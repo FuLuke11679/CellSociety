@@ -402,8 +402,7 @@ Ishan:
 1. Supporting Multiple Configuration Formats
     - Scenario Description
         - A student team is working on their simulation project and wants to support both XML and JSON configuration files. Some team members prefer writing configurations in XML, while others prefer JSON. The system should work seamlessly with either format.
-        <br>
-        ````java
+        ```java
         abstract class ConfigurationParser {
             // Protected variables that store parsed configuration
             protected gridSize, colors, rules, simulationType
@@ -435,7 +434,7 @@ Ishan:
                 // Handle JSON-specific validation
             }
         }
-        ````
+        ```
 
 2. Validating Configuration Files
     - A team member has created a new configuration file but made some mistakes. The parser needs to catch these errors and provide helpful feedback so they can fix the issues. The validation should check for:
@@ -443,7 +442,7 @@ Ishan:
         - Invalid values (like negative grid sizes)
         - Incorrect data types (like text where numbers are expected)
         - Simulation-specific requirements (like having the right states defined)
-        <br>
+
     ```java
     abstract class ConfigurationParser {
         validateConfiguration() {
