@@ -499,20 +499,20 @@ Daniel:
 1. Apply the rules to a middle cell: set the next state of a cell to dead by counting its number of neighbors using the Game of Life rules for a cell in the middle (i.e., with all its neighbors)
     - Storing the cell neighbors in the object of a cell.
     - Can set the state of each cell with the changeState method.
-<br>
+
 2. Apply the rules to an edge cell: set the next state of a cell to live by counting its number of neighbors using the Game of Life rules for a cell on the edge (i.e., with some of its neighbors missing)
     - Reading neighbors through configuring the XML file to encode the neighbors accordingly
     - We can also access edge cells based off of cell id
-<br>
+
 3. Move to the next generation: update all cells in a simulation from their current state to their next state and display the result graphically
     - Storing previous and next states within the object of each states (Cell Class)
     - We know which state to use based on if the id of the neighbor cell is less than the current cell.
     - First we update the cells (from Grid) and then display after cells are updated (from Display)
-<br>
+
 4. Switch simulations: load a new simulation from a data file, replacing the current running simulation with the newly loaded one
     - Instantiation is handled through XML parsing
     - The new conditions are contained within a cell subclass that corresponds to a different simulation
-<br>
+
 5. Set a simulation parameter: set the value of a parameter, probCatch, for a simulation, Fire, based on the value given in a data file
     - Can be included as a final variable within the fire cell subclass
 
