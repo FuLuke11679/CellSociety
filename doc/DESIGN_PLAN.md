@@ -403,8 +403,7 @@ Ishan:
     - Scenario Description
         - A student team is working on their simulation project and wants to support both XML and JSON configuration files. Some team members prefer writing configurations in XML, while others prefer JSON. The system should work seamlessly with either format.
         <br>
-        ```java
-        // The core parser interface that all format-specific parsers must implement
+        ````java
         abstract class ConfigurationParser {
             // Protected variables that store parsed configuration
             protected gridSize, colors, rules, simulationType
@@ -436,7 +435,7 @@ Ishan:
                 // Handle JSON-specific validation
             }
         }
-        ```
+        ````
 
 2. Validating Configuration Files
     - A team member has created a new configuration file but made some mistakes. The parser needs to catch these errors and provide helpful feedback so they can fix the issues. The validation should check for:
