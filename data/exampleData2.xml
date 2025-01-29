@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<simulationConfig>
+    <!-- window and grid configuration -->
+    <display width="800" height="600" title="Game of Life">
+        <grid rows="50" columns="50" cellSize="10" />
+        <!-- colors for alive vs. dead -->
+        <colors>
+            <alive>BLACK</alive>
+            <dead>WHITE</dead>
+        </colors>
+    </display>
+    
+    <!-- rule configuration -->
+    <rules type="GameOfLife">
+        <!-- survival rules -->
+        <survival>
+            <neighbor count="2" />
+            <neighbor count="3" />
+        </survival>
+        <!-- birth rules -->
+        <birth>
+            <neighbor count="3" />
+        </birth>
+        <!-- death rules -->
+        <death>
+            <neighbor count="0" />
+            <neighbor count="1" />
+    </rules>
+    
+    <!-- initial state configuration -->
+    <initialState type="specific">
+        <!-- each noted cell will start as "alive" -->
+        <cell row="1" column="1" />
+        <cell row="2" column="2" />
+        <cell row="2" column="3" />
+        <cell row="1" column="3" />
+        <cell row="0" column="2" />
+    </initialState>
+</simulationConfig>
