@@ -519,10 +519,22 @@ Daniel:
 
 ## Team Responsibilities
 
+Denote primary and secondary responsibilities, also include timetable
+
 * Palo Silva: _Front-End_, Design Features **10, 11, 12, 13, 14**
+
+Sunday 2/2: Complete features 10,11, maybe 12
+
+Monday 2/3: Complete 12, 13, 14
 
 * Luke: _Front-End_, Design Features **8 & 9**
 
 * Ishan: _Back-End_, Design Features **02, 04, 06**
 
 * Daniel: _Back-End_, Design Features **01, 03, 05**
+
+Friday 1/31: Implement 01
+
+Sunday 2/2: Implement 05
+
+Monday 2/3: Implement 03
