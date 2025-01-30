@@ -534,5 +534,7 @@ Monday 2/3: Complete 12, 13, 14
 * Daniel: _Back-End_, Design Features **01, 03, 05**
 
 Friday 1/31: Implement 01
+
 Sunday 2/2: Implement 05
+
 Monday 2/3: Implement 03
