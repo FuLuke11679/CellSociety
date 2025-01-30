@@ -357,15 +357,15 @@ The purpose of this design is to provide various Rulesets and Cells that abstrac
 One of the major design issues that the team discussed at length was the issue of how to keep track of a cell’s neighbors. We came up with three potential solutions as follows:
 
 1. Delegate all of the neighbor checking to the Grid class and passing the update condition to the Cell. For example, in the case of Conway’s game of life, the Grid class would be responsible for checking how many neighbors are alive and then passing that information into the Cell class to appropriately update. One advantage to this technique is that the Grid contains all the neighbors simply with an index, therefore, it would be straightforward to address to the neighbors and check their status. The major downside to this is that the Grid class would have a large set of responsibilities that perhaps should not be designated to the class and would also have difficulty scaling. For example, if the simulation type were to change, we would’ve had to implement a different checking system, like in the case of the forest fire simulation.
-<br>
+
 2. Have each instance of a Cell maintain its own group of neighbors with a list of the objects it is a neighbor to. With this approach, each cell would be able to locally count the statuses of the neighbors, and with inheritance, could implement different status checkers in each implementation of a subclass without having to check what kind of game it is, giving us the closed algorithmic process we wanted. However, this design has many moving pieces and uses a lot of storage. In the event of a 1000x1000 grid, we could have 1 million cells, each with instance variables and a list of 8 objects, resulting in the storage of 8 million cells. Additionally, we may run into tricky-to-solve memory pointer issues with different versions of the game, such as in segregation when a cell may want to move to a random vacant cell. This approach is also tightly coupled with the Grid, essentially storing double information, which is not necessary.
-<br>
+
 3. The third approach is the one we ultimately deciding on pursuing. The procedural Cell state updates will be invoked by the Grid class. From this class, we can invoke the update function that is handled by an instance of a Ruleset subclass. This subclass will take in a cell, a list of its neighbors provided by the grid, and be able to implement custom rules depending on which ruleset is instantiated. Additionally, we will have different subclasses of cells that will maintain different potential states, such as alive or dead in conway’s game of life while a segregation cell may have an enum class embedded that only allows colors, for example. The combination of the two makes the addition of a new simulation very flexible, since you would only need to add a new ruleset extension and a new corresponding cell type extension, while maintaining the algorithmic parts of the program closed. This solves the issue from design #2 where we no longer have to store all the cell’s neighbors within a cell so we avoid the potential tricky memory pointer issues as well as save space by passing in a temporary object.
 
 Another major design consideration we discussed was how to handle the previous and current states of a Cell. For example, if a Cell was queued for update but the left one had already been updated while the one to the right had old information, how do we accurately get a picture of the original state? We considered two possible designs for this issue.
 
 1. Update each cell into an auxiliary grid while maintaining the original states in the original grid then replace the original grid with the auxiliary array. The advantage to this is that checking each cell’s adjacent cells would be straightforward and can simply use the information at hand in the current grid. Additionally, each Cell would only have to maintain it’s active state, as the new copy of the Cell in the auxiliary array would contain the new state while the old state was contained in the original grid. The Display class would also have a straightforward job as once the new grid is copied into the old grid, the front end can update all at once. The disadvantage to this design is that for each frame or instant that the game simulates the next life, the program would be copying up to 1 million (1000x1000) cells into a new grid and replacing that grid, leading to potential issues with the speed slider. The team was not sure that this large scale could be replicated at a fast speed, therefore we decided not to go with this approach.
-<br>
+
 2. The design option that we ultimately decided on was to update each Cell in place. To solve this issue, we added three fields to the Cell class: a previous state variable, a current state variable, and a Cell ID. The Cell ID would encode the row and column of the cell by being row*gridWidth + column while the two state variables would maintain the previous and current states of a cell (alive or dead, on fire or not, etc.). With the combination of these three variables, we unlock all the information we need for any given cell. The idea is to traverse the grid from left to right, top to bottom and update in place as the program encounters a new cell. Using this idea, we know that any adjacent cell with an ID less than that of the current cell will need to use the information stored in previous state while any adjacent cell with an ID greater than that of the current cell will use the information stored in the current state field. To solve the issue of displaying a ripple effect, the program can wait for all the cells to be updated and display the new information all at once instead of displaying each cell changing one at a time. This also does not use any auxiliary storage. A disadvantage to this approach could be the dilution of the purpose of the Cell object in that it now contains more information that is used for a specific condition (updating cell status).
 
 
@@ -402,9 +402,7 @@ Ishan:
 1. Supporting Multiple Configuration Formats
     - Scenario Description
         - A student team is working on their simulation project and wants to support both XML and JSON configuration files. Some team members prefer writing configurations in XML, while others prefer JSON. The system should work seamlessly with either format.
-        <br>
         ```java
-        // The core parser interface that all format-specific parsers must implement
         abstract class ConfigurationParser {
             // Protected variables that store parsed configuration
             protected gridSize, colors, rules, simulationType
@@ -444,7 +442,7 @@ Ishan:
         - Invalid values (like negative grid sizes)
         - Incorrect data types (like text where numbers are expected)
         - Simulation-specific requirements (like having the right states defined)
-        <br>
+
     ```java
     abstract class ConfigurationParser {
         validateConfiguration() {
@@ -501,20 +499,20 @@ Daniel:
 1. Apply the rules to a middle cell: set the next state of a cell to dead by counting its number of neighbors using the Game of Life rules for a cell in the middle (i.e., with all its neighbors)
     - Storing the cell neighbors in the object of a cell.
     - Can set the state of each cell with the changeState method.
-<br>
+
 2. Apply the rules to an edge cell: set the next state of a cell to live by counting its number of neighbors using the Game of Life rules for a cell on the edge (i.e., with some of its neighbors missing)
     - Reading neighbors through configuring the XML file to encode the neighbors accordingly
     - We can also access edge cells based off of cell id
-<br>
+
 3. Move to the next generation: update all cells in a simulation from their current state to their next state and display the result graphically
     - Storing previous and next states within the object of each states (Cell Class)
     - We know which state to use based on if the id of the neighbor cell is less than the current cell.
     - First we update the cells (from Grid) and then display after cells are updated (from Display)
-<br>
+
 4. Switch simulations: load a new simulation from a data file, replacing the current running simulation with the newly loaded one
     - Instantiation is handled through XML parsing
     - The new conditions are contained within a cell subclass that corresponds to a different simulation
-<br>
+
 5. Set a simulation parameter: set the value of a parameter, probCatch, for a simulation, Fire, based on the value given in a data file
     - Can be included as a final variable within the fire cell subclass
 
