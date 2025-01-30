@@ -1,3 +1,3 @@
 This is Palo
 
-This is practice updating my personal branch in MERGE_PRACTICE.md. 
+Hello I am daniel and i am writing in this file
