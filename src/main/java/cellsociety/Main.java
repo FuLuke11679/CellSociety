@@ -2,12 +2,19 @@ package cellsociety;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.List;
 import java.util.ResourceBundle;
+import javafx.animation.KeyFrame;
+import javafx.animation.PauseTransition;
+import javafx.animation.Timeline;
 import javafx.application.Application;
+import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
+import javafx.scene.paint.Color;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import org.w3c.dom.Document;
@@ -20,6 +27,7 @@ import org.xml.sax.SAXException;
  * Feel free to completely change this code or delete it entirely. 
  */
 public class Main extends Application {
+
     // kind of data files to look for
     public static final String DATA_FILE_EXTENSION = "*.xml";
     // default to start in the data folder to make it easy on the user to find
@@ -29,11 +37,21 @@ public class Main extends Application {
     // internal configuration file
     public static final String INTERNAL_CONFIGURATION = "cellsociety.Version";
 
+    private Timeline simLoop;
+    private static double SECOND_DELAY = 0.8;  //this can be varied based on sim speed slider
+    private static Stage globalStage;
+    private GridView myGridView;
+    private Grid myGrid;
+
+
     /**
      * @see Application#start(Stage)
      */
     @Override
     public void start (Stage primaryStage) {
+        //skip xml loading for now--for now just initialize grid randomly and declare size/color/other
+        //variables directly in program
+        /*
         showMessage(AlertType.INFORMATION, String.format("Version: %s", getVersion()));
         File dataFile = FILE_CHOOSER.showOpenDialog(primaryStage);
         if (dataFile != null) {
@@ -42,6 +60,41 @@ public class Main extends Application {
                 showMessage(AlertType.INFORMATION, String.format("Number of Blocks = %d", numBlocks));
             }
         }
+         */
+        globalStage = primaryStage;
+        simLoop = new Timeline();
+        myGrid = new Grid(10, 10);
+        myGridView = new GridView(10, 10, myGrid.getGrid()); //parameters to constructor will be parsed from xml file
+        //myGridView.update(myGrid.getGrid());
+        //check what initial scene looks like (should write this in JUnit test next time
+        setStage(myGridView.getScene());
+        startSimulation(simLoop);
+
+    }
+    public void startSimulation(Timeline loop){
+        loop.setCycleCount(Timeline.INDEFINITE);
+        loop.getKeyFrames().add(new KeyFrame(Duration.seconds(SECOND_DELAY), e -> step(SECOND_DELAY)));
+        loop.play();
+    }
+
+    public void step(double elapsedTime){
+        //executes transition to next generation
+        //need to update internal grid in Grid class
+        //once its been updated then update visual display
+        //for now simply make small change to Grid to see update take place
+        List<Integer> updatedCells = myGrid.update(); //list of cell ids that were updated
+        myGridView.update(myGrid.getGrid(), updatedCells);
+        setStage(myGridView.getScene());
+
+        //PauseTransition pause = new PauseTransition(Duration.seconds(10));
+        //pause.play();
+
+    }
+
+    public static void setStage(Scene scene){
+        globalStage.setScene(scene);
+        globalStage.show();
+
     }
 
     /**
