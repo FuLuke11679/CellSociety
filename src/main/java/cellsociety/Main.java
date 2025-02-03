@@ -5,11 +5,8 @@ import java.io.IOException;
 import java.util.List;
 import java.util.ResourceBundle;
 import javafx.animation.KeyFrame;
-import javafx.animation.PauseTransition;
 import javafx.animation.Timeline;
 import javafx.application.Application;
-import javafx.geometry.Insets;
-import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
@@ -33,7 +30,7 @@ import org.xml.sax.SAXException;
 
 
 /**
- * Feel free to completely change this code or delete it entirely. 
+ * Feel free to completely change this code or delete it entirely.
  */
 public class Main extends Application {
     // kind of data files to look for
@@ -98,6 +95,7 @@ public class Main extends Application {
         //pause.play();
 
     }
+
 
     public static void setStage(Scene scene){
         globalStage.setScene(scene);
