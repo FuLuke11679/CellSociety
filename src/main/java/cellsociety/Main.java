@@ -4,8 +4,17 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ResourceBundle;
 import javafx.application.Application;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.ComboBox;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
+import javafx.scene.text.Text;
+import javafx.scene.Scene;
+import javafx.scene.paint.Color;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -28,20 +37,77 @@ public class Main extends Application {
     private final static FileChooser FILE_CHOOSER = makeChooser(DATA_FILE_EXTENSION);
     // internal configuration file
     public static final String INTERNAL_CONFIGURATION = "cellsociety.Version";
+    /**
+     * Will be determined through reading XML, but for now hard coded*/
+    private static final int ROWS = 50;
+    private static final int COLUMNS = 50;
+    private static final int CELL_SIZE = 16;
+    private static final Color ALIVE_COLOR = Color.BLUE;
+    private static final Color DEAD_COLOR = Color.WHITE;
+    private static final double DENSITY = 0.4;
 
     /**
      * @see Application#start(Stage)
      */
     @Override
     public void start (Stage primaryStage) {
-        showMessage(AlertType.INFORMATION, String.format("Version: %s", getVersion()));
-        File dataFile = FILE_CHOOSER.showOpenDialog(primaryStage);
-        if (dataFile != null) {
-            int numBlocks = calculateNumBlocks(dataFile);
-            if (numBlocks != 0) {
-                showMessage(AlertType.INFORMATION, String.format("Number of Blocks = %d", numBlocks));
-            }
-        }
+        /**
+         *         showMessage(AlertType.INFORMATION, String.format("Version: %s", getVersion()));
+         *         File dataFile = FILE_CHOOSER.showOpenDialog(primaryStage);
+         *         if (dataFile != null) {
+         *             int numBlocks = calculateNumBlocks(dataFile);
+         *             if (numBlocks != 0) {
+         *                 showMessage(AlertType.INFORMATION, String.format("Number of Blocks = %d", numBlocks));
+         *             }
+         *         }
+         */
+        GridManager gridManager = new GridManager(ROWS, COLUMNS, CELL_SIZE, ALIVE_COLOR, DEAD_COLOR, DENSITY);
+
+        // Initialize the grid
+        gridManager.initializeGrid();
+        BorderPane root = new BorderPane();
+        root.setPadding(new Insets(10));
+        Text descriptionText = new Text("Simulation Description");
+        BorderPane.setAlignment(descriptionText, Pos.CENTER);
+        root.setTop(descriptionText);
+        HBox controlsPanel = new HBox(10); // Spacing between controls
+        controlsPanel.setAlignment(Pos.CENTER);
+
+        // Add ruleset selection combo box
+        /**
+        ComboBox<String> rulesetComboBox = new ComboBox<>();
+        rulesetComboBox.getItems().addAll("Game of Life", "Percolation", "Fire Spread", "Segregation", "Wa-Tor");
+        rulesetComboBox.setValue("Game of Life"); // Default selection
+        rulesetComboBox.setOnAction(e -> changeRuleset(rulesetComboBox.getValue()));
+        */
+        // Add speed slider
+        /**
+        Slider speedSlider = new Slider(1, 10, 5); // Min, Max, Default
+        speedSlider.setShowTickLabels(true);
+        speedSlider.setShowTickMarks(true);
+        speedSlider.setMajorTickUnit(1);
+        speedSlider.setMinorTickCount(0);
+        speedSlider.setSnapToTicks(true);
+        */
+        // Add controls to the controls panel
+        /**
+        controlsPanel.getChildren().addAll(
+            new Label("Ruleset:"), rulesetComboBox,
+            new Label("Speed:"), speedSlider
+        );
+        */
+
+        // Add the controls panel to the top of the root layout
+        root.setTop(new VBox(10, descriptionText, controlsPanel)); // Spacing between description and controls
+
+        // Add the grid to the center of the root layout
+        root.setCenter(gridManager.getGridPane());
+
+        // Set up the scene and stage
+        Scene scene = new Scene(root, COLUMNS * CELL_SIZE, ROWS * CELL_SIZE + 100);
+        primaryStage.setTitle("Cell Society");
+        primaryStage.setScene(scene);
+        primaryStage.show();
     }
 
     /**
