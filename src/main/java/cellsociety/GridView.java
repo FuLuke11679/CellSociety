@@ -1,90 +1,91 @@
 package cellsociety;
 
 import java.util.List;
-import javafx.scene.Group;
 import javafx.scene.Scene;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
+import javafx.scene.text.Text;
 
 public class GridView {
-  private Grid myGrid;
+  private GridPane gridPane;
   private Scene myScene;
-  private Group root;
   private int rows;
   private int columns;
   private int cellSize;
   private final int SIZE_GRID = 500;
   private final int WINDOW_WIDTH = 500;
   private final int WINDOW_HEIGHT = 700;
-
-
+  private VBox infoBox;
+  private Rectangle[][] cellRectangles;  // Store references for easy updates
 
   /**
-   *
-   * @param rows      Number of rows in Grid
-   * @param columns   Number of columns in Grid
+   * Constructor for GridView.
    */
-  //add Grid object to constructor later
   public GridView(int rows, int columns, List<List<CellUnit>> grid) {
     this.rows = rows;
     this.columns = columns;
-    this.cellSize = SIZE_GRID/rows;
-    //this.myGrid = grid;  //takes grid object as parameter (has to read entire Grid everytime)
-    this.root = new Group();
-    //initializeGridView();
+    this.cellSize = SIZE_GRID / rows;
+    this.gridPane = new GridPane();
+    this.cellRectangles = new Rectangle[rows][columns];
+
     initializeFromGrid(grid);
+    //Hard coded for now
+    setupSimulationInfo("CA", "Wa-Tor World", "Luke", "This is a description");
+
+    BorderPane layout = new BorderPane();
+    layout.setCenter(gridPane);
+    layout.setTop(infoBox);
+
+    this.myScene = new Scene(layout, WINDOW_WIDTH, WINDOW_HEIGHT);
   }
 
-
-  public void initializeFromGrid(List<List<CellUnit>> grid){
-    for(List<CellUnit> row: grid){
-      for (CellUnit cell: row){
+  /**
+   * Initializes the grid from the given `CellUnit` list.
+   */
+  private void initializeFromGrid(List<List<CellUnit>> grid) {
+    for (int row = 0; row < rows; row++) {
+      for (int col = 0; col < columns; col++) {
         Rectangle rect = new Rectangle(cellSize, cellSize);
-        rect.setFill(cell.getColor());
+        rect.setFill(grid.get(row).get(col).getColor());
         rect.setStroke(Color.BLACK);
         rect.setStrokeWidth(1);
-        rect.setX(cell.getID()%columns * cellSize);
-        rect.setY(cell.getID()/columns * cellSize + WINDOW_HEIGHT-SIZE_GRID);
-        root.getChildren().add(rect);
+        gridPane.add(rect, col, row);  // (column, row) order
+        cellRectangles[row][col] = rect;  // Store reference for quick updates
       }
     }
-    myScene = new Scene(root, WINDOW_WIDTH, WINDOW_HEIGHT);
   }
 
-
-  public void update(List<List<CellUnit>> grid, List<Integer> updatedCells){
-    //don't want to return a new scene object
-    for(int id: updatedCells){
-      int row = id/rows;
-      int col = id%columns;
-      root.getChildren().remove(removeRectangleAt(row, col));
-      Rectangle rect = new Rectangle(cellSize, cellSize);
-      rect.setFill(grid.get(row).get(col).getColor());
-      rect.setStroke(Color.BLACK);
-      rect.setStrokeWidth(1);
-      rect.setX(col * cellSize);
-      rect.setY(row * cellSize + WINDOW_HEIGHT-SIZE_GRID);
-      root.getChildren().add(rect);
+  /**
+   * Updates the grid efficiently by modifying only changed cells.
+   */
+  public void update(List<List<CellUnit>> grid, List<Integer> updatedCells) {
+    for (int id : updatedCells) {
+      int row = id / columns;
+      int col = id % columns;
+      cellRectangles[row][col].setFill(grid.get(row).get(col).getColor());
     }
   }
 
-  // Method to remove a Rectangle at a specific X, Y coordinate
-  private Rectangle removeRectangleAt(double targetX, double targetY) {
-    // Search for the rectangle with the given coordinates
-    for (javafx.scene.Node node : root.getChildren()) {
-      if (node instanceof Rectangle) {
-        Rectangle rect = (Rectangle) node;
-        if (rect.getX() == targetX && rect.getY() == targetY) {
-          return rect;
-        }
-      }
-    }
-    return null;
+  /**
+   * Displays simulation metadata at the top.
+   */
+  private void setupSimulationInfo(String simType, String simName, String author, String description) {
+    infoBox = new VBox();
+    infoBox.getChildren().addAll(
+        new Text("Simulation: " + simName),
+        new Text("Type: " + simType),
+        new Text("Author: " + author),
+        new Text("Description: " + description)
+    );
   }
 
-  public Scene getScene(){
+  /**
+   * Returns the updated scene.
+   */
+  public Scene getScene() {
     return myScene;
   }
-
-
 }
