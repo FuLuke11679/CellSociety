@@ -13,7 +13,7 @@ public class ConwayRuleset extends Ruleset {
   private int countNeighbors(Cell cell, List<Cell> neighbors) {
     int aliveCells = 0;
     for (Cell neighbor : neighbors) {
-      if (getState(cell, neighbor) == GameOfLifeState.ALIVE) { //If the cell is alive
+      if (getState(cell, neighbor) == State.ALIVE) { //If the cell is alive
         aliveCells++;
       }
     }
