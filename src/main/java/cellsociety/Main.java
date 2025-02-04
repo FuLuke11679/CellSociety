@@ -5,12 +5,18 @@ import java.io.IOException;
 import java.util.List;
 import java.util.ResourceBundle;
 import javafx.animation.KeyFrame;
-import javafx.animation.PauseTransition;
 import javafx.animation.Timeline;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
+import javafx.scene.paint.Color;
+import javafx.scene.control.ComboBox;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
+import javafx.scene.text.Text;
+import javafx.scene.Scene;
 import javafx.scene.paint.Color;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
@@ -24,10 +30,9 @@ import org.xml.sax.SAXException;
 
 
 /**
- * Feel free to completely change this code or delete it entirely. 
+ * Feel free to completely change this code or delete it entirely.
  */
 public class Main extends Application {
-
     // kind of data files to look for
     public static final String DATA_FILE_EXTENSION = "*.xml";
     // default to start in the data folder to make it easy on the user to find
@@ -90,6 +95,7 @@ public class Main extends Application {
         //pause.play();
 
     }
+
 
     public static void setStage(Scene scene){
         globalStage.setScene(scene);
