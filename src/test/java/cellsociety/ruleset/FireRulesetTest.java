@@ -23,7 +23,8 @@ class FireRulesetTest {
 
   List<Cell> neighbors;
 
-  Ruleset ruleset = new FireRuleset(1, 1);
+  Ruleset rulesetMinProb = new FireRuleset(0, 0);
+  Ruleset rulesetMaxProb = new FireRuleset(1, 1);
 
   @BeforeEach
   void setUp() {
@@ -33,27 +34,53 @@ class FireRulesetTest {
   }
 
   @Test
-  void updateStateEmptyCell() {
+  void updateStateEmptyCellMinProb() {
     neighbors = new ArrayList<>(List.of(
         new FireCell(0, FireState.TREE, FireState.TREE),
         new FireCell(1, FireState.TREE, FireState.TREE),
         new FireCell(3, FireState.TREE, FireState.TREE),
         new FireCell(4, FireState.TREE, FireState.TREE)
     ));
-    ruleset.updateState(emptyCell, neighbors);
+    rulesetMinProb.updateState(emptyCell, neighbors);
+    assertEquals(FireState.EMPTY, emptyCell.getCurrState());
+    assertEquals(EMPTY_COLOR, emptyCell.getColor());
+  }
+
+  @Test
+  void updateStateEmptyCellMaxProb() {
+    neighbors = new ArrayList<>(List.of(
+        new FireCell(0, FireState.TREE, FireState.TREE),
+        new FireCell(1, FireState.TREE, FireState.TREE),
+        new FireCell(3, FireState.TREE, FireState.TREE),
+        new FireCell(4, FireState.TREE, FireState.TREE)
+    ));
+    rulesetMaxProb.updateState(emptyCell, neighbors);
     assertEquals(FireState.TREE, emptyCell.getCurrState());
     assertEquals(TREE_COLOR, emptyCell.getColor());
   }
 
   @Test
-  void updateStateTreeCellWithoutBurningNeighbor() {
+  void updateStateTreeCellWithoutBurningNeighborMinProb() {
     neighbors = new ArrayList<>(List.of(
         new FireCell(0, FireState.TREE, FireState.TREE),
         new FireCell(1, FireState.TREE, FireState.TREE),
         new FireCell(3, FireState.TREE, FireState.TREE),
         new FireCell(4, FireState.TREE, FireState.TREE)
     ));
-    ruleset.updateState(treeCell, neighbors);
+    rulesetMinProb.updateState(treeCell, neighbors);
+    assertEquals(FireState.TREE, treeCell.getCurrState());
+    assertEquals(TREE_COLOR, treeCell.getColor());
+  }
+
+  @Test
+  void updateStateTreeCellWithoutBurningNeighborMaxProb() {
+    neighbors = new ArrayList<>(List.of(
+        new FireCell(0, FireState.TREE, FireState.TREE),
+        new FireCell(1, FireState.TREE, FireState.TREE),
+        new FireCell(3, FireState.TREE, FireState.TREE),
+        new FireCell(4, FireState.TREE, FireState.TREE)
+    ));
+    rulesetMaxProb.updateState(treeCell, neighbors);
     assertEquals(FireState.BURNING, treeCell.getCurrState());
     assertEquals(BURNING_COLOR, treeCell.getColor());
   }
@@ -65,14 +92,14 @@ class FireRulesetTest {
         new FireCell(1, FireState.TREE, FireState.TREE),
         new FireCell(3, FireState.TREE, FireState.TREE)
     ));
-    ruleset.updateState(treeCell, neighbors);
+    rulesetMaxProb.updateState(treeCell, neighbors);
     assertEquals(FireState.BURNING, treeCell.getCurrState());
     assertEquals(BURNING_COLOR, treeCell.getColor());
   }
 
   @Test
   void updateStateBurningCell() {
-    ruleset.updateState(burningCell, neighbors);
+    rulesetMaxProb.updateState(burningCell, neighbors);
     assertEquals(FireState.EMPTY, burningCell.getCurrState());
     assertEquals(EMPTY_COLOR, burningCell.getColor());
   }
