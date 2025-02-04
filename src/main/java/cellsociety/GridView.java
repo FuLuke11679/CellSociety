@@ -20,18 +20,21 @@ public class GridView {
   private final int WINDOW_HEIGHT = 700;
   private VBox infoBox;
   private Rectangle[][] cellRectangles;  // Store references for easy updates
+  private Grid grid;
+
 
   /**
    * Constructor for GridView.
    */
-  public GridView(int rows, int columns, List<List<CellUnit>> grid) {
+  public GridView(int rows, int columns, Grid grid) {
     this.rows = rows;
     this.columns = columns;
     this.cellSize = SIZE_GRID / rows;
     this.gridPane = new GridPane();
     this.cellRectangles = new Rectangle[rows][columns];
+    this.grid = grid;
 
-    initializeFromGrid(grid);
+    initializeGrid();
     //Hard coded for now
     setupSimulationInfo("CA", "Wa-Tor World", "Luke", "This is a description");
 
@@ -45,11 +48,11 @@ public class GridView {
   /**
    * Initializes the grid from the given `CellUnit` list.
    */
-  private void initializeFromGrid(List<List<CellUnit>> grid) {
+  private void initializeGrid() {
     for (int row = 0; row < rows; row++) {
       for (int col = 0; col < columns; col++) {
         Rectangle rect = new Rectangle(cellSize, cellSize);
-        rect.setFill(grid.get(row).get(col).getColor());
+        rect.setFill(grid.getColor(row, col));
         rect.setStroke(Color.BLACK);
         rect.setStrokeWidth(1);
         gridPane.add(rect, col, row);  // (column, row) order
@@ -59,13 +62,13 @@ public class GridView {
   }
 
   /**
-   * Updates the grid efficiently by modifying only changed cells.
+   * Updates the grid efficiently by modifying only changed cells. Don't want to pass entire grid into front end.
    */
-  public void update(List<List<CellUnit>> grid, List<Integer> updatedCells) {
-    for (int id : updatedCells) {
+  public void update(int length) {
+    for (int id = 0; id < length; id++) {
       int row = id / columns;
       int col = id % columns;
-      cellRectangles[row][col].setFill(grid.get(row).get(col).getColor());
+      cellRectangles[row][col].setFill(grid.getColor(row, col));
     }
   }
 

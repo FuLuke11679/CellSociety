@@ -69,7 +69,7 @@ public class Main extends Application {
         globalStage = primaryStage;
         simLoop = new Timeline();
         myGrid = new Grid(10, 10);
-        myGridView = new GridView(10, 10, myGrid.getGrid()); //parameters to constructor will be parsed from xml file
+        myGridView = new GridView(10, 10, myGrid); //parameters to constructor will be parsed from xml file
         //myGridView.update(myGrid.getGrid());
         //check what initial scene looks like (should write this in JUnit test next time
         setStage(myGridView.getScene());
@@ -88,7 +88,7 @@ public class Main extends Application {
         //once its been updated then update visual display
         //for now simply make small change to Grid to see update take place
         List<Integer> updatedCells = myGrid.update(); //list of cell ids that were updated
-        myGridView.update(myGrid.getGrid(), updatedCells);
+        myGridView.update(myGrid.getLength());
         setStage(myGridView.getScene());
 
         //PauseTransition pause = new PauseTransition(Duration.seconds(10));
