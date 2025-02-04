@@ -1,5 +1,7 @@
 package cellsociety.cell;
 
+import javafx.scene.paint.Color;
+
 public class GameOfLifeCell extends Cell {
 
   public enum State {
@@ -10,8 +12,8 @@ public class GameOfLifeCell extends Cell {
   private State prevState;
   private State currState;
 
-  public GameOfLifeCell(int id, State prevState, State currState) {
-    super(id);
+  public GameOfLifeCell(int id, Color color, State prevState, State currState) {
+    super(id, color);
     this.prevState = prevState;
     this.currState = currState;
   }

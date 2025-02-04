@@ -3,12 +3,11 @@ package cellsociety.ruleset;
 import cellsociety.cell.*;
 import java.util.List;
 import cellsociety.cell.GameOfLifeCell.State;
+import javafx.scene.paint.Color;
 
 public class GameOfLifeRuleset {
 
-  public GameOfLifeRuleset() {
-
-  }
+  public GameOfLifeRuleset() {}
 
   public int countNeighbors(GameOfLifeCell cell, List<GameOfLifeCell> neighbors) {
     int aliveCells = 0;
@@ -39,11 +38,13 @@ public class GameOfLifeRuleset {
   private void killCell(GameOfLifeCell cell) {
     cell.setPrevState(cell.getCurrState());
     cell.setCurrState(State.DEAD);
+    cell.setColor(Color.WHITE);
   }
 
   private void birthCell(GameOfLifeCell cell) {
     cell.setPrevState(cell.getCurrState());
     cell.setCurrState(State.ALIVE);
+    cell.setColor(Color.BLACK);
   }
 
 }
