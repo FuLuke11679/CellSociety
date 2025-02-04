@@ -68,5 +68,15 @@ public class Grid {
     }
     return updatedList;
   }
+  public Color getColor(int row, int col){
+    return myGrid.get(row).get(col).getColor();
+  }
+  public int getLength(){
+    int totalCount = 0;
+    for (List<CellUnit> list : myGrid) {
+      totalCount += list.size();
+    }
+    return totalCount;
+  }
 
 }
