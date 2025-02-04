@@ -12,10 +12,16 @@ public class GameOfLifeCell extends Cell {
   private State prevState;
   private State currState;
 
-  public GameOfLifeCell(int id, Color color, State prevState, State currState) {
-    super(id, color);
+  public GameOfLifeCell(int id, State prevState, State currState) {
+    super(id);
     this.prevState = prevState;
     this.currState = currState;
+
+    if (currState == State.DEAD) {
+      setColor(Color.WHITE);
+    } else {
+      setColor(Color.BLACK);
+    }
   }
 
   public State getPrevState() {

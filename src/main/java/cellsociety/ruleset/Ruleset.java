@@ -1,12 +1,12 @@
 package cellsociety.ruleset;
 
-import cellsociety.cell.GameOfLifeCell;
+import cellsociety.cell.Cell;
 import java.util.List;
 
 public abstract class Ruleset {
 
   public Ruleset() {}
 
-  public abstract void updateState(GameOfLifeCell cell, List<GameOfLifeCell> neighbors);
+  public abstract void updateState(Cell cell, List<Cell> neighbors);
 
 }

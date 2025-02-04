@@ -5,13 +5,13 @@ import java.util.List;
 import cellsociety.cell.GameOfLifeCell.State;
 import javafx.scene.paint.Color;
 
-public class GameOfLifeRuleset {
+public class GameOfLifeRuleset extends Ruleset {
 
   public GameOfLifeRuleset() {}
 
-  public int countNeighbors(GameOfLifeCell cell, List<GameOfLifeCell> neighbors) {
+  private int countNeighbors(Cell cell, List<Cell> neighbors) {
     int aliveCells = 0;
-    for (GameOfLifeCell neighbor : neighbors) {
+    for (Cell neighbor : neighbors) {
       if (getState(cell, neighbor) == State.ALIVE) { //If the cell is alive
         aliveCells++;
       }
@@ -19,29 +19,29 @@ public class GameOfLifeRuleset {
     return aliveCells;
   }
 
-  public void updateState(GameOfLifeCell cell, List<GameOfLifeCell> neighbors) {
+  public void updateState(Cell cell, List<Cell> neighbors) {
     int aliveCells = countNeighbors(cell, neighbors);
-    if (aliveCells < 2 || aliveCells > 3) {
-      killCell(cell);
-    } else {
+    if (aliveCells == 2 || aliveCells == 3) {
       birthCell(cell);
+    } else {
+      killCell(cell);
     }
   }
 
-  private State getState(GameOfLifeCell cell, GameOfLifeCell neighbor) {
+  private State getState(Cell cell, Cell neighbor) {
     if (neighbor.getId() < cell.getId()) {
       return neighbor.getPrevState();
     }
     return neighbor.getCurrState();
   }
 
-  private void killCell(GameOfLifeCell cell) {
+  private void killCell(Cell cell) {
     cell.setPrevState(cell.getCurrState());
     cell.setCurrState(State.DEAD);
     cell.setColor(Color.WHITE);
   }
 
-  private void birthCell(GameOfLifeCell cell) {
+  private void birthCell(Cell cell) {
     cell.setPrevState(cell.getCurrState());
     cell.setCurrState(State.ALIVE);
     cell.setColor(Color.BLACK);
