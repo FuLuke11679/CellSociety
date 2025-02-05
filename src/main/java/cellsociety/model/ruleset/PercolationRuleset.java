@@ -1,9 +1,7 @@
 package cellsociety.model.ruleset;
 
 import cellsociety.model.cell.Cell;
-import cellsociety.model.cell.PercolationCell;
 import cellsociety.model.cell.PercolationCell.PercolationState;
-import cellsociety.model.state.CellState;
 import java.util.List;
 
 public class PercolationRuleset extends Ruleset {
