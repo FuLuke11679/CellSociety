@@ -1,11 +1,13 @@
 package cellsociety;
 
+import cellsociety.cell.Cell;
 import cellsociety.ruleset.Ruleset;
 import java.util.ArrayList;
 import java.util.List;
 import javafx.scene.paint.Color;
 import cellsociety.cell.ConwayCell;
 import cellsociety.cell.ConwayCell.GameOfLifeState;
+import cellsociety.state.CellState;
 import cellsociety.ruleset.ConwayRuleset;
 /*
 Updates Grid based on Cell logic
@@ -14,7 +16,7 @@ Does not display the grid or interact at all with javafx packages (i.e Scene, Gr
 public class Grid {
   private int rows;
   private int columns;
-  private List<List<ConwayCell>> myGrid;
+  private List<List<Cell>> myGrid;
   private Ruleset ruleset;
 
   /**
@@ -38,9 +40,9 @@ public class Grid {
     myGrid = new ArrayList<>();
     int count = 0;
     for (int x = 0; x < rows; x++) {
-      List<ConwayCell> row = new ArrayList<>();
+      List<Cell> row = new ArrayList<>();
       for (int y = 0; y < columns; y++) {
-        GameOfLifeState initialState = Math.random() < 0.4 ? GameOfLifeState.ALIVE : GameOfLifeState.DEAD;
+        CellState initialState = Math.random() < 0.4 ? GameOfLifeState.ALIVE : GameOfLifeState.DEAD;
         row.add(new ConwayCell(count, GameOfLifeState.DEAD, initialState));
         count++;
       }
@@ -56,14 +58,14 @@ public class Grid {
     for (int id = 0; id < length; id++) {
       int row = id / columns;
       int col = id % columns;
-      ConwayCell cell = myGrid.get(row).get(col);
-      List<ConwayCell> neighbors = getNeighbors(row, col);
+      Cell cell = myGrid.get(row).get(col);
+      List<Cell> neighbors = getNeighbors(row, col);
       ruleset.updateState(cell, new ArrayList<>(neighbors));
     }
     // Second pass: Apply new states and collect updates
     for (int x = 0; x < rows; x++) {
       for (int y = 0; y < columns; y++) {
-        ConwayCell cell = myGrid.get(x).get(y);
+        Cell cell = myGrid.get(x).get(y);
         if (cell.getPrevState() != cell.getCurrState()) {
           cell.setColor(cell.getCurrState() == GameOfLifeState.ALIVE ? Color.BLACK : Color.WHITE);
           updatedCells.add(cell.getId());
@@ -79,8 +81,8 @@ public class Grid {
     return myGrid.get(row).get(col).getColor();
   }
 
-  private List<ConwayCell> getNeighbors(int row, int col) {
-    List<ConwayCell> neighbors = new ArrayList<>();
+  private List<Cell> getNeighbors(int row, int col) {
+    List<Cell> neighbors = new ArrayList<>();
     int[] dx = {-1, -1, -1,  0,  0,  1,  1,  1};
     int[] dy = {-1,  0,  1, -1,  1, -1,  0,  1};
 
@@ -98,7 +100,7 @@ public class Grid {
 
   public int getLength(){
     int totalCount = 0;
-    for (List<ConwayCell> list : myGrid) {
+    for (List<Cell> list : myGrid) {
       totalCount += list.size();
     }
     return totalCount;
