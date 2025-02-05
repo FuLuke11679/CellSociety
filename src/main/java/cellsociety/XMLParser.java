@@ -26,7 +26,7 @@ public class XMLParser extends Parser{
   private String[] initialStates;
   private Map<String, String> simVarsMap;
 
-  public XMLParser(File file) {
+  public XMLParser(File file) throws ParserConfigurationException, SAXException, IOException{
     try {
       DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
       DocumentBuilder builder = factory.newDocumentBuilder();
@@ -84,6 +84,14 @@ public class XMLParser extends Parser{
       System.err.println("Unexpected Error: " + e.getMessage());
     }
 
+  }
+
+  private void parseDocument(Document document){
+    Element root = document.getDocumentElement();
+        
+    parseDisplay(document);
+    parseSimulation(document);
+    parseInitialStates(document);
   }
 
   public int getWidth() { return width; }
