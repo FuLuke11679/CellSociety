@@ -42,7 +42,10 @@ public class Grid {
     for (int x = 0; x < rows; x++) {
       List<Cell> row = new ArrayList<>();
       for (int y = 0; y < columns; y++) {
-        CellState initialState = Math.random() < 0.4 ? GameOfLifeState.ALIVE : GameOfLifeState.DEAD;
+        CellState initialState = GameOfLifeState.DEAD;
+        if((x >= 10 && x <= 12) && y == 10){
+          initialState = GameOfLifeState.ALIVE;
+        }
         row.add(new ConwayCell(count, GameOfLifeState.DEAD, initialState));
         count++;
       }
@@ -50,10 +53,9 @@ public class Grid {
     }
   }
 
-  public List<Integer> update(){
+  public void update(){
     //return a list of cell ids that were changed,
-    //loop over all cells and randomly change color of alive cells with probability 0.2
-    List<Integer> updatedCells = new ArrayList<>();
+    //loop over all cells and randomly change color of alive cells with probability 0.4
     int length = getLength();
     for (int id = 0; id < length; id++) {
       int row = id / columns;
@@ -68,12 +70,9 @@ public class Grid {
         Cell cell = myGrid.get(x).get(y);
         if (cell.getPrevState() != cell.getCurrState()) {
           cell.setColor(cell.getCurrState() == GameOfLifeState.ALIVE ? Color.BLACK : Color.WHITE);
-          updatedCells.add(cell.getId());
         }
       }
     }
-
-    return updatedCells;
   }
 
 

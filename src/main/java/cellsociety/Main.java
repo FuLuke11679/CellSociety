@@ -106,20 +106,14 @@ public class Main extends Application {
         simLoop.setCycleCount(Timeline.INDEFINITE);
         simLoop.play();
     }
-    public void restartSimulation() {
-        simLoop.stop(); // Stop the current simulation
-        myGrid = new Grid(10, 10); // Reset the grid
-        myGridView = new GridView(10, 10, myGrid); // Reset the view
-        setStage(myGridView.getScene()); // Update the scene
-    }
 
     public void step(double elapsedTime){
         //executes transition to next generation
         //need to update internal grid in Grid class
         //once its been updated then update visual display
         //for now simply make small change to Grid to see update take place
-        List<Integer> updatedValues = myGrid.update(); //list of cell ids that were updated
-        myGridView.update(updatedValues);
+        myGrid.update(); //list of cell ids that were updated
+        myGridView.update(myGrid.getLength());
 
         //PauseTransition pause = new PauseTransition(Duration.seconds(10));
         //pause.play();

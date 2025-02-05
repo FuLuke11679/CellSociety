@@ -18,7 +18,7 @@ public class ConwayCell extends Cell  {
     }
   }
 
-  public ConwayCell(int id, GameOfLifeState prevState, GameOfLifeState currState) {
+  public ConwayCell(int id, CellState prevState, CellState currState) {
     super(id, prevState, currState);
     if (currState == GameOfLifeState.DEAD) {
       setColor(Color.WHITE);

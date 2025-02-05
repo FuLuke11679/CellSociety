@@ -72,8 +72,8 @@ public class GridView {
   /**
    * Updates the grid efficiently by modifying only changed cells. Don't want to pass entire grid into front end.
    */
-  public void update(List<Integer> updatedCells) {
-    for (int id : updatedCells) {
+  public void update(int length) {
+    for (int id = 0; id < length; id++) {
       int row = id / columns;
       int col = id % columns;
       cellRectangles[row][col].setFill(grid.getColor(row, col));
