@@ -29,11 +29,9 @@ public class PercolationRuleset extends Ruleset {
   private boolean hasPercolatedNeighbor(Cell cell, List<Cell> neighbors) {
     for (Cell neighbor : neighbors) {
       if (getState(cell, neighbor) == PercolationState.PERCOLATED) {
-        System.out.println("yo whatup");
         return true;
       }
     }
-    System.out.println("updog");
     return false;
   }
 

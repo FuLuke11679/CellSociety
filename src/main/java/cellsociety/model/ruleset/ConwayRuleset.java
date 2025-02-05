@@ -22,7 +22,10 @@ public class ConwayRuleset extends Ruleset {
 
   public void updateState(Cell cell, List<Cell> neighbors) {
     int aliveCells = countNeighbors(cell, neighbors);
-    if (aliveCells == 2 || aliveCells == 3) {
+    if (aliveCells == 2) {
+      maintainCell(cell);
+    }
+    if (aliveCells == 3) {
       birthCell(cell);
     } else {
       killCell(cell);
@@ -39,6 +42,10 @@ public class ConwayRuleset extends Ruleset {
     cell.setPrevState(cell.getCurrState());
     cell.setCurrState(ConwayState.ALIVE);
     cell.setColor(Color.BLACK);
+  }
+
+  private void maintainCell(Cell cell) {
+    cell.setPrevState(cell.getCurrState());
   }
 
 }
