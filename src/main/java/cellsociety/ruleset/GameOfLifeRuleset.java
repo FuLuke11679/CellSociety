@@ -27,13 +27,23 @@ public class GameOfLifeRuleset extends Ruleset {
     }
 
     int aliveCells = countNeighbors(gameCell, neighbors);
+    State nextState = gameCell.getCurrState(); // Default to staying the same
 
-    if (aliveCells == 3 || (aliveCells == 2 && gameCell.getCurrState() == State.ALIVE)) {
-      birthCell(gameCell);
+    if (gameCell.getCurrState() == State.ALIVE) {
+      if (aliveCells < 2 || aliveCells > 3) {
+        nextState = State.DEAD; // Overcrowding or underpopulation
+      }
     } else {
-      killCell(gameCell);
+      if (aliveCells == 3) {
+        nextState = State.ALIVE; // Reproduction
+      }
     }
+
+    gameCell.setPrevState(gameCell.getCurrState());
+    gameCell.setCurrState(nextState);
+    gameCell.setColor(nextState == State.ALIVE ? Color.BLACK : Color.WHITE);
   }
+
 
   private State getState(Cell cell, GameOfLifeCell neighbor) {
     if (neighbor.getId() < cell.getId()) {

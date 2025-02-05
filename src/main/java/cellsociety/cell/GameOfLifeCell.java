@@ -1,5 +1,10 @@
 package cellsociety.cell;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import javafx.scene.paint.Color;
 
 public class GameOfLifeCell extends Cell {
@@ -17,11 +22,7 @@ public class GameOfLifeCell extends Cell {
     this.prevState = prevState;
     this.currState = currState;
 
-    if (currState == State.DEAD) {
-      setColor(Color.WHITE);
-    } else {
-      setColor(Color.BLACK);
-    }
+    setColor(getStateColor(currState));
   }
 
   public State getPrevState() {
@@ -38,6 +39,17 @@ public class GameOfLifeCell extends Cell {
 
   public void setCurrState(State currState) {
     this.currState = currState;
+  }
+  //returns list of states
+  public static ArrayList<State> getStates(){
+    return new ArrayList<>(Arrays.asList(State.values()));
+  }
+  public static Color getStateColor(State state) {
+    if (state == State.DEAD) {
+      return Color.WHITE;
+    } else {
+      return Color.BLACK;
+    }
   }
 
 }
