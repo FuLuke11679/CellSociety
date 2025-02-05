@@ -43,7 +43,7 @@ public class Main extends Application {
     public static final String INTERNAL_CONFIGURATION = "cellsociety.Version";
 
     private Timeline simLoop;
-    private static double SECOND_DELAY = 0.8;  //this can be varied based on sim speed slider
+    private static double SECOND_DELAY = 2;  //this can be varied based on sim speed slider
     private static Stage globalStage;
     private GridView myGridView;
     private Grid myGrid;
@@ -54,22 +54,17 @@ public class Main extends Application {
      */
     @Override
     public void start (Stage primaryStage) {
-        //skip xml loading for now--for now just initialize grid randomly and declare size/color/other
-        //variables directly in program
-        /*
+
         showMessage(AlertType.INFORMATION, String.format("Version: %s", getVersion()));
         File dataFile = FILE_CHOOSER.showOpenDialog(primaryStage);
-        if (dataFile != null) {
-            int numBlocks = calculateNumBlocks(dataFile);
-            if (numBlocks != 0) {
-                showMessage(AlertType.INFORMATION, String.format("Number of Blocks = %d", numBlocks));
-            }
-        }
-         */
+        Parser myParser = new XMLParser(dataFile);
+
         globalStage = primaryStage;
         simLoop = new Timeline();
-        myGrid = new Grid(10, 10);
-        myGridView = new GridView(10, 10, myGrid); //parameters to constructor will be parsed from xml file
+        myGrid = new Grid(myParser.getRows(), myParser.getColumns(), myParser.getInitialStates());
+        myGridView = new GridView(myParser.getRows(), myParser.getColumns(), myGrid); //parameters to constructor will be parsed from xml file
+        //need to pass more info regarding simulation title, author, etc to GridView constructor
+
         //myGridView.update(myGrid.getGrid());
         //check what initial scene looks like (should write this in JUnit test next time
         setStage(myGridView.getScene());

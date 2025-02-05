@@ -2,6 +2,7 @@ package cellsociety;
 
 import java.util.List;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
@@ -19,6 +20,7 @@ public class GridView {
   private final int WINDOW_WIDTH = 500;
   private final int WINDOW_HEIGHT = 700;
   private VBox infoBox;
+  private VBox buttons;
   private Rectangle[][] cellRectangles;  // Store references for easy updates
   private Grid grid;
 
@@ -41,6 +43,7 @@ public class GridView {
     BorderPane layout = new BorderPane();
     layout.setCenter(gridPane);
     layout.setTop(infoBox);
+    layout.setRight(buttons);  //new
 
     this.myScene = new Scene(layout, WINDOW_WIDTH, WINDOW_HEIGHT);
   }
@@ -83,6 +86,12 @@ public class GridView {
         new Text("Author: " + author),
         new Text("Description: " + description)
     );
+    //new
+    buttons = new VBox();
+    Button button1 = new Button("Button 1");
+    Button button2 = new Button("Button 2");
+    Button button3 = new Button("Button 3");
+    buttons.getChildren().addAll(button1, button2, button3);
   }
 
   /**

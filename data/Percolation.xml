@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<simulationConfig>
+    <!-- window and grid configuration -->
+    <display width="800" height="800" title="Percolation Simulation" author="Palo">
+        <grid rows="5" columns="5" />
+        <description text="This is the percolation simulation"/>
+    </display>
+
+    <!-- sim configuration -->
+    <sim type="Percolation">
+        <simvars
+
+        />
+    </sim>
+    <init
+      stateList =
+        "A,A,D,D,D,
+        A,A,D,D,D,
+        A,A,D,D,D,
+        A,A,D,D,D,
+        A,A,D,D,D"
+    >
+    </init>
+
+</simulationConfig>

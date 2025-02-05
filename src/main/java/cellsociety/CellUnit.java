@@ -7,6 +7,7 @@ public class CellUnit {
     private int id;
     private Color color;
 
+
     public CellUnit(int id, double density) {
       this.id = id;
       Random rand = new Random();
@@ -17,6 +18,12 @@ public class CellUnit {
         this.color = Color.WHITE;
       }
     }
+
+  public CellUnit(int id, Color color){
+    this.id = id;
+    this.color = color;
+  }
+
 
     public int getID(){
       return id;

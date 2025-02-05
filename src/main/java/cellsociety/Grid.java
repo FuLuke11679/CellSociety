@@ -21,23 +21,23 @@ public class Grid {
    * @param rows       Number of rows in the grid.
    * @param columns    Number of columns in the grid.
    */
-  public Grid(int rows, int columns) {
+  public Grid(int rows, int columns, List<CellUnit> initStates) {
     this.rows = rows;
     this.columns = columns;
     myGrid = new ArrayList<>();
-    initializeGrid();
+    initializeGrid(initStates);
   }
 
   /**
    * Initialize the grid with Cells
    */
-  public void initializeGrid() {
+  public void initializeGrid(List<CellUnit> initStates) {
     //myGrid = new ArrayList<>();
     int count = 0;
     for (int x = 0; x < rows; x++) {
       List<CellUnit> row = new ArrayList<>();
       for (int y = 0; y < columns; y++) {
-        row.add(new CellUnit(count, 0.2));
+        row.add(initStates.get(count));
         count++;
       }
       myGrid.add(row);
