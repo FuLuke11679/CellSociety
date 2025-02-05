@@ -109,6 +109,19 @@ public class XMLParser extends Parser{
     this.description = getRequiredAttribute(descElement, "text");
   }
 
+  private void parseSimulation(Document document) {
+    Element sim = getRequiredElement(document, "sim");
+    this.simType = getRequiredAttribute(sim, "type");
+    
+    Element simvars = getRequiredElement(document, "simvars");
+    simVarsMap = new HashMap<>();
+    NamedNodeMap attributes = simvars.getAttributes();
+    for (int i = 0; i < attributes.getLength(); i++) {
+        Node attr = attributes.item(i);
+        simVarsMap.put(attr.getNodeName(), attr.getNodeValue());
+    }
+  }
+
   private Element getRequiredElement(Node parent, String tagName) {
     NodeList elements = (parent instanceof Document ? 
         ((Document)parent).getElementsByTagName(tagName) :
