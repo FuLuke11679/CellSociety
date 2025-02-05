@@ -1,9 +1,9 @@
-package cellsociety.ruleset;
+package cellsociety.model.ruleset;
 
-import cellsociety.cell.*;
-import cellsociety.cell.ConwayCell.GameOfLifeState;
+import cellsociety.model.cell.Cell;
+import cellsociety.model.cell.ConwayCell.ConwayState;
 import java.util.List;
-import cellsociety.state.CellState;
+import cellsociety.model.state.CellState;
 import javafx.scene.paint.Color;
 
 public class ConwayRuleset extends Ruleset {
@@ -13,7 +13,7 @@ public class ConwayRuleset extends Ruleset {
   private int countNeighbors(Cell cell, List<Cell> neighbors) {
     int aliveCells = 0;
     for (Cell neighbor : neighbors) {
-      if (getState(cell, neighbor) == GameOfLifeState.ALIVE) { //If the cell is alive
+      if (getState(cell, neighbor) == ConwayState.ALIVE) { //If the cell is alive
         aliveCells++;
       }
     }
@@ -29,22 +29,15 @@ public class ConwayRuleset extends Ruleset {
     }
   }
 
-  private CellState getState(Cell cell, Cell neighbor) {
-    if (neighbor.getId() < cell.getId()) {
-      return neighbor.getPrevState();
-    }
-    return neighbor.getCurrState();
-  }
-
   private void killCell(Cell cell) {
     cell.setPrevState(cell.getCurrState());
-    cell.setCurrState(GameOfLifeState.DEAD);
+    cell.setCurrState(ConwayState.DEAD);
     cell.setColor(Color.WHITE);
   }
 
   private void birthCell(Cell cell) {
     cell.setPrevState(cell.getCurrState());
-    cell.setCurrState(GameOfLifeState.ALIVE);
+    cell.setCurrState(ConwayState.ALIVE);
     cell.setColor(Color.BLACK);
   }
 
