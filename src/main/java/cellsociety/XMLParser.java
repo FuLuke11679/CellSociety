@@ -21,18 +21,34 @@ public class XMLParser extends Parser {
     private String[] initialStates;
     private Map<String, String> simVarsMap;
 
-    public XMLParser(File file) throws ParserConfigurationException, SAXException, IOException {
-        DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-        // Enable secure processing to prevent XXE attacks
-        factory.setFeature("http://xml.org/sax/features/external-general-entities", false);
-        factory.setFeature("http://xml.org/sax/features/external-parameter-entities", false);
-        factory.setFeature("http://apache.org/xml/features/nonvalidating/load-external-dtd", false);
-        
-        DocumentBuilder builder = factory.newDocumentBuilder();
-        Document document = builder.parse(file);
-        document.getDocumentElement().normalize(); // This line should not be commented out
-        
-        parseDocument(document);
+    public XMLParser(File file) {
+        try {
+            DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+            // Enable secure processing to prevent XXE attacks
+            factory.setFeature("http://xml.org/sax/features/external-general-entities", false);
+            factory.setFeature("http://xml.org/sax/features/external-parameter-entities", false);
+            factory.setFeature("http://apache.org/xml/features/nonvalidating/load-external-dtd", false);
+            
+            DocumentBuilder builder = factory.newDocumentBuilder();
+            Document document = builder.parse(file);
+            document.getDocumentElement().normalize();
+            
+            parseDocument(document);
+        } catch (ParserConfigurationException e) {
+            handleError("XML Parser Configuration Error", e);
+        } catch (SAXException e) {
+            handleError("XML Parsing Error: The file may be malformed", e);
+        } catch (IOException e) {
+            handleError("File I/O Error", e);
+        } catch (Exception e) {
+            handleError("Unexpected Error", e);
+        }
+    }
+    
+    private void handleError(String message, Exception e) {
+        System.err.println(message + ": " + e.getMessage());
+        // You might want to throw a custom exception here instead
+        // throw new XMLParsingException(message, e);
     }
     
     private void parseDocument(Document document) {
@@ -101,7 +117,7 @@ public class XMLParser extends Parser {
     }
     
     private int getRequiredIntAttribute(Element element, String attributeName) {
-        String value = getRequiredAttribute(element, "width");
+        String value = getRequiredAttribute(element, attributeName);
         try {
             return Integer.parseInt(value);
         } catch (NumberFormatException e) {
@@ -112,12 +128,35 @@ public class XMLParser extends Parser {
     }
 
     // Getters remain unchanged
-    public int getWidth() { return width; }
-    public int getHeight() { return height; }
-    public String getTitle() { return title; }
-    public String getSimType() { return simType; }
-    public int getRows() { return rows; }
-    public int getColumns() { return columns; }
-    public String[] getInitialStates() { return initialStates; }
-    public Map<String, String> getSimVarsMap() { return simVarsMap; }
+    public int getWidth() { 
+      return width; 
+    }
+
+    public int getHeight() { 
+      return height; 
+    }
+
+    public String getTitle() { 
+      return title; 
+    }
+
+    public String getSimType() { 
+      return simType; 
+    }
+
+    public int getRows() { 
+      return rows; 
+    }
+
+    public int getColumns() { 
+      return columns; 
+    }
+    
+    public String[] getInitialStates() { 
+      return initialStates; 
+    }
+
+    public Map<String, String> getSimVarsMap() { 
+      return simVarsMap; 
+    }
 }
