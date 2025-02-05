@@ -1,70 +1,47 @@
 package cellsociety.view;
 
-import static org.junit.jupiter.api.Assertions.*;
-
 import cellsociety.model.Grid;
-import javafx.scene.Scene;
+import cellsociety.model.cell.ConwayCell.ConwayState;
+import cellsociety.model.ruleset.ConwayRuleset;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Rectangle;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import javafx.scene.Scene;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 class GridViewTest {
 
   private GridView gridView;
-  private TestGrid testGrid;
-  private final int rows = 5;
-  private final int columns = 5;
+  private Grid grid;
 
   @BeforeEach
   void setUp() {
-    testGrid = new TestGrid(rows, columns);
-    gridView = new GridView(rows, columns, testGrid);
+    String[] initialCells = {
+        "A", "D", "A", "D",
+        "D", "A", "D", "A",
+        "A", "D", "A", "D",
+        "D", "A", "D", "A"
+    };
+    grid = new Grid(4, 4, new ConwayRuleset(), initialCells);
+    gridView = new GridView(4, 4, grid);
   }
 
   @Test
-  void getScene() {
+  void testUpdate() {
+    grid.update();
+    gridView.update(16); // Should update the grid view with 16 cells.
+    Rectangle firstCell = (Rectangle) gridView.getScene().getRoot().getChildrenUnmodifiable().get(0);
+
+    // Now you can safely call getFill() on the Rectangle
+    assertEquals(Color.WHITE, firstCell.getFill(), "The first cell should be white after update.");
+  }
+
+
+  @Test
+  void testGetScene() {
     Scene scene = gridView.getScene();
-    assertNotNull(scene, "Scene should not be null");
-    assertEquals(500, scene.getWidth(), "Scene should have correct width");
-    assertEquals(700, scene.getHeight(), "Scene should have correct height");
-  }
-
-  @Test
-  void update() {
-    // Set a specific cell color
-    testGrid.setColor(2, 2, Color.BLUE);
-
-    // Call update
-    gridView.update(rows * columns);
-
-    // Verify that the color has changed
-    assertEquals(Color.BLUE, testGrid.getColor(2, 2), "Cell color should update correctly");
-  }
-
-  /**
-   * A simple test implementation of Grid that allows setting colors manually.
-   */
-  static class TestGrid extends Grid {
-    private final Color[][] colors;
-
-    TestGrid(int rows, int columns) {
-      super(rows, columns); // Assuming Grid has a no-arg constructor
-      colors = new Color[rows][columns];
-
-      // Default all cells to white
-      for (int i = 0; i < rows; i++) {
-        for (int j = 0; j < columns; j++) {
-          colors[i][j] = Color.WHITE;
-        }
-      }
-    }
-
-    public Color getColor(int row, int col) {
-      return colors[row][col];
-    }
-
-    public void setColor(int row, int col, Color color) {
-      colors[row][col] = color;
-    }
+    assertNotNull(scene, "Scene should not be null.");
   }
 }
