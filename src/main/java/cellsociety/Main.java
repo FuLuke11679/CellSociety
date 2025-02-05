@@ -1,8 +1,16 @@
 package cellsociety;
 
+import cellsociety.model.cell.ConwayCell.ConwayState;
+import cellsociety.model.cell.FireCell.FireState;
+import cellsociety.model.cell.PercolationCell.PercolationState;
+import cellsociety.model.ruleset.FireRuleset;
+import cellsociety.model.ruleset.PercolationRuleset;
+import cellsociety.model.ruleset.Ruleset;
+import cellsociety.model.state.CellState;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 import java.util.ResourceBundle;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
@@ -29,6 +37,7 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
+import cellsociety.model.ruleset.ConwayRuleset;
 
 
 /**
@@ -44,12 +53,14 @@ public class Main extends Application {
     // internal configuration file
     public static final String INTERNAL_CONFIGURATION = "cellsociety.Version";
 
+    public static final File SIM_FILE = new File("data/GameOfLife.xml");
+
     private Timeline simLoop;
     private static double SECOND_DELAY = 0.8;  //this can be varied based on sim speed slider
     private static Stage globalStage;
     private GridView myGridView;
     private Grid myGrid;
-
+    private Parser myParser;
 
     /**
      * @see Application#start(Stage)
@@ -70,8 +81,22 @@ public class Main extends Application {
          */
         globalStage = primaryStage;
         simLoop = new Timeline();
-        myGrid = new Grid(20, 20);
-        myGridView = new GridView(20, 20, myGrid); //parameters to constructor will be parsed from xml file
+        myParser = new XMLParser(SIM_FILE);
+
+        double probCatch = 0, probGrow = 0;
+        if (!myParser.getSimVarsMap().isEmpty()) {
+            probCatch = Double.parseDouble(myParser.getSimVarsMap().get("probCatch"));
+            probGrow = Double.parseDouble(myParser.getSimVarsMap().get("probGrow"));
+        }
+
+        Map<String, Ruleset> rulesetMap = Map.of(
+            "Conway", new ConwayRuleset(),
+            "Percolation", new PercolationRuleset(),
+            "Fire", new FireRuleset(probCatch, probGrow)
+    );
+
+        myGrid = new Grid(myParser.getRows(), myParser.getColumns(), rulesetMap.get(myParser.getSimType()), myParser.getInitialStates());
+        myGridView = new GridView(myParser.getRows(), myParser.getColumns(), myGrid); //parameters to constructor will be parsed from xml file
         //myGridView.update(myGrid.getGrid());
         //check what initial scene looks like (should write this in JUnit test next time
         BorderPane layout = new BorderPane();

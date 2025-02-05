@@ -1,6 +1,7 @@
 package cellsociety;
 
 import java.util.List;
+import java.util.Map;
 
 public abstract class Parser {
   //what info is needed from Parser
@@ -28,5 +29,8 @@ public abstract class Parser {
 
   public abstract String[] getInitialStates();
 
+  public abstract String getSimType();
+
+  public abstract Map<String, String> getSimVarsMap();
 
 }
