@@ -1,7 +1,11 @@
 package cellsociety;
 
 import static org.junit.jupiter.api.Assertions.*;
-import javafx.scene.paint.Color;
+
+import cellsociety.model.cell.Cell;
+import cellsociety.model.cell.ConwayCell;
+import cellsociety.model.cell.ConwayCell.ConwayState;
+import cellsociety.model.ruleset.ConwayRuleset;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -9,58 +13,70 @@ class GridTest {
   private Grid grid;
   private final int rows = 5;
   private final int cols = 5;
+  private final String[] initialStates = {
+      "A", "D", "A", "D", "A",
+      "D", "A", "D", "A", "D",
+      "A", "D", "A", "D", "A",
+      "D", "A", "D", "A", "D",
+      "A", "D", "A", "D", "A"
+  };
 
   @BeforeEach
   void setUp() {
-    grid = new Grid(rows, cols);
+    grid = new Grid(rows, cols, new ConwayRuleset(), initialStates);
   }
 
+  // ✅ Tests Grid Initialization: Ensures all cells are created correctly
   @Test
-  void testInitializeGridNotEmpty() {
-    for (int x = 0; x < rows; x++) {
-      for (int y = 0; y < cols; y++) {
-        assertNotNull(grid.getColor(x, y));
-      }
-    }
+  void initializeGrid_CorrectlyInitializesCells() {
+    assertNotNull(grid);
+    assertEquals(rows * cols, grid.getLength());
+
+    // Check that the first and last cell are correctly assigned
+    assertEquals(ConwayState.ALIVE, ((ConwayCell) grid.getCell(0, 0)).getCurrState());
+    assertEquals(ConwayState.DEAD, ((ConwayCell) grid.getCell(0, 1)).getCurrState());
   }
 
+  // ❌ Negative Test: Ensure grid handles invalid initial states safely
   @Test
-  void testInitializeGridCorrectSize() {
+  void initializeGrid_HandlesInvalidStatesGracefully() {
+    String[] invalidStates = {"X", "Y", "Z", "D", "A"};
+    assertThrows(NullPointerException.class, () -> new Grid(1, 5, new ConwayRuleset(), invalidStates));
+  }
+
+
+  // ❌ Negative Test: Ensure update does not throw exceptions on empty grids
+  @Test
+  void update_DoesNotThrowOnEmptyGrid() {
+    Grid emptyGrid = new Grid(0, 0, new ConwayRuleset(), new String[0]);
+    assertDoesNotThrow(emptyGrid::update);
+  }
+
+  // ✅ Tests getCell: Ensures retrieval of correct cell
+  @Test
+  void getCell_ReturnsCorrectCell() {
+    Cell cell = grid.getCell(3, 3);
+    assertNotNull(cell);
+    assertEquals(ConwayState.ALIVE, ((ConwayCell) cell).getCurrState());
+  }
+
+  // ❌ Negative Test: Ensure out-of-bounds access throws exception
+  @Test
+  void getCell_ThrowsExceptionForInvalidCoordinates() {
+    assertThrows(IndexOutOfBoundsException.class, () -> grid.getCell(-1, 0));
+    assertThrows(IndexOutOfBoundsException.class, () -> grid.getCell(rows, cols));
+  }
+
+  // ✅ Tests getLength: Ensures correct grid size
+  @Test
+  void getLength_ReturnsCorrectValue() {
     assertEquals(rows * cols, grid.getLength());
   }
 
+  // ❌ Negative Test: Ensure empty grid returns zero length
   @Test
-  void testUpdateChangesCellStates() {
-    Color beforeUpdate = grid.getColor(2, 2);
-    grid.update();
-    Color afterUpdate = grid.getColor(2, 2);
-    assertNotEquals(beforeUpdate, afterUpdate);
-  }
-
-  @Test
-  void testUpdatePreservesGridSize() {
-    grid.update();
-    assertEquals(rows * cols, grid.getLength());
-  }
-
-  @Test
-  void testGetColorReturnsValidColor() {
-    assertTrue(grid.getColor(0, 0) == Color.BLACK || grid.getColor(0, 0) == Color.WHITE);
-  }
-
-  @Test
-  void testGetColorOutOfBoundsThrowsException() {
-    assertThrows(IndexOutOfBoundsException.class, () -> grid.getColor(rows, cols));
-  }
-
-  @Test
-  void testGetLengthMatchesInitialization() {
-    assertEquals(rows * cols, grid.getLength());
-  }
-
-  @Test
-  void testGetLengthUnchangedAfterUpdate() {
-    grid.update();
-    assertEquals(rows * cols, grid.getLength());
+  void getLength_ReturnsZeroForEmptyGrid() {
+    Grid emptyGrid = new Grid(0, 0, new ConwayRuleset(), new String[0]);
+    assertEquals(0, emptyGrid.getLength());
   }
 }

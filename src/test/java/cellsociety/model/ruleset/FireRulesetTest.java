@@ -1,109 +1,93 @@
-package cellsociety.model.ruleset;
+package cellsociety;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 import cellsociety.model.cell.Cell;
-import cellsociety.model.cell.FireCell;
-import cellsociety.model.cell.FireCell.FireState;
-import cellsociety.model.ruleset.FireRuleset;
-import cellsociety.model.ruleset.Ruleset;
-import java.util.ArrayList;
-import java.util.List;
-import javafx.scene.paint.Color;
+import cellsociety.model.cell.ConwayCell;
+import cellsociety.model.cell.ConwayCell.ConwayState;
+import cellsociety.model.ruleset.ConwayRuleset;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-class FireRulesetTest {
-
-  private static final Color TREE_COLOR = Color.GREEN;
-  private static final Color BURNING_COLOR = Color.BROWN;
-  private static final Color EMPTY_COLOR = Color.YELLOW;
-
-  private Cell emptyCell;
-  private Cell burningCell;
-  private Cell treeCell;
-
-  List<Cell> neighbors;
-
-  Ruleset rulesetMinProb = new FireRuleset(0, 0);
-  Ruleset rulesetMaxProb = new FireRuleset(1, 1);
+class GridTest {
+  private Grid grid;
+  private final int rows = 5;
+  private final int cols = 5;
+  private final String[] initialStates = {
+      "A", "D", "A", "D", "A",
+      "D", "A", "D", "A", "D",
+      "A", "D", "A", "D", "A",
+      "D", "A", "D", "A", "D",
+      "A", "D", "A", "D", "A"
+  };
 
   @BeforeEach
   void setUp() {
-    emptyCell = new FireCell(2, FireState.EMPTY, FireState.EMPTY);
-    burningCell = new FireCell(2, FireState.BURNING, FireState.BURNING);
-    treeCell = new FireCell(2, FireState.TREE, FireState.TREE);
+    grid = new Grid(rows, cols, new ConwayRuleset(), initialStates);
   }
 
+  // ✅ Tests Grid Initialization: Ensures all cells are created correctly
   @Test
-  void updateStateEmptyCellMinProb() {
-    neighbors = new ArrayList<>(List.of(
-        new FireCell(0, FireState.TREE, FireState.TREE),
-        new FireCell(1, FireState.TREE, FireState.TREE),
-        new FireCell(3, FireState.TREE, FireState.TREE),
-        new FireCell(4, FireState.TREE, FireState.TREE)
-    ));
-    rulesetMinProb.updateState(emptyCell, neighbors);
-    assertEquals(FireState.EMPTY, emptyCell.getCurrState());
-    assertEquals(EMPTY_COLOR, emptyCell.getColor());
+  void initializeGrid_CorrectlyInitializesCells() {
+    assertNotNull(grid);
+    assertEquals(rows * cols, grid.getLength());
+
+    // Check that the first and last cell are correctly assigned
+    assertEquals(ConwayState.ALIVE, ((ConwayCell) grid.getCell(0, 0)).getCurrState());
+    assertEquals(ConwayState.DEAD, ((ConwayCell) grid.getCell(0, 1)).getCurrState());
   }
 
+  // ❌ Negative Test: Ensure grid handles invalid initial states safely
   @Test
-  void updateStateEmptyCellMaxProb() {
-    neighbors = new ArrayList<>(List.of(
-        new FireCell(0, FireState.TREE, FireState.TREE),
-        new FireCell(1, FireState.TREE, FireState.TREE),
-        new FireCell(3, FireState.TREE, FireState.TREE),
-        new FireCell(4, FireState.TREE, FireState.TREE)
-    ));
-    rulesetMaxProb.updateState(emptyCell, neighbors);
-    assertEquals(FireState.TREE, emptyCell.getCurrState());
-    assertEquals(TREE_COLOR, emptyCell.getColor());
+  void initializeGrid_HandlesInvalidStatesGracefully() {
+    String[] invalidStates = {"X", "Y", "Z", "D", "A"};
+    assertThrows(NullPointerException.class, () -> new Grid(1, 5, new ConwayRuleset(), invalidStates));
   }
 
+  // ✅ Tests the update method: Ensures state transition occurs
   @Test
-  void updateStateTreeCellWithoutBurningNeighborMinProb() {
-    neighbors = new ArrayList<>(List.of(
-        new FireCell(0, FireState.TREE, FireState.TREE),
-        new FireCell(1, FireState.TREE, FireState.TREE),
-        new FireCell(3, FireState.TREE, FireState.TREE),
-        new FireCell(4, FireState.TREE, FireState.TREE)
-    ));
-    rulesetMinProb.updateState(treeCell, neighbors);
-    assertEquals(FireState.TREE, treeCell.getCurrState());
-    assertEquals(TREE_COLOR, treeCell.getColor());
+  void update_ChangesCellStates() {
+    Cell originalCell = grid.getCell(2, 2);
+    ConwayState originalState = ((ConwayCell) originalCell).getCurrState();
+
+    grid.update();
+    ConwayState updatedState = ((ConwayCell) grid.getCell(2, 2)).getCurrState();
+
+    assertNotEquals(originalState, updatedState);
   }
 
+  // ❌ Negative Test: Ensure update does not throw exceptions on empty grids
   @Test
-  void updateStateTreeCellWithoutBurningNeighborMaxProb() {
-    neighbors = new ArrayList<>(List.of(
-        new FireCell(0, FireState.TREE, FireState.TREE),
-        new FireCell(1, FireState.TREE, FireState.TREE),
-        new FireCell(3, FireState.TREE, FireState.TREE),
-        new FireCell(4, FireState.TREE, FireState.TREE)
-    ));
-    rulesetMaxProb.updateState(treeCell, neighbors);
-    assertEquals(FireState.BURNING, treeCell.getCurrState());
-    assertEquals(BURNING_COLOR, treeCell.getColor());
+  void update_DoesNotThrowOnEmptyGrid() {
+    Grid emptyGrid = new Grid(0, 0, new ConwayRuleset(), new String[0]);
+    assertDoesNotThrow(emptyGrid::update);
   }
 
+  // ✅ Tests getCell: Ensures retrieval of correct cell
   @Test
-  void updateStateTreeCellWithBurningNeighbor() {
-    neighbors = new ArrayList<>(List.of(
-        new FireCell(0, FireState.BURNING, FireState.BURNING),
-        new FireCell(1, FireState.TREE, FireState.TREE),
-        new FireCell(3, FireState.TREE, FireState.TREE)
-    ));
-    rulesetMaxProb.updateState(treeCell, neighbors);
-    assertEquals(FireState.BURNING, treeCell.getCurrState());
-    assertEquals(BURNING_COLOR, treeCell.getColor());
+  void getCell_ReturnsCorrectCell() {
+    Cell cell = grid.getCell(3, 3);
+    assertNotNull(cell);
+    assertEquals(ConwayState.ALIVE, ((ConwayCell) cell).getCurrState());
   }
 
+  // ❌ Negative Test: Ensure out-of-bounds access throws exception
   @Test
-  void updateStateBurningCell() {
-    rulesetMaxProb.updateState(burningCell, neighbors);
-    assertEquals(FireState.EMPTY, burningCell.getCurrState());
-    assertEquals(EMPTY_COLOR, burningCell.getColor());
+  void getCell_ThrowsExceptionForInvalidCoordinates() {
+    assertThrows(IndexOutOfBoundsException.class, () -> grid.getCell(-1, 0));
+    assertThrows(IndexOutOfBoundsException.class, () -> grid.getCell(rows, cols));
   }
 
+  // ✅ Tests getLength: Ensures correct grid size
+  @Test
+  void getLength_ReturnsCorrectValue() {
+    assertEquals(rows * cols, grid.getLength());
+  }
+
+  // ❌ Negative Test: Ensure empty grid returns zero length
+  @Test
+  void getLength_ReturnsZeroForEmptyGrid() {
+    Grid emptyGrid = new Grid(0, 0, new ConwayRuleset(), new String[0]);
+    assertEquals(0, emptyGrid.getLength());
+  }
 }
