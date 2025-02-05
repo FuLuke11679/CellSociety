@@ -88,7 +88,7 @@ public class Main extends Application {
             "Conway", new ConwayRuleset(),
             "Percolation", new PercolationRuleset(),
             "Fire", new FireRuleset(probCatch, probGrow)
-    );
+        );
 
         myGrid = new Grid(myParser.getRows(), myParser.getColumns(), rulesetMap.get(myParser.getSimType()), myParser.getInitialStates());
         myGridView = new GridView(myParser.getRows(), myParser.getColumns(), myGrid); //parameters to constructor will be parsed from xml file
