@@ -1,9 +1,9 @@
-package cellsociety.ruleset;
+package cellsociety.model.ruleset;
 
-import cellsociety.cell.Cell;
-import cellsociety.cell.FireCell.FireState;
+import cellsociety.model.cell.Cell;
+import cellsociety.model.cell.FireCell.FireState;
 import java.util.List;
-import cellsociety.state.CellState;
+import cellsociety.model.state.CellState;
 import javafx.scene.paint.Color;
 
 public class FireRuleset extends Ruleset {
@@ -25,6 +25,8 @@ public class FireRuleset extends Ruleset {
     if (cell.getCurrState() == FireState.EMPTY) {
       if (Math.random() < probGrow) {
         growTree(cell);
+      } else {
+        maintainCell(cell);
       }
       return;
     }
@@ -51,13 +53,6 @@ public class FireRuleset extends Ruleset {
     return false;
   }
 
-  private CellState getState(Cell cell, Cell neighbor) {
-    if (neighbor.getId() < cell.getId()) {
-      return neighbor.getPrevState();
-    }
-    return neighbor.getCurrState();
-  }
-
   private void killCell(Cell cell) {
     cell.setPrevState(cell.getCurrState());
     cell.setCurrState(FireState.EMPTY);
@@ -74,6 +69,10 @@ public class FireRuleset extends Ruleset {
     cell.setPrevState(cell.getCurrState());
     cell.setCurrState(FireState.TREE);
     cell.setColor(TREE_COLOR);
+  }
+
+  private void maintainCell(Cell cell) {
+    cell.setPrevState(cell.getCurrState());
   }
 
 }

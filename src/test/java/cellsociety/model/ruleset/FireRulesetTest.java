@@ -1,10 +1,12 @@
-package cellsociety.ruleset;
+package cellsociety.model.ruleset;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-import cellsociety.cell.Cell;
-import cellsociety.cell.FireCell;
-import cellsociety.cell.FireCell.FireState;
+import cellsociety.model.cell.Cell;
+import cellsociety.model.cell.FireCell;
+import cellsociety.model.cell.FireCell.FireState;
+import cellsociety.model.ruleset.FireRuleset;
+import cellsociety.model.ruleset.Ruleset;
 import java.util.ArrayList;
 import java.util.List;
 import javafx.scene.paint.Color;
