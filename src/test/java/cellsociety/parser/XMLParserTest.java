@@ -13,7 +13,7 @@ class XMLParserTest {
 
   @BeforeEach
   void setUp() {
-    File file = new File("data/GameOfLife.xml");
+    File file = new File("data/GameOfLife_1.xml");
     xmlParser = new XMLParser(file);
   }
   @Test
