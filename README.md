@@ -39,7 +39,7 @@ This project implements a cellular automata simulator.
  * Assumptions or Simplifications:
 
  * Known Bugs:
-
+ 
  * Features implemented:
 
  * Features unimplemented:
