@@ -48,7 +48,7 @@ class GridViewTest {
     private final Color[][] colors;
 
     TestGrid(int rows, int columns) {
-      super(); // Assuming Grid has a no-arg constructor
+      super(rows, columns); // Assuming Grid has a no-arg constructor
       colors = new Color[rows][columns];
 
       // Default all cells to white
