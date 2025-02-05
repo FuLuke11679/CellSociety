@@ -2,6 +2,9 @@ package cellsociety;
 
 import cellsociety.model.cell.Cell;
 import cellsociety.model.cell.ConwayCell;
+import cellsociety.model.cell.ConwayCell.ConwayState;
+import cellsociety.model.cell.FireCell.FireState;
+import cellsociety.model.cell.PercolationCell.PercolationState;
 import cellsociety.model.state.CellState;
 import java.util.List;
 import java.util.Map;
@@ -25,6 +28,17 @@ public class GridView {
   private VBox infoBox;
   private Rectangle[][] cellRectangles;  // Store references for easy updates
   private Grid grid;
+
+  private final Map<CellState, Color> cellColors = Map.of(
+      ConwayState.ALIVE, Color.BLACK,
+      ConwayState.DEAD, Color.WHITE,
+      PercolationState.BLOCKED, Color.BLACK,
+      PercolationState.PERCOLATED, Color.BLUE,
+      PercolationState.OPEN, Color.WHITE,
+      FireState.TREE, Color.GREEN,
+      FireState.BURNING, Color.BROWN,
+      FireState.EMPTY, Color.WHITE
+  );
 
   /**
    * Constructor for GridView.
@@ -60,7 +74,7 @@ public class GridView {
     for (int row = 0; row < rows; row++) {
       for (int col = 0; col < columns; col++) {
         Rectangle rect = new Rectangle(cellSize, cellSize);
-        rect.setFill(grid.getColor(row, col));
+        rect.setFill(cellColors.get(grid.getCell(row, col).getCurrState()));
         rect.setStroke(Color.BLACK);
         rect.setStrokeWidth(1);
         gridPane.add(rect, col, row);  // (column, row) order
@@ -76,7 +90,7 @@ public class GridView {
     for (int id = 0; id < length; id++) {
       int row = id / columns;
       int col = id % columns;
-      cellRectangles[row][col].setFill(grid.getColor(row, col));
+      cellRectangles[row][col].setFill(cellColors.get(grid.getCell(row, col).getCurrState()));
     }
   }
 
@@ -91,10 +105,6 @@ public class GridView {
         new Text("Author: " + author),
         new Text("Description: " + description)
     );
-    for(CellState state : ConwayCell.getStates()){
-      Color stateColor = ConwayCell.getStateColor(state);
-      infoBox.getChildren().add(new Text(state.toString() + ": " + Cell.getColorName(stateColor)));
-    }
   }
 
   /**
