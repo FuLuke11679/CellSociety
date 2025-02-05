@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<simulationConfig>
+  <!-- window and grid configuration -->
+  <display width="800" height="800" title="Fire Simulation" author="Palo">
+    <grid rows="10" columns="10" />
+    <description text="This is the forest fire simulation"/>
+  </display>
+
+  <!-- sim configuration -->
+  <sim type="Fire">
+    <simvars
+      probCatch = "0.15"
+      probGrow = "0.3"
+    />
+  </sim>
+  <init
+    stateList =
+      "B,E,E,E,E,E,E,E,T,B,
+        B,E,E,T,E,E,E,E,E,T,
+        T,T,E,E,T,T,E,T,E,E,
+        B,T,E,E,E,T,T,E,E,B,
+        T,T,E,E,E,E,E,E,E,E,
+        T,T,E,E,T,T,E,T,E,E,
+        B,T,E,E,E,T,T,E,E,B,
+        B,E,E,T,E,E,E,E,E,T,
+        T,T,E,E,E,E,E,E,E,E,
+        B,T,E,E,E,T,T,E,E,B
+"
+  >
+  </init>
+
+</simulationConfig>

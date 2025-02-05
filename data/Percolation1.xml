@@ -2,23 +2,27 @@
 <simulationConfig>
     <!-- window and grid configuration -->
     <display width="800" height="800" title="Percolation Simulation" author="Palo">
-        <grid rows="5" columns="5" />
+        <grid rows="10" columns="10" />
         <description text="This is the percolation simulation"/>
     </display>
 
     <!-- sim configuration -->
     <sim type="Percolation">
         <simvars
-
         />
     </sim>
     <init
       stateList =
-        "A,A,D,D,D,
-        A,A,D,D,D,
-        A,A,D,D,D,
-        A,A,D,D,D,
-        A,A,D,D,D"
+        "P,BL,O,O,O,O,O,O,O,O,
+        O,BL,O,O,O,O,O,O,O,O,
+        O,BL,O,O,O,O,O,O,O,O,
+        O,BL,O,O,O,O,O,O,O,O,
+        O,BL,O,O,O,O,O,O,O,O,
+        O,BL,O,O,O,O,O,O,O,O,
+        O,BL,O,O,O,O,O,O,O,O,
+        O,BL,O,O,O,O,O,O,O,O,
+        O,BL,O,O,O,O,O,O,O,O,
+        O,BL,O,O,O,O,O,O,O,O,"
     >
     </init>
 

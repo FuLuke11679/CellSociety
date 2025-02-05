@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<simulationConfig>
+  <!-- window and grid configuration -->
+  <display width="1000" height="1000" title="Conway Simulation" author="Palo">
+    <grid rows="20" columns="20" />
+    <description text="This is Palo's description"/>
+  </display>
+
+  <!-- sim configuration -->
+  <sim type="Conway">
+    <simvars
+    />
+  </sim>
+  <init
+    stateList =
+      "D,D,D,D,A,D,D,D,D,A,A,A,D,D,A,A,A,D,D,A,
+        D,A,D,D,D,D,A,D,D,D,A,D,D,A,D,A,D,A,A,A,
+        D,A,D,A,D,D,A,D,A,D,D,D,D,D,D,D,D,D,D,D,
+        A,A,D,D,A,A,A,D,D,A,D,D,D,D,D,D,D,D,D,D,
+        D,A,D,D,A,D,A,D,D,A,A,A,D,D,A,A,A,D,D,A,
+        A,D,D,A,A,D,D,A,D,A,D,D,A,D,D,D,A,D,D,A,
+        D,D,D,D,D,D,D,D,D,D,A,A,D,D,A,A,A,D,D,A,
+        A,D,A,D,A,D,D,D,D,D,A,A,D,D,A,A,A,D,D,A,
+        A,D,D,A,D,A,D,A,A,A,D,D,D,D,D,D,D,D,D,D,
+        D,D,D,D,D,D,D,D,D,D,D,D,A,D,D,D,A,D,D,A"
+  >
+  </init>
+</simulationConfig>

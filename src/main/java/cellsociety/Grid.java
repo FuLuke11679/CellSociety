@@ -1,9 +1,14 @@
 package cellsociety;
 
 import cellsociety.model.cell.Cell;
+import cellsociety.model.cell.FireCell.FireState;
+import cellsociety.model.cell.PercolationCell.PercolationState;
+import cellsociety.model.ruleset.FireRuleset;
+import cellsociety.model.ruleset.PercolationRuleset;
 import cellsociety.model.ruleset.Ruleset;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import javafx.scene.paint.Color;
 import cellsociety.model.cell.ConwayCell;
 import cellsociety.model.cell.ConwayCell.ConwayState;
@@ -14,8 +19,21 @@ Updates Grid based on Cell logic
 Does not display the grid or interact at all with javafx packages (i.e Scene, Groups, etc)
  */
 public class Grid {
+
+  private final static Map<String, CellState> stateMap = Map.of(
+      "A", ConwayState.ALIVE,
+      "D", ConwayState.DEAD,
+      "B", FireState.BURNING,
+      "T", FireState.TREE,
+      "E", FireState.EMPTY,
+      "BL", PercolationState.BLOCKED,
+      "P", PercolationState.PERCOLATED,
+      "O", PercolationState.OPEN
+  );
+
   private int rows;
   private int columns;
+  private String[] myCells;
   private List<List<Cell>> myGrid;
   private Ruleset ruleset;
 
@@ -33,6 +51,14 @@ public class Grid {
     initializeGrid();
   }
 
+  public Grid(int rows, int columns, Ruleset ruleset, String[] cells) {
+    this.rows = rows;
+    this.columns = columns;
+    this.ruleset = ruleset;
+    this.myCells = cells;
+    initializeGrid();
+  }
+
   /**
    * Initialize the grid with Cells
    */
@@ -42,8 +68,8 @@ public class Grid {
     for (int x = 0; x < rows; x++) {
       List<Cell> row = new ArrayList<>();
       for (int y = 0; y < columns; y++) {
-        CellState initialState = (Math.random() < 0.3) ? ConwayState.ALIVE : ConwayState.DEAD;
-        row.add(new ConwayCell(count, ConwayState.DEAD, initialState));
+        CellState initialState = stateMap.get(myCells[count]);
+        row.add(new ConwayCell(count, null, initialState));
         count++;
       }
       myGrid.add(row);
@@ -62,19 +88,19 @@ public class Grid {
       ruleset.updateState(cell, new ArrayList<>(neighbors));
     }
     // Second pass: Apply new states and collect updates
-    for (int x = 0; x < rows; x++) {
-      for (int y = 0; y < columns; y++) {
-        Cell cell = myGrid.get(x).get(y);
-        if (cell.getPrevState() != cell.getCurrState()) {
-          cell.setColor(cell.getCurrState() == ConwayState.ALIVE ? Color.BLACK : Color.WHITE);
-        }
-      }
-    }
+//    for (int x = 0; x < rows; x++) {
+//      for (int y = 0; y < columns; y++) {
+//        Cell cell = myGrid.get(x).get(y);
+//        if (cell.getPrevState() != cell.getCurrState()) {
+//          cell.setColor(cell.getCurrState() == ConwayState.ALIVE ? Color.BLACK : Color.WHITE);
+//        }
+//      }
+//    }
   }
 
 
-  public Color getColor(int row, int col){
-    return myGrid.get(row).get(col).getColor();
+  public Cell getCell(int row, int col){
+    return myGrid.get(row).get(col);
   }
 
   private List<Cell> getNeighbors(int row, int col) {

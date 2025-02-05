@@ -11,19 +11,8 @@ public class FireCell extends Cell {
     BURNING;
   }
 
-  private static final Color TREE_COLOR = Color.GREEN;
-  private static final Color BURNING_COLOR = Color.BROWN;
-  private static final Color EMPTY_COLOR = Color.YELLOW;
-
   public FireCell(int id, FireState prevState, FireState currState) {
     super(id, prevState, currState);
-    if (currState == FireState.EMPTY) {
-      setColor(EMPTY_COLOR);
-    } else if (currState == FireState.TREE) {
-      setColor(TREE_COLOR);
-    } else if (currState == FireState.BURNING) {
-      setColor(BURNING_COLOR);
-    }
   }
 
   @Override
