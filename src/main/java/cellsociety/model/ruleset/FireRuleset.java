@@ -3,7 +3,6 @@ package cellsociety.model.ruleset;
 import cellsociety.model.cell.Cell;
 import cellsociety.model.cell.FireCell.FireState;
 import java.util.List;
-import cellsociety.model.state.CellState;
 import javafx.scene.paint.Color;
 
 public class FireRuleset extends Ruleset {

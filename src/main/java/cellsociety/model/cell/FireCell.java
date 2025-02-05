@@ -1,7 +1,6 @@
 package cellsociety.model.cell;
 
 import cellsociety.model.state.CellState;
-import javafx.scene.paint.Color;
 
 public class FireCell extends Cell {
 
