@@ -1,6 +1,6 @@
-package cellsociety.cell;
+package cellsociety.model.cell;
 
-import cellsociety.state.CellState;
+import cellsociety.model.state.CellState;
 import javafx.scene.paint.Color;
 
 public class FireCell extends Cell {
@@ -9,11 +9,6 @@ public class FireCell extends Cell {
     EMPTY,
     TREE,
     BURNING;
-
-    @Override
-    public String getName() {
-      return "";
-    }
   }
 
   private static final Color TREE_COLOR = Color.GREEN;

@@ -68,8 +68,8 @@ public class Main extends Application {
          */
         globalStage = primaryStage;
         simLoop = new Timeline();
-        myGrid = new Grid(10, 10);
-        myGridView = new GridView(10, 10, myGrid); //parameters to constructor will be parsed from xml file
+        myGrid = new Grid(20, 20);
+        myGridView = new GridView(20, 20, myGrid); //parameters to constructor will be parsed from xml file
         //myGridView.update(myGrid.getGrid());
         //check what initial scene looks like (should write this in JUnit test next time
         setStage(myGridView.getScene());

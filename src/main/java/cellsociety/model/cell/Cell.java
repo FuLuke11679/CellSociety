@@ -1,6 +1,6 @@
-package cellsociety.cell;
+package cellsociety.model.cell;
 
-import cellsociety.state.CellState;
+import cellsociety.model.state.CellState;
 import javafx.scene.paint.Color;
 
 public abstract class Cell {
