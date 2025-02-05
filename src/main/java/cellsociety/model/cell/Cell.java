@@ -1,9 +1,6 @@
 package cellsociety.model.cell;
 
-import java.util.HashMap;
-import java.util.Map;
 import cellsociety.model.state.CellState;
-import javafx.scene.paint.Color;
 
 public abstract class Cell {
 

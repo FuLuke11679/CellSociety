@@ -3,8 +3,6 @@ package cellsociety.model.ruleset;
 import cellsociety.model.cell.Cell;
 import cellsociety.model.cell.ConwayCell.ConwayState;
 import java.util.List;
-import cellsociety.model.state.CellState;
-import javafx.scene.paint.Color;
 
 public class ConwayRuleset extends Ruleset {
 
