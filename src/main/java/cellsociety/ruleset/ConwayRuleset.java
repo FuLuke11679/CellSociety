@@ -10,15 +10,18 @@ public class ConwayRuleset extends Ruleset {
 
   public ConwayRuleset() {}
 
+
   private int countNeighbors(Cell cell, List<Cell> neighbors) {
     int aliveCells = 0;
     for (Cell neighbor : neighbors) {
-      if (getState(cell, neighbor) == State.ALIVE) { //If the cell is alive
+      if (getState(cell, neighbor) == GameOfLifeState.ALIVE) {
         aliveCells++;
       }
     }
+
     return aliveCells;
   }
+
 
   public void updateState(Cell cell, List<Cell> neighbors) {
     int aliveCells = countNeighbors(cell, neighbors);
@@ -28,6 +31,7 @@ public class ConwayRuleset extends Ruleset {
       killCell(cell);
     }
   }
+
 
   private CellState getState(Cell cell, Cell neighbor) {
     if (neighbor.getId() < cell.getId()) {

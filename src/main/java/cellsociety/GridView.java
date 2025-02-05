@@ -1,8 +1,8 @@
 package cellsociety;
 
 import cellsociety.cell.Cell;
-import cellsociety.cell.GameOfLifeCell;
-import cellsociety.cell.GameOfLifeCell.State;
+import cellsociety.cell.ConwayCell;
+import cellsociety.state.CellState;
 import java.util.List;
 import javafx.scene.Scene;
 import javafx.scene.layout.BorderPane;
@@ -20,7 +20,7 @@ public class GridView {
   private int cellSize;
   private final int SIZE_GRID = 500;
   private final int WINDOW_WIDTH = 500;
-  private final int WINDOW_HEIGHT = 600;
+  private final int WINDOW_HEIGHT = 700;
   private VBox infoBox;
   private Rectangle[][] cellRectangles;  // Store references for easy updates
   private Grid grid;
@@ -38,6 +38,7 @@ public class GridView {
     this.grid = grid;
 
     initializeGrid();
+    //hard coded for now
     String description = "Any live cell with fewer than two live neighbours dies, as if by underpopulation.\n"
         + "Any live cell with two or three live neighbours lives on to the next generation.\n"
         + "Any live cell with more than three live neighbours dies, as if by overpopulation.\n"
@@ -71,8 +72,8 @@ public class GridView {
   /**
    * Updates the grid efficiently by modifying only changed cells. Don't want to pass entire grid into front end.
    */
-  public void update(int length) {
-    for (int id = 0; id < length; id++) {
+  public void update(List<Integer> updatedCells) {
+    for (int id : updatedCells) {
       int row = id / columns;
       int col = id % columns;
       cellRectangles[row][col].setFill(grid.getColor(row, col));
@@ -90,8 +91,8 @@ public class GridView {
         new Text("Author: " + author),
         new Text("Description: " + description)
     );
-    for(State state : GameOfLifeCell.getStates()){
-      Color stateColor = GameOfLifeCell.getStateColor(state);
+    for(CellState state : ConwayCell.getStates()){
+      Color stateColor = ConwayCell.getStateColor(state);
       infoBox.getChildren().add(new Text(state.toString() + ": " + Cell.getColorName(stateColor)));
     }
   }

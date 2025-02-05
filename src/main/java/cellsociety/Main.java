@@ -118,8 +118,8 @@ public class Main extends Application {
         //need to update internal grid in Grid class
         //once its been updated then update visual display
         //for now simply make small change to Grid to see update take place
-        myGrid.update(); //list of cell ids that were updated
-        myGridView.update(myGrid.getLength());
+        List<Integer> updatedValues = myGrid.update(); //list of cell ids that were updated
+        myGridView.update(updatedValues);
 
         //PauseTransition pause = new PauseTransition(Duration.seconds(10));
         //pause.play();
