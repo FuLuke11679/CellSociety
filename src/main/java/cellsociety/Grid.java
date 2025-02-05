@@ -1,14 +1,14 @@
 package cellsociety;
 
-import cellsociety.cell.Cell;
-import cellsociety.ruleset.Ruleset;
+import cellsociety.model.cell.Cell;
+import cellsociety.model.ruleset.Ruleset;
 import java.util.ArrayList;
 import java.util.List;
 import javafx.scene.paint.Color;
-import cellsociety.cell.ConwayCell;
-import cellsociety.cell.ConwayCell.GameOfLifeState;
-import cellsociety.state.CellState;
-import cellsociety.ruleset.ConwayRuleset;
+import cellsociety.model.cell.ConwayCell;
+import cellsociety.model.cell.ConwayCell.ConwayState;
+import cellsociety.model.state.CellState;
+import cellsociety.model.ruleset.ConwayRuleset;
 /*
 Updates Grid based on Cell logic
 Does not display the grid or interact at all with javafx packages (i.e Scene, Groups, etc)
@@ -42,11 +42,11 @@ public class Grid {
     for (int x = 0; x < rows; x++) {
       List<Cell> row = new ArrayList<>();
       for (int y = 0; y < columns; y++) {
-        CellState initialState = GameOfLifeState.DEAD;
+        CellState initialState = ConwayState.DEAD;
         if((x >= 10 && x <= 12) && y == 10){
-          initialState = GameOfLifeState.ALIVE;
+          initialState = ConwayState.ALIVE;
         }
-        row.add(new ConwayCell(count, GameOfLifeState.DEAD, initialState));
+        row.add(new ConwayCell(count, ConwayState.DEAD, initialState));
         count++;
       }
       myGrid.add(row);
@@ -69,7 +69,7 @@ public class Grid {
       for (int y = 0; y < columns; y++) {
         Cell cell = myGrid.get(x).get(y);
         if (cell.getPrevState() != cell.getCurrState()) {
-          cell.setColor(cell.getCurrState() == GameOfLifeState.ALIVE ? Color.BLACK : Color.WHITE);
+          cell.setColor(cell.getCurrState() == ConwayState.ALIVE ? Color.BLACK : Color.WHITE);
         }
       }
     }

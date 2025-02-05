@@ -1,8 +1,8 @@
 package cellsociety;
 
-import cellsociety.cell.Cell;
-import cellsociety.cell.ConwayCell;
-import cellsociety.state.CellState;
+import cellsociety.model.cell.Cell;
+import cellsociety.model.cell.ConwayCell;
+import cellsociety.model.state.CellState;
 import java.util.List;
 import javafx.scene.Scene;
 import javafx.scene.layout.BorderPane;

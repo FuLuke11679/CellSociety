@@ -1,26 +1,21 @@
-package cellsociety.cell;
+package cellsociety.model.cell;
 
-import cellsociety.state.CellState;
+import cellsociety.model.state.CellState;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import javafx.scene.paint.Color;
 
-public class ConwayCell extends Cell  {
+public class ConwayCell extends Cell {
 
-  public enum GameOfLifeState implements CellState {
+  public enum ConwayState implements CellState {
     ALIVE,
-    DEAD;
-
-    @Override
-    public String getName() {
-      return "";
-    }
+    DEAD
   }
 
   public ConwayCell(int id, CellState prevState, CellState currState) {
     super(id, prevState, currState);
-    if (currState == GameOfLifeState.DEAD) {
+    if (currState == ConwayState.DEAD) {
       setColor(Color.WHITE);
     } else {
       setColor(Color.BLACK);
@@ -43,11 +38,11 @@ public class ConwayCell extends Cell  {
     this.currState = currState;
   }
 
-  public static List<GameOfLifeState> getStates(){
-    return Arrays.asList(GameOfLifeState.values());
+  public static List<CellState> getStates(){
+    return Arrays.asList(ConwayState.values());
   }
   public static Color getStateColor(CellState state) {
-    if (state == GameOfLifeState.DEAD) {
+    if (state == ConwayState.DEAD) {
       return Color.WHITE;
     } else {
       return Color.BLACK;
