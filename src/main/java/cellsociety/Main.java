@@ -53,7 +53,6 @@ public class Main extends Application {
     // internal configuration file
     public static final String INTERNAL_CONFIGURATION = "cellsociety.Version";
 
-    public static final File SIM_FILE = new File("data/Fire.xml");
 
     private Timeline simLoop;
     private static double SECOND_DELAY = 0.8;  //this can be varied based on sim speed slider
@@ -69,14 +68,11 @@ public class Main extends Application {
     @Override
     public void start (Stage primaryStage) {
 
-        //showMessage(AlertType.INFORMATION, String.format("Version: %s", getVersion()));
         File dataFile = FILE_CHOOSER.showOpenDialog(primaryStage);
-        XMLParser myParser = new XMLParser(dataFile);
-
 
         globalStage = primaryStage;
         simLoop = new Timeline();
-        myParser = new XMLParser(SIM_FILE);
+        myParser = new XMLParser(dataFile);
 
         double probCatch = 0, probGrow = 0;
         if (!myParser.getSimVarsMap().isEmpty()) {
