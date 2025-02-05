@@ -25,6 +25,8 @@ public class Controller {
   private Grid myGrid;
   private GridView myGridView;
 
-  public Controller() {}
+  public Controller() {
+
+  }
 
 }

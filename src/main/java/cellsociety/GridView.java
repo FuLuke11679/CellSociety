@@ -4,6 +4,7 @@ import cellsociety.model.cell.Cell;
 import cellsociety.model.cell.ConwayCell;
 import cellsociety.model.state.CellState;
 import java.util.List;
+import java.util.Map;
 import javafx.scene.Scene;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
@@ -24,7 +25,6 @@ public class GridView {
   private VBox infoBox;
   private Rectangle[][] cellRectangles;  // Store references for easy updates
   private Grid grid;
-
 
   /**
    * Constructor for GridView.
