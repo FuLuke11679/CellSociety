@@ -51,23 +51,18 @@ public class Main extends Application {
     private Grid myGrid;
 
 
+
     /**
      * @see Application#start(Stage)
      */
     @Override
     public void start (Stage primaryStage) {
-        //skip xml loading for now--for now just initialize grid randomly and declare size/color/other
-        //variables directly in program
-        /*
-        showMessage(AlertType.INFORMATION, String.format("Version: %s", getVersion()));
+
+        //showMessage(AlertType.INFORMATION, String.format("Version: %s", getVersion()));
         File dataFile = FILE_CHOOSER.showOpenDialog(primaryStage);
-        if (dataFile != null) {
-            int numBlocks = calculateNumBlocks(dataFile);
-            if (numBlocks != 0) {
-                showMessage(AlertType.INFORMATION, String.format("Number of Blocks = %d", numBlocks));
-            }
-        }
-         */
+        XMLParser myParser = new XMLParser(dataFile);
+
+
         globalStage = primaryStage;
         simLoop = new Timeline();
         myGrid = new Grid(20, 20);
