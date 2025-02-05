@@ -1,12 +1,10 @@
-package cellsociety;
+package cellsociety.view;
 
-import cellsociety.model.cell.Cell;
-import cellsociety.model.cell.ConwayCell;
+import cellsociety.model.Grid;
 import cellsociety.model.cell.ConwayCell.ConwayState;
 import cellsociety.model.cell.FireCell.FireState;
 import cellsociety.model.cell.PercolationCell.PercolationState;
 import cellsociety.model.state.CellState;
-import java.util.List;
 import java.util.Map;
 import javafx.scene.Scene;
 import javafx.scene.layout.BorderPane;

@@ -36,7 +36,6 @@ class ConwayRulesetTest {
     ruleset.updateState(cell, neighbors);
     assertEquals(ConwayState.ALIVE, cell.getPrevState());
     assertEquals(ConwayState.DEAD, cell.getCurrState());
-    assertEquals(Color.WHITE, cell.getColor());
   }
 
   @Test
@@ -51,7 +50,6 @@ class ConwayRulesetTest {
     ruleset.updateState(cell, neighbors);
     assertEquals(ConwayState.ALIVE, cell.getPrevState());
     assertEquals(ConwayState.DEAD, cell.getCurrState());
-    assertEquals(Color.WHITE, cell.getColor());
   }
 
   @Test
@@ -66,7 +64,6 @@ class ConwayRulesetTest {
     ruleset.updateState(cell, neighbors);
     assertEquals(ConwayState.DEAD, cell.getPrevState());
     assertEquals(ConwayState.DEAD, cell.getCurrState());
-    assertEquals(Color.WHITE, cell.getColor());
   }
 
   @Test
@@ -81,7 +78,6 @@ class ConwayRulesetTest {
     ruleset.updateState(cell, neighbors);
     assertEquals(ConwayState.DEAD, cell.getPrevState());
     assertEquals(ConwayState.ALIVE, cell.getCurrState());
-    assertEquals(Color.BLACK, cell.getColor());
   }
 
 }

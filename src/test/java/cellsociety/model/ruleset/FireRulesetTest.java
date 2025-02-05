@@ -15,10 +15,6 @@ import org.junit.jupiter.api.Test;
 
 class FireRulesetTest {
 
-  private static final Color TREE_COLOR = Color.GREEN;
-  private static final Color BURNING_COLOR = Color.BROWN;
-  private static final Color EMPTY_COLOR = Color.YELLOW;
-
   private Cell emptyCell;
   private Cell burningCell;
   private Cell treeCell;
@@ -45,7 +41,6 @@ class FireRulesetTest {
     ));
     rulesetMinProb.updateState(emptyCell, neighbors);
     assertEquals(FireState.EMPTY, emptyCell.getCurrState());
-    assertEquals(EMPTY_COLOR, emptyCell.getColor());
   }
 
   @Test
@@ -58,7 +53,6 @@ class FireRulesetTest {
     ));
     rulesetMaxProb.updateState(emptyCell, neighbors);
     assertEquals(FireState.TREE, emptyCell.getCurrState());
-    assertEquals(TREE_COLOR, emptyCell.getColor());
   }
 
   @Test
@@ -71,7 +65,6 @@ class FireRulesetTest {
     ));
     rulesetMinProb.updateState(treeCell, neighbors);
     assertEquals(FireState.TREE, treeCell.getCurrState());
-    assertEquals(TREE_COLOR, treeCell.getColor());
   }
 
   @Test
@@ -84,7 +77,6 @@ class FireRulesetTest {
     ));
     rulesetMaxProb.updateState(treeCell, neighbors);
     assertEquals(FireState.BURNING, treeCell.getCurrState());
-    assertEquals(BURNING_COLOR, treeCell.getColor());
   }
 
   @Test
@@ -96,14 +88,12 @@ class FireRulesetTest {
     ));
     rulesetMaxProb.updateState(treeCell, neighbors);
     assertEquals(FireState.BURNING, treeCell.getCurrState());
-    assertEquals(BURNING_COLOR, treeCell.getColor());
   }
 
   @Test
   void updateStateBurningCell() {
     rulesetMaxProb.updateState(burningCell, neighbors);
     assertEquals(FireState.EMPTY, burningCell.getCurrState());
-    assertEquals(EMPTY_COLOR, burningCell.getColor());
   }
 
 }
