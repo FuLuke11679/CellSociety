@@ -26,7 +26,7 @@ public abstract class Parser {
 
   public abstract int getColumns();
 
-  public abstract List<CellUnit> getInitialStates();
+  public abstract String[] getInitialStates();
 
 
 }

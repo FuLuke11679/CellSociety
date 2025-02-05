@@ -1,5 +1,6 @@
 package cellsociety;
 
+import cellsociety.model.cell.ConwayCell;
 import java.io.IOException;
 import javafx.scene.paint.Color;
 import javax.xml.parsers.DocumentBuilder;
@@ -12,6 +13,7 @@ import java.util.List;
 import org.xml.sax.SAXException;
 import java.util.HashMap;
 import java.util.Map;
+import cellsociety.model.cell.Cell;
 
 public class XMLParser extends Parser{
   private int width;
@@ -21,7 +23,7 @@ public class XMLParser extends Parser{
   private int columns;
   private String simType;
   private String description;
-  private List<Cellt> initialStates;
+  private String[] initialStates;
   private Map<String, String> simVarsMap;
 
   public XMLParser(File file) {
@@ -69,20 +71,8 @@ public class XMLParser extends Parser{
       Element initElement = (Element) document.getElementsByTagName("init").item(0);
       String stateList = initElement.getAttribute("stateList").replaceAll("\\s+", ""); // Remove newlines and spaces
       // Split values using comma
-      String[] states = stateList.split(",");
-      initialStates = new ArrayList<>();
-      int i=0;
-      for(String state : states){
+      initialStates = stateList.split(",");
 
-        if(state.equals("A")){
-          initialStates.add(new CellUnit(i, Color.BLUE));
-        }
-        else if(state.equals("D")){
-          initialStates.add(new CellUnit(i, Color.WHITE));
-        }
-        else if()
-        i++;
-      }
 
     } catch (ParserConfigurationException e) {
       System.err.println("Parser Configuration Error: " + e.getMessage());
@@ -108,7 +98,7 @@ public class XMLParser extends Parser{
 
   public int getColumns() { return columns; }
 
-  public List<CellUnit> getInitialStates() { return initialStates; }
+  public String[] getInitialStates() { return initialStates; }
 
   public Map<String, String> getSimVarsMap() {return simVarsMap;}
 
