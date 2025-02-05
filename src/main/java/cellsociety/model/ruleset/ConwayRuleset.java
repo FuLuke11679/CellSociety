@@ -45,13 +45,11 @@ public class ConwayRuleset extends Ruleset {
   private void killCell(Cell cell) {
     cell.setPrevState(cell.getCurrState());
     cell.setCurrState(ConwayState.DEAD);
-    cell.setColor(Color.WHITE);
   }
 
   private void birthCell(Cell cell) {
     cell.setPrevState(cell.getCurrState());
     cell.setCurrState(ConwayState.ALIVE);
-    cell.setColor(Color.BLACK);
   }
 
   private void maintainCell(Cell cell) {

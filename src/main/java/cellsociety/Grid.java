@@ -88,19 +88,19 @@ public class Grid {
       ruleset.updateState(cell, new ArrayList<>(neighbors));
     }
     // Second pass: Apply new states and collect updates
-    for (int x = 0; x < rows; x++) {
-      for (int y = 0; y < columns; y++) {
-        Cell cell = myGrid.get(x).get(y);
-        if (cell.getPrevState() != cell.getCurrState()) {
-          cell.setColor(cell.getCurrState() == ConwayState.ALIVE ? Color.BLACK : Color.WHITE);
-        }
-      }
-    }
+//    for (int x = 0; x < rows; x++) {
+//      for (int y = 0; y < columns; y++) {
+//        Cell cell = myGrid.get(x).get(y);
+//        if (cell.getPrevState() != cell.getCurrState()) {
+//          cell.setColor(cell.getCurrState() == ConwayState.ALIVE ? Color.BLACK : Color.WHITE);
+//        }
+//      }
+//    }
   }
 
 
-  public Color getColor(int row, int col){
-    return myGrid.get(row).get(col).getColor();
+  public Cell getCell(int row, int col){
+    return myGrid.get(row).get(col);
   }
 
   private List<Cell> getNeighbors(int row, int col) {
