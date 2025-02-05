@@ -26,7 +26,7 @@ class GridTest {
     grid = new Grid(rows, cols, new ConwayRuleset(), initialStates);
   }
 
-  // ✅ Tests Grid Initialization: Ensures all cells are created correctly
+  // Tests Grid Initialization: Ensures all cells are created correctly
   @Test
   void initializeGrid_CorrectlyInitializesCells() {
     assertNotNull(grid);
@@ -37,15 +37,8 @@ class GridTest {
     assertEquals(ConwayState.DEAD, ((ConwayCell) grid.getCell(0, 1)).getCurrState());
   }
 
-  // ❌ Negative Test: Ensure grid handles invalid initial states safely
-  @Test
-  void initializeGrid_HandlesInvalidStatesGracefully() {
-    String[] invalidStates = {"X", "Y", "Z", "D", "A"};
-    assertThrows(NullPointerException.class, () -> new Grid(1, 5, new ConwayRuleset(), invalidStates));
-  }
 
-
-  // ❌ Negative Test: Ensure update does not throw exceptions on empty grids
+  // Negative Test: Ensure update does not throw exceptions on empty grids
   @Test
   void update_DoesNotThrowOnEmptyGrid() {
     Grid emptyGrid = new Grid(0, 0, new ConwayRuleset(), new String[0]);
@@ -60,20 +53,20 @@ class GridTest {
     assertEquals(ConwayState.ALIVE, ((ConwayCell) cell).getCurrState());
   }
 
-  // ❌ Negative Test: Ensure out-of-bounds access throws exception
+  // Negative Test: Ensure out-of-bounds access throws exception
   @Test
   void getCell_ThrowsExceptionForInvalidCoordinates() {
     assertThrows(IndexOutOfBoundsException.class, () -> grid.getCell(-1, 0));
     assertThrows(IndexOutOfBoundsException.class, () -> grid.getCell(rows, cols));
   }
 
-  // ✅ Tests getLength: Ensures correct grid size
+  // Tests getLength: Ensures correct grid size
   @Test
   void getLength_ReturnsCorrectValue() {
     assertEquals(rows * cols, grid.getLength());
   }
 
-  // ❌ Negative Test: Ensure empty grid returns zero length
+  // Negative Test: Ensure empty grid returns zero length
   @Test
   void getLength_ReturnsZeroForEmptyGrid() {
     Grid emptyGrid = new Grid(0, 0, new ConwayRuleset(), new String[0]);

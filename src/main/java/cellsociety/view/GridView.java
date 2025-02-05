@@ -24,7 +24,7 @@ public class GridView {
   private final int WINDOW_WIDTH = 500;
   private final int WINDOW_HEIGHT = 700;
   private VBox infoBox;
-  private Rectangle[][] cellRectangles;  // Store references for easy updates
+  Rectangle[][] cellRectangles;  // Store references for easy updates
   private Grid grid;
 
   private final Map<CellState, Color> cellColors = Map.of(
