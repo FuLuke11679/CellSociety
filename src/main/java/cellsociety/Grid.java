@@ -42,10 +42,7 @@ public class Grid {
     for (int x = 0; x < rows; x++) {
       List<Cell> row = new ArrayList<>();
       for (int y = 0; y < columns; y++) {
-        CellState initialState = ConwayState.DEAD;
-        if((x >= 10 && x <= 12) && y == 10){
-          initialState = ConwayState.ALIVE;
-        }
+        CellState initialState = (Math.random() < 0.3) ? ConwayState.ALIVE : ConwayState.DEAD;
         row.add(new ConwayCell(count, ConwayState.DEAD, initialState));
         count++;
       }

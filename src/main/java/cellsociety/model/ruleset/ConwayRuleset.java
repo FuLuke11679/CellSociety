@@ -22,18 +22,24 @@ public class ConwayRuleset extends Ruleset {
 
   public void updateState(Cell cell, List<Cell> neighbors) {
     int aliveCells = countNeighbors(cell, neighbors);
-    if (cell.getCurrState() == ConwayState.ALIVE) { // Only live cells can maintain state
-      if (aliveCells == 2 || aliveCells == 3) {
-        maintainCell(cell);
-      } else {
+
+    if (cell.getCurrState() == ConwayState.ALIVE) {
+      // Live cell survives with 2 or 3 neighbors, otherwise it dies
+      if (aliveCells < 2 || aliveCells > 3) {
         killCell(cell);
+      } else {
+        maintainCell(cell);
       }
-    } else { // Dead cells only become alive if they have exactly 3 neighbors
+    } else {
+      // Dead cell becomes alive if it has exactly 3 neighbors
       if (aliveCells == 3) {
         birthCell(cell);
+      } else {
+        maintainCell(cell);  // Explicitly keep it dead if it doesn't meet the condition
       }
     }
   }
+
 
 
   private void killCell(Cell cell) {
