@@ -53,7 +53,7 @@ public class Main extends Application {
     // internal configuration file
     public static final String INTERNAL_CONFIGURATION = "cellsociety.Version";
 
-    public static final File SIM_FILE = new File("data/GameOfLife.xml");
+    public static final File SIM_FILE = new File("data/Fire.xml");
 
     private Timeline simLoop;
     private static double SECOND_DELAY = 0.8;  //this can be varied based on sim speed slider
