@@ -1,15 +1,12 @@
-package cellsociety;
+package cellsociety.model;
 
 import cellsociety.model.cell.Cell;
 import cellsociety.model.cell.FireCell.FireState;
 import cellsociety.model.cell.PercolationCell.PercolationState;
-import cellsociety.model.ruleset.FireRuleset;
-import cellsociety.model.ruleset.PercolationRuleset;
 import cellsociety.model.ruleset.Ruleset;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import javafx.scene.paint.Color;
 import cellsociety.model.cell.ConwayCell;
 import cellsociety.model.cell.ConwayCell.ConwayState;
 import cellsociety.model.state.CellState;

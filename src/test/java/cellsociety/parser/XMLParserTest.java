@@ -1,11 +1,10 @@
-package cellsociety;
+package cellsociety.parser;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
-import javafx.stage.FileChooser;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

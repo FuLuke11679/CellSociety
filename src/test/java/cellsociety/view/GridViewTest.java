@@ -1,10 +1,10 @@
-package cellsociety;
+package cellsociety.view;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import cellsociety.model.Grid;
 import javafx.scene.Scene;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Rectangle;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -59,7 +59,6 @@ class GridViewTest {
       }
     }
 
-    @Override
     public Color getColor(int row, int col) {
       return colors[row][col];
     }
