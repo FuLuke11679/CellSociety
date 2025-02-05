@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<simulationConfig>
+  <!-- window and grid configuration -->
+  <display width="100" height="200" title="Conway Simulation" author="Palo">
+    <grid rows="8" columns="8" />
+    <description text="This is Palo's description"/>
+  </display>
+
+  <!-- sim configuration -->
+  <sim type="Conway">
+    <simvars
+    />
+  </sim>
+  <init
+    stateList =
+      "D,D,D,A,D,D,A,A,
+        D,A,D,D,D,D,D,D,
+        D,A,A,D,A,A,D,D,
+        A,D,D,A,D,A,D,A"
+  >
+  </init>
+
+</simulationConfig>
