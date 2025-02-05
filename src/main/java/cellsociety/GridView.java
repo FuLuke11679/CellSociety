@@ -1,5 +1,8 @@
 package cellsociety;
 
+import cellsociety.cell.Cell;
+import cellsociety.cell.GameOfLifeCell;
+import cellsociety.cell.GameOfLifeCell.State;
 import java.util.List;
 import javafx.scene.Scene;
 import javafx.scene.layout.BorderPane;
@@ -17,7 +20,7 @@ public class GridView {
   private int cellSize;
   private final int SIZE_GRID = 500;
   private final int WINDOW_WIDTH = 500;
-  private final int WINDOW_HEIGHT = 700;
+  private final int WINDOW_HEIGHT = 600;
   private VBox infoBox;
   private Rectangle[][] cellRectangles;  // Store references for easy updates
   private Grid grid;
@@ -35,11 +38,15 @@ public class GridView {
     this.grid = grid;
 
     initializeGrid();
+    String description = "Any live cell with fewer than two live neighbours dies, as if by underpopulation.\n"
+        + "Any live cell with two or three live neighbours lives on to the next generation.\n"
+        + "Any live cell with more than three live neighbours dies, as if by overpopulation.\n"
+        + "Any dead cell with exactly three live neighbours becomes a live cell, as if by reproduction.";
     //Hard coded for now
-    setupSimulationInfo("CA", "Wa-Tor World", "Luke", "This is a description");
+    setupSimulationInfo("Game of Life", "Random", "Luke, Daniel, Palo, and Ishan", description);
 
     BorderPane layout = new BorderPane();
-    layout.setCenter(gridPane);
+    layout.setBottom(gridPane);
     layout.setTop(infoBox);
 
     this.myScene = new Scene(layout, WINDOW_WIDTH, WINDOW_HEIGHT);
@@ -83,6 +90,10 @@ public class GridView {
         new Text("Author: " + author),
         new Text("Description: " + description)
     );
+    for(State state : GameOfLifeCell.getStates()){
+      Color stateColor = GameOfLifeCell.getStateColor(state);
+      infoBox.getChildren().add(new Text(state.toString() + ": " + Cell.getColorName(stateColor)));
+    }
   }
 
   /**

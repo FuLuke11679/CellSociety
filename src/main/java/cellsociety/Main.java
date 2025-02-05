@@ -10,6 +10,8 @@ import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.Button;
+import javafx.scene.control.Slider;
 import javafx.scene.paint.Color;
 import javafx.scene.control.ComboBox;
 import javafx.scene.layout.BorderPane;
@@ -68,18 +70,47 @@ public class Main extends Application {
          */
         globalStage = primaryStage;
         simLoop = new Timeline();
-        myGrid = new Grid(10, 10);
-        myGridView = new GridView(10, 10, myGrid); //parameters to constructor will be parsed from xml file
+        myGrid = new Grid(20, 20);
+        myGridView = new GridView(20, 20, myGrid); //parameters to constructor will be parsed from xml file
         //myGridView.update(myGrid.getGrid());
         //check what initial scene looks like (should write this in JUnit test next time
-        setStage(myGridView.getScene());
-        startSimulation(simLoop);
+        BorderPane layout = new BorderPane();
+        layout.setCenter(myGridView.getScene().getRoot());
+        Button startButton = new Button("Start");
+        Button pauseButton = new Button("Pause");
+
+        startButton.setOnAction(e -> startSimulation());
+        pauseButton.setOnAction(e -> simLoop.stop());
+
+        // ✅ Create Speed Slider
+        Slider speedSlider = new Slider(0.1, 2.0, 0.8); // Min speed 0.1s, max 2s per step
+        speedSlider.setShowTickLabels(true);
+        speedSlider.setShowTickMarks(true);
+        speedSlider.setMajorTickUnit(0.5);
+        speedSlider.setBlockIncrement(0.1);
+        speedSlider.valueProperty().addListener((obs, oldVal, newVal) -> {
+            SECOND_DELAY = newVal.doubleValue();  // ✅ Update speed dynamically
+            if (!simLoop.getKeyFrames().isEmpty()) {
+                simLoop.stop();
+                startSimulation(); // Restart with the new speed
+            }
+        });
+        HBox controls = new HBox(10, startButton, pauseButton, new Text("Speed: "), speedSlider);
+        layout.setBottom(controls);
+        setStage(new Scene(layout, 500, 700));
 
     }
-    public void startSimulation(Timeline loop){
-        loop.setCycleCount(Timeline.INDEFINITE);
-        loop.getKeyFrames().add(new KeyFrame(Duration.seconds(SECOND_DELAY), e -> step(SECOND_DELAY)));
-        loop.play();
+    public void startSimulation(){
+        simLoop.stop();
+        simLoop = new Timeline(new KeyFrame(Duration.seconds(SECOND_DELAY), e -> step(SECOND_DELAY)));
+        simLoop.setCycleCount(Timeline.INDEFINITE);
+        simLoop.play();
+    }
+    public void restartSimulation() {
+        simLoop.stop(); // Stop the current simulation
+        myGrid = new Grid(10, 10); // Reset the grid
+        myGridView = new GridView(10, 10, myGrid); // Reset the view
+        setStage(myGridView.getScene()); // Update the scene
     }
 
     public void step(double elapsedTime){
@@ -87,9 +118,8 @@ public class Main extends Application {
         //need to update internal grid in Grid class
         //once its been updated then update visual display
         //for now simply make small change to Grid to see update take place
-        List<Integer> updatedCells = myGrid.update(); //list of cell ids that were updated
+        myGrid.update(); //list of cell ids that were updated
         myGridView.update(myGrid.getLength());
-        setStage(myGridView.getScene());
 
         //PauseTransition pause = new PauseTransition(Duration.seconds(10));
         //pause.play();

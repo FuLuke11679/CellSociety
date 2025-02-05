@@ -41,7 +41,7 @@ public class Grid {
       List<GameOfLifeCell> row = new ArrayList<>();
       for (int y = 0; y < columns; y++) {
         //Randomly set cells as ALIVE or DEAD
-        State initialState = Math.random() < 0.2 ? State.ALIVE : State.DEAD;
+        State initialState = Math.random() < 0.4 ? State.ALIVE : State.DEAD;
         row.add(new GameOfLifeCell(count, State.DEAD, initialState));
         count++;
       }
@@ -49,10 +49,7 @@ public class Grid {
     }
   }
 
-  public List<Integer> update(){
-    //return a list of cell ids that were changed,
-    //loop over all cells and randomly change color of alive cells with probability 0.2
-    List<Integer> updatedCells = new ArrayList<>();
+  public void update(){
     int length = getLength();
     for (int id = 0; id < length; id++) {
       int row = id / columns;
@@ -61,19 +58,8 @@ public class Grid {
       List<GameOfLifeCell> neighbors = getNeighbors(row, col);
       ruleset.updateState(cell, new ArrayList<>(neighbors));
     }
-    // Second pass: Apply new states and collect updates
-    for (int x = 0; x < rows; x++) {
-      for (int y = 0; y < columns; y++) {
-        GameOfLifeCell cell = myGrid.get(x).get(y);
-        if (cell.getPrevState() != cell.getCurrState()) {
-          cell.setColor(cell.getCurrState() == State.ALIVE ? Color.BLACK : Color.WHITE);
-          updatedCells.add(cell.getId());
-        }
-      }
-    }
-
-    return updatedCells;
   }
+
   public Color getColor(int row, int col){
     return myGrid.get(row).get(col).getColor();
   }
