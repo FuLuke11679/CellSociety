@@ -24,7 +24,6 @@ public class XMLParser extends Parser {
     public XMLParser(File file) {
         try {
             DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-            // Enable secure processing to prevent XXE attacks
             factory.setFeature("http://xml.org/sax/features/external-general-entities", false);
             factory.setFeature("http://xml.org/sax/features/external-parameter-entities", false);
             factory.setFeature("http://apache.org/xml/features/nonvalidating/load-external-dtd", false);
@@ -47,8 +46,6 @@ public class XMLParser extends Parser {
     
     private void handleError(String message, Exception e) {
         System.err.println(message + ": " + e.getMessage());
-        // You might want to throw a custom exception here instead
-        // throw new XMLParsingException(message, e);
     }
     
     private void parseDocument(Document document) {
@@ -127,13 +124,16 @@ public class XMLParser extends Parser {
         }
     }
 
-    // Getters remain unchanged
     public int getWidth() { 
       return width; 
     }
 
     public int getHeight() { 
       return height; 
+    }
+
+    public String getDescription() {
+        return description;
     }
 
     public String getTitle() { 
