@@ -1,7 +1,6 @@
 package cellsociety.view;
 
 import cellsociety.model.Grid;
-import cellsociety.model.cell.ConwayCell.ConwayState;
 import cellsociety.model.ruleset.ConwayRuleset;
 import javafx.application.Platform;
 import javafx.scene.paint.Color;
