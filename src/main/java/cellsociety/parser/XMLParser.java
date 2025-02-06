@@ -21,6 +21,7 @@ public class XMLParser extends Parser {
     private String[] initialStates;
     private Map<String, String> simVarsMap;
 
+    // TODO: modify this so that it has methods to return relevant info in the xml file
     public XMLParser(File file) {
         try {
             DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
