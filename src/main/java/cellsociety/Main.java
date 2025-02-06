@@ -1,245 +1,156 @@
 package cellsociety;
 
 import cellsociety.model.Grid;
-import cellsociety.model.ruleset.FireRuleset;
-import cellsociety.model.ruleset.PercolationRuleset;
-import cellsociety.model.ruleset.Ruleset;
-import cellsociety.parser.Parser;
+import cellsociety.model.ruleset.*;
 import cellsociety.parser.XMLParser;
 import cellsociety.view.GridView;
-import java.io.File;
-import java.io.IOException;
-import java.util.Map;
-import java.util.ResourceBundle;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Application;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Alert.AlertType;
-import javafx.scene.control.Button;
-import javafx.scene.control.Slider;
+import javafx.scene.control.*;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
-import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.*;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
-import org.w3c.dom.NodeList;
-import org.xml.sax.SAXException;
-import cellsociety.model.ruleset.ConwayRuleset;
+import java.io.File;
+import java.io.StringWriter;
+import java.util.Map;
 
-
-/**
- * Feel free to completely change this code or delete it entirely.
- */
 public class Main extends Application {
-    // kind of data files to look for
-    public static final String DATA_FILE_EXTENSION = "*.xml";
-    // default to start in the data folder to make it easy on the user to find
-    public static final String DATA_FILE_FOLDER = System.getProperty("user.dir") + "/data";
-    // NOTE: make ONE chooser since generally accepted behavior is that it remembers where user left it last
-    private final static FileChooser FILE_CHOOSER = makeChooser(DATA_FILE_EXTENSION);
-    // internal configuration file
-    public static final String INTERNAL_CONFIGURATION = "cellsociety.Version";
-
-
+    private static final String DATA_FILE_EXTENSION = "*.xml";
+    private static final FileChooser FILE_CHOOSER = new FileChooser();
     private Timeline simLoop;
-    private static double SECOND_DELAY = 0.8;  //this can be varied based on sim speed slider
+    private static double SECOND_DELAY = 0.8;
     private static Stage globalStage;
     private GridView myGridView;
     private Grid myGrid;
-    private Parser myParser;
+    private XMLParser myParser;
+    private File initialFile;
 
-
-    /**
-     * @see Application#start(Stage)
-     */
     @Override
-    public void start (Stage primaryStage) {
-
-        File dataFile = FILE_CHOOSER.showOpenDialog(primaryStage);
-
+    public void start(Stage primaryStage) {
         globalStage = primaryStage;
-        simLoop = new Timeline();
-        myParser = new XMLParser(dataFile);
+        FILE_CHOOSER.getExtensionFilters().add(new FileChooser.ExtensionFilter("XML Files", DATA_FILE_EXTENSION));
+        initialFile = FILE_CHOOSER.showOpenDialog(primaryStage);
 
-        double probCatch = 0, probGrow = 0;
-        if (!myParser.getSimVarsMap().isEmpty()) {
-            probCatch = Double.parseDouble(myParser.getSimVarsMap().get("probCatch"));
-            probGrow = Double.parseDouble(myParser.getSimVarsMap().get("probGrow"));
+        if (initialFile != null) {
+            loadSimulation(initialFile);
         }
+    }
 
-        Map<String, Ruleset> rulesetMap = Map.of(
-            "Conway", new ConwayRuleset(),
-            "Percolation", new PercolationRuleset(),
-            "Fire", new FireRuleset(probCatch, probGrow)
-        );
+    private void loadSimulation(File dataFile) {
+        myParser = new XMLParser(dataFile);
+        myGrid = new Grid(myParser.getRows(), myParser.getColumns(), getRuleset(), myParser.getInitialStates());
+        myGridView = new GridView(myParser.getRows(), myParser.getColumns(), myGrid);
 
-        myGrid = new Grid(myParser.getRows(), myParser.getColumns(), rulesetMap.get(myParser.getSimType()), myParser.getInitialStates());
-        myGridView = new GridView(myParser.getRows(), myParser.getColumns(), myGrid); //parameters to constructor will be parsed from xml file
-        //myGridView.update(myGrid.getGrid());
-        //check what initial scene looks like (should write this in JUnit test next time
         BorderPane layout = new BorderPane();
         layout.setCenter(myGridView.getScene().getRoot());
+
         Button startButton = new Button("Start");
         Button pauseButton = new Button("Pause");
+        Button saveButton = new Button("Save");
+        Button resetButton = new Button("Reset");
+        Button loadButton = new Button("Load New File");
 
         startButton.setOnAction(e -> startSimulation());
         pauseButton.setOnAction(e -> simLoop.stop());
-
-        Button loadButton = new Button("Load New File");
-        loadButton.setOnAction(e -> loadNewFile(primaryStage));
-
-        //  Create Speed Slider
-        Slider speedSlider = new Slider(0.1, 2.0, 0.8); // Min speed 0.1s, max 2s per step
-        speedSlider.setShowTickLabels(true);
-        speedSlider.setShowTickMarks(true);
-        speedSlider.setMajorTickUnit(0.5);
-        speedSlider.setBlockIncrement(0.1);
-        speedSlider.valueProperty().addListener((obs, oldVal, newVal) -> {
-            SECOND_DELAY = newVal.doubleValue();  //  Update speed dynamically
-            if (!simLoop.getKeyFrames().isEmpty()) {
-                simLoop.stop();
-                startSimulation(); // Restart with the new speed
+        saveButton.setOnAction(e -> saveSimulation());
+        resetButton.setOnAction(e -> resetSimulation());
+        loadButton.setOnAction(e -> {
+            File newFile = FILE_CHOOSER.showOpenDialog(globalStage);
+            if (newFile != null) {
+                loadSimulation(newFile);
             }
         });
-        HBox controls = new HBox(10, startButton, pauseButton, loadButton, new Text("Speed: "), speedSlider);
-        layout.setBottom(controls);
-        setStage(new Scene(layout, 500, 700));
 
+        Slider speedSlider = new Slider(0.1, 2.0, SECOND_DELAY);
+        speedSlider.valueProperty().addListener((obs, oldVal, newVal) -> {
+            SECOND_DELAY = newVal.doubleValue();
+            if (!simLoop.getKeyFrames().isEmpty()) {
+                simLoop.stop();
+                startSimulation();
+            }
+        });
+
+        HBox controls = new HBox(10, startButton, pauseButton, saveButton, resetButton, loadButton, new Label("Speed:"), speedSlider);
+        layout.setBottom(controls);
+
+        setStage(new Scene(layout, 600, 700));
     }
-    public void startSimulation(){
-        simLoop.stop();
-        simLoop = new Timeline(new KeyFrame(Duration.seconds(SECOND_DELAY), e -> step(SECOND_DELAY)));
+
+    private Ruleset getRuleset() {
+        return switch (myParser.getSimType()) {
+            case "Conway" -> new ConwayRuleset();
+            case "Percolation" -> new PercolationRuleset();
+            case "Fire" -> new FireRuleset(Double.parseDouble(myParser.getSimVarsMap().get("probCatch")),
+                Double.parseDouble(myParser.getSimVarsMap().get("probGrow")));
+            default -> throw new IllegalStateException("Unknown simulation type");
+        };
+    }
+
+    private void startSimulation() {
+        simLoop = new Timeline(new KeyFrame(Duration.seconds(SECOND_DELAY), e -> {
+            myGrid.update();
+            myGridView.update();
+        }));
         simLoop.setCycleCount(Timeline.INDEFINITE);
         simLoop.play();
     }
 
-    public void step(double elapsedTime){
-        //executes transition to next generation
-        //need to update internal grid in Grid class
-        //once its been updated then update visual display
-        //for now simply make small change to Grid to see update take place
-        myGrid.update(); //list of cell ids that were updated
-        myGridView.update();
+    private void saveSimulation() {
+        TextInputDialog dialog = new TextInputDialog("Simulation");
+        dialog.setHeaderText("Enter simulation metadata (Title, Author, Description)");
+        dialog.setContentText("Metadata:");
+        dialog.showAndWait();
 
-        //PauseTransition pause = new PauseTransition(Duration.seconds(10));
-        //pause.play();
+        File saveFile = FILE_CHOOSER.showSaveDialog(globalStage);
+        if (saveFile != null) {
+            try {
+                Document doc = DocumentBuilderFactory.newInstance().newDocumentBuilder().newDocument();
+                Element root = doc.createElement("Simulation");
+                root.setAttribute("Title", dialog.getEditor().getText());
+                doc.appendChild(root);
 
+                Element grid = doc.createElement("Grid");
+                grid.setAttribute("rows", String.valueOf(myParser.getRows()));
+                grid.setAttribute("columns", String.valueOf(myParser.getColumns()));
+                root.appendChild(grid);
 
+                Transformer transformer = TransformerFactory.newInstance().newTransformer();
+                transformer.setOutputProperty(OutputKeys.INDENT, "yes");
+                DOMSource source = new DOMSource(doc);
+                StreamResult result = new StreamResult(saveFile);
+                transformer.transform(source, result);
+            } catch (Exception e) {
+                showMessage("Error saving file.");
+            }
+        }
     }
 
+    private void resetSimulation() {
+        loadSimulation(initialFile);
+    }
 
-    public static void setStage(Scene scene){
+    private void setStage(Scene scene) {
         globalStage.setScene(scene);
         globalStage.show();
-
     }
 
-    /**
-     * Returns number of blocks needed to cover the width and height given in the data file.
-     */
-    public int calculateNumBlocks(File xmlFile) {
-        try {
-            Document xmlDocument = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(xmlFile);
-            Element root = xmlDocument.getDocumentElement();
-            int width = Integer.parseInt(getTextValue(root, "width"));
-            int height = Integer.parseInt(getTextValue(root, "height"));
-            return width * height;
-        }
-        catch (NumberFormatException e) {
-            showMessage(AlertType.ERROR, "Invalid number given in data");
-            return 0;
-        }
-        catch (ParserConfigurationException e) {
-            showMessage(AlertType.ERROR, "Invalid XML Configuration");
-            return 0;
-        }
-        catch (SAXException | IOException e) {
-            showMessage(AlertType.ERROR, "Invalid XML Data");
-            return 0;
-        }
+    private void showMessage(String message) {
+        new Alert(Alert.AlertType.INFORMATION, message).showAndWait();
     }
 
-    /**
-     * A method to test getting internal resources.
-     */
-    public double getVersion () {
-        ResourceBundle resources = ResourceBundle.getBundle(INTERNAL_CONFIGURATION);
-        return Double.parseDouble(resources.getString("Version"));
-    }
-    // Method to load a new file and reset the simulation
-    private void loadNewFile(Stage primaryStage) {
-        File dataFile = FILE_CHOOSER.showOpenDialog(primaryStage);
-        if (dataFile != null) {
-            myParser = new XMLParser(dataFile);
-
-            double probCatch = 0, probGrow = 0;
-            if (!myParser.getSimVarsMap().isEmpty()) {
-                probCatch = Double.parseDouble(myParser.getSimVarsMap().get("probCatch"));
-                probGrow = Double.parseDouble(myParser.getSimVarsMap().get("probGrow"));
-            }
-
-            Map<String, Ruleset> rulesetMap = Map.of(
-                "Conway", new ConwayRuleset(),
-                "Percolation", new PercolationRuleset(),
-                "Fire", new FireRuleset(probCatch, probGrow)
-            );
-
-            myGrid = new Grid(myParser.getRows(), myParser.getColumns(), rulesetMap.get(myParser.getSimType()), myParser.getInitialStates());
-
-            // Update only the grid portion
-            myGridView = new GridView(myParser.getRows(), myParser.getColumns(), myGrid);
-
-            // Get the existing layout and update only the center (GridView)
-            BorderPane layout = (BorderPane) globalStage.getScene().getRoot();
-            layout.setCenter(myGridView.getScene().getRoot());
-
-            simLoop.stop();  // Stop the current simulation
-            startSimulation();  // Start the simulation with the new file
-        }
-    }
-
-
-
-    // get value of Element's text
-    private String getTextValue (Element e, String tagName) {
-        NodeList nodeList = e.getElementsByTagName(tagName);
-        if (nodeList.getLength() > 0) {
-            return nodeList.item(0).getTextContent();
-        }
-        else {
-            // FIXME: empty string or exception? In some cases it may be an error to not find any text
-            return "";
-        }
-    }
-
-    // display given message to user using the given type of Alert dialog box
-    void showMessage (AlertType type, String message) {
-        new Alert(type, message).showAndWait();
-    }
-
-    // set some sensible defaults when the FileChooser is created
-    private static FileChooser makeChooser (String extensionAccepted) {
-        FileChooser result = new FileChooser();
-        result.setTitle("Open Data File");
-        // pick a reasonable place to start searching for files
-        result.setInitialDirectory(new File(DATA_FILE_FOLDER));
-        result.getExtensionFilters().setAll(new FileChooser.ExtensionFilter("Data Files", extensionAccepted));
-        return result;
-    }
-
-    /**
-     * Start the program, give complete control to JavaFX.
-     *
-     * Default version of main() is actually included within JavaFX, so this is not technically necessary!
-     */
-    public static void main (String[] args) {
+    public static void main(String[] args) {
         launch(args);
     }
 }
+
