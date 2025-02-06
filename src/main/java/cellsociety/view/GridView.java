@@ -84,13 +84,14 @@ public class GridView {
   /**
    * Updates the grid efficiently by modifying only changed cells. Don't want to pass entire grid into front end.
    */
-  public void update(int length) {
-    for (int id = 0; id < length; id++) {
-      int row = id / columns;
-      int col = id % columns;
-      cellRectangles[row][col].setFill(cellColors.get(grid.getCell(row, col).getCurrState()));
+  public void update() {
+    for (int row = 0; row < rows; row++) {
+      for (int col = 0; col < columns; col++) {
+        cellRectangles[row][col].setFill(cellColors.get(grid.getCell(row, col).getCurrState()));
+      }
     }
   }
+
 
   /**
    * Displays simulation metadata at the top.

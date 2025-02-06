@@ -92,20 +92,23 @@ public class Main extends Application {
         startButton.setOnAction(e -> startSimulation());
         pauseButton.setOnAction(e -> simLoop.stop());
 
-        // ✅ Create Speed Slider
+        Button loadButton = new Button("Load New File");
+        loadButton.setOnAction(e -> loadNewFile(primaryStage));
+
+        //  Create Speed Slider
         Slider speedSlider = new Slider(0.1, 2.0, 0.8); // Min speed 0.1s, max 2s per step
         speedSlider.setShowTickLabels(true);
         speedSlider.setShowTickMarks(true);
         speedSlider.setMajorTickUnit(0.5);
         speedSlider.setBlockIncrement(0.1);
         speedSlider.valueProperty().addListener((obs, oldVal, newVal) -> {
-            SECOND_DELAY = newVal.doubleValue();  // ✅ Update speed dynamically
+            SECOND_DELAY = newVal.doubleValue();  //  Update speed dynamically
             if (!simLoop.getKeyFrames().isEmpty()) {
                 simLoop.stop();
                 startSimulation(); // Restart with the new speed
             }
         });
-        HBox controls = new HBox(10, startButton, pauseButton, new Text("Speed: "), speedSlider);
+        HBox controls = new HBox(10, startButton, pauseButton, loadButton, new Text("Speed: "), speedSlider);
         layout.setBottom(controls);
         setStage(new Scene(layout, 500, 700));
 
@@ -123,7 +126,7 @@ public class Main extends Application {
         //once its been updated then update visual display
         //for now simply make small change to Grid to see update take place
         myGrid.update(); //list of cell ids that were updated
-        myGridView.update(myGrid.getLength());
+        myGridView.update();
 
         //PauseTransition pause = new PauseTransition(Duration.seconds(10));
         //pause.play();
@@ -170,6 +173,39 @@ public class Main extends Application {
         ResourceBundle resources = ResourceBundle.getBundle(INTERNAL_CONFIGURATION);
         return Double.parseDouble(resources.getString("Version"));
     }
+    // Method to load a new file and reset the simulation
+    private void loadNewFile(Stage primaryStage) {
+        File dataFile = FILE_CHOOSER.showOpenDialog(primaryStage);
+        if (dataFile != null) {
+            myParser = new XMLParser(dataFile);
+
+            double probCatch = 0, probGrow = 0;
+            if (!myParser.getSimVarsMap().isEmpty()) {
+                probCatch = Double.parseDouble(myParser.getSimVarsMap().get("probCatch"));
+                probGrow = Double.parseDouble(myParser.getSimVarsMap().get("probGrow"));
+            }
+
+            Map<String, Ruleset> rulesetMap = Map.of(
+                "Conway", new ConwayRuleset(),
+                "Percolation", new PercolationRuleset(),
+                "Fire", new FireRuleset(probCatch, probGrow)
+            );
+
+            myGrid = new Grid(myParser.getRows(), myParser.getColumns(), rulesetMap.get(myParser.getSimType()), myParser.getInitialStates());
+
+            // Update only the grid portion
+            myGridView = new GridView(myParser.getRows(), myParser.getColumns(), myGrid);
+
+            // Get the existing layout and update only the center (GridView)
+            BorderPane layout = (BorderPane) globalStage.getScene().getRoot();
+            layout.setCenter(myGridView.getScene().getRoot());
+
+            simLoop.stop();  // Stop the current simulation
+            startSimulation();  // Start the simulation with the new file
+        }
+    }
+
+
 
     // get value of Element's text
     private String getTextValue (Element e, String tagName) {
