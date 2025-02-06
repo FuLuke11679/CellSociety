@@ -1,7 +1,9 @@
 package cellsociety.model;
 
 import cellsociety.model.cell.Cell;
+import cellsociety.model.cell.FireCell;
 import cellsociety.model.cell.FireCell.FireState;
+import cellsociety.model.cell.PercolationCell;
 import cellsociety.model.cell.PercolationCell.PercolationState;
 import cellsociety.model.ruleset.Ruleset;
 import java.util.ArrayList;
@@ -66,12 +68,24 @@ public class Grid {
       List<Cell> row = new ArrayList<>();
       for (int y = 0; y < columns; y++) {
         CellState initialState = stateMap.get(myCells[count]);
-        row.add(new ConwayCell(count, null, initialState));
+        // Use the appropriate cell type based on the state
+        Cell cell;
+        if (initialState instanceof ConwayState) {
+          cell = new ConwayCell(count, null, initialState);
+        } else if (initialState instanceof FireState) {
+          cell = new FireCell(count, null, initialState);  // Update with FireCell constructor
+        } else if (initialState instanceof PercolationState) {
+          cell = new PercolationCell(count, null, initialState);  // Similarly for PercolationCell
+        } else {
+          throw new IllegalArgumentException("Unsupported state: " + initialState);
+        }
+        row.add(cell);
         count++;
       }
       myGrid.add(row);
     }
   }
+
 
   public void update(){
     //return a list of cell ids that were changed,

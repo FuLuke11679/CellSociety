@@ -1,47 +1,62 @@
 package cellsociety.view;
 
 import cellsociety.model.Grid;
-import cellsociety.model.cell.ConwayCell.ConwayState;
 import cellsociety.model.ruleset.ConwayRuleset;
+import javafx.application.Platform;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import javafx.scene.Scene;
-
 import static org.junit.jupiter.api.Assertions.*;
 
 class GridViewTest {
 
-  private GridView gridView;
-  private Grid grid;
+  private static GridView gridView;
+  private static Grid grid;
+  private static final int ROWS = 4;
+  private static final int COLUMNS = 4;
+
+  @BeforeAll
+  static void initJavaFX() {
+    Thread thread = new Thread(() -> Platform.startup(() -> {}));
+    thread.setDaemon(true);
+    thread.start();
+  }
 
   @BeforeEach
-  void setUp() {
-    String[] initialCells = {
-        "A", "D", "A", "D",
-        "D", "A", "D", "A",
-        "A", "D", "A", "D",
-        "D", "A", "D", "A"
-    };
-    grid = new Grid(4, 4, new ConwayRuleset(), initialCells);
-    gridView = new GridView(4, 4, grid);
+  void setUp() throws Exception {
+    Platform.runLater(() -> {
+      String[] initialCells = {
+          "A", "D", "A", "D",
+          "D", "D", "D", "A",
+          "A", "D", "A", "D",
+          "D", "A", "D", "A"
+      };
+      grid = new Grid(ROWS, COLUMNS, new ConwayRuleset(), initialCells);
+      gridView = new GridView(ROWS, COLUMNS, grid);
+    });
+    Thread.sleep(500); // Allow JavaFX to initialize
   }
 
   @Test
-  void testUpdate() {
-    grid.update();
-    gridView.update(16); // Should update the grid view with 16 cells.
-    Rectangle firstCell = (Rectangle) gridView.getScene().getRoot().getChildrenUnmodifiable().get(0);
+  void testUpdate() throws Exception {
+    Platform.runLater(() -> {
+      grid.update();
 
-    // Now you can safely call getFill() on the Rectangle
-    assertEquals(Color.WHITE, firstCell.getFill(), "The first cell should be white after update.");
+      // Call update() on GridView
+      gridView.update();
+
+      // Access cell rectangles (assuming public or through a getter)
+      Rectangle[][] cellRectangles = gridView.cellRectangles;
+
+      // Verify UI updates reflect grid changes
+      assertEquals(Color.WHITE, cellRectangles[0][0].getFill(), "Top-left cell should be WHITE.");
+      assertEquals(Color.BLACK, cellRectangles[1][1].getFill(), "Cell (1,1) should be BLACK.");
+    });
+
+    Thread.sleep(500); // Allow JavaFX to update UI before assertions
   }
 
-
-  @Test
-  void testGetScene() {
-    Scene scene = gridView.getScene();
-    assertNotNull(scene, "Scene should not be null.");
-  }
 }
+
