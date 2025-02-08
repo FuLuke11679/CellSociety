@@ -84,7 +84,7 @@ public class Main extends Application {
         HBox controls = new HBox(10, startButton, pauseButton, saveButton, resetButton, loadButton, new Label("Speed:"), speedSlider);
         layout.setBottom(controls);
 
-        setStage(new Scene(layout, 600, 700));
+        setStage(new Scene(layout, 600, 800));
     }
 
     private Ruleset getRuleset() {

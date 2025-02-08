@@ -20,9 +20,9 @@ public class GridView {
   private int rows;
   private int columns;
   private int cellSize;
-  private final int SIZE_GRID = 500;
-  private final int WINDOW_WIDTH = 500;
-  private final int WINDOW_HEIGHT = 700;
+  private final int SIZE_GRID = 600;
+  private final int WINDOW_WIDTH = 600;
+  private final int WINDOW_HEIGHT = 800;
   private VBox infoBox;
   Rectangle[][] cellRectangles;  // Store references for easy updates
   private Grid grid;
