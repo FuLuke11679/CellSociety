@@ -73,7 +73,7 @@ public class Main extends Application {
 
         Slider speedSlider = new Slider(0.1, 2.0, SECOND_DELAY);
         speedSlider.valueProperty().addListener((obs, oldVal, newVal) -> {
-            SECOND_DELAY = newVal.doubleValue();
+            SECOND_DELAY = 2.1 - newVal.doubleValue();
             if (!simLoop.getKeyFrames().isEmpty()) {
                 simLoop.stop();
                 startSimulation();
