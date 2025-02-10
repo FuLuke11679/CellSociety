@@ -2,6 +2,7 @@ package cellsociety.model;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import cellsociety.model.grid.ConwayGrid;
 import cellsociety.model.grid.Grid;
 import cellsociety.model.cell.Cell;
 import cellsociety.model.cell.ConwayCell;
@@ -24,7 +25,7 @@ class GridTest {
 
   @BeforeEach
   void setUp() {
-    grid = new Grid(rows, cols, new ConwayRuleset(), initialStates);
+    grid = new ConwayGrid(rows, cols, new ConwayRuleset(), initialStates);
   }
 
   // Tests Grid Initialization: Ensures all cells are created correctly
@@ -42,7 +43,7 @@ class GridTest {
   // Negative Test: Ensure update does not throw exceptions on empty grids
   @Test
   void update_DoesNotThrowOnEmptyGrid() {
-    Grid emptyGrid = new Grid(0, 0, new ConwayRuleset(), new String[0]);
+    Grid emptyGrid = new ConwayGrid(0, 0, new ConwayRuleset(), new String[0]);
     assertDoesNotThrow(emptyGrid::update);
   }
 
@@ -70,7 +71,7 @@ class GridTest {
   // Negative Test: Ensure empty grid returns zero length
   @Test
   void getLength_ReturnsZeroForEmptyGrid() {
-    Grid emptyGrid = new Grid(0, 0, new ConwayRuleset(), new String[0]);
+    Grid emptyGrid = new ConwayGrid(0, 0, new ConwayRuleset(), new String[0]);
     assertEquals(0, emptyGrid.getLength());
   }
 }
