@@ -2,6 +2,8 @@ package cellsociety.model.ruleset;
 
 import cellsociety.model.cell.Cell;
 import cellsociety.model.cell.ConwayCell.ConwayState;
+import cellsociety.model.grid.ConwayGrid;
+import cellsociety.model.grid.Grid;
 import java.util.List;
 
 public class ConwayRuleset extends Ruleset {
@@ -16,6 +18,11 @@ public class ConwayRuleset extends Ruleset {
       }
     }
     return aliveCells;
+  }
+
+  @Override
+  public Grid createGrid(int rows, int columns, String[] initialStates) {
+    return new ConwayGrid(rows, columns, new ConwayRuleset(), initialStates);
   }
 
   public void updateState(Cell cell, List<Cell> neighbors) {

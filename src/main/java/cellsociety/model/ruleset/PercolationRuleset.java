@@ -2,6 +2,8 @@ package cellsociety.model.ruleset;
 
 import cellsociety.model.cell.Cell;
 import cellsociety.model.cell.PercolationCell.PercolationState;
+import cellsociety.model.grid.Grid;
+import cellsociety.model.grid.PercolationGrid;
 import java.util.List;
 
 public class PercolationRuleset extends Ruleset {
@@ -22,6 +24,11 @@ public class PercolationRuleset extends Ruleset {
       maintainCell(cell);
     }
 
+  }
+
+  @Override
+  public Grid createGrid(int rows, int columns, String[] initialStates) {
+    return new PercolationGrid(rows, columns, new PercolationRuleset(), initialStates);
   }
 
   private boolean hasPercolatedNeighbor(Cell cell, List<Cell> neighbors) {
