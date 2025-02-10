@@ -1,6 +1,6 @@
 package cellsociety.view;
 
-import cellsociety.model.Grid;
+import cellsociety.model.grid.Grid;
 import cellsociety.model.cell.ConwayCell.ConwayState;
 import cellsociety.model.cell.FireCell.FireState;
 import cellsociety.model.cell.PercolationCell.PercolationState;

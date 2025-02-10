@@ -5,8 +5,8 @@ import cellsociety.model.state.CellState;
 public abstract class Cell {
 
   private final int id;
-  CellState prevState;
-  CellState currState;
+  protected CellState prevState;
+  protected CellState currState;
 
   public Cell( int id, CellState prevState, CellState currState){
       this.id = id;

@@ -1,4 +1,4 @@
-package cellsociety.model;
+package cellsociety.model.grid;
 
 import cellsociety.model.cell.Cell;
 import cellsociety.model.cell.FireCell;
@@ -17,9 +17,9 @@ import cellsociety.model.ruleset.ConwayRuleset;
 Updates Grid based on Cell logic
 Does not display the grid or interact at all with javafx packages (i.e Scene, Groups, etc)
  */
-public class Grid {
+public abstract class Grid {
 
-  private final static Map<String, CellState> stateMap = Map.of(
+  protected final static Map<String, CellState> stateMap = Map.of(
       "A", ConwayState.ALIVE,
       "D", ConwayState.DEAD,
       "B", FireState.BURNING,
@@ -30,11 +30,11 @@ public class Grid {
       "O", PercolationState.OPEN
   );
 
-  private int rows;
-  private int columns;
-  private String[] myCells;
-  private List<List<Cell>> myGrid;
-  private Ruleset ruleset;
+  protected int rows;
+  protected int columns;
+  protected String[] myCells;
+  protected List<List<Cell>> myGrid;
+  protected Ruleset ruleset;
 
   /**
    * Constructor for GridManager.
@@ -61,30 +61,7 @@ public class Grid {
   /**
    * Initialize the grid with Cells
    */
-  public void initializeGrid() {
-    myGrid = new ArrayList<>();
-    int count = 0;
-    for (int x = 0; x < rows; x++) {
-      List<Cell> row = new ArrayList<>();
-      for (int y = 0; y < columns; y++) {
-        CellState initialState = stateMap.get(myCells[count]);
-        // Use the appropriate cell type based on the state
-        Cell cell;
-        if (initialState instanceof ConwayState) {
-          cell = new ConwayCell(count, null, initialState);
-        } else if (initialState instanceof FireState) {
-          cell = new FireCell(count, null, initialState);  // Update with FireCell constructor
-        } else if (initialState instanceof PercolationState) {
-          cell = new PercolationCell(count, null, initialState);  // Similarly for PercolationCell
-        } else {
-          throw new IllegalArgumentException("Unsupported state: " + initialState);
-        }
-        row.add(cell);
-        count++;
-      }
-      myGrid.add(row);
-    }
-  }
+  public abstract void initializeGrid();
 
 
   public void update(){
@@ -137,6 +114,10 @@ public class Grid {
       totalCount += list.size();
     }
     return totalCount;
+  }
+
+  protected CellState getInitialState(String stateSymbol) {
+    return stateMap.get(stateSymbol);
   }
 
 }

@@ -2,6 +2,8 @@ package cellsociety.model.ruleset;
 
 import cellsociety.model.cell.Cell;
 import cellsociety.model.cell.FireCell.FireState;
+import cellsociety.model.grid.FireGrid;
+import cellsociety.model.grid.Grid;
 import java.util.List;
 import javafx.scene.paint.Color;
 
@@ -41,6 +43,11 @@ public class FireRuleset extends Ruleset {
     } else if (Math.random() < probCatch) {
       lightFire(cell);
     }
+  }
+
+  @Override
+  public Grid createGrid(int rows, int columns, String[] initialStates) {
+    return new FireGrid(rows, columns, new FireRuleset(probGrow, probCatch), initialStates);
   }
 
   private boolean isNeighborCellBurning(Cell cell, List<Cell> neighbors) {

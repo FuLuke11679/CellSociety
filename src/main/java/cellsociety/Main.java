@@ -1,6 +1,6 @@
 package cellsociety;
 
-import cellsociety.model.Grid;
+import cellsociety.model.grid.Grid;
 import cellsociety.model.ruleset.*;
 import cellsociety.parser.XMLParser;
 import cellsociety.view.GridView;
@@ -15,15 +15,12 @@ import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.*;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import java.io.File;
-import java.io.StringWriter;
-import java.util.Map;
 
 public class Main extends Application {
     private static final String DATA_FILE_EXTENSION = "*.xml";
@@ -34,22 +31,24 @@ public class Main extends Application {
     private GridView myGridView;
     private Grid myGrid;
     private XMLParser myParser;
-    private File initialFile;
+    private File currentFile;
 
     @Override
     public void start(Stage primaryStage) {
         globalStage = primaryStage;
         FILE_CHOOSER.getExtensionFilters().add(new FileChooser.ExtensionFilter("XML Files", DATA_FILE_EXTENSION));
-        initialFile = FILE_CHOOSER.showOpenDialog(primaryStage);
+        currentFile = FILE_CHOOSER.showOpenDialog(primaryStage);
 
-        if (initialFile != null) {
-            loadSimulation(initialFile);
+        if (currentFile != null) {
+            loadSimulation(currentFile);
         }
     }
 
     private void loadSimulation(File dataFile) {
+        currentFile = dataFile;
         myParser = new XMLParser(dataFile);
-        myGrid = new Grid(myParser.getRows(), myParser.getColumns(), getRuleset(), myParser.getInitialStates());
+        Ruleset ruleset = getRuleset();
+        myGrid = ruleset.createGrid(myParser.getRows(), myParser.getColumns(), myParser.getInitialStates());
         myGridView = new GridView(myParser.getRows(), myParser.getColumns(), myGrid);
 
         BorderPane layout = new BorderPane();
@@ -74,7 +73,7 @@ public class Main extends Application {
 
         Slider speedSlider = new Slider(0.1, 2.0, SECOND_DELAY);
         speedSlider.valueProperty().addListener((obs, oldVal, newVal) -> {
-            SECOND_DELAY = newVal.doubleValue();
+            SECOND_DELAY = 2.1 - newVal.doubleValue();
             if (!simLoop.getKeyFrames().isEmpty()) {
                 simLoop.stop();
                 startSimulation();
@@ -137,7 +136,7 @@ public class Main extends Application {
     }
 
     private void resetSimulation() {
-        loadSimulation(initialFile);
+        loadSimulation(currentFile);
     }
 
     private void setStage(Scene scene) {
