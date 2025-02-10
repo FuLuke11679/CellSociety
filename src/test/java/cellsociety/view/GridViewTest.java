@@ -1,5 +1,6 @@
 package cellsociety.view;
 
+import cellsociety.model.grid.ConwayGrid;
 import cellsociety.model.grid.Grid;
 import cellsociety.model.ruleset.ConwayRuleset;
 import javafx.application.Platform;
@@ -33,7 +34,7 @@ class GridViewTest {
           "A", "D", "A", "D",
           "D", "A", "D", "A"
       };
-      grid = new Grid(ROWS, COLUMNS, new ConwayRuleset(), initialCells);
+      grid = new ConwayGrid(ROWS, COLUMNS, new ConwayRuleset(), initialCells);
       gridView = new GridView(ROWS, COLUMNS, grid);
     });
     Thread.sleep(500); // Allow JavaFX to initialize
