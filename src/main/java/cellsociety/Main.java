@@ -4,6 +4,7 @@ import cellsociety.model.grid.Grid;
 import cellsociety.model.ruleset.*;
 import cellsociety.parser.XMLParser;
 import cellsociety.view.GridView;
+import cellsociety.view.GridView.ColorScheme;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Application;
@@ -38,6 +39,7 @@ public class Main extends Application {
     private Grid myGrid;
     private XMLParser myParser;
     private File currentFile;
+    private ColorScheme myScheme;
 
     @Override
     public void start(Stage primaryStage) {
@@ -45,7 +47,7 @@ public class Main extends Application {
         loadSplashScreen();
     }
 
-    private void loadSimulation(File dataFile) {
+    private void loadSimulation(File dataFile, ColorScheme myScheme) {
 
         currentFile = dataFile;
         myParser = new XMLParser(dataFile);
@@ -58,7 +60,8 @@ public class Main extends Application {
             myParser.getTitle(),
             myParser.getAuthor(),
             myParser.getDescription(),
-            myGrid);
+            myGrid,
+            myScheme);
 
         BorderPane layout = initializeLayout();
 
@@ -116,16 +119,28 @@ public class Main extends Application {
         MenuItem colorScheme3 = new MenuItem("Duke Mode");
         MenuItem colorScheme4 = new MenuItem("UNC Mode");
         BooleanProperty colorSelected = new SimpleBooleanProperty(false);
-        colorScheme1.setOnAction(e -> colorSelected.set(true));
-        colorScheme2.setOnAction(e -> colorSelected.set(true));
-        colorScheme3.setOnAction(e -> colorSelected.set(true));
-        colorScheme4.setOnAction(e -> colorSelected.set(true));
+        colorScheme1.setOnAction(e -> {
+            colorSelected.set(true);
+            myScheme = ColorScheme.DARK;
+        });
+        colorScheme2.setOnAction(e -> {
+            colorSelected.set(true);
+            myScheme = ColorScheme.LIGHT;
+        });
+        colorScheme3.setOnAction(e -> {
+            colorSelected.set(true);
+            myScheme = ColorScheme.DUKE;
+        });
+        colorScheme4.setOnAction(e -> {
+            colorSelected.set(true);
+            myScheme = ColorScheme.UNC;
+        });
         colorScheme.getItems().addAll(colorScheme1, colorScheme2, colorScheme3, colorScheme4);
         loadButton.setOnAction(e -> {
             File newFile = FILE_CHOOSER.showOpenDialog(globalStage);
             if (newFile != null & languageSelected.get() & colorSelected.get()) {
                 //only should load once other buttons have been selected
-                loadSimulation(newFile);
+                loadSimulation(newFile, myScheme);
             }
         });
         HBox controls = new HBox(10, loadButton, languageSelect, colorScheme);
@@ -150,7 +165,7 @@ public class Main extends Application {
         loadButton.setOnAction(e -> {
             File newFile = FILE_CHOOSER.showOpenDialog(globalStage);
             if (newFile != null) {
-                loadSimulation(newFile);
+                loadSimulation(newFile, myScheme);
             }
         });
 
@@ -199,7 +214,7 @@ public class Main extends Application {
     }
 
     private void resetSimulation() {
-        loadSimulation(currentFile);
+        loadSimulation(currentFile, myScheme);
     }
 
     private void setStage(Scene scene) {
