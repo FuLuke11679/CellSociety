@@ -139,8 +139,21 @@ public class SegregationRuleset extends Ruleset {
   @Override
   public Grid createGrid(int rows, int columns, String[] initialStates) {
     grid = new SegregationGrid(rows, columns, new SegregationRuleset(similarityThreshold), initialStates);
-    emptyCells = grid.getEmptyCells();
+    emptyCells = getEmptyCells(grid);
     return grid;
+  }
+
+
+  private Map<Cell, Integer> getEmptyCells(Grid grid) {
+    Map<Cell, Integer> emptyCells = new HashMap<>();
+    for (int i = 0; i < grid.getRows(); i++) {
+      for (int j = 0; j < grid.getColumns(); j++) {
+        if (grid.getCell(i,j).getCurrState() == SegregationState.EMPTY) {
+          emptyCells.put(grid.getCell(i,j), 1);
+        }
+      }
+    }
+    return emptyCells;
   }
 
 }
