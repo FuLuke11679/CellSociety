@@ -5,6 +5,7 @@ import cellsociety.model.cell.FireCell;
 import cellsociety.model.cell.FireCell.FireState;
 import cellsociety.model.cell.PercolationCell;
 import cellsociety.model.cell.PercolationCell.PercolationState;
+import cellsociety.model.cell.SegregationCell.SegregationState;
 import cellsociety.model.ruleset.Ruleset;
 import java.util.ArrayList;
 import java.util.List;
@@ -19,15 +20,18 @@ Does not display the grid or interact at all with javafx packages (i.e Scene, Gr
  */
 public abstract class Grid {
 
-  protected final static Map<String, CellState> stateMap = Map.of(
-      "A", ConwayState.ALIVE,
-      "D", ConwayState.DEAD,
-      "B", FireState.BURNING,
-      "T", FireState.TREE,
-      "E", FireState.EMPTY,
-      "BL", PercolationState.BLOCKED,
-      "P", PercolationState.PERCOLATED,
-      "O", PercolationState.OPEN
+  protected final static Map<String, CellState> stateMap = Map.ofEntries(
+      Map.entry("A", ConwayState.ALIVE),
+      Map.entry("D", ConwayState.DEAD),
+      Map.entry("B", FireState.BURNING),
+      Map.entry("T", FireState.TREE),
+      Map.entry("E", FireState.EMPTY),
+      Map.entry("BL", PercolationState.BLOCKED),
+      Map.entry("P", PercolationState.PERCOLATED),
+      Map.entry("O", PercolationState.OPEN),
+      Map.entry("BLU", SegregationState.BLUE),
+      Map.entry("R", SegregationState.RED),
+      Map.entry("EM", SegregationState.EMPTY)
   );
 
   protected int rows;

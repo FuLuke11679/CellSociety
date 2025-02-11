@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<simulationConfig>
+  <!-- window and grid configuration -->
+  <display width="800" height="800" title="Segregation Simulation" author="Palo">
+    <grid rows="21" columns="21" />
+    <description text="This is the segregation simulation"/>
+  </display>
+
+  <!-- sim configuration -->
+  <sim type="Segregation">
+    <simvars
+      thresh="0.6"
+    />
+  </sim>
+
+  <init
+    stateList="
+      R,BLU,EM,R,BLU,EM,R,BLU,EM,R,BLU,EM,R,BLU,EM,R,BLU,EM,R,BLU,EM,
+      BLU,R,EM,BLU,R,EM,BLU,R,EM,BLU,R,EM,BLU,R,EM,BLU,R,EM,BLU,R,EM,
+      EM,EM,R,BLU,EM,EM,R,BLU,EM,EM,R,BLU,EM,EM,R,BLU,EM,EM,R,BLU,EM,
+      R,BLU,EM,R,BLU,EM,R,BLU,EM,R,BLU,EM,R,BLU,EM,R,BLU,EM,R,BLU,EM,
+      BLU,R,EM,BLU,R,EM,BLU,R,EM,BLU,R,EM,BLU,R,EM,BLU,R,EM,BLU,R,EM,
+      EM,EM,R,BLU,EM,EM,R,BLU,EM,EM,R,BLU,EM,EM,R,BLU,EM,EM,R,BLU,EM,
+      R,BLU,EM,R,BLU,EM,R,BLU,EM,R,BLU,EM,R,BLU,EM,R,BLU,EM,R,BLU,EM,
+      BLU,R,EM,BLU,R,EM,BLU,R,EM,BLU,R,EM,BLU,R,EM,BLU,R,EM,BLU,R,EM,
+      EM,EM,R,BLU,EM,EM,R,BLU,EM,EM,R,BLU,EM,EM,R,BLU,EM,EM,R,BLU,EM,
+      R,BLU,EM,R,BLU,EM,R,BLU,EM,R,BLU,EM,R,BLU,EM,R,BLU,EM,R,BLU,EM,
+      BLU,R,EM,BLU,R,EM,BLU,R,EM,BLU,R,EM,BLU,R,EM,BLU,R,EM,BLU,R,EM,
+      EM,EM,R,BLU,EM,EM,R,BLU,EM,EM,R,BLU,EM,EM,R,BLU,EM,EM,R,BLU,EM,
+      R,BLU,EM,R,BLU,EM,R,BLU,EM,R,BLU,EM,R,BLU,EM,R,BLU,EM,R,BLU,EM,
+      BLU,R,EM,BLU,R,EM,BLU,R,EM,BLU,R,EM,BLU,R,EM,BLU,R,EM,BLU,R,EM,
+      EM,EM,R,BLU,EM,EM,R,BLU,EM,EM,R,BLU,EM,EM,R,BLU,EM,EM,R,BLU,EM,
+      R,BLU,EM,R,BLU,EM,R,BLU,EM,R,BLU,EM,R,BLU,EM,R,BLU,EM,R,BLU,EM,
+      BLU,R,EM,BLU,R,EM,BLU,R,EM,BLU,R,EM,BLU,R,EM,BLU,R,EM,BLU,R,EM,
+      EM,EM,R,BLU,EM,EM,R,BLU,EM,EM,R,BLU,EM,EM,R,BLU,EM,EM,R,BLU,EM,
+      R,BLU,EM,R,BLU,EM,R,BLU,EM,R,BLU,EM,R,BLU,EM,R,BLU,EM,R,BLU,EM,
+      BLU,R,EM,BLU,R,EM,BLU,R,EM,BLU,R,EM,BLU,R,EM,BLU,R,EM,BLU,R,EM,
+      EM,EM,R,BLU,EM,EM,R,BLU,EM,EM,R,BLU,EM,EM,R,BLU,EM,EM,R,BLU,EM"
+  >
+  </init>
+</simulationConfig>

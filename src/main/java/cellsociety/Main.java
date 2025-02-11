@@ -92,6 +92,7 @@ public class Main extends Application {
             case "Percolation" -> new PercolationRuleset();
             case "Fire" -> new FireRuleset(Double.parseDouble(myParser.getSimVarsMap().get("probCatch")),
                 Double.parseDouble(myParser.getSimVarsMap().get("probGrow")));
+            case "Segregation" -> new SegregationRuleset(Double.parseDouble(myParser.getSimVarsMap().get("thresh")));
             default -> throw new IllegalStateException("Unknown simulation type");
         };
     }
