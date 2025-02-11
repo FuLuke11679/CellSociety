@@ -7,10 +7,13 @@ import cellsociety.view.GridView;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Application;
+import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.SimpleBooleanProperty;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.util.Duration;
@@ -36,15 +39,20 @@ public class Main extends Application {
     @Override
     public void start(Stage primaryStage) {
         globalStage = primaryStage;
+        loadSplashScreen();
+        /*
         FILE_CHOOSER.getExtensionFilters().add(new FileChooser.ExtensionFilter("XML Files", DATA_FILE_EXTENSION));
         currentFile = FILE_CHOOSER.showOpenDialog(primaryStage);
 
         if (currentFile != null) {
             loadSimulation(currentFile);
         }
+
+         */
     }
 
     private void loadSimulation(File dataFile) {
+
         currentFile = dataFile;
         myParser = new XMLParser(dataFile);
         Ruleset ruleset = getRuleset();
@@ -82,7 +90,7 @@ public class Main extends Application {
 
         HBox controls = new HBox(10, startButton, pauseButton, saveButton, resetButton, loadButton, new Label("Speed:"), speedSlider);
         layout.setBottom(controls);
-
+        //why is this hardcoded???
         setStage(new Scene(layout, 600, 800));
     }
 
@@ -104,6 +112,48 @@ public class Main extends Application {
         }));
         simLoop.setCycleCount(Timeline.INDEFINITE);
         simLoop.play();
+    }
+
+    private void loadSplashScreen() {
+        BorderPane splash = new BorderPane();
+        Text welcome = new Text("Welcome to Cell Society Simulations");
+        splash.setCenter(welcome);
+        Button loadButton = new Button("Load Simulation File");
+        MenuButton languageSelect = new MenuButton("Language");
+        MenuItem language1 = new MenuItem("English");
+        MenuItem language2 = new MenuItem("Spanish");
+        MenuItem language3 = new MenuItem("French");
+        BooleanProperty languageSelected = new SimpleBooleanProperty(false);
+        languageSelect.setOnAction(e -> {
+            //code itself can't translate language in description
+            //would have to be hardcoded in the CSS/resource property files
+            //but then no way to deal with descriptions provided by the user
+            languageSelected.set(true); //fix this, doesn't work as intended because we have a MenuButton
+        });
+        languageSelect.getItems().addAll(language1, language2, language3);
+        MenuButton colorScheme = new MenuButton("Color Scheme");
+        MenuItem colorScheme1 = new MenuItem("Dark Mode");
+        MenuItem colorScheme2 = new MenuItem("Light Mode");
+        MenuItem colorScheme3 = new MenuItem("Duke Mode");
+        MenuItem colorScheme4 = new MenuItem("UNC Mode");
+        BooleanProperty colorSelected = new SimpleBooleanProperty(false);
+        colorScheme.setOnAction(e -> {
+            //code itself can't translate language in description
+            //would have to be hardcoded in the CSS/resource property files
+            //but then no way to deal with descriptions provided by the user
+            colorSelected.set(true); //fix this, doesn't work as intended because we have a MenuButton
+        });
+        colorScheme.getItems().addAll(colorScheme1, colorScheme2, colorScheme3, colorScheme4);
+        loadButton.setOnAction(e -> {
+            File newFile = FILE_CHOOSER.showOpenDialog(globalStage);
+            if (newFile != null & languageSelected.get()) {
+                //only should load once other buttons have been selected
+                loadSimulation(newFile);
+            }
+        });
+        HBox controls = new HBox(10, loadButton, languageSelect, colorScheme);
+        splash.setBottom(controls);
+        setStage(new Scene(splash, 600, 800));
     }
 
     private void saveSimulation() {
