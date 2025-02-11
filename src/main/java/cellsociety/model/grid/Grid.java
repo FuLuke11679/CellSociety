@@ -124,4 +124,22 @@ public abstract class Grid {
     return stateMap.get(stateSymbol);
   }
 
+  public int getRows() {
+    return rows;
+  }
+
+  public int getColumns() {
+    return columns;
+  }
+
+  public void printGrid() {
+    for (int i = 0; i < rows; i++) {
+      for (int j = 0; j < columns; j++) {
+        System.out.print(getCell(i, j).getCurrState() + " ");
+      }
+      System.out.println();
+    }
+    System.out.println();
+  }
+
 }
