@@ -18,8 +18,10 @@ public class XMLParser extends Parser {
     private int columns;
     private String simType;
     private String description;
+    private String author;
     private String[] initialStates;
     private Map<String, String> simVarsMap;
+
 
     // TODO: modify this so that it has methods to return relevant info in the xml file
     public XMLParser(File file) {
@@ -63,6 +65,7 @@ public class XMLParser extends Parser {
         this.width = getRequiredIntAttribute(display, "width");
         this.height = getRequiredIntAttribute(display, "height");
         this.title = getRequiredAttribute(display, "title");
+        this.author = getRequiredAttribute(display, "author");
         
         Element grid = getRequiredElement(display, "grid");
         this.rows = getRequiredIntAttribute(grid, "rows");
@@ -145,6 +148,8 @@ public class XMLParser extends Parser {
       return simType; 
     }
 
+    public String getAuthor(){return author;}
+
     public int getRows() { 
       return rows; 
     }
@@ -156,6 +161,7 @@ public class XMLParser extends Parser {
     public String[] getInitialStates() { 
       return initialStates; 
     }
+
 
     public Map<String, String> getSimVarsMap() { 
       return simVarsMap; 

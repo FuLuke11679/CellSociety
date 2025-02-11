@@ -45,7 +45,7 @@ public class GridView {
   /**
    * Constructor for GridView.
    */
-  public GridView(int rows, int columns, Grid grid) {
+  public GridView(int rows, int columns, String simType, String title, String author, String description, Grid grid) {
     this.rows = rows;
     this.columns = columns;
     this.cellSize = SIZE_GRID / rows;
@@ -54,13 +54,7 @@ public class GridView {
     this.grid = grid;
 
     initializeGrid();
-    //hard coded for now
-    String description = "Any live cell with fewer than two live neighbours dies, as if by underpopulation.\n"
-        + "Any live cell with two or three live neighbours lives on to the next generation.\n"
-        + "Any live cell with more than three live neighbours dies, as if by overpopulation.\n"
-        + "Any dead cell with exactly three live neighbours becomes a live cell, as if by reproduction.";
-    //Hard coded for now
-    setupSimulationInfo("Game of Life", "Random", "Luke, Daniel, Palo, and Ishan", description);
+    setupSimulationInfo(simType, title, author, description);
 
     BorderPane layout = new BorderPane();
     layout.setBottom(gridPane);
@@ -95,6 +89,8 @@ public class GridView {
       }
     }
   }
+
+
 
 
   /**
