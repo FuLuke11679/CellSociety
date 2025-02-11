@@ -17,37 +17,37 @@ class XMLParserTest {
     xmlParser = new XMLParser(file);
   }
   @Test
-  void getWidth() {
+  void getWidth_returnCorrectWidth() {
     assertEquals(800, xmlParser.getWidth());
   }
 
   @Test
-  void getHeight() {
+  void getHeight_returnsCorrectHeight() {
     assertEquals(800, xmlParser.getHeight());
   }
 
   @Test
-  void getTitle() {
+  void getTitle_returnsCorrectTitle() {
     assertEquals("Conway Simulation", xmlParser.getTitle());
   }
 
   @Test
-  void getSimType() {
+  void getSimType_returnsCorrectSimType() {
     assertEquals("Conway", xmlParser.getSimType());
   }
 
   @Test
-  void getRows() {
+  void getRows_returnsCorrectRows() {
     assertEquals(5, xmlParser.getRows());
   }
 
   @Test
-  void getColumns() {
+  void getColumns_returnsCorrectColumns() {
     assertEquals(5, xmlParser.getColumns());
   }
 
   @Test
-  void getInitialStates() {
+  void getInitialStates_returnsCorrectInitialStates() {
     String[] expected = {"A","A","D","D","D",
         "A","A","D","D","D",
         "A","A","D","D","D",
@@ -57,7 +57,7 @@ class XMLParserTest {
   }
 
   @Test
-  void getSimVarsMap() {
+  void getSimVarsMap_returnsCorrectSimVarsMap() {
     Map<String, String> expected = new HashMap<>();
     assertEquals(expected, xmlParser.getSimVarsMap());
   }
