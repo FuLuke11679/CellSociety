@@ -62,7 +62,9 @@ public class SegregationRuleset extends Ruleset {
   }
 
   private Cell findSuitableEmptyCell() {
-    for (Cell c : emptyCells.keySet()) {
+    List<Cell> candidateCells = new ArrayList<>(emptyCells.keySet());
+    Collections.shuffle(candidateCells);
+    for (Cell c : candidateCells) {
       if (emptyCells.get(c) >= 1) {
         return c;
       }

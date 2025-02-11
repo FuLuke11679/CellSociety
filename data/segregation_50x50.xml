@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<simulationConfig>
+  <!-- window and grid configuration -->
+  <display width="800" height="800" title="Segregation Simulation" author="Palo">
+    <grid rows="50" columns="50" />
+    <description text="This is the segregation simulation"/>
+  </display>
+
+  <!-- sim configuration -->
+  <sim type="Segregation">
+    <simvars
+      thresh="0.5"
+    />
+  </sim>
+
+  <init
+    stateList = "
+      BLU, EM, EM, BLU, BLU, BLU, BLU, EM, BLU, R, R, R, BLU, EM, EM, EM, R, BLU, BLU, R, BLU, BLU, R, BLU, BLU, R, BLU, R, BLU, R, BLU, R, R, EM, BLU, R, R, BLU, BLU, BLU, R, BLU, BLU, R, EM, R, BLU, R, BLU, BLU,
+BLU, BLU, BLU, EM, R, R, R, EM, EM, BLU, R, BLU, BLU, BLU, R, R, BLU, BLU, R, BLU, EM, R, BLU, EM, R, BLU, EM, EM, R, R, BLU, BLU, EM, EM, R, R, R, R, EM, BLU, EM, BLU, BLU, BLU, R, EM, R, BLU, R, R,
+EM, R, BLU, R, R, R, R, R, R, BLU, R, BLU, BLU, BLU, BLU, BLU, R, R, BLU, R, BLU, BLU, BLU, R, EM, R, EM, EM, BLU, EM, BLU, R, EM, BLU, BLU, BLU, R, R, EM, EM, BLU, BLU, BLU, BLU, EM, BLU, BLU, R, R, EM,
+R, EM, EM, R, R, R, R, R, R, EM, R, R, BLU, BLU, EM, R, BLU, R, R, BLU, R, BLU, EM, BLU, BLU, EM, R, EM, R, BLU, BLU, BLU, BLU, BLU, BLU, EM, BLU, BLU, BLU, R, R, EM, R, R, BLU, R, R, BLU, BLU, BLU,
+R, R, BLU, R, BLU, R, R, BLU, EM, R, BLU, EM, BLU, BLU, R, R, BLU, EM, BLU, R, R, BLU, EM, BLU, EM, R, EM, EM, BLU, R, R, R, R, BLU, R, EM, EM, R, R, EM, BLU, BLU, R, R, BLU, R, R, EM, EM, BLU,
+R, BLU, R, EM, BLU, EM, BLU, BLU, BLU, EM, EM, BLU, R, BLU, R, BLU, R, EM, EM, EM, BLU, R, BLU, EM, BLU, EM, R, EM, BLU, BLU, BLU, BLU, R, R, BLU, R, EM, BLU, BLU, EM, R, R, BLU, BLU, R, BLU, EM, R, EM, R,
+R, R, BLU, EM, R, BLU, BLU, EM, R, BLU, R, R, BLU, R, BLU, BLU, BLU, R, EM, R, BLU, BLU, EM, EM, EM, BLU, EM, R, BLU, BLU, BLU, EM, R, BLU, R, BLU, BLU, BLU, R, R, BLU, EM, R, BLU, BLU, R, R, BLU, BLU, BLU,
+BLU, BLU, R, R, R, R, EM, R, R, EM, BLU, EM, BLU, BLU, BLU, R, BLU, BLU, R, R, BLU, EM, R, EM, EM, EM, BLU, R, EM, R, EM, BLU, EM, BLU, EM, BLU, R, BLU, BLU, R, R, R, EM, EM, R, BLU, BLU, R, BLU, EM,
+R, BLU, R, BLU, R, R, R, BLU, BLU, EM, EM, R, BLU, R, BLU, BLU, EM, BLU, R, R, R, BLU, R, R, BLU, EM, R, R, EM, R, R, EM, BLU, R, BLU, R, BLU, EM, EM, R, BLU, R, EM, BLU, R, BLU, EM, R, BLU, EM,
+BLU, BLU, BLU, R, EM, R, R, BLU, EM, R, BLU, EM, R, BLU, EM, R, EM, BLU, BLU, BLU, BLU, R, EM, BLU, BLU, R, BLU, R, EM, BLU, EM, BLU, BLU, BLU, R, EM, EM, R, BLU, R, R, EM, R, BLU, R, R, BLU, BLU, BLU, BLU,
+BLU, BLU, R, R, EM, BLU, R, BLU, R, R, BLU, R, R, BLU, EM, R, EM, BLU, BLU, R, BLU, R, R, EM, BLU, R, R, EM, R, BLU, R, BLU, BLU, R, BLU, R, BLU, EM, R, R, BLU, R, BLU, R, BLU, R, EM, R, BLU, EM,
+BLU, R, R, BLU, BLU, R, BLU, BLU, R, BLU, EM, R, R, BLU, R, BLU, BLU, BLU, BLU, BLU, BLU, BLU, R, EM, BLU, BLU, BLU, EM, EM, EM, BLU, R, BLU, EM, BLU, R, EM, BLU, BLU, EM, BLU, R, EM, R, EM, BLU, R, R, BLU, R,
+EM, EM, R, BLU, R, R, BLU, R, R, R, EM, BLU, R, EM, EM, EM, EM, R, R, BLU, BLU, R, R, EM, R, BLU, R, BLU, EM, BLU, BLU, R, R, BLU, R, BLU, BLU, BLU, BLU, EM, EM, R, BLU, R, R, EM, EM, R, BLU, BLU,
+BLU, R, BLU, EM, R, R, R, R, EM, R, BLU, R, R, R, R, BLU, BLU, EM, BLU, R, BLU, R, EM, R, BLU, BLU, R, BLU, R, R, EM, EM, R, R, EM, BLU, BLU, BLU, BLU, R, R, R, R, BLU, R, R, BLU, BLU, BLU, EM,
+BLU, R, BLU, BLU, R, EM, R, EM, BLU, BLU, R, BLU, BLU, R, BLU, BLU, R, BLU, R, EM, BLU, R, R, BLU, R, R, BLU, BLU, BLU, EM, BLU, R, BLU, R, R, EM, BLU, BLU, BLU, R, BLU, BLU, R, BLU, BLU, EM, BLU, R, EM, EM,
+R, EM, R, BLU, EM, BLU, EM, R, R, BLU, R, BLU, EM, BLU, R, BLU, BLU, EM, BLU, R, R, EM, R, BLU, R, EM, R, R, R, BLU, R, R, BLU, BLU, BLU, R, R, EM, BLU, BLU, EM, BLU, BLU, BLU, BLU, R, R, BLU, BLU, EM,
+R, R, R, EM, BLU, R, EM, R, BLU, R, R, BLU, R, R, R, BLU, EM, BLU, BLU, BLU, EM, R, R, R, R, BLU, BLU, R, BLU, BLU, R, EM, BLU, BLU, R, BLU, EM, R, EM, R, BLU, EM, EM, BLU, R, R, R, EM, R, EM,
+BLU, R, R, R, R, BLU, BLU, EM, BLU, BLU, EM, R, BLU, EM, BLU, BLU, R, EM, BLU, BLU, R, BLU, EM, BLU, EM, R, BLU, BLU, BLU, R, R, EM, BLU, BLU, EM, EM, BLU, R, R, R, BLU, R, BLU, EM, BLU, EM, R, R, BLU, BLU,
+R, EM, R, R, R, R, R, BLU, BLU, R, R, BLU, R, EM, BLU, BLU, BLU, R, R, R, R, BLU, BLU, BLU, R, BLU, R, EM, R, R, BLU, BLU, EM, R, R, R, R, BLU, BLU, R, BLU, R, R, EM, BLU, BLU, BLU, EM, BLU, BLU,
+EM, R, BLU, R, R, R, BLU, EM, R, BLU, R, R, EM, R, BLU, BLU, EM, EM, BLU, EM, BLU, R, EM, BLU, BLU, R, EM, EM, BLU, R, R, R, EM, R, R, BLU, BLU, BLU, EM, R, BLU, BLU, BLU, BLU, R, BLU, R, BLU, BLU, R,
+BLU, R, R, R, R, R, BLU, R, BLU, BLU, EM, BLU, EM, R, EM, EM, R, EM, R, EM, BLU, R, BLU, R, EM, EM, BLU, BLU, R, R, BLU, R, BLU, BLU, BLU, R, BLU, EM, R, R, BLU, BLU, EM, EM, EM, R, R, EM, EM, EM,
+BLU, R, R, BLU, R, EM, BLU, R, R, R, BLU, EM, R, BLU, BLU, BLU, R, BLU, R, R, R, EM, R, BLU, EM, BLU, R, R, R, BLU, R, BLU, R, BLU, R, EM, BLU, R, R, R, BLU, R, BLU, BLU, EM, EM, R, R, R, R,
+EM, BLU, BLU, BLU, BLU, EM, EM, EM, EM, EM, BLU, BLU, BLU, R, R, BLU, R, BLU, BLU, BLU, R, BLU, BLU, EM, R, R, R, R, R, BLU, BLU, BLU, R, BLU, BLU, R, BLU, R, BLU, BLU, EM, BLU, R, EM, BLU, BLU, EM, EM, BLU, BLU,
+BLU, R, BLU, R, R, R, R, EM, BLU, EM, R, BLU, R, R, R, R, R, BLU, R, BLU, R, R, BLU, EM, R, BLU, BLU, EM, BLU, R, R, EM, EM, BLU, EM, BLU, R, R, BLU, R, BLU, R, EM, BLU, R, BLU, R, R, BLU, BLU,
+EM, BLU, BLU, BLU, R, R, R, BLU, R, R, R, R, BLU, BLU, BLU, R, R, BLU, EM, R, BLU, R, R, BLU, BLU, EM, EM, BLU, BLU, BLU, R, BLU, BLU, BLU, BLU, EM, R, R, EM, EM, R, EM, BLU, R, R, R, EM, R, EM, BLU,
+EM, BLU, R, BLU, R, R, R, R, BLU, BLU, R, EM, BLU, BLU, R, BLU, R, BLU, EM, R, BLU, EM, BLU, R, R, EM, R, BLU, R, EM, R, BLU, R, R, R, R, R, R, EM, R, EM, BLU, BLU, BLU, BLU, BLU, R, EM, R, R,
+R, R, EM, EM, R, BLU, BLU, EM, R, EM, R, R, R, R, R, EM, R, BLU, R, R, EM, R, EM, BLU, BLU, R, BLU, EM, EM, R, BLU, R, R, R, EM, R, BLU, R, R, BLU, BLU, R, BLU, BLU, R, R, R, R, R, BLU,
+BLU, BLU, R, R, EM, BLU, BLU, EM, BLU, R, EM, R, EM, BLU, EM, R, BLU, BLU, BLU, R, EM, BLU, BLU, BLU, R, BLU, R, EM, BLU, EM, R, BLU, BLU, R, BLU, EM, BLU, BLU, R, R, EM, R, R, BLU, R, BLU, EM, BLU, R, R,
+BLU, BLU, R, EM, BLU, BLU, R, BLU, EM, R, R, BLU, EM, BLU, R, R, EM, EM, BLU, BLU, BLU, BLU, R, R, R, EM, EM, BLU, R, R, BLU, BLU, R, R, R, EM, R, BLU, EM, R, BLU, R, BLU, R, BLU, BLU, EM, BLU, R, R,
+BLU, BLU, EM, EM, R, BLU, EM, EM, R, R, BLU, BLU, R, EM, BLU, BLU, R, R, BLU, R, R, EM, R, R, R, BLU, R, BLU, EM, BLU, EM, BLU, EM, EM, BLU, BLU, BLU, R, BLU, BLU, EM, EM, EM, BLU, BLU, BLU, R, BLU, EM, BLU,
+BLU, BLU, BLU, R, R, EM, EM, BLU, BLU, EM, BLU, BLU, BLU, BLU, R, BLU, BLU, BLU, BLU, BLU, BLU, R, EM, BLU, R, BLU, BLU, R, BLU, BLU, EM, EM, R, BLU, R, BLU, BLU, R, BLU, BLU, EM, R, EM, EM, R, BLU, BLU, EM, EM, BLU,
+R, R, EM, EM, EM, BLU, BLU, BLU, R, BLU, BLU, R, R, R, BLU, R, BLU, BLU, BLU, R, R, BLU, R, R, R, BLU, BLU, R, R, BLU, R, EM, BLU, R, BLU, R, R, R, EM, R, R, R, BLU, BLU, R, R, BLU, R, BLU, R,
+BLU, R, BLU, R, BLU, R, R, BLU, R, BLU, EM, R, R, R, BLU, R, BLU, EM, BLU, R, R, R, BLU, EM, EM, BLU, BLU, BLU, R, BLU, R, BLU, R, BLU, EM, BLU, R, BLU, BLU, EM, BLU, EM, BLU, R, EM, R, BLU, R, EM, BLU,
+R, R, BLU, R, EM, BLU, BLU, BLU, BLU, EM, R, R, BLU, R, R, R, R, BLU, BLU, EM, EM, EM, BLU, BLU, R, R, EM, BLU, BLU, R, BLU, EM, R, R, BLU, EM, EM, BLU, BLU, EM, R, R, R, BLU, R, EM, R, R, BLU, EM,
+R, R, BLU, R, R, BLU, R, EM, R, R, BLU, R, BLU, BLU, EM, R, R, R, R, BLU, BLU, BLU, R, EM, BLU, R, EM, R, EM, EM, R, BLU, R, EM, R, R, R, R, EM, EM, EM, EM, BLU, R, EM, BLU, BLU, R, BLU, BLU,
+EM, BLU, R, R, R, BLU, R, BLU, R, BLU, EM, R, R, BLU, EM, R, R, R, BLU, BLU, BLU, BLU, R, R, R, BLU, BLU, BLU, R, R, R, BLU, R, R, BLU, R, R, EM, R, BLU, R, R, BLU, BLU, BLU, BLU, EM, R, R, R,
+BLU, R, R, BLU, BLU, EM, R, R, BLU, R, R, BLU, EM, R, BLU, EM, BLU, BLU, R, EM, BLU, BLU, BLU, BLU, BLU, EM, BLU, BLU, R, BLU, BLU, EM, EM, BLU, R, EM, EM, R, BLU, BLU, BLU, BLU, EM, EM, EM, EM, R, BLU, BLU, EM,
+BLU, R, EM, BLU, EM, R, R, BLU, R, BLU, BLU, R, R, R, BLU, BLU, BLU, EM, BLU, BLU, BLU, R, R, R, EM, R, R, R, R, R, BLU, EM, EM, BLU, BLU, BLU, R, BLU, R, R, R, BLU, BLU, BLU, R, EM, R, BLU, EM, EM,
+BLU, EM, BLU, R, R, R, BLU, BLU, BLU, BLU, R, BLU, EM, R, R, R, R, R, BLU, BLU, BLU, EM, BLU, R, BLU, BLU, R, R, BLU, R, R, EM, BLU, R, R, R, R, BLU, EM, BLU, BLU, BLU, EM, BLU, R, BLU, EM, BLU, BLU, BLU,
+BLU, BLU, EM, R, BLU, BLU, R, R, EM, R, R, R, BLU, EM, R, R, EM, R, R, BLU, BLU, EM, BLU, EM, R, R, R, EM, BLU, R, EM, BLU, R, BLU, EM, BLU, EM, BLU, BLU, R, R, BLU, R, BLU, BLU, BLU, R, R, EM, EM,
+EM, BLU, BLU, BLU, EM, BLU, BLU, BLU, R, EM, R, BLU, EM, BLU, R, R, BLU, BLU, R, BLU, BLU, BLU, BLU, BLU, BLU, R, R, R, EM, BLU, EM, BLU, BLU, BLU, BLU, R, BLU, EM, R, R, BLU, BLU, R, R, EM, BLU, R, EM, R, R,
+BLU, R, R, BLU, R, R, EM, R, EM, R, EM, R, BLU, R, R, BLU, R, EM, R, BLU, EM, R, R, R, BLU, BLU, BLU, BLU, EM, BLU, EM, R, BLU, BLU, BLU, R, R, EM, EM, R, R, R, R, BLU, R, BLU, EM, EM, BLU, R,
+BLU, BLU, EM, BLU, EM, R, BLU, BLU, R, R, R, BLU, BLU, R, R, BLU, BLU, BLU, R, EM, R, EM, R, BLU, R, BLU, EM, BLU, R, BLU, R, BLU, EM, EM, BLU, BLU, BLU, EM, BLU, EM, BLU, EM, R, R, R, EM, EM, BLU, BLU, R,
+R, R, EM, R, EM, BLU, BLU, BLU, EM, BLU, EM, R, R, R, R, BLU, R, R, R, BLU, R, BLU, R, R, BLU, EM, BLU, R, BLU, BLU, BLU, R, EM, EM, R, R, R, R, R, BLU, R, R, EM, BLU, BLU, EM, BLU, BLU, BLU, BLU,
+BLU, BLU, R, BLU, R, R, EM, R, BLU, R, BLU, BLU, R, BLU, R, BLU, BLU, BLU, BLU, BLU, EM, R, EM, BLU, EM, R, BLU, R, EM, BLU, R, EM, R, R, BLU, EM, BLU, R, BLU, R, BLU, R, BLU, R, BLU, R, BLU, BLU, R, R,
+R, R, BLU, R, R, BLU, BLU, R, R, R, BLU, BLU, R, EM, EM, BLU, BLU, R, EM, R, BLU, EM, R, R, BLU, R, R, BLU, R, R, BLU, BLU, BLU, R, EM, R, EM, R, BLU, BLU, EM, R, R, BLU, R, R, BLU, R, BLU, BLU,
+EM, R, EM, R, EM, R, EM, R, BLU, R, BLU, R, BLU, BLU, BLU, R, BLU, BLU, EM, R, EM, BLU, BLU, R, EM, BLU, R, EM, BLU, R, BLU, EM, BLU, BLU, EM, R, BLU, EM, R, R, R, R, BLU, BLU, R, R, R, R, R, R,
+R, BLU, BLU, R, R, R, R, R, BLU, BLU, R, BLU, R, BLU, EM, EM, R, BLU, EM, BLU, R, R, EM, BLU, R, R, BLU, R, R, BLU, R, EM, R, EM, R, EM, R, EM, R, EM, R, EM, R, EM, BLU, R, BLU, BLU, R, EM,
+BLU, BLU, R, R, BLU, BLU, R, BLU, BLU, R, R, EM, R, BLU, BLU, BLU, EM, R, BLU, EM, BLU, BLU, EM, BLU, BLU, BLU, BLU, R, EM, BLU, EM, R, BLU, BLU, R, BLU, R, BLU, EM, EM, BLU, R, BLU, EM, EM, EM, BLU, BLU, BLU, EM,
+R, EM, R, R, EM, BLU, EM, EM, R, R, EM, R, EM, R, R, BLU, BLU, BLU, BLU, R, BLU, BLU, BLU, BLU, BLU, R, BLU, BLU, BLU, BLU, BLU, BLU, BLU, R, R, BLU, R, R, EM, R, BLU, EM, R, R, R, R, R, BLU, R, EM,
+    "
+  >
+  </init>
+</simulationConfig>
