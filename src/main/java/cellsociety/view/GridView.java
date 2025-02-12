@@ -6,9 +6,14 @@ import cellsociety.model.cell.ConwayCell.ConwayState;
 import cellsociety.model.cell.FireCell.FireState;
 import cellsociety.model.cell.PercolationCell.PercolationState;
 import cellsociety.model.state.CellState;
+import java.util.List;
 import java.util.Map;
+import javafx.geometry.Insets;
 import javafx.scene.Scene;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
@@ -28,6 +33,13 @@ public class GridView {
   Rectangle[][] cellRectangles;  // Store references for easy updates
   private Grid grid;
 
+  public enum ColorScheme{
+    LIGHT,
+    DARK,
+    DUKE,
+    UNC
+  }
+
   private final Map<CellState, Color> cellColors = Map.ofEntries(
       Map.entry(ConwayState.ALIVE, Color.BLACK),
       Map.entry(ConwayState.DEAD, Color.WHITE),
@@ -42,10 +54,17 @@ public class GridView {
       Map.entry(SegregationState.EMPTY, Color.WHITE)
   );
 
+  private final Map<ColorScheme, Color> schemeColors = Map.ofEntries(
+      Map.entry(ColorScheme.LIGHT, Color.WHITESMOKE),
+      Map.entry(ColorScheme.DARK, Color.GRAY),
+      Map.entry(ColorScheme.DUKE, Color.BLUE),
+      Map.entry(ColorScheme.UNC, Color.LIGHTBLUE)
+  );
+
   /**
    * Constructor for GridView.
    */
-  public GridView(int rows, int columns, Grid grid) {
+  public GridView(int rows, int columns, String simType, String title, String author, String description, Grid grid, ColorScheme scheme) {
     this.rows = rows;
     this.columns = columns;
     this.cellSize = SIZE_GRID / rows;
@@ -54,17 +73,12 @@ public class GridView {
     this.grid = grid;
 
     initializeGrid();
-    //hard coded for now
-    String description = "Any live cell with fewer than two live neighbours dies, as if by underpopulation.\n"
-        + "Any live cell with two or three live neighbours lives on to the next generation.\n"
-        + "Any live cell with more than three live neighbours dies, as if by overpopulation.\n"
-        + "Any dead cell with exactly three live neighbours becomes a live cell, as if by reproduction.";
-    //Hard coded for now
-    setupSimulationInfo("Game of Life", "Random", "Luke, Daniel, Palo, and Ishan", description);
+    setupSimulationInfo(simType, title, author, description);
 
     BorderPane layout = new BorderPane();
     layout.setBottom(gridPane);
     layout.setTop(infoBox);
+    layout.setBackground(new Background(new BackgroundFill(schemeColors.get(scheme), CornerRadii.EMPTY, Insets.EMPTY)));
 
     this.myScene = new Scene(layout, WINDOW_WIDTH, WINDOW_HEIGHT);
   }
@@ -95,6 +109,8 @@ public class GridView {
       }
     }
   }
+
+
 
 
   /**
