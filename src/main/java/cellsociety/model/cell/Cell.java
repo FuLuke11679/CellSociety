@@ -18,12 +18,32 @@ public abstract class Cell {
       return id;
     }
 
-    public abstract CellState getPrevState ();
+  /**
+   * @return The previous state of the cell
+   */
+  public CellState getPrevState() {
+    return prevState;
+  }
 
-    public abstract CellState getCurrState ();
+  /**
+   * @return The current state of the cell
+   */
+  public CellState getCurrState() {
+    return currState;
+  }
 
-    public abstract void setPrevState(CellState state);
+  /**
+   * @param state The state you wish to set the previous state of the cell to
+   */
+  public void setPrevState(CellState state) {
+    prevState = state;
+  }
 
-  public abstract void setCurrState(CellState state);
+  /**
+   * @param state The state you wish to set the current state of the cell to
+   */
+  public void setCurrState(CellState state) {
+    currState = state;
+  }
 
 }

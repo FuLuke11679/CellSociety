@@ -34,16 +34,4 @@ public class SegregationGrid extends Grid {
     }
   }
 
-  public Map<Cell, Integer> getEmptyCells() {
-    Map<Cell, Integer> emptyCells = new HashMap<>();
-    for (int i = 0; i < rows; i++) {
-      for (int j = 0; j < columns; j++) {
-        if (getCell(i,j).getCurrState() == SegregationState.EMPTY) {
-          emptyCells.put(getCell(i,j), 1);
-        }
-      }
-    }
-    return emptyCells;
-  }
-
 }
