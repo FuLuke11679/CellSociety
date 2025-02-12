@@ -6,24 +6,18 @@ import cellsociety.parser.XMLParser;
 import cellsociety.view.GridView;
 import cellsociety.view.GridView.ColorScheme;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.ResourceBundle;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Application;
-import javafx.beans.property.BooleanProperty;
-import javafx.beans.property.SimpleBooleanProperty;
-import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.scene.layout.Background;
-import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.StackPane;
-import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 import javafx.scene.text.TextFlow;
@@ -50,19 +44,15 @@ public class Main extends Application {
     private File currentFile;
     private ColorScheme myScheme;
     private Locale myLocale;
+    private Scene splashScene;
 
-    //DUPLICATE VARIABLE, NEED to place in property file if possible
-    private final Map<ColorScheme, Color> schemeColors = Map.ofEntries(
-        Map.entry(ColorScheme.LIGHT, Color.WHITESMOKE),
-        Map.entry(ColorScheme.DARK, Color.GRAY),
-        Map.entry(ColorScheme.DUKE, Color.BLUE),
-        Map.entry(ColorScheme.UNC, Color.LIGHTBLUE)
-    );//required for setting language
 
     @Override
     public void start(Stage primaryStage) {
         globalStage = primaryStage;
+        myLocale = Locale.getDefault(); //default should be English
         loadSplashScreen();
+
     }
 
     private void loadSimulation(File dataFile) {
@@ -80,7 +70,6 @@ public class Main extends Application {
             myParser.getDescription(),
             myGrid,
             myScheme);
-            //myLocale);
 
         BorderPane layout = initializeLayout();
 
@@ -110,36 +99,56 @@ public class Main extends Application {
 
     private void loadSplashScreen() {
         BorderPane splash = new BorderPane();
-        myLocale = Locale.ENGLISH; //default to english
-        //set all relevant text in this method, but buttons are set and added to layout here
-        //this means we have to get children
-        //setSplashText(myLocale)
+        splashScene = new Scene(splash, 600, 800);
         ResourceBundle simInfo = ResourceBundle.getBundle("SimInfo", myLocale);
+        splash = loadSplashText(splash, simInfo);  //returns BorderPane
+        Button loadButton = new Button(simInfo.getString("splash_load_sim"));
+        loadButton.setOnAction(e -> {
+            File newFile = FILE_CHOOSER.showOpenDialog(globalStage);
+            if (newFile != null) {
+                loadSimulation(newFile);
+            }
+        });
+        List<MenuButton> controlButtons = loadControlButtons(simInfo);
+        HBox controls = new HBox(10, loadButton);
+        for (MenuButton controlButton : controlButtons) {
+            controls.getChildren().add(controlButton);
+        }
+        splash.setBottom(controls);
+        setStage(splashScene);
+    }
+
+    private BorderPane loadSplashText(BorderPane splash, ResourceBundle simInfo) {
         Text welcome = new Text(simInfo.getString("splash_welcome"));
         TextFlow textFlow = new TextFlow(welcome);
         textFlow.setTextAlignment(TextAlignment.CENTER);
         splash.setCenter(textFlow);
-        Button loadButton = new Button(simInfo.getString("splash_load_sim"));
+        return splash;
+    }
+
+    private List<MenuButton> loadControlButtons(ResourceBundle simInfo) {
+        List<MenuButton> controlButtons = new ArrayList<>();
         MenuButton languageSelect = new MenuButton(simInfo.getString("splash_language_button"));
         MenuItem language1 = new MenuItem(simInfo.getString("splash_language_1"));
         MenuItem language2 = new MenuItem(simInfo.getString("splash_language_2"));
         MenuItem language3 = new MenuItem(simInfo.getString("splash_language_3"));
-        BooleanProperty languageSelected = new SimpleBooleanProperty(false);
         language1.setOnAction(e -> {
-            languageSelected.set(true);
-            //change language here for all nodes on splash screen
-            //myLocale = Locale.ENGLISH;
+            if(myLocale != Locale.ENGLISH) {
+                myLocale = Locale.ENGLISH;
+                loadSplashScreen();  //need to reload if language has been changed
+            }
         });
-        language2.setOnAction(e ->
-        {
-            languageSelected.set(true);
-            myLocale = Locale.FRENCH;
-            //simInfo = ResourceBundle.getBundle("SimInfo", myLocale);
+        language2.setOnAction(e -> {
+            if(myLocale != Locale.FRENCH) {
+                myLocale = Locale.FRENCH;
+                loadSplashScreen();
+            }
         });
-        language3.setOnAction(e ->
-        {
-            languageSelected.set(true);
-            myLocale = Locale.GERMAN;
+        language3.setOnAction(e ->{
+            if(myLocale != Locale.GERMAN){
+                myLocale = Locale.GERMAN;
+                loadSplashScreen();
+            }
         });
         languageSelect.getItems().addAll(language1, language2, language3);
         MenuButton colorScheme = new MenuButton(simInfo.getString("splash_color_button"));
@@ -147,62 +156,53 @@ public class Main extends Application {
         MenuItem colorScheme2 = new MenuItem(simInfo.getString("splash_color_scheme_2"));
         MenuItem colorScheme3 = new MenuItem(simInfo.getString("splash_color_scheme_3"));
         MenuItem colorScheme4 = new MenuItem(simInfo.getString("splash_color_scheme_4"));
-        BooleanProperty colorSelected = new SimpleBooleanProperty(false);
         colorScheme1.setOnAction(e -> {
-            colorSelected.set(true);
-            myScheme = ColorScheme.DARK;
-            setSplashDarkTheme(splash, myScheme);
-            //need to set new scene in each of these cases!!
+            setSplashTheme(splashScene, ColorScheme.DARK); //enum just for switch statememt
+            myScheme = ColorScheme.DARK; //this should be eliminated
         });
         colorScheme2.setOnAction(e -> {
-            colorSelected.set(true);
+            setSplashTheme(splashScene, ColorScheme.LIGHT);
             myScheme = ColorScheme.LIGHT;
-            //setSplashTheme(splash, myScheme);
         });
         colorScheme3.setOnAction(e -> {
-            colorSelected.set(true);
+            setSplashTheme(splashScene, ColorScheme.DUKE);
             myScheme = ColorScheme.DUKE;
-            //setSplashTheme(splash, myScheme);
         });
         colorScheme4.setOnAction(e -> {
-            colorSelected.set(true);
+            setSplashTheme(splashScene, ColorScheme.UNC);
             myScheme = ColorScheme.UNC;
-            //setSplashTheme(splash, myScheme);
         });
         colorScheme.getItems().addAll(colorScheme1, colorScheme2, colorScheme3, colorScheme4);
-        loadButton.setOnAction(e -> {
-            File newFile = FILE_CHOOSER.showOpenDialog(globalStage);
-            if (newFile != null & languageSelected.get() & colorSelected.get()) {
-                //only should load once other buttons have been selected
-                loadSimulation(newFile);
-            }
-        });
-        HBox controls = new HBox(10, loadButton, languageSelect, colorScheme);
-        splash.setBottom(controls);
-        Scene splashScene = new Scene(splash, 600, 800);
+        controlButtons.add(languageSelect);
+        controlButtons.add(colorScheme);
+        return controlButtons;
+    }
+
+    private void setSplashTheme(Scene splashScene, ColorScheme scheme){
+        URL resourcePath = null;
+        switch(scheme){
+            case DARK:
+                resourcePath = getClass().getResource("/SplashDark.css");
+                break;
+            case LIGHT:
+                resourcePath = getClass().getResource("/SplashLight.css");
+                break;
+            case DUKE:
+                resourcePath = getClass().getResource("/SplashDuke.css");
+                break;
+            case UNC:
+                resourcePath = getClass().getResource("/SplashUnc.css");
+                break;
+        }
+
+        if (resourcePath == null) {
+            System.err.println("Error: Invalid Splash Theme");
+        }
+        splashScene.getStylesheets().add(resourcePath.toExternalForm());
         setStage(splashScene);
     }
 
-    private void setSplashDarkTheme(BorderPane splash, ColorScheme scheme){
-        //takes scene object and
-        splash.setBackground(new Background(new BackgroundFill(schemeColors.get(scheme), CornerRadii.EMPTY, Insets.EMPTY)));
-        //Scene splashScene = new Scene(splash, 600, 800);
-        //need to modify splash if we want to use it in manner above
-       // URL resourceUrl = getClass().getResource("SplashDark.css");
 
-        // Check if the resource URL is null (file not found)
-        /*
-        if (resourceUrl == null) {
-            System.err.println("Error: SplashDark.css file not found!");
-            // You can also handle this scenario by providing a default style or a fallback
-            return;  // Exit the method or handle the error as needed
-        }
-
-         */
-        //splashScene.getStylesheets().add(getClass().getResource("SplashDark.css").toExternalForm());
-        setStage(new Scene(splash, 600, 800));
-
-    }
 
     private BorderPane initializeLayout() {
         BorderPane layout = new BorderPane();
