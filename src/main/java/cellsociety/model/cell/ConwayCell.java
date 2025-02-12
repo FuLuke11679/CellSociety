@@ -13,20 +13,4 @@ public class ConwayCell extends Cell {
     super(id, prevState, currState);
   }
 
-  public CellState getPrevState() {
-    return prevState;
-  }
-
-  public CellState getCurrState() {
-    return currState;
-  }
-
-  public void setPrevState(CellState prevState) {
-    this.prevState = prevState;
-  }
-
-  public void setCurrState(CellState currState) {
-    this.currState = currState;
-  }
-
 }
