@@ -14,23 +14,4 @@ public class PercolationCell extends Cell {
     super(id, prevState, currState);
   }
 
-  @Override
-  public CellState getPrevState() {
-    return prevState;
-  }
-
-  @Override
-  public CellState getCurrState() {
-    return currState;
-  }
-
-  @Override
-  public void setPrevState(CellState state) {
-    prevState = state;
-  }
-
-  @Override
-  public void setCurrState(CellState state) {
-    currState = state;
-  }
 }
