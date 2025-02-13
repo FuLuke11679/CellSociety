@@ -32,7 +32,7 @@ This project implements a cellular automata simulator.
 
  * Main class:
 
-Main.java
+Main.java and run the program
 
  * Data files needed: 
 
