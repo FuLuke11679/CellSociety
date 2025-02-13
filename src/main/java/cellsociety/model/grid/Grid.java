@@ -95,7 +95,7 @@ public abstract class Grid {
     return myGrid.get(row).get(col);
   }
 
-  private List<Cell> getNeighbors(int row, int col) {
+  public List<Cell> getNeighbors(int row, int col) {
     List<Cell> neighbors = new ArrayList<>();
     int[] dx = {-1, -1, -1,  0,  0,  1,  1,  1};
     int[] dy = {-1,  0,  1, -1,  1, -1,  0,  1};
