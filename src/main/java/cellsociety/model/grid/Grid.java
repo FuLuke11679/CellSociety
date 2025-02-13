@@ -6,6 +6,7 @@ import cellsociety.model.cell.FireCell.FireState;
 import cellsociety.model.cell.PercolationCell;
 import cellsociety.model.cell.PercolationCell.PercolationState;
 import cellsociety.model.cell.SegregationCell.SegregationState;
+import cellsociety.model.cell.WatorCell.WatorState;
 import cellsociety.model.ruleset.Ruleset;
 import java.util.ArrayList;
 import java.util.List;
@@ -31,7 +32,10 @@ public abstract class Grid {
       Map.entry("O", PercolationState.OPEN),
       Map.entry("BLU", SegregationState.BLUE),
       Map.entry("R", SegregationState.RED),
-      Map.entry("EM", SegregationState.EMPTY)
+      Map.entry("EM", SegregationState.EMPTY),
+      Map.entry("S", WatorState.SHARK),
+      Map.entry("F", WatorState.FISH),
+      Map.entry("W", WatorState.WATER)
   );
 
   protected int rows;

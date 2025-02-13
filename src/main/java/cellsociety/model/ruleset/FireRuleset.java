@@ -9,10 +9,6 @@ import javafx.scene.paint.Color;
 
 public class FireRuleset extends Ruleset {
 
-  private static final Color TREE_COLOR = Color.GREEN;
-  private static final Color BURNING_COLOR = Color.BROWN;
-  private static final Color EMPTY_COLOR = Color.YELLOW;
-
   private final double probGrow;
   private final double probCatch;
 

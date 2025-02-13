@@ -6,6 +6,7 @@ import cellsociety.model.grid.Grid;
 import cellsociety.model.grid.WatorGrid;
 import cellsociety.model.state.CellState;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -16,8 +17,12 @@ public class WatorRuleset extends Ruleset {
   private static final int SHARK_REPRODUCTION_TIME = 5;
   private static final int FISH_REPRODUCTION_TIME = 5;
 
-  private Grid grid;
+  private Grid myGrid;
   private Map<Cell, Integer> energyMap;
+
+  public WatorRuleset() {
+    super();
+  }
 
   /**
    * @param cell The cell whose state me must check
@@ -25,10 +30,6 @@ public class WatorRuleset extends Ruleset {
    */
   @Override
   public void updateState(Cell cell, List<Cell> neighbors) {
-
-    if (cell.getPrevState() == WatorState.WATER && cell.getCurrState() != WatorState.WATER) {
-      return;
-    }
 
     if (cell.getCurrState() == WatorState.WATER) {
       maintainCell(cell);
@@ -38,15 +39,11 @@ public class WatorRuleset extends Ruleset {
     if (cell.getCurrState() == WatorState.FISH) {
       if (energyMap.containsKey(cell)) {
         Cell toSwap = getRandomEmptySpot(cell, neighbors);
-        if (energyMap.get(cell) % FISH_REPRODUCTION_TIME == 0) {
-          if (toSwap != null) {
+        if (toSwap != null && energyMap.get(cell) % FISH_REPRODUCTION_TIME == 0) {
             reproduceCell(cell, toSwap);
-          }
-        } else {
-          if (toSwap != null) {
-            swapCell(cell, toSwap);
-            energyMap.put(cell, energyMap.get(cell) - 1); // Take away energy from fish
-          }
+        } else if (toSwap != null) {
+          swapCell(cell, toSwap);
+          energyMap.put(cell, energyMap.get(cell) - 1); // Take away energy from fish
         }
       }
     }
@@ -105,15 +102,16 @@ public class WatorRuleset extends Ruleset {
   }
 
   private boolean isCellWrapped(Cell cell, Cell neighbor) {
-    if (cell.getId() >= 0 && cell.getId() < grid.getColumns()
-            && neighbor.getId() >= grid.getRows() * grid.getColumns()) {
+    if (cell.getId() >= 0 && cell.getId() < myGrid.getColumns()
+            && neighbor.getId() >= myGrid.getRows() * myGrid.getColumns()) {
       return true;
     }
-    return cell.getId() % grid.getColumns() == 0
-        && neighbor.getId() % grid.getColumns() == grid.getColumns() - 1;
+    return cell.getId() % myGrid.getColumns() == 0
+        && neighbor.getId() % myGrid.getColumns() == myGrid.getColumns() - 1;
   }
 
   private void generateLifeMap(Grid grid) {
+    energyMap = new HashMap<>();
     for (int i = 0; i < grid.getRows(); i++) {
       for (int j = 0; j < grid.getColumns(); j++) {
         if (grid.getCell(i,j).getCurrState() == WatorState.FISH) {
@@ -143,9 +141,9 @@ public class WatorRuleset extends Ruleset {
    */
   @Override
   public Grid createGrid(int rows, int columns, String[] initialStates) {
-    grid = new WatorGrid(rows, columns, new WatorRuleset(), initialStates);
-    generateLifeMap(grid);
-    return grid;
+    myGrid = new WatorGrid(rows, columns, new WatorRuleset(), initialStates);
+    generateLifeMap(myGrid);
+    return myGrid;
   }
 
 }
