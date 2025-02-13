@@ -8,11 +8,13 @@ import java.util.List;
 
 public class PercolationRuleset extends Ruleset {
 
-  public PercolationRuleset() {}
+  public PercolationRuleset() {
+  }
 
   @Override
   public void updateState(Cell cell, List<Cell> neighbors) {
-    if (cell.getCurrState() == PercolationState.BLOCKED || cell.getCurrState() == PercolationState.PERCOLATED) {
+    if (cell.getCurrState() == PercolationState.BLOCKED
+        || cell.getCurrState() == PercolationState.PERCOLATED) {
       maintainCell(cell);
       return;
     }

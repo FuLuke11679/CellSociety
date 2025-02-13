@@ -8,7 +8,8 @@ import java.util.List;
 
 public class ConwayRuleset extends Ruleset {
 
-  public ConwayRuleset() {}
+  public ConwayRuleset() {
+  }
 
   private int countNeighbors(Cell cell, List<Cell> neighbors) {
     int aliveCells = 0;
@@ -44,7 +45,6 @@ public class ConwayRuleset extends Ruleset {
       }
     }
   }
-
 
 
   private void killCell(Cell cell) {
