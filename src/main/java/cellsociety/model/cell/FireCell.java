@@ -7,7 +7,7 @@ public class FireCell extends Cell {
   public enum FireState implements CellState {
     EMPTY,
     TREE,
-    BURNING;
+    BURNING
   }
 
   public FireCell(int id, FireState prevState, CellState currState) {

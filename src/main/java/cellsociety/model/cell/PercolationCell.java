@@ -7,7 +7,7 @@ public class PercolationCell extends Cell {
   public enum PercolationState implements CellState {
     BLOCKED,
     OPEN,
-    PERCOLATED;
+    PERCOLATED
   }
 
   public PercolationCell(int id, CellState prevState, CellState currState) {

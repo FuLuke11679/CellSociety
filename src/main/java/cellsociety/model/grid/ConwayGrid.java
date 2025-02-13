@@ -1,8 +1,7 @@
 package cellsociety.model.grid;
 
-import cellsociety.model.cell.ConwayCell;
 import cellsociety.model.cell.Cell;
-import cellsociety.model.ruleset.ConwayRuleset;
+import cellsociety.model.cell.ConwayCell;
 import cellsociety.model.ruleset.Ruleset;
 import cellsociety.model.state.CellState;
 import java.util.ArrayList;
@@ -12,13 +11,13 @@ import java.util.List;
 Updates Grid based on Cell logic
 Does not display the grid or interact at all with javafx packages (i.e Scene, Groups, etc)
  */
-public class ConwayGrid extends Grid{
+public class ConwayGrid extends Grid {
 
   /**
    * Constructor for ConwayGrid.
    *
-   * @param rows       Number of rows in the grid.
-   * @param columns    Number of columns in the grid.
+   * @param rows    Number of rows in the grid.
+   * @param columns Number of columns in the grid.
    */
 
   public ConwayGrid(int rows, int columns, Ruleset ruleset, String[] cells) {
