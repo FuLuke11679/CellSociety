@@ -1,15 +1,11 @@
 package cellsociety.model.grid;
 
 import cellsociety.model.cell.Cell;
-import cellsociety.model.cell.FireCell;
 import cellsociety.model.cell.SegregationCell;
-import cellsociety.model.cell.SegregationCell.SegregationState;
 import cellsociety.model.ruleset.Ruleset;
 import cellsociety.model.state.CellState;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public class SegregationGrid extends Grid {
 

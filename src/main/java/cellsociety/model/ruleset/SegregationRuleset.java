@@ -2,7 +2,6 @@ package cellsociety.model.ruleset;
 
 import cellsociety.model.cell.Cell;
 import cellsociety.model.cell.SegregationCell.SegregationState;
-import cellsociety.model.grid.FireGrid;
 import cellsociety.model.grid.Grid;
 import cellsociety.model.grid.SegregationGrid;
 import cellsociety.model.state.CellState;
@@ -26,7 +25,7 @@ public class SegregationRuleset extends Ruleset {
   /**
    * Function to update the state of the cell based on its neighbors
    *
-   * @param cell The cell of focus that we are looking to update
+   * @param cell      The cell of focus that we are looking to update
    * @param neighbors The neighbors around the cell that we need to analyze
    */
   public void updateState(Cell cell, List<Cell> neighbors) {
@@ -53,7 +52,7 @@ public class SegregationRuleset extends Ruleset {
   /**
    * Function to check if the Segregation cell is satisfied with the "race" of its neighbors
    *
-   * @param cell The cell that is being analyzed
+   * @param cell      The cell that is being analyzed
    * @param neighbors The neighbors of the cell that we need to analyze
    * @return If the cell is satisfied with the "race" of its neighbors
    */
@@ -68,12 +67,12 @@ public class SegregationRuleset extends Ruleset {
         totalCount++;
       }
     }
-    return simCount/totalCount > similarityThreshold;
+    return simCount / totalCount > similarityThreshold;
   }
 
   /**
-   * Shuffles the KeySet of empty cells and finds the first cell that has had a life cycle longer than
-   * one update cycle (to account for sequential updates)
+   * Shuffles the KeySet of empty cells and finds the first cell that has had a life cycle longer
+   * than one update cycle (to account for sequential updates)
    *
    * @return A suitable empty cell to swap with
    */
@@ -91,13 +90,15 @@ public class SegregationRuleset extends Ruleset {
   /**
    * Function to get the appropriate state of a cell
    *
-   * @param cell The cell we wish to get the state of
-   * @param neighbor The neighbors that determine the state of the cell (whether we look at prev or curr state)
+   * @param cell     The cell we wish to get the state of
+   * @param neighbor The neighbors that determine the state of the cell (whether we look at prev or
+   *                 curr state)
    * @return The appropriate state of the cell
    */
   @Override
   public CellState getState(Cell cell, Cell neighbor) {
-    if (neighbor.getId() < cell.getId() || (emptyCells.containsKey(neighbor) && emptyCells.get(neighbor) < 1)) {
+    if (neighbor.getId() < cell.getId() || (emptyCells.containsKey(neighbor)
+        && emptyCells.get(neighbor) < 1)) {
       return neighbor.getPrevState();
     }
     return neighbor.getCurrState();
@@ -122,6 +123,7 @@ public class SegregationRuleset extends Ruleset {
 
   /**
    * Maintains the state of a cell if it does not need updates
+   *
    * @param cell The cell to maintain the state of
    */
   private void maintainCell(Cell cell) {
@@ -131,14 +133,15 @@ public class SegregationRuleset extends Ruleset {
   /**
    * Creates a custom grid with the appropriate cell type
    *
-   * @param rows The amount of rows in the grid
-   * @param columns The amount of columns in a grid
+   * @param rows          The amount of rows in the grid
+   * @param columns       The amount of columns in a grid
    * @param initialStates The initial states to be configured in the grid of each cell
    * @return The Grid of the simulation
    */
   @Override
   public Grid createGrid(int rows, int columns, String[] initialStates) {
-    grid = new SegregationGrid(rows, columns, new SegregationRuleset(similarityThreshold), initialStates);
+    grid = new SegregationGrid(rows, columns, new SegregationRuleset(similarityThreshold),
+        initialStates);
     emptyCells = getEmptyCells(grid);
     return grid;
   }
@@ -148,8 +151,8 @@ public class SegregationRuleset extends Ruleset {
     Map<Cell, Integer> emptyCells = new HashMap<>();
     for (int i = 0; i < grid.getRows(); i++) {
       for (int j = 0; j < grid.getColumns(); j++) {
-        if (grid.getCell(i,j).getCurrState() == SegregationState.EMPTY) {
-          emptyCells.put(grid.getCell(i,j), 1);
+        if (grid.getCell(i, j).getCurrState() == SegregationState.EMPTY) {
+          emptyCells.put(grid.getCell(i, j), 1);
         }
       }
     }

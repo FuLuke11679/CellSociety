@@ -1,7 +1,6 @@
 package cellsociety.model.grid;
 
 import cellsociety.model.cell.Cell;
-import cellsociety.model.cell.SegregationCell;
 import cellsociety.model.cell.WatorCell;
 import cellsociety.model.ruleset.Ruleset;
 import cellsociety.model.state.CellState;
@@ -37,8 +36,8 @@ public class WatorGrid extends Grid {
   @Override
   public List<Cell> getNeighbors(int row, int col) {
     List<Cell> neighbors = new ArrayList<>();
-    int[] dx = {-1, 1,  0, 0};
-    int[] dy = { 0, 0, -1, 1};
+    int[] dx = {-1, 1, 0, 0};
+    int[] dy = {0, 0, -1, 1};
 
     for (int i = 0; i < 4; i++) {
       int newRow = (row + dx[i] + rows) % rows;  // Wrap row
