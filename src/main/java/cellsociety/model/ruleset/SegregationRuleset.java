@@ -14,7 +14,7 @@ import java.util.Map;
 public class SegregationRuleset extends Ruleset {
 
   private final double similarityThreshold;
-  private SegregationGrid grid;
+  private SegregationGrid myGrid;
   Map<Cell, Integer> emptyCells;
 
   public SegregationRuleset(double similarityThreshold) {
@@ -60,10 +60,10 @@ public class SegregationRuleset extends Ruleset {
     double simCount = 0;
     double totalCount = 0;
     for (Cell neighbor : neighbors) {
-      if (getState(cell, neighbor) == cell.getCurrState()) {
+      if (neighbor.getCurrState() == cell.getCurrState()) {
         simCount++;
         totalCount++;
-      } else if (getState(cell, neighbor) != SegregationState.EMPTY) {
+      } else if (neighbor.getCurrState() != SegregationState.EMPTY) {
         totalCount++;
       }
     }
@@ -97,10 +97,6 @@ public class SegregationRuleset extends Ruleset {
    */
   @Override
   public CellState getState(Cell cell, Cell neighbor) {
-    if (neighbor.getId() < cell.getId() || (emptyCells.containsKey(neighbor)
-        && emptyCells.get(neighbor) < 1)) {
-      return neighbor.getPrevState();
-    }
     return neighbor.getCurrState();
   }
 
@@ -111,11 +107,9 @@ public class SegregationRuleset extends Ruleset {
    * @param cell2 The cell we wish to swap the first cell with
    */
   private void swapCell(Cell cell1, Cell cell2) {
-    cell1.setPrevState(cell1.getCurrState());
-    cell2.setPrevState(cell2.getCurrState());
-
+    CellState temp = cell1.getCurrState();
     cell1.setCurrState(cell2.getCurrState());
-    cell2.setCurrState(cell1.getPrevState());
+    cell2.setCurrState(temp);
 
     emptyCells.remove(cell2);
     emptyCells.put(cell1, 0);
@@ -127,7 +121,7 @@ public class SegregationRuleset extends Ruleset {
    * @param cell The cell to maintain the state of
    */
   private void maintainCell(Cell cell) {
-    cell.setPrevState(cell.getCurrState());
+    cell.setNextState(cell.getCurrState());
   }
 
   /**
@@ -140,10 +134,10 @@ public class SegregationRuleset extends Ruleset {
    */
   @Override
   public Grid createGrid(int rows, int columns, String[] initialStates) {
-    grid = new SegregationGrid(rows, columns, new SegregationRuleset(similarityThreshold),
+    myGrid = new SegregationGrid(rows, columns, new SegregationRuleset(similarityThreshold),
         initialStates);
-    emptyCells = getEmptyCells(grid);
-    return grid;
+    emptyCells = getEmptyCells(myGrid);
+    return myGrid;
   }
 
 

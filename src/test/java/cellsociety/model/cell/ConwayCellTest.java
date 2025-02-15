@@ -2,8 +2,6 @@ package cellsociety.model.cell;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-import cellsociety.model.cell.Cell;
-import cellsociety.model.cell.ConwayCell;
 import cellsociety.model.cell.ConwayCell.ConwayState;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -19,24 +17,24 @@ class ConwayCellTest {
   }
 
   @Test
-  void getPrevState() {
-    assertEquals(ConwayState.DEAD, cell.getPrevState());
-  }
-
-  @Test
   void getCurrState() {
-    assertEquals(ConwayState.ALIVE, cell.getCurrState());
+    assertEquals(ConwayState.DEAD, cell.getCurrState());
   }
 
   @Test
-  void setPrevState() {
-    cell.setPrevState(ConwayState.ALIVE);
-    assertEquals(ConwayState.ALIVE, cell.getPrevState());
+  void getNextState() {
+    assertEquals(ConwayState.ALIVE, cell.getNextState());
   }
 
   @Test
   void setCurrState() {
-    cell.setCurrState(ConwayState.DEAD);
-    assertEquals(ConwayState.DEAD, cell.getCurrState());
+    cell.setCurrState(ConwayState.ALIVE);
+    assertEquals(ConwayState.ALIVE, cell.getCurrState());
+  }
+
+  @Test
+  void setNextState() {
+    cell.setNextState(ConwayState.DEAD);
+    assertEquals(ConwayState.DEAD, cell.getNextState());
   }
 }

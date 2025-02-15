@@ -1,12 +1,12 @@
 package cellsociety.view;
 
 import cellsociety.model.cell.SegregationCell.SegregationState;
+import cellsociety.model.cell.WatorCell.WatorState;
 import cellsociety.model.grid.Grid;
 import cellsociety.model.cell.ConwayCell.ConwayState;
 import cellsociety.model.cell.FireCell.FireState;
 import cellsociety.model.cell.PercolationCell.PercolationState;
 import cellsociety.model.state.CellState;
-import java.util.List;
 import java.util.Map;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
@@ -51,7 +51,10 @@ public class GridView {
       Map.entry(FireState.EMPTY, Color.WHITE),
       Map.entry(SegregationState.BLUE, Color.BLUE),
       Map.entry(SegregationState.RED, Color.RED),
-      Map.entry(SegregationState.EMPTY, Color.WHITE)
+      Map.entry(SegregationState.EMPTY, Color.WHITE),
+      Map.entry(WatorState.SHARK, Color.LIGHTBLUE),
+      Map.entry(WatorState.FISH, Color.LIGHTGREEN),
+      Map.entry(WatorState.WATER, Color.WHITE)
   );
 
   private final Map<ColorScheme, Color> schemeColors = Map.ofEntries(

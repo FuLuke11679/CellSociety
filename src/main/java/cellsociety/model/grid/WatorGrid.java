@@ -39,7 +39,7 @@ public class WatorGrid extends Grid {
     int[] dx = {-1, 1, 0, 0};
     int[] dy = {0, 0, -1, 1};
 
-    for (int i = 0; i < 8; i++) {
+    for (int i = 0; i < 4; i++) {
       int newRow = (row + dx[i] + rows) % rows;  // Wrap row
       int newCol = (col + dy[i] + columns) % columns;  // Wrap column
 

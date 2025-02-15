@@ -16,24 +16,24 @@ class SegregationCellTest {
   }
 
   @Test
-  void getPrevState() {
-    assertEquals(SegregationState.BLUE, cell.getPrevState());
-  }
-
-  @Test
   void getCurrState() {
-    assertEquals(SegregationState.EMPTY, cell.getCurrState());
+    assertEquals(SegregationState.BLUE, cell.getCurrState());
   }
 
   @Test
-  void setPrevState() {
-    cell.setPrevState(SegregationState.EMPTY);
-    assertEquals(SegregationState.EMPTY, cell.getPrevState());
+  void getNextState() {
+    assertEquals(SegregationState.EMPTY, cell.getNextState());
   }
 
   @Test
   void setCurrState() {
-    cell.setCurrState(SegregationState.RED);
-    assertEquals(SegregationState.RED, cell.getCurrState());
+    cell.setCurrState(SegregationState.EMPTY);
+    assertEquals(SegregationState.EMPTY, cell.getCurrState());
+  }
+
+  @Test
+  void setNextState() {
+    cell.setNextState(SegregationState.RED);
+    assertEquals(SegregationState.RED, cell.getNextState());
   }
 }

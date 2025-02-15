@@ -5,13 +5,8 @@ import cellsociety.model.cell.FireCell.FireState;
 import cellsociety.model.grid.FireGrid;
 import cellsociety.model.grid.Grid;
 import java.util.List;
-import javafx.scene.paint.Color;
 
 public class FireRuleset extends Ruleset {
-
-  private static final Color TREE_COLOR = Color.GREEN;
-  private static final Color BURNING_COLOR = Color.BROWN;
-  private static final Color EMPTY_COLOR = Color.YELLOW;
 
   private final double probGrow;
   private final double probCatch;
@@ -52,7 +47,7 @@ public class FireRuleset extends Ruleset {
 
   private boolean isNeighborCellBurning(Cell cell, List<Cell> neighbors) {
     for (Cell neighbor : neighbors) {
-      if (getState(cell, neighbor) == FireState.BURNING) {
+      if (neighbor.getCurrState() == FireState.BURNING) {
         return true;
       }
     }

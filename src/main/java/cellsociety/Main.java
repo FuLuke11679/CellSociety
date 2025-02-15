@@ -84,6 +84,7 @@ public class Main extends Application {
             case "Fire" -> new FireRuleset(Double.parseDouble(myParser.getSimVarsMap().get("probCatch")),
                 Double.parseDouble(myParser.getSimVarsMap().get("probGrow")));
             case "Segregation" -> new SegregationRuleset(Double.parseDouble(myParser.getSimVarsMap().get("thresh")));
+            case "WatorWorld" -> new WatorRuleset();
             default -> throw new IllegalStateException("Unknown simulation type");
         };
     }

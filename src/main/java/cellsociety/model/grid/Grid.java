@@ -5,6 +5,7 @@ import cellsociety.model.cell.ConwayCell.ConwayState;
 import cellsociety.model.cell.FireCell.FireState;
 import cellsociety.model.cell.PercolationCell.PercolationState;
 import cellsociety.model.cell.SegregationCell.SegregationState;
+import cellsociety.model.cell.WatorCell.WatorState;
 import cellsociety.model.ruleset.ConwayRuleset;
 import cellsociety.model.ruleset.Ruleset;
 import cellsociety.model.state.CellState;
@@ -29,7 +30,10 @@ public abstract class Grid {
       Map.entry("O", PercolationState.OPEN),
       Map.entry("BLU", SegregationState.BLUE),
       Map.entry("R", SegregationState.RED),
-      Map.entry("EM", SegregationState.EMPTY)
+      Map.entry("EM", SegregationState.EMPTY),
+      Map.entry("S", WatorState.SHARK),
+      Map.entry("F", WatorState.FISH),
+      Map.entry("W", WatorState.WATER)
   );
 
   protected int rows;
@@ -82,20 +86,11 @@ public abstract class Grid {
       int row = id / columns;
       int col = id % columns;
       Cell cell = myGrid.get(row).get(col);
-      if(cell.getCurrState() != cell.getNextState()){
+      if(cell.getNextState() != null && cell.getNextState() != cell.getCurrState()){
         cell.setCurrState(cell.getNextState());
         cell.setNextState(null);
       }
     }
-    // Second pass: Apply new states and collect updates
-//    for (int x = 0; x < rows; x++) {
-//      for (int y = 0; y < columns; y++) {
-//        Cell cell = myGrid.get(x).get(y);
-//        if (cell.getPrevState() != cell.getCurrState()) {
-//          cell.setColor(cell.getCurrState() == ConwayState.ALIVE ? Color.BLACK : Color.WHITE);
-//        }
-//      }
-//    }
   }
 
 
@@ -143,7 +138,7 @@ public abstract class Grid {
   public void printGrid() {
     for (int i = 0; i < rows; i++) {
       for (int j = 0; j < columns; j++) {
-        System.out.print(getCell(i, j).getCurrState() + " ");
+        System.out.print(getCell(i, j).getNextState() + " ");
       }
       System.out.println();
     }
