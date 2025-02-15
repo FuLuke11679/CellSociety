@@ -1,19 +1,17 @@
 package cellsociety.model.grid;
 
 import cellsociety.model.cell.Cell;
-import cellsociety.model.cell.FireCell;
+import cellsociety.model.cell.ConwayCell.ConwayState;
 import cellsociety.model.cell.FireCell.FireState;
-import cellsociety.model.cell.PercolationCell;
 import cellsociety.model.cell.PercolationCell.PercolationState;
 import cellsociety.model.cell.SegregationCell.SegregationState;
+import cellsociety.model.ruleset.ConwayRuleset;
 import cellsociety.model.ruleset.Ruleset;
+import cellsociety.model.state.CellState;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import cellsociety.model.cell.ConwayCell;
-import cellsociety.model.cell.ConwayCell.ConwayState;
-import cellsociety.model.state.CellState;
-import cellsociety.model.ruleset.ConwayRuleset;
+
 /*
 Updates Grid based on Cell logic
 Does not display the grid or interact at all with javafx packages (i.e Scene, Groups, etc)
@@ -43,8 +41,8 @@ public abstract class Grid {
   /**
    * Constructor for GridManager.
    *
-   * @param rows       Number of rows in the grid.
-   * @param columns    Number of columns in the grid.
+   * @param rows    Number of rows in the grid.
+   * @param columns Number of columns in the grid.
    */
   public Grid(int rows, int columns) {
     this.rows = rows;
@@ -68,7 +66,7 @@ public abstract class Grid {
   public abstract void initializeGrid();
 
 
-  public void update(){
+  public void update() {
     //return a list of cell ids that were changed,
     //loop over all cells and randomly change color of alive cells with probability 0.4
     int length = getLength();
@@ -91,14 +89,14 @@ public abstract class Grid {
   }
 
 
-  public Cell getCell(int row, int col){
+  public Cell getCell(int row, int col) {
     return myGrid.get(row).get(col);
   }
 
   public List<Cell> getNeighbors(int row, int col) {
     List<Cell> neighbors = new ArrayList<>();
-    int[] dx = {-1, -1, -1,  0,  0,  1,  1,  1};
-    int[] dy = {-1,  0,  1, -1,  1, -1,  0,  1};
+    int[] dx = {-1, -1, -1, 0, 0, 1, 1, 1};
+    int[] dy = {-1, 0, 1, -1, 1, -1, 0, 1};
 
     for (int i = 0; i < 8; i++) {
       int newRow = row + dx[i];
@@ -112,7 +110,7 @@ public abstract class Grid {
     return neighbors;
   }
 
-  public int getLength(){
+  public int getLength() {
     int totalCount = 0;
     for (List<Cell> list : myGrid) {
       totalCount += list.size();

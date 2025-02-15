@@ -8,15 +8,15 @@ public abstract class Cell {
   protected CellState prevState;
   protected CellState currState;
 
-  public Cell( int id, CellState prevState, CellState currState){
-      this.id = id;
-      this.prevState = prevState;
-      this.currState = currState;
-    }
+  public Cell(int id, CellState prevState, CellState currState) {
+    this.id = id;
+    this.prevState = prevState;
+    this.currState = currState;
+  }
 
-    public int getId () {
-      return id;
-    }
+  public int getId() {
+    return id;
+  }
 
   /**
    * @return The previous state of the cell

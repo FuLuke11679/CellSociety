@@ -20,7 +20,7 @@ public class WatorRuleset extends Ruleset {
   private Map<Cell, Integer> energyMap;
 
   /**
-   * @param cell The cell whose state me must check
+   * @param cell      The cell whose state me must check
    * @param neighbors The neighbors who determine what the cell should do
    */
   @Override
@@ -106,7 +106,7 @@ public class WatorRuleset extends Ruleset {
 
   private boolean isCellWrapped(Cell cell, Cell neighbor) {
     if (cell.getId() >= 0 && cell.getId() < grid.getColumns()
-            && neighbor.getId() >= grid.getRows() * grid.getColumns()) {
+        && neighbor.getId() >= grid.getRows() * grid.getColumns()) {
       return true;
     }
     return cell.getId() % grid.getColumns() == 0
@@ -116,10 +116,10 @@ public class WatorRuleset extends Ruleset {
   private void generateLifeMap(Grid grid) {
     for (int i = 0; i < grid.getRows(); i++) {
       for (int j = 0; j < grid.getColumns(); j++) {
-        if (grid.getCell(i,j).getCurrState() == WatorState.FISH) {
-          energyMap.put(grid.getCell(i,j), MAX_FISH_LIFE);
-        } else if (grid.getCell(i,j).getCurrState() == WatorState.SHARK) {
-          energyMap.put(grid.getCell(i,j), MAX_SHARK_LIFE);
+        if (grid.getCell(i, j).getCurrState() == WatorState.FISH) {
+          energyMap.put(grid.getCell(i, j), MAX_FISH_LIFE);
+        } else if (grid.getCell(i, j).getCurrState() == WatorState.SHARK) {
+          energyMap.put(grid.getCell(i, j), MAX_SHARK_LIFE);
         }
       }
     }
@@ -127,6 +127,7 @@ public class WatorRuleset extends Ruleset {
 
   /**
    * Maintains the state of a cell if it does not need updates
+   *
    * @param cell The cell to maintain the state of
    */
   private void maintainCell(Cell cell) {
@@ -136,8 +137,8 @@ public class WatorRuleset extends Ruleset {
   /**
    * Creates the grid for WatorWorld
    *
-   * @param rows Integer: The amount of rows in the grid
-   * @param columns Integer: The amount of columns in the grid
+   * @param rows          Integer: The amount of rows in the grid
+   * @param columns       Integer: The amount of columns in the grid
    * @param initialStates A String[] denoting the initial states of each cell
    * @return The new grid
    */
