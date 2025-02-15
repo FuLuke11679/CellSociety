@@ -10,8 +10,8 @@ public class SegregationCell extends Cell {
     EMPTY
   }
 
-  public SegregationCell(int id, CellState prevState, CellState currState) {
-    super(id, prevState, currState);
+  public SegregationCell(int id, CellState currState, CellState nextState) {
+    super(id, currState, nextState);
   }
 
 }

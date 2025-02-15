@@ -10,8 +10,8 @@ public class WatorCell extends Cell {
     WATER
   }
 
-  public WatorCell(int id, CellState prevState, CellState currState) {
-    super(id, prevState, currState);
+  public WatorCell(int id, CellState currState, CellState nextState) {
+    super(id, currState, nextState);
   }
 
 }

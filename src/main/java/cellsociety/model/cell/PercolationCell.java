@@ -10,8 +10,8 @@ public class PercolationCell extends Cell {
     PERCOLATED
   }
 
-  public PercolationCell(int id, CellState prevState, CellState currState) {
-    super(id, prevState, currState);
+  public PercolationCell(int id, CellState currState, CellState nextState) {
+    super(id, currState, nextState);
   }
 
 }

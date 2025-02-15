@@ -36,7 +36,7 @@ public class PercolationGrid extends Grid {
       for (int y = 0; y < columns; y++) {
         CellState initialState = getInitialState(myCells[count]);
         // Use the appropriate cell type based on the state
-        Cell cell = new PercolationCell(count, null, initialState);
+        Cell cell = new PercolationCell(count, initialState, null);
         row.add(cell);
         count++;
       }

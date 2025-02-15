@@ -9,8 +9,8 @@ public class ConwayCell extends Cell {
     DEAD
   }
 
-  public ConwayCell(int id, CellState prevState, CellState currState) {
-    super(id, prevState, currState);
+  public ConwayCell(int id, CellState currState, CellState nextState) {
+    super(id, currState, nextState);
   }
 
 }

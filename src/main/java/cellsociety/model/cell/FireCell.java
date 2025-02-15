@@ -10,8 +10,8 @@ public class FireCell extends Cell {
     BURNING
   }
 
-  public FireCell(int id, FireState prevState, CellState currState) {
-    super(id, prevState, currState);
+  public FireCell(int id, CellState currState, CellState nextState) {
+    super(id, currState, nextState);
   }
 
 }

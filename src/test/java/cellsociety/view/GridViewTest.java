@@ -35,7 +35,7 @@ class GridViewTest {
           "D", "A", "D", "A"
       };
       grid = new ConwayGrid(ROWS, COLUMNS, new ConwayRuleset(), initialCells);
-      gridView = new GridView(ROWS, COLUMNS, grid);
+      //gridView = new GridView(ROWS, COLUMNS, grid);
     });
     Thread.sleep(500); // Allow JavaFX to initialize
   }

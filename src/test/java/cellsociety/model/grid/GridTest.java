@@ -1,9 +1,7 @@
-package cellsociety.model;
+package cellsociety.model.grid;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-import cellsociety.model.grid.ConwayGrid;
-import cellsociety.model.grid.Grid;
 import cellsociety.model.cell.Cell;
 import cellsociety.model.cell.ConwayCell;
 import cellsociety.model.cell.ConwayCell.ConwayState;
@@ -74,4 +72,5 @@ class GridTest {
     Grid emptyGrid = new ConwayGrid(0, 0, new ConwayRuleset(), new String[0]);
     assertEquals(0, emptyGrid.getLength());
   }
+
 }

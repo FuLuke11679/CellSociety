@@ -5,13 +5,13 @@ import cellsociety.model.state.CellState;
 public abstract class Cell {
 
   private final int id;
-  protected CellState prevState;
   protected CellState currState;
+  protected CellState nextState;
 
-  public Cell(int id, CellState prevState, CellState currState) {
+  public Cell(int id, CellState currState, CellState nextState) {
     this.id = id;
-    this.prevState = prevState;
     this.currState = currState;
+    this.nextState = nextState;
   }
 
   public int getId() {
@@ -21,8 +21,8 @@ public abstract class Cell {
   /**
    * @return The previous state of the cell
    */
-  public CellState getPrevState() {
-    return prevState;
+  public CellState getNextState() {
+    return nextState;
   }
 
   /**
@@ -35,8 +35,8 @@ public abstract class Cell {
   /**
    * @param state The state you wish to set the previous state of the cell to
    */
-  public void setPrevState(CellState state) {
-    prevState = state;
+  public void setNextState(CellState state) {
+    nextState = state;
   }
 
   /**
