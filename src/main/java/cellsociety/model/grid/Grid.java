@@ -83,9 +83,8 @@ public abstract class Grid {
       int col = id % columns;
       Cell cell = myGrid.get(row).get(col);
       if(cell.getCurrState() != cell.getNextState()){
-        CellState temp = cell.getCurrState();
         cell.setCurrState(cell.getNextState());
-        cell.setNextState(temp);
+        cell.setNextState(null);
       }
     }
     // Second pass: Apply new states and collect updates
