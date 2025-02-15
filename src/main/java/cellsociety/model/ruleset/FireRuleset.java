@@ -56,22 +56,19 @@ public class FireRuleset extends Ruleset {
   }
 
   private void killCell(Cell cell) {
-    cell.setPrevState(cell.getCurrState());
-    cell.setCurrState(FireState.EMPTY);
+    cell.setNextState(FireState.EMPTY);
   }
 
   private void lightFire(Cell cell) {
-    cell.setPrevState(cell.getCurrState());
-    cell.setCurrState(FireState.BURNING);
+    cell.setNextState(FireState.BURNING);
   }
 
   private void growTree(Cell cell) {
-    cell.setPrevState(cell.getCurrState());
-    cell.setCurrState(FireState.TREE);
+    cell.setNextState(FireState.TREE);
   }
 
   private void maintainCell(Cell cell) {
-    cell.setPrevState(cell.getCurrState());
+    cell.setNextState(cell.getCurrState());
   }
 
 }

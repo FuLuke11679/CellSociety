@@ -43,12 +43,11 @@ public class PercolationRuleset extends Ruleset {
   }
 
   private void maintainCell(Cell cell) {
-    cell.setPrevState(cell.getCurrState());
+    cell.setNextState(cell.getCurrState());
   }
 
   private void percolateCell(Cell cell) {
-    cell.setPrevState(cell.getCurrState());
-    cell.setCurrState(PercolationState.PERCOLATED);
+    cell.setNextState(PercolationState.PERCOLATED);
   }
 
 }

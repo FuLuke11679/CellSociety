@@ -36,7 +36,7 @@ public class FireGrid extends Grid {
       for (int y = 0; y < columns; y++) {
         CellState initialState = getInitialState(myCells[count]);
         // Use the appropriate cell type based on the state
-        Cell cell = new FireCell(count, null, initialState);
+        Cell cell = new FireCell(count, initialState, null);
         row.add(cell);
         count++;
       }

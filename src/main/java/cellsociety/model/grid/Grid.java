@@ -80,6 +80,16 @@ public abstract class Grid {
       List<Cell> neighbors = getNeighbors(row, col);
       ruleset.updateState(cell, new ArrayList<>(neighbors));
     }
+    // Second pass: Apply new states and update cells to utilize the next state
+    for( int id = 0; id < length; id++) {
+      int row = id / columns;
+      int col = id % columns;
+      Cell cell = myGrid.get(row).get(col);
+      if(cell.getCurrState() != cell.getNextState()){
+        cell.setCurrState(cell.getNextState());
+        cell.setNextState(null);
+      }
+    }
     // Second pass: Apply new states and collect updates
 //    for (int x = 0; x < rows; x++) {
 //      for (int y = 0; y < columns; y++) {

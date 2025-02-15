@@ -15,9 +15,6 @@ public abstract class Ruleset {
   public abstract Grid createGrid(int rows, int columns, String[] initialStates);
 
   protected CellState getState(Cell cell, Cell neighbor) {
-    if (neighbor.getId() < cell.getId()) {
-      return neighbor.getPrevState();
-    }
     return neighbor.getCurrState();
   }
 
