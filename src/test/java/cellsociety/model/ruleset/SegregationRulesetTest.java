@@ -3,14 +3,9 @@ package cellsociety.model.ruleset;
 import static org.junit.jupiter.api.Assertions.*;
 
 import cellsociety.model.cell.Cell;
-import cellsociety.model.cell.SegregationCell;
 import cellsociety.model.cell.SegregationCell.SegregationState;
 import cellsociety.model.grid.Grid;
-import cellsociety.model.grid.SegregationGrid;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -41,7 +36,7 @@ class SegregationRulesetTest {
 
     myRuleset.updateState(myGrid.getCell(0, 0), neighbors);
 
-    assertEquals(SegregationState.EMPTY, myGrid.getCell(0, 0).getCurrState());
+    assertEquals(SegregationState.EMPTY, myGrid.getCell(0, 0).getNextState());
   }
 
   @Test
@@ -56,8 +51,8 @@ class SegregationRulesetTest {
 
     myRuleset.updateState(myGrid.getCell(0, 1), neighbors);
 
-    assertEquals(SegregationState.RED, myGrid.getCell(0, 1).getPrevState());
     assertEquals(SegregationState.RED, myGrid.getCell(0, 1).getCurrState());
+    assertEquals(SegregationState.RED, myGrid.getCell(0, 1).getNextState());
   }
 
   @Test
@@ -72,8 +67,8 @@ class SegregationRulesetTest {
 
     myRuleset.updateState(myGrid.getCell(0, 2), neighbors);
 
-    assertEquals(SegregationState.EMPTY, myGrid.getCell(0, 2).getPrevState());
     assertEquals(SegregationState.EMPTY, myGrid.getCell(0, 2).getCurrState());
+    assertEquals(SegregationState.EMPTY, myGrid.getCell(0, 2).getNextState());
   }
 
 }

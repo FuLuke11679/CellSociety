@@ -16,24 +16,24 @@ class PercolationCellTest {
   }
 
   @Test
-  void getPrevState() {
-    assertEquals(PercolationState.OPEN, cell.getPrevState());
-  }
-
-  @Test
   void getCurrState() {
-    assertEquals(PercolationState.PERCOLATED, cell.getCurrState());
+    assertEquals(PercolationState.OPEN, cell.getCurrState());
   }
 
   @Test
-  void setPrevState() {
-    cell.setPrevState(PercolationState.PERCOLATED);
-    assertEquals(PercolationState.PERCOLATED, cell.getPrevState());
+  void getNextState() {
+    assertEquals(PercolationState.PERCOLATED, cell.getNextState());
   }
 
   @Test
   void setCurrState() {
-    cell.setCurrState(PercolationState.BLOCKED);
-    assertEquals(PercolationState.BLOCKED, cell.getCurrState());
+    cell.setCurrState(PercolationState.PERCOLATED);
+    assertEquals(PercolationState.PERCOLATED, cell.getCurrState());
+  }
+
+  @Test
+  void setNextState() {
+    cell.setNextState(PercolationState.BLOCKED);
+    assertEquals(PercolationState.BLOCKED, cell.getNextState());
   }
 }

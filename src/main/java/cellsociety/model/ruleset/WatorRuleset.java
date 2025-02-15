@@ -31,12 +31,12 @@ public class WatorRuleset extends Ruleset {
   @Override
   public void updateState(Cell cell, List<Cell> neighbors) {
 
-    if (cell.getCurrState() == WatorState.WATER) {
+    if (cell.getNextState() == WatorState.WATER) {
       maintainCell(cell);
       return;
     }
 
-    if (cell.getCurrState() == WatorState.FISH) {
+    if (cell.getNextState() == WatorState.FISH) {
       if (energyMap.containsKey(cell)) {
         Cell toSwap = getRandomEmptySpot(cell, neighbors);
         if (toSwap != null && energyMap.get(cell) % FISH_REPRODUCTION_TIME == 0) {
@@ -77,33 +77,33 @@ public class WatorRuleset extends Ruleset {
    * @param cell2 The cell we wish to swap the first cell with
    */
   private void swapCell(Cell cell1, Cell cell2) {
-    cell1.setPrevState(cell1.getCurrState());
-    cell2.setPrevState(cell2.getCurrState());
+    cell1.setCurrState(cell1.getNextState());
+    cell2.setCurrState(cell2.getNextState());
 
-    cell1.setCurrState(cell2.getCurrState());
-    cell2.setCurrState(cell1.getPrevState());
+    cell1.setNextState(cell2.getNextState());
+    cell2.setNextState(cell1.getCurrState());
 
     energyMap.put(cell1, energyMap.get(cell1));
     energyMap.remove(cell2);
   }
 
   private void reproduceCell(Cell cell, Cell child) {
-    child.setPrevState(child.getCurrState());
-    child.setCurrState(cell.getCurrState());
+    child.setCurrState(child.getNextState());
+    child.setNextState(cell.getNextState());
     energyMap.put(child, MAX_SHARK_LIFE);
   }
 
   @Override
   protected CellState getState(Cell cell, Cell neighbor) {
     if (neighbor.getId() < cell.getId() || isCellWrapped(cell, neighbor)) {
-      return neighbor.getPrevState();
+      return neighbor.getCurrState();
     }
-    return neighbor.getCurrState();
+    return neighbor.getNextState();
   }
 
   private boolean isCellWrapped(Cell cell, Cell neighbor) {
-    if (cell.getId() >= 0 && cell.getId() < grid.getColumns()
-        && neighbor.getId() >= grid.getRows() * grid.getColumns()) {
+    if (cell.getId() >= 0 && cell.getId() < myGrid.getColumns()
+        && neighbor.getId() >= myGrid.getRows() * myGrid.getColumns()) {
       return true;
     }
     return cell.getId() % myGrid.getColumns() == 0
@@ -114,9 +114,9 @@ public class WatorRuleset extends Ruleset {
     energyMap = new HashMap<>();
     for (int i = 0; i < grid.getRows(); i++) {
       for (int j = 0; j < grid.getColumns(); j++) {
-        if (grid.getCell(i, j).getCurrState() == WatorState.FISH) {
+        if (grid.getCell(i, j).getNextState() == WatorState.FISH) {
           energyMap.put(grid.getCell(i, j), MAX_FISH_LIFE);
-        } else if (grid.getCell(i, j).getCurrState() == WatorState.SHARK) {
+        } else if (grid.getCell(i, j).getNextState() == WatorState.SHARK) {
           energyMap.put(grid.getCell(i, j), MAX_SHARK_LIFE);
         }
       }
@@ -129,7 +129,7 @@ public class WatorRuleset extends Ruleset {
    * @param cell The cell to maintain the state of
    */
   private void maintainCell(Cell cell) {
-    cell.setPrevState(cell.getCurrState());
+    cell.setCurrState(cell.getNextState());
   }
 
   /**

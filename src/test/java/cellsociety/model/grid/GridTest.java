@@ -33,8 +33,8 @@ class GridTest {
     assertEquals(rows * cols, grid.getLength());
 
     // Check that the first and last cell are correctly assigned
-    assertEquals(ConwayState.ALIVE, ((ConwayCell) grid.getCell(0, 0)).getCurrState());
-    assertEquals(ConwayState.DEAD, ((ConwayCell) grid.getCell(0, 1)).getCurrState());
+    assertEquals(ConwayState.ALIVE, ((ConwayCell) grid.getCell(0, 0)).getNextState());
+    assertEquals(ConwayState.DEAD, ((ConwayCell) grid.getCell(0, 1)).getNextState());
   }
 
 
@@ -50,7 +50,7 @@ class GridTest {
   void getCell_ReturnsCorrectCell() {
     Cell cell = grid.getCell(3, 3);
     assertNotNull(cell);
-    assertEquals(ConwayState.ALIVE, ((ConwayCell) cell).getCurrState());
+    assertEquals(ConwayState.ALIVE, ((ConwayCell) cell).getNextState());
   }
 
   // Negative Test: Ensure out-of-bounds access throws exception

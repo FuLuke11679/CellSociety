@@ -5,11 +5,8 @@ import static org.junit.jupiter.api.Assertions.*;
 import cellsociety.model.cell.Cell;
 import cellsociety.model.cell.FireCell;
 import cellsociety.model.cell.FireCell.FireState;
-import cellsociety.model.ruleset.FireRuleset;
-import cellsociety.model.ruleset.Ruleset;
 import java.util.ArrayList;
 import java.util.List;
-import javafx.scene.paint.Color;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -40,7 +37,7 @@ class FireRulesetTest {
         new FireCell(4, FireState.TREE, FireState.TREE)
     ));
     rulesetMinProb.updateState(emptyCell, neighbors);
-    assertEquals(FireState.EMPTY, emptyCell.getCurrState());
+    assertEquals(FireState.EMPTY, emptyCell.getNextState());
   }
 
   @Test
@@ -52,7 +49,7 @@ class FireRulesetTest {
         new FireCell(4, FireState.TREE, FireState.TREE)
     ));
     rulesetMaxProb.updateState(emptyCell, neighbors);
-    assertEquals(FireState.TREE, emptyCell.getCurrState());
+    assertEquals(FireState.TREE, emptyCell.getNextState());
   }
 
   @Test
@@ -64,7 +61,7 @@ class FireRulesetTest {
         new FireCell(4, FireState.TREE, FireState.TREE)
     ));
     rulesetMinProb.updateState(treeCell, neighbors);
-    assertEquals(FireState.TREE, treeCell.getCurrState());
+    assertEquals(FireState.TREE, treeCell.getNextState());
   }
 
   @Test
@@ -76,7 +73,7 @@ class FireRulesetTest {
         new FireCell(4, FireState.TREE, FireState.TREE)
     ));
     rulesetMaxProb.updateState(treeCell, neighbors);
-    assertEquals(FireState.BURNING, treeCell.getCurrState());
+    assertEquals(FireState.BURNING, treeCell.getNextState());
   }
 
   @Test
@@ -87,13 +84,13 @@ class FireRulesetTest {
         new FireCell(3, FireState.TREE, FireState.TREE)
     ));
     rulesetMaxProb.updateState(treeCell, neighbors);
-    assertEquals(FireState.BURNING, treeCell.getCurrState());
+    assertEquals(FireState.BURNING, treeCell.getNextState());
   }
 
   @Test
   void updateStateBurningCell() {
     rulesetMaxProb.updateState(burningCell, neighbors);
-    assertEquals(FireState.EMPTY, burningCell.getCurrState());
+    assertEquals(FireState.EMPTY, burningCell.getNextState());
   }
 
 }

@@ -2,8 +2,6 @@ package cellsociety.model.cell;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-import cellsociety.model.cell.Cell;
-import cellsociety.model.cell.FireCell;
 import cellsociety.model.cell.FireCell.FireState;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -18,24 +16,24 @@ class FireCellTest {
   }
 
   @Test
-  void getPrevState() {
-    assertEquals(FireState.BURNING, cell.getPrevState());
-  }
-
-  @Test
   void getCurrState() {
-    assertEquals(FireState.EMPTY, cell.getCurrState());
+    assertEquals(FireState.BURNING, cell.getCurrState());
   }
 
   @Test
-  void setPrevState() {
-    cell.setPrevState(FireState.BURNING);
-    assertEquals(FireState.BURNING, cell.getPrevState());
+  void getNextState() {
+    assertEquals(FireState.EMPTY, cell.getNextState());
   }
 
   @Test
   void setCurrState() {
-    cell.setCurrState(FireState.EMPTY);
-    assertEquals(FireState.EMPTY, cell.getCurrState());
+    cell.setCurrState(FireState.BURNING);
+    assertEquals(FireState.BURNING, cell.getCurrState());
+  }
+
+  @Test
+  void setNextState() {
+    cell.setNextState(FireState.EMPTY);
+    assertEquals(FireState.EMPTY, cell.getNextState());
   }
 }

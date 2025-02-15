@@ -31,8 +31,8 @@ class PercolationRulesetTest {
         new PercolationCell(4, null, PercolationState.BLOCKED)
     ));
     ruleset.updateState(cell, neighbors);
-    assertEquals(PercolationState.BLOCKED, cell.getPrevState());
     assertEquals(PercolationState.BLOCKED, cell.getCurrState());
+    assertEquals(PercolationState.BLOCKED, cell.getNextState());
   }
 
   @Test
@@ -45,8 +45,8 @@ class PercolationRulesetTest {
         new PercolationCell(4, null, PercolationState.PERCOLATED)
     ));
     ruleset.updateState(cell, neighbors);
-    assertEquals(PercolationState.PERCOLATED, cell.getPrevState());
     assertEquals(PercolationState.PERCOLATED, cell.getCurrState());
+    assertEquals(PercolationState.PERCOLATED, cell.getNextState());
   }
 
   @Test
@@ -59,8 +59,8 @@ class PercolationRulesetTest {
         new PercolationCell(4, null, PercolationState.OPEN)
     ));
     ruleset.updateState(cell, neighbors);
-    assertEquals(PercolationState.OPEN, cell.getPrevState());
     assertEquals(PercolationState.OPEN, cell.getCurrState());
+    assertEquals(PercolationState.OPEN, cell.getNextState());
   }
 
   @Test
@@ -73,8 +73,8 @@ class PercolationRulesetTest {
         new PercolationCell(4, null, PercolationState.OPEN)
     ));
     ruleset.updateState(cell, neighbors);
-    assertEquals(PercolationState.OPEN, cell.getPrevState());
-    assertEquals(PercolationState.PERCOLATED, cell.getCurrState());
+    assertEquals(PercolationState.OPEN, cell.getCurrState());
+    assertEquals(PercolationState.PERCOLATED, cell.getNextState());
   }
 
 }
