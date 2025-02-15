@@ -36,11 +36,11 @@ public abstract class Grid {
       Map.entry("W", WatorState.WATER)
   );
 
-  protected int rows;
-  protected int columns;
-  protected String[] myCells;
-  protected List<List<Cell>> myGrid;
-  protected Ruleset ruleset;
+  private int rows;
+  private int columns;
+  private String[] myCells;
+  private List<List<Cell>> myGrid;
+  private Ruleset ruleset;
 
   /**
    * Constructor for GridManager.
@@ -147,6 +147,9 @@ public abstract class Grid {
 
   public int getColumns() {
     return columns;
+  }
+  public List<List<Cell>> getGrid() {
+    return myGrid;
   }
 
   public Cell createCell(int id, CellState currState, CellState nextState, String cellType) {

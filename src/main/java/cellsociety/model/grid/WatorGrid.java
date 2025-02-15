@@ -24,10 +24,13 @@ public class WatorGrid extends Grid {
     int[] dy = {0, 0, -1, 1};
 
     for (int i = 0; i < 4; i++) {
-      int newRow = (row + dx[i] + rows) % rows;  // Wrap row
-      int newCol = (col + dy[i] + columns) % columns;  // Wrap column
+      int numRows = getRows();
+      int numCols = getColumns();
+      List<List<Cell>> grid = getGrid();
+      int newRow = (row + dx[i] + numRows) % numRows;  // Wrap row
+      int newCol = (col + dy[i] + numCols) % numCols;  // Wrap column
 
-      neighbors.add(myGrid.get(newRow).get(newCol));
+      neighbors.add(grid.get(newRow).get(newCol));
     }
     return neighbors;
   }
