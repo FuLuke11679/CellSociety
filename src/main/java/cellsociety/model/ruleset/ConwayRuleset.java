@@ -48,17 +48,15 @@ public class ConwayRuleset extends Ruleset {
 
 
   private void killCell(Cell cell) {
-    cell.setPrevState(cell.getCurrState());
-    cell.setCurrState(ConwayState.DEAD);
+    cell.setNextState(ConwayState.DEAD);
   }
 
   private void birthCell(Cell cell) {
-    cell.setPrevState(cell.getCurrState());
-    cell.setCurrState(ConwayState.ALIVE);
+    cell.setNextState(ConwayState.ALIVE);
   }
 
   private void maintainCell(Cell cell) {
-    cell.setPrevState(cell.getCurrState());
+    cell.setNextState(cell.getCurrState());
   }
 
 }

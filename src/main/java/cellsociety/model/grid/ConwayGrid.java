@@ -36,7 +36,7 @@ public class ConwayGrid extends Grid {
       for (int y = 0; y < columns; y++) {
         CellState initialState = getInitialState(myCells[count]);
         // Use the appropriate cell type based on the state
-        Cell cell = new ConwayCell(count, null, initialState);
+        Cell cell = new ConwayCell(count, initialState, null);
         row.add(cell);
         count++;
       }
