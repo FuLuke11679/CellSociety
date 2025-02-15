@@ -16,22 +16,6 @@ public class WatorGrid extends Grid {
   /**
    * Method to initialize the grid with the proper cell type
    */
-  @Override
-  public void initializeGrid() {
-    myGrid = new ArrayList<>();
-    int count = 0;
-    for (int x = 0; x < rows; x++) {
-      List<Cell> row = new ArrayList<>();
-      for (int y = 0; y < columns; y++) {
-        CellState initialState = getInitialState(myCells[count]);
-        // Use the appropriate cell type based on the state
-        Cell cell = new WatorCell(count, initialState, null);
-        row.add(cell);
-        count++;
-      }
-      myGrid.add(row);
-    }
-  }
 
   @Override
   public List<Cell> getNeighbors(int row, int col) {

@@ -67,7 +67,21 @@ public abstract class Grid {
   /**
    * Initialize the grid with Cells
    */
-  public abstract void initializeGrid();
+  public void initializeGrid() {
+    myGrid = new ArrayList<>();
+    int count = 0;
+    for (int x = 0; x < rows; x++) {
+      List<Cell> row = new ArrayList<>();
+      for (int y = 0; y < columns; y++) {
+        CellState initialState = getInitialState(myCells[count]);
+        String cellType = getCellTypeForState(initialState); // Map state to cell type name
+        Cell cell = createCell(count, initialState, null, cellType); // Use reflection to create cell
+        row.add(cell);
+        count++;
+      }
+      myGrid.add(row);
+    }
+  }
 
 
   public void update() {
@@ -135,14 +149,34 @@ public abstract class Grid {
     return columns;
   }
 
-  public void printGrid() {
-    for (int i = 0; i < rows; i++) {
-      for (int j = 0; j < columns; j++) {
-        System.out.print(getCell(i, j).getNextState() + " ");
-      }
-      System.out.println();
+  public Cell createCell(int id, CellState currState, CellState nextState, String cellType) {
+    try {
+      // Construct the full class name by using the cellType
+      Class<?> cellClass = Class.forName("cellsociety.model.cell." + cellType);
+
+      // Return an instance of the correct cell type
+      return (Cell) cellClass.getConstructor(int.class, CellState.class, CellState.class)
+          .newInstance(id, currState, nextState);
+    } catch (Exception e) {
+      e.printStackTrace();
+      return null;  // Handle error or return a default cell if necessary
     }
-    System.out.println();
   }
+
+  private String getCellTypeForState(CellState state) {
+    if (state instanceof ConwayState) {
+      return "ConwayCell";
+    } else if (state instanceof FireState) {
+      return "FireCell";
+    } else if (state instanceof PercolationState) {
+      return "PercolationCell";
+    } else if (state instanceof WatorState) {
+      return "WatorCell";
+    } else if (state instanceof SegregationState) {
+      return "SegregationCell";
+    }
+    return "Cell";
+  }
+
 
 }
