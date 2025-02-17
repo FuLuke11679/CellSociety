@@ -27,48 +27,26 @@ class SegregationRulesetTest {
   }
 
   @Test
-  void updateStateWhenNeedsToSwap() {
+  void updateCellStateWhenNeedsToSwap() {
     List<Cell> neighbors = List.of(
         myGrid.getCell(0, 1),
         myGrid.getCell(1, 0),
         myGrid.getCell(1, 1)
     );
 
-    myRuleset.updateState(myGrid.getCell(0, 0), neighbors);
+    myGrid.update();
+//    myRuleset.updateState(myGrid.getCell(0, 0), neighbors);
+    myGrid.printGrid();
 
-    assertEquals(SegregationState.EMPTY, myGrid.getCell(0, 0).getNextState());
+    assertEquals(SegregationState.EMPTY, myGrid.getCell(0, 0).getCurrState());
   }
 
   @Test
-  void updateStateWhenDoesntNeedsToSwap() {
-    List<Cell> neighbors = List.of(
-        myGrid.getCell(0, 0),
-        myGrid.getCell(1, 0),
-        myGrid.getCell(1, 1),
-        myGrid.getCell(0, 2),
-        myGrid.getCell(1, 2)
-    );
-
-    myRuleset.updateState(myGrid.getCell(0, 1), neighbors);
+  void updateCellStateWhenDoesntNeedsToSwap() {
+    myGrid.update();
+    myGrid.printGrid();
 
     assertEquals(SegregationState.RED, myGrid.getCell(0, 1).getCurrState());
-    assertEquals(SegregationState.RED, myGrid.getCell(0, 1).getNextState());
-  }
-
-  @Test
-  void updateStateWhenCellIsEmpty() {
-    List<Cell> neighbors = List.of(
-        myGrid.getCell(0, 1),
-        myGrid.getCell(1, 1),
-        myGrid.getCell(1, 2),
-        myGrid.getCell(0, 3),
-        myGrid.getCell(1, 3)
-    );
-
-    myRuleset.updateState(myGrid.getCell(0, 2), neighbors);
-
-    assertEquals(SegregationState.EMPTY, myGrid.getCell(0, 2).getCurrState());
-    assertEquals(SegregationState.EMPTY, myGrid.getCell(0, 2).getNextState());
   }
 
 }

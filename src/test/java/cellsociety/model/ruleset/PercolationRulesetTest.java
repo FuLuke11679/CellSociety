@@ -22,57 +22,57 @@ class PercolationRulesetTest {
   }
 
   @Test
-  void updateStateForBlockedCell() {
-    cell = new PercolationCell(2, null, PercolationState.BLOCKED);
+  void updateCellStateForBlockedCell() {
+    cell = new PercolationCell(2, PercolationState.BLOCKED, null);
     neighbors = new ArrayList<>(List.of(
-        new PercolationCell(0, PercolationState.BLOCKED, PercolationState.BLOCKED),
-        new PercolationCell(1, PercolationState.BLOCKED, PercolationState.BLOCKED),
-        new PercolationCell(3, null, PercolationState.BLOCKED),
-        new PercolationCell(4, null, PercolationState.BLOCKED)
+        new PercolationCell(0, PercolationState.BLOCKED, null),
+        new PercolationCell(1, PercolationState.BLOCKED, null),
+        new PercolationCell(3, PercolationState.BLOCKED, null),
+        new PercolationCell(4, PercolationState.BLOCKED, null)
     ));
-    ruleset.updateState(cell, neighbors);
+    ruleset.updateCellState(cell, neighbors);
     assertEquals(PercolationState.BLOCKED, cell.getCurrState());
     assertEquals(PercolationState.BLOCKED, cell.getNextState());
   }
 
   @Test
-  void updateStateForPercolatedCell() {
-    cell = new PercolationCell(2, null, PercolationState.PERCOLATED);
+  void updateCellStateForPercolatedCell() {
+    cell = new PercolationCell(2, PercolationState.PERCOLATED, null);
     neighbors = new ArrayList<>(List.of(
-        new PercolationCell(0, PercolationState.BLOCKED, PercolationState.OPEN),
-        new PercolationCell(1, PercolationState.OPEN, PercolationState.BLOCKED),
-        new PercolationCell(3, null, PercolationState.PERCOLATED),
-        new PercolationCell(4, null, PercolationState.PERCOLATED)
+        new PercolationCell(0, PercolationState.OPEN, null),
+        new PercolationCell(1, PercolationState.BLOCKED, null),
+        new PercolationCell(3, PercolationState.PERCOLATED, null),
+        new PercolationCell(4, PercolationState.PERCOLATED, null)
     ));
-    ruleset.updateState(cell, neighbors);
+    ruleset.updateCellState(cell, neighbors);
     assertEquals(PercolationState.PERCOLATED, cell.getCurrState());
     assertEquals(PercolationState.PERCOLATED, cell.getNextState());
   }
 
   @Test
-  void updateStateForOpenCellWithoutPercolatedNeighbors() {
-    cell = new PercolationCell(2, null, PercolationState.OPEN);
+  void updateCellStateForOpenCellWithoutPercolatedNeighbors() {
+    cell = new PercolationCell(2, PercolationState.OPEN, null);
     neighbors = new ArrayList<>(List.of(
-        new PercolationCell(0, PercolationState.BLOCKED, PercolationState.OPEN),
-        new PercolationCell(1, PercolationState.OPEN, PercolationState.BLOCKED),
-        new PercolationCell(3, null, PercolationState.OPEN),
-        new PercolationCell(4, null, PercolationState.OPEN)
+        new PercolationCell(0, PercolationState.OPEN, null),
+        new PercolationCell(1, PercolationState.BLOCKED, null),
+        new PercolationCell(3, PercolationState.OPEN, null),
+        new PercolationCell(4, PercolationState.OPEN, null)
     ));
-    ruleset.updateState(cell, neighbors);
+    ruleset.updateCellState(cell, neighbors);
     assertEquals(PercolationState.OPEN, cell.getCurrState());
     assertEquals(PercolationState.OPEN, cell.getNextState());
   }
 
   @Test
-  void updateStateForOpenCellWithPercolatedNeighbor() {
-    cell = new PercolationCell(2, null, PercolationState.OPEN);
+  void updateCellStateForOpenCellWithPercolatedNeighbor() {
+    cell = new PercolationCell(2, PercolationState.OPEN, null);
     neighbors = new ArrayList<>(List.of(
-        new PercolationCell(0, PercolationState.PERCOLATED, PercolationState.PERCOLATED),
-        new PercolationCell(1, PercolationState.BLOCKED, PercolationState.BLOCKED),
-        new PercolationCell(3, null, PercolationState.OPEN),
-        new PercolationCell(4, null, PercolationState.OPEN)
+        new PercolationCell(0, PercolationState.PERCOLATED, null),
+        new PercolationCell(1, PercolationState.BLOCKED, null),
+        new PercolationCell(3, PercolationState.OPEN, null),
+        new PercolationCell(4, PercolationState.OPEN, null)
     ));
-    ruleset.updateState(cell, neighbors);
+    ruleset.updateCellState(cell, neighbors);
     assertEquals(PercolationState.OPEN, cell.getCurrState());
     assertEquals(PercolationState.PERCOLATED, cell.getNextState());
   }
