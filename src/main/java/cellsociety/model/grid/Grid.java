@@ -43,19 +43,12 @@ public abstract class Grid {
   private Ruleset ruleset;
 
   /**
-   * Constructor for GridManager.
-   *
-   * @param rows    Number of rows in the grid.
-   * @param columns Number of columns in the grid.
+   * Constructor for the Grid object
+   * @param rows The amount of rows we want in the grid
+   * @param columns The amount of columns we want in the grid
+   * @param ruleset The ruleset we want to apply to this grid
+   * @param cells The initial states of the cells in a String[]
    */
-  public Grid(int rows, int columns) {
-    this.rows = rows;
-    this.columns = columns;
-    this.ruleset = new ConwayRuleset();
-    myGrid = new ArrayList<>();
-    initializeGrid();
-  }
-
   public Grid(int rows, int columns, Ruleset ruleset, String[] cells) {
     this.rows = rows;
     this.columns = columns;
@@ -83,7 +76,9 @@ public abstract class Grid {
     }
   }
 
-
+  /**
+   * Function to update the grid each frame.
+   */
   public void update() {
     //return a list of cell ids that were changed,
     //loop over all cells and randomly change color of alive cells with probability 0.4
@@ -93,25 +88,42 @@ public abstract class Grid {
       int col = id % columns;
       Cell cell = myGrid.get(row).get(col);
       List<Cell> neighbors = getNeighbors(row, col);
-      ruleset.updateState(cell, new ArrayList<>(neighbors));
+      ruleset.updateCellState(cell, new ArrayList<>(neighbors));
     }
     // Second pass: Apply new states and update cells to utilize the next state
-    for( int id = 0; id < length; id++) {
+    moveNextStateToCurrent();
+  }
+
+  /**
+   * Function to move all the generated next states into the current states of the cells
+   */
+  protected void moveNextStateToCurrent() {
+    for( int id = 0; id < getLength(); id++) {
       int row = id / columns;
       int col = id % columns;
       Cell cell = myGrid.get(row).get(col);
-//      if(cell.getNextState() != null){
-        cell.setCurrState(cell.getNextState());
-        cell.setNextState(null);
-//      }
+
+      cell.setCurrState(cell.getNextState());
+      cell.setNextState(null);
     }
   }
 
-
+  /**
+   * Getter to get a cell
+   * @param row The row index in which the cell is contained
+   * @param col The column index in which the cell is contained.
+   * @return The Cell at Grid[row,col]
+   */
   public Cell getCell(int row, int col) {
     return myGrid.get(row).get(col);
   }
 
+  /**
+   * Function to get the 8 neighbors around a cell
+   * @param row The row index of the target cell
+   * @param col The col index of a target cell
+   * @return The 8 neighbors around the cell at Grid[row,col]
+   */
   public List<Cell> getNeighbors(int row, int col) {
     List<Cell> neighbors = new ArrayList<>();
     int[] dx = {-1, -1, -1, 0, 0, 1, 1, 1};
@@ -129,6 +141,10 @@ public abstract class Grid {
     return neighbors;
   }
 
+  /**
+   * Counts up the number of cells in the grid
+   * @return The amount of cells in the grid
+   */
   public int getLength() {
     int totalCount = 0;
     for (List<Cell> list : myGrid) {
@@ -148,8 +164,13 @@ public abstract class Grid {
   public int getColumns() {
     return columns;
   }
+
   public List<List<Cell>> getGrid() {
     return myGrid;
+  }
+
+  protected Ruleset getRuleset() {
+    return ruleset;
   }
 
   public Cell createCell(int id, CellState currState, CellState nextState, String cellType) {
@@ -181,5 +202,14 @@ public abstract class Grid {
     return "Cell";
   }
 
+  public void printGrid() {
+    for (int i = 0; i < rows; i++) {
+      for (int j = 0; j < columns; j++) {
+        System.out.print(getCell(i, j).getCurrState() + " ");
+      }
+      System.out.println();
+    }
+    System.out.println();
+  }
 
 }

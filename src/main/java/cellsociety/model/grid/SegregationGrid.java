@@ -13,4 +13,13 @@ public class SegregationGrid extends Grid {
     super(rows, columns, ruleset, cells);
   }
 
+  @Override
+  public void update() {
+    //return a list of cell ids that were changed,
+    //loop over all cells and randomly change color of alive cells with probability 0.4
+    getRuleset().updateGridState();
+    // Second pass: Apply new states and update cells to utilize the next state
+    moveNextStateToCurrent();
+  }
+
 }
