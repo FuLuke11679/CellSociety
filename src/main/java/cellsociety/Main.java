@@ -1,6 +1,7 @@
 package cellsociety;
 
 import cellsociety.model.grid.Grid;
+import cellsociety.model.grid.SugarscapeGrid;
 import cellsociety.model.ruleset.*;
 import cellsociety.parser.InvalidXMLConfigurationException;
 import cellsociety.parser.XMLParser;
@@ -89,6 +90,7 @@ public class Main extends Application {
                 Double.parseDouble(myParser.getSimVarsMap().get("probGrow")));
             case "Segregation" -> new SegregationRuleset(Double.parseDouble(myParser.getSimVarsMap().get("thresh")));
             case "WatorWorld" -> new WatorRuleset();
+            case "Sugarscape" -> new SugarscapeRuleset();
             default -> throw new IllegalStateException("Unknown simulation type");
         };
     }
