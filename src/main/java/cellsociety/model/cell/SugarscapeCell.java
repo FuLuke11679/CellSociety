@@ -6,9 +6,6 @@ public class SugarscapeCell extends Cell {
 
   public enum SugarscapeState implements CellState {
     EMPTY,
-    LOW_SUGAR,
-    MEDIUM_SUGAR,
-    HIGH_SUGAR,
     OCCUPIED
   }
 
