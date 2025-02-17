@@ -27,17 +27,18 @@ public class SegregationRuleset extends Ruleset {
     List<Cell> emptyCells = getEmptyCells();
     List<Cell> unSatisfiedCells = getUnsatisfiedCells();
 
+    Collections.shuffle(unSatisfiedCells);
+    Collections.shuffle(emptyCells);
+
     for (Cell c : unSatisfiedCells) {
       if (emptyCells.isEmpty()) {
         break;
       }
 
-      Collections.shuffle(emptyCells);
-      Cell randomEmptyCell = emptyCells.getFirst();
-
+      Cell randomEmptyCell = emptyCells.getLast();
       swapCell(c, randomEmptyCell);
 
-      emptyCells.remove(randomEmptyCell);
+      emptyCells.removeLast();
     }
 
     maintainRestOfGrid();

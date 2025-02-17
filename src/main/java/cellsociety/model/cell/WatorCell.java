@@ -4,6 +4,8 @@ import cellsociety.model.state.CellState;
 
 public class WatorCell extends Cell {
 
+  int energy;
+
   public enum WatorState implements CellState {
     FISH,
     SHARK,
@@ -12,6 +14,7 @@ public class WatorCell extends Cell {
 
   public WatorCell(int id, CellState currState, CellState nextState) {
     super(id, currState, nextState);
+    energy = 0;
   }
 
 }

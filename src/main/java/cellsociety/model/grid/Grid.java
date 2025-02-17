@@ -165,8 +165,8 @@ public abstract class Grid {
     return columns;
   }
 
-  public List<List<Cell>> getGrid() {
-    return myGrid;
+  public Grid getGrid() {
+    return this;
   }
 
   protected Ruleset getRuleset() {

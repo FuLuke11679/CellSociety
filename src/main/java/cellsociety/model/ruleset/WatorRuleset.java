@@ -4,7 +4,7 @@ import cellsociety.model.cell.Cell;
 import cellsociety.model.cell.WatorCell.WatorState;
 import cellsociety.model.grid.Grid;
 import cellsociety.model.grid.WatorGrid;
-import cellsociety.model.state.CellState;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -12,13 +12,16 @@ import java.util.Map;
 
 public class WatorRuleset extends Ruleset {
 
-  private static final int MAX_SHARK_LIFE = 10;
-  private static final int MAX_FISH_LIFE = 10;
+  private static final int MAX_SHARK_ENERGY = 10;
+  private static final int MAX_FISH_ENERGY = 10;
   private static final int SHARK_REPRODUCTION_TIME = 5;
   private static final int FISH_REPRODUCTION_TIME = 5;
 
-  private Grid myGrid;
-  private Map<Cell, Integer> energyMap;
+  private WatorGrid myGrid;
+  private List<Cell> fishCells;
+  private List<Cell> sharkCells;
+  private Map<Cell, Integer> fishEnergyMap;
+  private Map<Cell, Integer> sharkEnergyMap;
 
   public WatorRuleset() {
     super();
@@ -31,22 +34,7 @@ public class WatorRuleset extends Ruleset {
   @Override
   public void updateCellState(Cell cell, List<Cell> neighbors) {
 
-    if (cell.getNextState() == WatorState.WATER) {
-      maintainCell(cell);
-      return;
-    }
 
-    if (cell.getNextState() == WatorState.FISH) {
-      if (energyMap.containsKey(cell)) {
-        Cell toSwap = getRandomEmptySpot(cell, neighbors);
-        if (toSwap != null && energyMap.get(cell) % FISH_REPRODUCTION_TIME == 0) {
-            reproduceCell(cell, toSwap);
-        } else if (toSwap != null) {
-          swapCell(cell, toSwap);
-          energyMap.put(cell, energyMap.get(cell) - 1); // Take away energy from fish
-        }
-      }
-    }
 
   }
 
@@ -56,68 +44,172 @@ public class WatorRuleset extends Ruleset {
   @Override
   public void updateGridState() {
 
+//    sharkCells = new ArrayList<>(sharkEnergyMap.keySet());
+    fishCells = new ArrayList<>(fishEnergyMap.keySet());
+
+    killDeadCells();
+
+//    for (Cell c : sharkCells) {
+//      moveShark(c);
+//    }
+
+    for (Cell c : fishCells) {
+      moveFish(c);
+    }
+
+    maintainRestOfGrid();
+
   }
 
-  private Cell getRandomEmptySpot(Cell cell, List<Cell> neighbors) {
+  private void moveFish(Cell cell) {
+    int cellRow = cell.getId() / myGrid.getRows();
+    int cellCol = cell.getId() % myGrid.getRows();
+    List<Cell> neighbors = myGrid.getNeighbors(cellRow, cellCol);
+    Cell toMove = getRandomEmptySpot(neighbors);
+    if (toMove != null) {
+      swapFishAndEmptyCell(cell, toMove);
+    }
+  }
+
+  private void moveShark(Cell cell) {
+    int cellRow = cell.getId() / myGrid.getRows();
+    int cellCol = cell.getId() % myGrid.getRows();
+    List<Cell> neighbors = myGrid.getNeighbors(cellRow, cellCol);
+    Cell toMove = getRandomFishOrEmptySpot(neighbors);
+
+    if (toMove != null) {
+      System.out.println("Shark Cell ID: " + cell.getId());
+      System.out.println("ToMove Cell ID: " + toMove.getId());
+      System.out.println();
+      if (toMove.getCurrState() == WatorState.FISH) {
+        sharkEatFish(cell, toMove);
+      } else {
+        swapSharkAndEmptyCell(cell, toMove);
+      }
+    }
+  }
+
+  private Cell getRandomEmptySpot(List<Cell> neighbors) {
     Collections.shuffle(neighbors);
     for (Cell neighbor : neighbors) {
-      if (neighbor.getCurrState() == WatorState.WATER) {
-        return cell;
+      if (neighbor.getCurrState() == WatorState.WATER && neighbor.getNextState() == null) {
+        return neighbor;
       }
     }
     return null;
   }
 
-  private Cell getRandomFish(Cell cell, List<Cell> neighbors) {
+  private Cell getRandomFishOrEmptySpot(List<Cell> neighbors) {
     Collections.shuffle(neighbors);
     for (Cell neighbor : neighbors) {
-      if (neighbor.getCurrState() == WatorState.FISH) {
-        return cell;
+      if (neighbor.getCurrState() == WatorState.FISH && neighbor.getNextState() == null) {
+        return neighbor;
       }
     }
-    return null;
+    return getRandomEmptySpot(neighbors);
   }
 
   /**
    * Function to "swap" two cells in a grid
    *
-   * @param cell1 The first cell we wish to swap
-   * @param cell2 The cell we wish to swap the first cell with
+   * @param fish The fish cell we wish to swap
+   * @param emptyCell The empty cell we wish to swap it with
    */
-  private void swapCell(Cell cell1, Cell cell2) {
-    cell1.setCurrState(cell1.getNextState());
-    cell2.setCurrState(cell2.getNextState());
+  private void swapFishAndEmptyCell(Cell fish, Cell emptyCell) {
 
-    cell1.setNextState(cell2.getNextState());
-    cell2.setNextState(cell1.getCurrState());
+    System.out.println("Fish ID: " + fish.getId() + " Swap ID: " + emptyCell.getId());
 
-    energyMap.put(cell1, energyMap.get(cell1));
-    energyMap.remove(cell2);
+    fish.setNextState(emptyCell.getCurrState());
+    emptyCell.setNextState(fish.getCurrState());
+
+    if (fishEnergyMap.get(fish) > 1) { // If the fish has enough energy to live on
+      fishEnergyMap.put(emptyCell, fishEnergyMap.get(fish) - 1);
+    }
+    fishEnergyMap.remove(fish);
+
+  }
+
+  /**
+   * Function to "swap" two cells in a grid
+   *
+   * @param shark The shark cell we wish to swap
+   * @param emptyCell The empty cell we wish to swap it with
+   */
+  private void swapSharkAndEmptyCell(Cell shark, Cell emptyCell) {
+    shark.setNextState(emptyCell.getCurrState());
+    emptyCell.setNextState(shark.getCurrState());
+
+    if (sharkEnergyMap.get(shark) > 1) { // If the fish has enough energy to live on
+      sharkEnergyMap.put(emptyCell, sharkEnergyMap.get(shark) - 1);
+    }
+    sharkEnergyMap.remove(shark);
+  }
+
+  /**
+   * Makes shark eat a fish that is neighboring
+   *
+   * @param shark The shark cell we wish to swap
+   * @param fish The fish cell we wish to eat
+   */
+  private void sharkEatFish(Cell shark, Cell fish) {
+    fish.setNextState(shark.getCurrState()); // Change the fish cell to shark cell
+    fish.setNextState(WatorState.WATER);
+
+    fishEnergyMap.remove(fish);
+
+    if (sharkEnergyMap.get(shark) > 1) { // If the shark has enough energy to live on
+      sharkEnergyMap.put(fish, sharkEnergyMap.get(shark) - 1); // TODO: Add energy for eating fish
+    }
+    sharkEnergyMap.remove(shark);
   }
 
   private void reproduceCell(Cell cell, Cell child) {
     child.setCurrState(child.getNextState());
     child.setNextState(cell.getNextState());
-    energyMap.put(child, MAX_SHARK_LIFE);
-  }
-
-  private boolean isCellWrapped(Cell cell, Cell neighbor) {
-    if (cell.getId() >= 0 && cell.getId() < myGrid.getColumns()
-        && neighbor.getId() >= myGrid.getRows() * myGrid.getColumns()) {
-      return true;
-    }
-    return cell.getId() % myGrid.getColumns() == 0
-        && neighbor.getId() % myGrid.getColumns() == myGrid.getColumns() - 1;
+    sharkEnergyMap.put(child, MAX_SHARK_ENERGY);
   }
 
   private void generateLifeMap(Grid grid) {
-    energyMap = new HashMap<>();
+    fishCells = new ArrayList<>();
+    fishEnergyMap = new HashMap<>();
+    sharkCells = new ArrayList<>();
+    sharkEnergyMap = new HashMap<>();
     for (int i = 0; i < grid.getRows(); i++) {
       for (int j = 0; j < grid.getColumns(); j++) {
-        if (grid.getCell(i, j).getNextState() == WatorState.FISH) {
-          energyMap.put(grid.getCell(i, j), MAX_FISH_LIFE);
-        } else if (grid.getCell(i, j).getNextState() == WatorState.SHARK) {
-          energyMap.put(grid.getCell(i, j), MAX_SHARK_LIFE);
+        Cell cellToAdd = grid.getCell(i, j);
+        if (cellToAdd.getCurrState() == WatorState.FISH) {
+          fishCells.add(cellToAdd);
+          fishEnergyMap.put(cellToAdd, MAX_FISH_ENERGY);
+        } else if (cellToAdd.getCurrState() == WatorState.SHARK) {
+          sharkCells.add(cellToAdd);
+          sharkEnergyMap.put(cellToAdd, MAX_SHARK_ENERGY);
+        }
+      }
+    }
+  }
+
+  /**
+   * Function that moves all the current states into next states for unaffected cells
+   */
+  protected void maintainRestOfGrid() {
+    for (int i = 0; i < myGrid.getRows(); i++) {
+      for (int j = 0; j < myGrid.getColumns(); j++) {
+        if (myGrid.getCell(i, j).getNextState() == null) {
+          maintainCell(myGrid.getCell(i, j));
+        }
+      }
+    }
+  }
+
+  private void killDeadCells() {
+    for (int i = 0; i < myGrid.getRows(); i++) {
+      for (int j = 0; j < myGrid.getColumns(); j++) {
+        Cell currCell = myGrid.getCell(i, j);
+        if (!fishEnergyMap.containsKey(currCell)) {
+          currCell.setCurrState(WatorState.WATER);
+        }
+        if (!sharkEnergyMap.containsKey(currCell)) {
+          currCell.setCurrState(WatorState.WATER);
         }
       }
     }
@@ -133,7 +225,7 @@ public class WatorRuleset extends Ruleset {
    */
   @Override
   public Grid createGrid(int rows, int columns, String[] initialStates) {
-    myGrid = new WatorGrid(rows, columns, new WatorRuleset(), initialStates);
+    myGrid = new WatorGrid(rows, columns, this, initialStates);
     generateLifeMap(myGrid);
     return myGrid;
   }

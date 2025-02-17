@@ -13,6 +13,13 @@ public class WatorGrid extends Grid {
     super(rows, columns, ruleset, cells);
   }
 
+  @Override
+  public void update() {
+    getRuleset().updateGridState();
+    // Second pass: Apply new states and update cells to utilize the next state
+    moveNextStateToCurrent();
+  }
+
   /**
    * A function that determines the four adjacent cells (N,E,S,W)
    * @param row The row index of the target cell
@@ -21,18 +28,19 @@ public class WatorGrid extends Grid {
    */
   @Override
   public List<Cell> getNeighbors(int row, int col) {
+    Grid grid = getGrid();
     List<Cell> neighbors = new ArrayList<>();
+
     int[] dx = {-1, 1, 0, 0};
     int[] dy = {0, 0, -1, 1};
 
     for (int i = 0; i < 4; i++) {
       int numRows = getRows();
       int numCols = getColumns();
-      List<List<Cell>> grid = getGrid();
       int newRow = (row + dx[i] + numRows) % numRows;  // Wrap row
       int newCol = (col + dy[i] + numCols) % numCols;  // Wrap column
 
-      neighbors.add(grid.get(newRow).get(newCol));
+      neighbors.add(grid.getCell(newRow, newCol));
     }
     return neighbors;
   }
