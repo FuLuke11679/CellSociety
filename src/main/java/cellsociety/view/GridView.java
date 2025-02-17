@@ -57,9 +57,6 @@ public class GridView {
       Map.entry(WatorState.FISH, Color.LIGHTGREEN),
       Map.entry(WatorState.WATER, Color.WHITE),
       Map.entry(SugarscapeState.EMPTY, Color.WHITE),
-      Map.entry(SugarscapeState.LOW_SUGAR, Color.YELLOW),
-      Map.entry(SugarscapeState.MEDIUM_SUGAR, Color.ORANGE),
-      Map.entry(SugarscapeState.HIGH_SUGAR, Color.RED),
       Map.entry(SugarscapeState.OCCUPIED, Color.BLACK)
   );
 

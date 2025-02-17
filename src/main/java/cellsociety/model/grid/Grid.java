@@ -35,12 +35,7 @@ public abstract class Grid {
       Map.entry("EM", SegregationState.EMPTY),
       Map.entry("S", WatorState.SHARK),
       Map.entry("F", WatorState.FISH),
-      Map.entry("W", WatorState.WATER),
-      Map.entry("EMPTY", SugarscapeState.EMPTY),
-      Map.entry("LOW_SUGAR", SugarscapeState.LOW_SUGAR),
-      Map.entry("MEDIUM_SUGAR", SugarscapeState.MEDIUM_SUGAR),
-      Map.entry("HIGH_SUGAR", SugarscapeState.HIGH_SUGAR),
-      Map.entry("OCCUPIED", SugarscapeState.OCCUPIED)
+      Map.entry("W", WatorState.WATER)
   );
 
   private int rows;
