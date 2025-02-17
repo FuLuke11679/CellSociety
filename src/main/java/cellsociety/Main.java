@@ -81,12 +81,22 @@ public class Main extends Application {
         return switch (myParser.getSimType()) {
             case "Conway" -> new ConwayRuleset();
             case "Percolation" -> new PercolationRuleset();
-            case "Fire" -> new FireRuleset(Double.parseDouble(myParser.getSimVarsMap().get("probCatch")),
-                Double.parseDouble(myParser.getSimVarsMap().get("probGrow")));
-            case "Segregation" -> new SegregationRuleset(Double.parseDouble(myParser.getSimVarsMap().get("thresh")));
-            case "WatorWorld" -> new WatorRuleset();
+            case "Fire" -> new FireRuleset(getDoubleFromParser("probCatch"), getDoubleFromParser("probGrow"));
+            case "Segregation" -> new SegregationRuleset(getDoubleFromParser("thresh"));
+            case "WatorWorld" -> new WatorRuleset(getIntFromParser("fishBreedTime"),
+                getIntFromParser("fishStarveTime"),
+                getIntFromParser("sharkBreedTime"),
+                getIntFromParser("sharkStarveTime"));
             default -> throw new IllegalStateException("Unknown simulation type");
         };
+    }
+
+    private int getIntFromParser(String fieldKey) {
+        return Integer.parseInt(myParser.getSimVarsMap().get(fieldKey));
+    }
+
+    private double getDoubleFromParser(String fieldKey) {
+        return Double.parseDouble(myParser.getSimVarsMap().get(fieldKey));
     }
 
     private void startSimulation() {
