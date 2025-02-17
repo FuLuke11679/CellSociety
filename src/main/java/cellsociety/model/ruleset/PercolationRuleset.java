@@ -12,7 +12,7 @@ public class PercolationRuleset extends Ruleset {
   }
 
   @Override
-  public void updateState(Cell cell, List<Cell> neighbors) {
+  public void updateCellState(Cell cell, List<Cell> neighbors) {
     if (cell.getCurrState() == PercolationState.BLOCKED
         || cell.getCurrState() == PercolationState.PERCOLATED) {
       maintainCell(cell);
@@ -20,7 +20,7 @@ public class PercolationRuleset extends Ruleset {
     }
 
     // The following code only applies to open cells
-    if (hasPercolatedNeighbor(cell, neighbors)) {
+    if (hasPercolatedNeighbor(neighbors)) {
       percolateCell(cell);
     } else {
       maintainCell(cell);
@@ -29,25 +29,35 @@ public class PercolationRuleset extends Ruleset {
   }
 
   @Override
-  public Grid createGrid(int rows, int columns, String[] initialStates) {
-    return new PercolationGrid(rows, columns, new PercolationRuleset(), initialStates);
+  public void updateGridState() {
+
   }
 
-  private boolean hasPercolatedNeighbor(Cell cell, List<Cell> neighbors) {
+  /**
+   * Checks whether a cell has any neighboring cells that have been percolated
+   * @param neighbors The neighbors of the target cell
+   * @return True if the cell has percolated neighbors
+   */
+  private boolean hasPercolatedNeighbor(List<Cell> neighbors) {
     for (Cell neighbor : neighbors) {
-      if (getState(cell, neighbor) == PercolationState.PERCOLATED) {
+      if (neighbor.getCurrState() == PercolationState.PERCOLATED) {
         return true;
       }
     }
     return false;
   }
 
-  private void maintainCell(Cell cell) {
-    cell.setNextState(cell.getCurrState());
-  }
-
+  /**
+   * Sets the next state of the cell to PERCOLATED
+   * @param cell The target cell
+   */
   private void percolateCell(Cell cell) {
     cell.setNextState(PercolationState.PERCOLATED);
+  }
+
+  @Override
+  public Grid createGrid(int rows, int columns, String[] initialStates) {
+    return new PercolationGrid(rows, columns, this, initialStates);
   }
 
 }

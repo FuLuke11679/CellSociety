@@ -29,7 +29,7 @@ public class WatorRuleset extends Ruleset {
    * @param neighbors The neighbors who determine what the cell should do
    */
   @Override
-  public void updateState(Cell cell, List<Cell> neighbors) {
+  public void updateCellState(Cell cell, List<Cell> neighbors) {
 
     if (cell.getNextState() == WatorState.WATER) {
       maintainCell(cell);
@@ -50,10 +50,18 @@ public class WatorRuleset extends Ruleset {
 
   }
 
+  /**
+   *
+   */
+  @Override
+  public void updateGridState() {
+
+  }
+
   private Cell getRandomEmptySpot(Cell cell, List<Cell> neighbors) {
     Collections.shuffle(neighbors);
     for (Cell neighbor : neighbors) {
-      if (getState(cell, neighbor) == WatorState.WATER) {
+      if (neighbor.getCurrState() == WatorState.WATER) {
         return cell;
       }
     }
@@ -63,7 +71,7 @@ public class WatorRuleset extends Ruleset {
   private Cell getRandomFish(Cell cell, List<Cell> neighbors) {
     Collections.shuffle(neighbors);
     for (Cell neighbor : neighbors) {
-      if (getState(cell, neighbor) == WatorState.FISH) {
+      if (neighbor.getCurrState() == WatorState.FISH) {
         return cell;
       }
     }
@@ -121,15 +129,6 @@ public class WatorRuleset extends Ruleset {
         }
       }
     }
-  }
-
-  /**
-   * Maintains the state of a cell if it does not need updates
-   *
-   * @param cell The cell to maintain the state of
-   */
-  private void maintainCell(Cell cell) {
-    cell.setCurrState(cell.getNextState());
   }
 
   /**

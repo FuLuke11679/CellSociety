@@ -17,7 +17,7 @@ public class FireRuleset extends Ruleset {
   }
 
   @Override
-  public void updateState(Cell cell, List<Cell> neighbors) {
+  public void updateCellState(Cell cell, List<Cell> neighbors) {
     if (cell.getCurrState() == FireState.EMPTY) {
       if (Math.random() < probGrow) {
         growTree(cell);
@@ -33,19 +33,27 @@ public class FireRuleset extends Ruleset {
     }
 
     // The following code will only execute if tree
-    if (isNeighborCellBurning(cell, neighbors)) {
+    if (isNeighborCellBurning(neighbors)) {
       lightFire(cell);
     } else if (Math.random() < probCatch) {
       lightFire(cell);
+    } else {
+      maintainCell(cell);
     }
+
   }
 
   @Override
-  public Grid createGrid(int rows, int columns, String[] initialStates) {
-    return new FireGrid(rows, columns, new FireRuleset(probGrow, probCatch), initialStates);
+  public void updateGridState() {
+
   }
 
-  private boolean isNeighborCellBurning(Cell cell, List<Cell> neighbors) {
+  /**
+   * Function to check if a neighboring cell is burning
+   * @param neighbors The neighbors of the target cell
+   * @return A boolean denoting true for a burning neighbor, false otherwise
+   */
+  private boolean isNeighborCellBurning(List<Cell> neighbors) {
     for (Cell neighbor : neighbors) {
       if (neighbor.getCurrState() == FireState.BURNING) {
         return true;
@@ -54,20 +62,33 @@ public class FireRuleset extends Ruleset {
     return false;
   }
 
+  /**
+   * Sets a cell's next state to EMPTY
+   * @param cell The target cell
+   */
   private void killCell(Cell cell) {
     cell.setNextState(FireState.EMPTY);
   }
 
+  /**
+   * Sets a cell's next state to BURNING
+   * @param cell The target cell
+   */
   private void lightFire(Cell cell) {
     cell.setNextState(FireState.BURNING);
   }
 
+  /**
+   * Sets a cell's next state to TREE
+   * @param cell The target cell
+   */
   private void growTree(Cell cell) {
     cell.setNextState(FireState.TREE);
   }
 
-  private void maintainCell(Cell cell) {
-    cell.setNextState(cell.getCurrState());
+  @Override
+  public Grid createGrid(int rows, int columns, String[] initialStates) {
+    return new FireGrid(rows, columns, this, initialStates);
   }
 
 }

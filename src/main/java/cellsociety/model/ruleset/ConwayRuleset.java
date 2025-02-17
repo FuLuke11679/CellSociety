@@ -11,23 +11,8 @@ public class ConwayRuleset extends Ruleset {
   public ConwayRuleset() {
   }
 
-  private int countNeighbors(Cell cell, List<Cell> neighbors) {
-    int aliveCells = 0;
-    for (Cell neighbor : neighbors) {
-      if (getState(cell, neighbor) == ConwayState.ALIVE) { //If the cell is alive
-        aliveCells++;
-      }
-    }
-    return aliveCells;
-  }
-
-  @Override
-  public Grid createGrid(int rows, int columns, String[] initialStates) {
-    return new ConwayGrid(rows, columns, new ConwayRuleset(), initialStates);
-  }
-
-  public void updateState(Cell cell, List<Cell> neighbors) {
-    int aliveCells = countNeighbors(cell, neighbors);
+  public void updateCellState(Cell cell, List<Cell> neighbors) {
+    int aliveCells = countNeighbors(neighbors);
 
     if (cell.getCurrState() == ConwayState.ALIVE) {
       // Live cell survives with 2 or 3 neighbors, otherwise it dies
@@ -46,17 +31,44 @@ public class ConwayRuleset extends Ruleset {
     }
   }
 
+  @Override
+  public void updateGridState() {
+  }
 
+  /**
+   * Function to count the amount of alive neighbors of a cell
+   * @param neighbors The list of neighbor cells
+   * @return An integer denoting the amount of alive cells
+   */
+  private int countNeighbors(List<Cell> neighbors) {
+    int aliveCells = 0;
+    for (Cell neighbor : neighbors) {
+      if (neighbor.getCurrState() == ConwayState.ALIVE) { //If the cell is alive
+        aliveCells++;
+      }
+    }
+    return aliveCells;
+  }
+
+  /**
+   * Sets the next state of a cell to DEAD
+   * @param cell The cell we wish to kill
+   */
   private void killCell(Cell cell) {
     cell.setNextState(ConwayState.DEAD);
   }
 
+  /**
+   * Sets the next state of a cell to ALIVE
+   * @param cell The cell we wish to birth
+   */
   private void birthCell(Cell cell) {
     cell.setNextState(ConwayState.ALIVE);
   }
 
-  private void maintainCell(Cell cell) {
-    cell.setNextState(cell.getCurrState());
+  @Override
+  public Grid createGrid(int rows, int columns, String[] initialStates) {
+    return new ConwayGrid(rows, columns, this, initialStates);
   }
 
 }

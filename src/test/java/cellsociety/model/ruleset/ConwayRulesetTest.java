@@ -22,7 +22,7 @@ class ConwayRulesetTest {
   }
 
   @Test
-  void updateStateLessThan2AliveNeighbors() {
+  void updateCellStateLessThan2AliveNeighbors() {
     cell.setNextState(ConwayState.ALIVE);
     neighbors = new ArrayList<>(List.of(
         new ConwayCell(0, ConwayState.DEAD, ConwayState.ALIVE),
@@ -30,13 +30,13 @@ class ConwayRulesetTest {
         new ConwayCell(3, null, ConwayState.DEAD),
         new ConwayCell(4, null, ConwayState.ALIVE)
     ));
-    ruleset.updateState(cell, neighbors);
+    ruleset.updateCellState(cell, neighbors);
     assertEquals(ConwayState.ALIVE, cell.getCurrState());
     assertEquals(ConwayState.DEAD, cell.getNextState());
   }
 
   @Test
-  void updateStateMoreThan3AliveNeighbors() {
+  void updateCellStateMoreThan3AliveNeighbors() {
     cell.setNextState(ConwayState.ALIVE);
     neighbors = new ArrayList<>(List.of(
         new ConwayCell(0, ConwayState.ALIVE, ConwayState.DEAD),
@@ -44,13 +44,13 @@ class ConwayRulesetTest {
         new ConwayCell(3, null, ConwayState.ALIVE),
         new ConwayCell(4, null, ConwayState.ALIVE)
     ));
-    ruleset.updateState(cell, neighbors);
+    ruleset.updateCellState(cell, neighbors);
     assertEquals(ConwayState.ALIVE, cell.getCurrState());
     assertEquals(ConwayState.DEAD, cell.getNextState());
   }
 
   @Test
-  void updateStateReproduceWith2AliveNeighbors() {
+  void updateCellStateReproduceWith2AliveNeighbors() {
     cell.setNextState(ConwayState.DEAD);
     neighbors = new ArrayList<>(List.of(
         new ConwayCell(0, ConwayState.DEAD, ConwayState.ALIVE),
@@ -58,13 +58,13 @@ class ConwayRulesetTest {
         new ConwayCell(3, null, ConwayState.ALIVE),
         new ConwayCell(4, null, ConwayState.DEAD)
     ));
-    ruleset.updateState(cell, neighbors);
+    ruleset.updateCellState(cell, neighbors);
     assertEquals(ConwayState.DEAD, cell.getCurrState());
     assertEquals(ConwayState.DEAD, cell.getNextState());
   }
 
   @Test
-  void updateStateReproduceWith3AliveNeighbors() {
+  void updateCellStateReproduceWith3AliveNeighbors() {
     cell.setNextState(ConwayState.DEAD);
     neighbors = new ArrayList<>(List.of(
         new ConwayCell(0, ConwayState.DEAD, ConwayState.ALIVE),
@@ -72,7 +72,7 @@ class ConwayRulesetTest {
         new ConwayCell(3, null, ConwayState.ALIVE),
         new ConwayCell(4, null, ConwayState.ALIVE)
     ));
-    ruleset.updateState(cell, neighbors);
+    ruleset.updateCellState(cell, neighbors);
     assertEquals(ConwayState.DEAD, cell.getCurrState());
     assertEquals(ConwayState.ALIVE, cell.getNextState());
   }

@@ -9,8 +9,8 @@
   <!-- sim configuration -->
   <sim type="Fire">
     <simvars
-      probCatch = "0.4"
-      probGrow = "0.3"
+      probCatch = "0.003"
+      probGrow = "0.03"
     />
   </sim>
   <init
