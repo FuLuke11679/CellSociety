@@ -14,8 +14,8 @@ public class WatorRuleset extends Ruleset {
 
   private static final int MAX_SHARK_ENERGY = 10;
   private static final int MAX_FISH_ENERGY = 10;
-  private static final int SHARK_REPRODUCTION_TIME = 5;
-  private static final int FISH_REPRODUCTION_TIME = 5;
+  private static final int SHARK_REPRODUCTION_TIME = 8;
+  private static final int FISH_REPRODUCTION_TIME = 8;
   private static final int FISH_ENERGY_VALUE = 5;
 
   private WatorGrid myGrid;
@@ -145,9 +145,18 @@ public class WatorRuleset extends Ruleset {
 
     if (sharkEnergyMap.get(shark) > 1) { // If the fish has enough energy to live on
       sharkEnergyMap.put(emptyCell, sharkEnergyMap.get(shark) - 1);
+      sharkReproductionMap.put(emptyCell, sharkReproductionMap.get(shark) - 1);
     }
     sharkEnergyMap.remove(shark);
+
+    // Reproduce shark if necessary
+    if (sharkReproductionMap.containsKey(emptyCell) && sharkReproductionMap.get(emptyCell) == 0) {
+      makeShark(shark);
+      sharkReproductionMap.put(emptyCell, SHARK_REPRODUCTION_TIME); // Reset reproduction time for cell that birthed
+    }
+
   }
+
 
   /**
    * Makes shark eat a fish that is neighboring
@@ -167,17 +176,25 @@ public class WatorRuleset extends Ruleset {
     sharkEnergyMap.remove(shark);
   }
 
-  private void reproduceCell(Cell cell, Cell child) {
-    child.setCurrState(child.getNextState());
-    child.setNextState(cell.getNextState());
-    sharkEnergyMap.put(child, MAX_SHARK_ENERGY);
+  private void makeShark(Cell cell) {
+    cell.setNextState(WatorState.SHARK);
+    sharkEnergyMap.put(cell, MAX_SHARK_ENERGY);
+    sharkReproductionMap.put(cell, SHARK_REPRODUCTION_TIME);
+  }
+
+  private void makeFish(Cell cell) {
+    cell.setNextState(WatorState.FISH);
+    fishEnergyMap.put(cell, FISH_ENERGY_VALUE);
+    fishReproductionMap.put(cell, FISH_REPRODUCTION_TIME);
   }
 
   private void generateEnergyAndReproductionMaps(Grid grid) {
     fishCells = new ArrayList<>();
     fishEnergyMap = new HashMap<>();
+    fishReproductionMap = new HashMap<>();
     sharkCells = new ArrayList<>();
     sharkEnergyMap = new HashMap<>();
+    sharkReproductionMap = new HashMap<>();
     for (int i = 0; i < grid.getRows(); i++) {
       for (int j = 0; j < grid.getColumns(); j++) {
         Cell cellToAdd = grid.getCell(i, j);
@@ -213,9 +230,11 @@ public class WatorRuleset extends Ruleset {
         Cell currCell = myGrid.getCell(i, j);
         if (currCell.getCurrState() == WatorState.FISH && !fishEnergyMap.containsKey(currCell)) {
           currCell.setCurrState(WatorState.WATER);
+          fishReproductionMap.remove(currCell);
         }
         if (currCell.getCurrState() == WatorState.SHARK && !sharkEnergyMap.containsKey(currCell)) {
           currCell.setCurrState(WatorState.WATER);
+          sharkReproductionMap.remove(currCell);
         }
       }
     }
