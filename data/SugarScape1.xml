@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<simulationConfig>
+  <!-- window and grid configuration -->
+  <display width="800" height="800" title="Sugarscape Simulation" author="Luke">
+    <grid rows="5" columns="5" />
+    <description text="This is the Sugarscape simulation"/>
+  </display>
+
+  <!-- sim configuration -->
+  <sim type="Sugarscape">
+    <simvars />
+  </sim>
+  <init
+    stateList =
+      "LOW_SUGAR,EMPTY,MEDIUM_SUGAR,HIGH_SUGAR,OCCUPIED,
+       LOW_SUGAR,MEDIUM_SUGAR,HIGH_SUGAR,OCCUPIED,EMPTY,
+       MEDIUM_SUGAR,HIGH_SUGAR,OCCUPIED,EMPTY,LOW_SUGAR,
+       HIGH_SUGAR,OCCUPIED,EMPTY,LOW_SUGAR,MEDIUM_SUGAR,
+       OCCUPIED,EMPTY,LOW_SUGAR,MEDIUM_SUGAR,HIGH_SUGAR"
+  >
+  </init>
+</simulationConfig>
