@@ -6,6 +6,11 @@ import cellsociety.model.grid.ConwayGrid;
 import cellsociety.model.grid.Grid;
 import java.util.List;
 
+/**
+ * Author: Daniel Rodriguez-Florido
+ * The back-end ruleset logic to preform the Conway Game of Life Simulation
+ */
+
 public class ConwayRuleset extends Ruleset {
 
   public ConwayRuleset() {

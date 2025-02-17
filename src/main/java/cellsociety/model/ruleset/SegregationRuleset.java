@@ -8,6 +8,11 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+/**
+ * Author: Daniel Rodriguez-Florido
+ * The back-end ruleset logic to preform the Segregation Simulation
+ */
+
 public class SegregationRuleset extends Ruleset {
 
   private final double similarityThreshold;

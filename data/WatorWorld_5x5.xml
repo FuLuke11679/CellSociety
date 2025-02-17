@@ -1,0 +1,15 @@
+<?xml version="1.0" ?>
+<simulationConfig>
+  <display width="800" height="800" title="WatorWorld Simulation" author="Palo">
+    <grid rows="5" columns="5"/>
+    <description text="This is the WatorWorld simulation"/>
+  </display>
+  <sim type="WatorWorld">
+    <simvars fishBreedTime="9" fishStarveTime="15" sharkBreedTime="12" sharkStarveTime="7"/>
+  </sim>
+  <init stateList="S,F,W,S,F,
+       W,S,S,F,W,
+       F,F,W,S,F,
+       S,F,S,F,S,
+       S,F,W,F,F"/>
+</simulationConfig>

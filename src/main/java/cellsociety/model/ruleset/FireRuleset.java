@@ -6,6 +6,11 @@ import cellsociety.model.grid.FireGrid;
 import cellsociety.model.grid.Grid;
 import java.util.List;
 
+/**
+ * Author: Daniel Rodriguez-Florido
+ * The back-end ruleset logic to preform the Forest Fire Simulation
+ */
+
 public class FireRuleset extends Ruleset {
 
   private final double probGrow;

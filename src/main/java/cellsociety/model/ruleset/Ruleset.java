@@ -5,6 +5,11 @@ import cellsociety.model.grid.Grid;
 import cellsociety.model.state.CellState;
 import java.util.List;
 
+/**
+ * Author: Daniel Rodriguez-Florido
+ * The superclass for all the Rulesets
+ */
+
 public abstract class Ruleset {
 
   public Ruleset() {
