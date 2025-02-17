@@ -155,8 +155,8 @@ public abstract class Grid {
   public int getColumns() {
     return columns;
   }
-  public List<List<Cell>> getGrid() {
-    return myGrid;
+  protected Grid getGrid() {
+    return this;
   }
 
   public Cell createCell(int id, CellState currState, CellState nextState, String cellType) {
