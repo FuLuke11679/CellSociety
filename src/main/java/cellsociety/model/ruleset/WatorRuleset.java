@@ -101,14 +101,6 @@ public class WatorRuleset extends Ruleset {
     energyMap.put(child, MAX_SHARK_LIFE);
   }
 
-  @Override
-  protected CellState getState(Cell cell, Cell neighbor) {
-    if (neighbor.getId() < cell.getId() || isCellWrapped(cell, neighbor)) {
-      return neighbor.getCurrState();
-    }
-    return neighbor.getNextState();
-  }
-
   private boolean isCellWrapped(Cell cell, Cell neighbor) {
     if (cell.getId() >= 0 && cell.getId() < myGrid.getColumns()
         && neighbor.getId() >= myGrid.getRows() * myGrid.getColumns()) {
