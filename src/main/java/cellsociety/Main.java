@@ -1,6 +1,7 @@
 package cellsociety;
 
 import cellsociety.model.grid.Grid;
+import cellsociety.model.grid.SugarscapeGrid;
 import cellsociety.model.ruleset.*;
 import cellsociety.parser.XMLParser;
 import cellsociety.view.GridView;

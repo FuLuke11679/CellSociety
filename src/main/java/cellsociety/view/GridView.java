@@ -1,6 +1,7 @@
 package cellsociety.view;
 
 import cellsociety.model.cell.SegregationCell.SegregationState;
+import cellsociety.model.cell.SugarscapeCell.SugarscapeState;
 import cellsociety.model.cell.WatorCell.WatorState;
 import cellsociety.model.grid.Grid;
 import cellsociety.model.cell.ConwayCell.ConwayState;
@@ -54,7 +55,9 @@ public class GridView {
       Map.entry(SegregationState.EMPTY, Color.WHITE),
       Map.entry(WatorState.SHARK, Color.LIGHTBLUE),
       Map.entry(WatorState.FISH, Color.LIGHTGREEN),
-      Map.entry(WatorState.WATER, Color.WHITE)
+      Map.entry(WatorState.WATER, Color.WHITE),
+      Map.entry(SugarscapeState.EMPTY, Color.WHITE),
+      Map.entry(SugarscapeState.OCCUPIED, Color.BLACK)
   );
 
   private final Map<ColorScheme, Color> schemeColors = Map.ofEntries(

@@ -5,6 +5,8 @@ import cellsociety.model.cell.ConwayCell.ConwayState;
 import cellsociety.model.cell.FireCell.FireState;
 import cellsociety.model.cell.PercolationCell.PercolationState;
 import cellsociety.model.cell.SegregationCell.SegregationState;
+import cellsociety.model.cell.SugarscapeCell;
+import cellsociety.model.cell.SugarscapeCell.SugarscapeState;
 import cellsociety.model.cell.WatorCell.WatorState;
 import cellsociety.model.ruleset.ConwayRuleset;
 import cellsociety.model.ruleset.Ruleset;
@@ -198,6 +200,8 @@ public abstract class Grid {
       return "WatorCell";
     } else if (state instanceof SegregationState) {
       return "SegregationCell";
+    } else if (state instanceof SugarscapeState) {
+      return "SugarscapeCell";
     }
     return "Cell";
   }
