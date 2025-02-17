@@ -86,10 +86,10 @@ public abstract class Grid {
       int row = id / columns;
       int col = id % columns;
       Cell cell = myGrid.get(row).get(col);
-      if(cell.getNextState() != null && cell.getNextState() != cell.getCurrState()){
+//      if(cell.getNextState() != null){
         cell.setCurrState(cell.getNextState());
         cell.setNextState(null);
-      }
+//      }
     }
   }
 
@@ -138,7 +138,7 @@ public abstract class Grid {
   public void printGrid() {
     for (int i = 0; i < rows; i++) {
       for (int j = 0; j < columns; j++) {
-        System.out.print(getCell(i, j).getNextState() + " ");
+        System.out.print(getCell(i, j).getCurrState() + " ");
       }
       System.out.println();
     }
