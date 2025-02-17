@@ -17,10 +17,10 @@
 
   <init
     stateList =
-      "W,W,F,F,F,
-       W,W,S,F,W,
-       W,S,S,S,W,
+      "W,W,W,W,W,
+       W,W,W,W,W,
        W,W,S,W,W,
+       W,W,W,W,W,
        W,W,W,W,W"
   >
   </init>
