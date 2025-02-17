@@ -6,6 +6,11 @@ import cellsociety.model.grid.Grid;
 import cellsociety.model.grid.PercolationGrid;
 import java.util.List;
 
+/**
+ * Author: Daniel Rodriguez-Florido
+ * The back-end ruleset logic to preform the Percolation Simulation
+ */
+
 public class PercolationRuleset extends Ruleset {
 
   public PercolationRuleset() {

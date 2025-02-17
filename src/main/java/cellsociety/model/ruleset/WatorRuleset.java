@@ -10,12 +10,13 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * Author: Daniel Rodriguez-Florido
+ * The back-end ruleset logic to preform the WatorWorld Simulation
+ */
+
 public class WatorRuleset extends Ruleset {
 
-  private static final int MAX_SHARK_ENERGY = 10;
-  private static final int MAX_FISH_ENERGY = 10;
-  private static final int SHARK_REPRODUCTION_TIME = 8;
-  private static final int FISH_REPRODUCTION_TIME = 8;
   private static final int FISH_ENERGY_VALUE = 5;
 
   private WatorGrid myGrid;
@@ -26,23 +27,33 @@ public class WatorRuleset extends Ruleset {
   private Map<Cell, Integer> fishReproductionMap;
   private Map<Cell, Integer> sharkReproductionMap;
 
-  public WatorRuleset() {
-    super();
-  }
+  private final int maxSharkEnergy;
+  private final int maxFishEnergy;
+  private final int sharkReproductionTime;
+  private final int fishReproductionTime;
+
 
   /**
-   * @param cell      The cell whose state me must check
-   * @param neighbors The neighbors who determine what the cell should do
+   * Constructor for the WatorRuleset
+   * @param fishBreedTime The amount of chronons (time units) it takes for a fish to reproduce
+   * @param fishStarveTime The amount of chronons it takes for a fish to die
+   * @param sharkBreedTime The amount of chronons it takes for a shark to reproduce
+   * @param sharkStarveTime The amount of chronons it takes for a shark to die
    */
+  public WatorRuleset(int fishBreedTime, int fishStarveTime, int sharkBreedTime, int sharkStarveTime) {
+    super();
+    fishReproductionTime = fishBreedTime;
+    maxFishEnergy = fishStarveTime;
+    sharkReproductionTime = sharkBreedTime;
+    maxSharkEnergy = sharkStarveTime;
+  }
+
   @Override
   public void updateCellState(Cell cell, List<Cell> neighbors) {
-
-
-
   }
 
   /**
-   *
+   * Updates sharks, then fish, and maintains any unaffected cell.
    */
   @Override
   public void updateGridState() {
@@ -65,6 +76,10 @@ public class WatorRuleset extends Ruleset {
 
   }
 
+  /**
+   * Moves a fish from its original spot to a new random empty space
+   * @param cell The fish cell we wish to move
+   */
   private void moveFish(Cell cell) {
     int cellRow = cell.getId() / myGrid.getRows();
     int cellCol = cell.getId() % myGrid.getRows();
@@ -75,6 +90,10 @@ public class WatorRuleset extends Ruleset {
     }
   }
 
+  /**
+   * Moves a shark from its original spot to a random fish space or empty space if no fish around
+   * @param cell The shark cell we wish to move
+   */
   private void moveShark(Cell cell) {
     int cellRow = cell.getId() / myGrid.getRows();
     int cellCol = cell.getId() % myGrid.getRows();
@@ -82,9 +101,6 @@ public class WatorRuleset extends Ruleset {
     Cell toMove = getRandomFishOrEmptySpot(neighbors);
 
     if (toMove != null) {
-      System.out.println("Shark Cell ID: " + cell.getId());
-      System.out.println("ToMove Cell ID: " + toMove.getId());
-      System.out.println();
       if (toMove.getCurrState() == WatorState.FISH) {
         sharkEatFish(cell, toMove);
       } else {
@@ -93,6 +109,11 @@ public class WatorRuleset extends Ruleset {
     }
   }
 
+  /**
+   * Gets a random empty neighbor to move a cell to
+   * @param neighbors The neighbors of the cell to check
+   * @return An empty Cell that is the candidate for swapping to
+   */
   private Cell getRandomEmptySpot(List<Cell> neighbors) {
     Collections.shuffle(neighbors);
     for (Cell neighbor : neighbors) {
@@ -103,6 +124,12 @@ public class WatorRuleset extends Ruleset {
     return null;
   }
 
+  /**
+   * For sharks to find a random spot to move to. Attempts to find fish and if does not find fish
+   * then returns a random empty spot to move to.
+   * @param neighbors The neighbors of the shark cell
+   * @return The cell the shark can move to
+   */
   private Cell getRandomFishOrEmptySpot(List<Cell> neighbors) {
     Collections.shuffle(neighbors);
     for (Cell neighbor : neighbors) {
@@ -120,9 +147,6 @@ public class WatorRuleset extends Ruleset {
    * @param emptyCell The empty cell we wish to swap it with
    */
   private void swapFishAndEmptyCell(Cell fish, Cell emptyCell) {
-
-    System.out.println("Fish ID: " + fish.getId() + " Swap ID: " + emptyCell.getId());
-
     fish.setNextState(emptyCell.getCurrState());
     emptyCell.setNextState(fish.getCurrState());
 
@@ -134,7 +158,7 @@ public class WatorRuleset extends Ruleset {
 
     if (fishReproductionMap.containsKey(emptyCell) && fishReproductionMap.get(emptyCell) == 0) {
       makeFish(fish);
-      fishReproductionMap.put(emptyCell, FISH_REPRODUCTION_TIME); // Reset reproduction time for cell that birthed
+      fishReproductionMap.put(emptyCell, fishReproductionTime); // Reset reproduction time for cell that birthed
     }
 
   }
@@ -158,7 +182,7 @@ public class WatorRuleset extends Ruleset {
     // Reproduce shark if necessary
     if (sharkReproductionMap.containsKey(emptyCell) && sharkReproductionMap.get(emptyCell) == 0) {
       makeShark(shark);
-      sharkReproductionMap.put(emptyCell, SHARK_REPRODUCTION_TIME); // Reset reproduction time for cell that birthed
+      sharkReproductionMap.put(emptyCell, sharkReproductionTime); // Reset reproduction time for cell that birthed
     }
 
   }
@@ -184,22 +208,34 @@ public class WatorRuleset extends Ruleset {
 
     if (sharkReproductionMap.containsKey(fish) && sharkReproductionMap.get(fish) == 0) {
       makeShark(shark);
-      sharkReproductionMap.put(fish, SHARK_REPRODUCTION_TIME); // Reset reproduction time for cell that birthed
+      sharkReproductionMap.put(fish, sharkReproductionTime); // Reset reproduction time for cell that birthed
     }
   }
 
+  /**
+   * Makes a new shark cell. Used for reproduction purposes
+   * @param cell The cell we wish to turn into a new shark cell
+   */
   private void makeShark(Cell cell) {
     cell.setNextState(WatorState.SHARK);
-    sharkEnergyMap.put(cell, MAX_SHARK_ENERGY);
-    sharkReproductionMap.put(cell, SHARK_REPRODUCTION_TIME);
+    sharkEnergyMap.put(cell, maxSharkEnergy);
+    sharkReproductionMap.put(cell, sharkReproductionTime);
   }
 
+  /**
+   * Makes a new fish cell. Used for reproduction purposes.
+   * @param cell The cell we wish to turn into a new fish cell
+   */
   private void makeFish(Cell cell) {
     cell.setNextState(WatorState.FISH);
-    fishEnergyMap.put(cell, MAX_FISH_ENERGY);
-    fishReproductionMap.put(cell, FISH_REPRODUCTION_TIME);
+    fishEnergyMap.put(cell, maxFishEnergy);
+    fishReproductionMap.put(cell, fishReproductionTime);
   }
 
+  /**
+   * Generates the initial states for all the tracking maps.
+   * @param grid The grid to grab the states from.
+   */
   private void generateEnergyAndReproductionMaps(Grid grid) {
     fishCells = new ArrayList<>();
     fishEnergyMap = new HashMap<>();
@@ -212,12 +248,12 @@ public class WatorRuleset extends Ruleset {
         Cell cellToAdd = grid.getCell(i, j);
         if (cellToAdd.getCurrState() == WatorState.FISH) {
           fishCells.add(cellToAdd);
-          fishEnergyMap.put(cellToAdd, MAX_FISH_ENERGY);
-          fishReproductionMap.put(cellToAdd, FISH_REPRODUCTION_TIME);
+          fishEnergyMap.put(cellToAdd, maxFishEnergy);
+          fishReproductionMap.put(cellToAdd, fishReproductionTime);
         } else if (cellToAdd.getCurrState() == WatorState.SHARK) {
           sharkCells.add(cellToAdd);
-          sharkEnergyMap.put(cellToAdd, MAX_SHARK_ENERGY);
-          sharkReproductionMap.put(cellToAdd, SHARK_REPRODUCTION_TIME);
+          sharkEnergyMap.put(cellToAdd, maxSharkEnergy);
+          sharkReproductionMap.put(cellToAdd, sharkReproductionTime);
         }
       }
     }
@@ -236,6 +272,9 @@ public class WatorRuleset extends Ruleset {
     }
   }
 
+  /**
+   * Visually "kills" (sets to default state) any cell that no longer has any energy.
+   */
   private void killDeadCells() {
     for (int i = 0; i < myGrid.getRows(); i++) {
       for (int j = 0; j < myGrid.getColumns(); j++) {

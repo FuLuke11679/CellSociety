@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <simulationConfig>
   <!-- window and grid configuration -->
-  <display width="800" height="800" title="WatorWorld Simulation" author="Palo">
+  <display width="800" height="800" title="WatorWorld Simulation" author="Daniel">
     <grid rows="5" columns="5" />
     <description text="This is the WatorWorld simulation"/>
   </display>
