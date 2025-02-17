@@ -128,8 +128,14 @@ public class WatorRuleset extends Ruleset {
 
     if (fishEnergyMap.get(fish) > 1) { // If the fish has enough energy to live on
       fishEnergyMap.put(emptyCell, fishEnergyMap.get(fish) - 1);
+      fishReproductionMap.put(emptyCell, fishReproductionMap.get(fish) - 1);
     }
     fishEnergyMap.remove(fish);
+
+    if (fishReproductionMap.containsKey(emptyCell) && fishReproductionMap.get(emptyCell) == 0) {
+      makeFish(fish);
+      fishReproductionMap.put(emptyCell, FISH_REPRODUCTION_TIME); // Reset reproduction time for cell that birthed
+    }
 
   }
 
@@ -172,8 +178,14 @@ public class WatorRuleset extends Ruleset {
 
     if (sharkEnergyMap.get(shark) > 1) { // If the shark has enough energy to live on
       sharkEnergyMap.put(fish, sharkEnergyMap.get(shark) - 1 + FISH_ENERGY_VALUE);
+      sharkReproductionMap.put(fish, sharkReproductionMap.get(shark) - 1);
     }
     sharkEnergyMap.remove(shark);
+
+    if (sharkReproductionMap.containsKey(fish) && sharkReproductionMap.get(fish) == 0) {
+      makeShark(shark);
+      sharkReproductionMap.put(fish, SHARK_REPRODUCTION_TIME); // Reset reproduction time for cell that birthed
+    }
   }
 
   private void makeShark(Cell cell) {
@@ -184,7 +196,7 @@ public class WatorRuleset extends Ruleset {
 
   private void makeFish(Cell cell) {
     cell.setNextState(WatorState.FISH);
-    fishEnergyMap.put(cell, FISH_ENERGY_VALUE);
+    fishEnergyMap.put(cell, MAX_FISH_ENERGY);
     fishReproductionMap.put(cell, FISH_REPRODUCTION_TIME);
   }
 
