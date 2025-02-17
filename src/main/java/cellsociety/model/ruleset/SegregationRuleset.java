@@ -1,6 +1,7 @@
 package cellsociety.model.ruleset;
 
 import cellsociety.model.cell.Cell;
+import cellsociety.model.cell.SegregationCell;
 import cellsociety.model.cell.SegregationCell.SegregationState;
 import cellsociety.model.grid.Grid;
 import cellsociety.model.grid.SegregationGrid;
@@ -8,18 +9,20 @@ import cellsociety.model.state.CellState;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 public class SegregationRuleset extends Ruleset {
 
   private final double similarityThreshold;
   private SegregationGrid myGrid;
-  Map<Cell, Integer> emptyCells;
+  Set<Cell> emptyCells;
 
   public SegregationRuleset(double similarityThreshold) {
     this.similarityThreshold = similarityThreshold;
-    emptyCells = new HashMap<>();
+    emptyCells = new HashSet<>();
   }
 
   /**
@@ -29,13 +32,15 @@ public class SegregationRuleset extends Ruleset {
    * @param neighbors The neighbors around the cell that we need to analyze
    */
   public void updateState(Cell cell, List<Cell> neighbors) {
+
+    System.out.println("Number of empty cells: " + emptyCells.size());
+
     if (cell.getCurrState() == SegregationState.EMPTY) {
       maintainCell(cell);
-      if (emptyCells.containsKey(cell)) {
-        emptyCells.put(cell, emptyCells.get(cell) + 1);
-      } else {
-        emptyCells.put(cell, 0);
-      }
+      return;
+    }
+
+    if (cell.getNextState() != null) {
       return;
     }
 
@@ -47,6 +52,7 @@ public class SegregationRuleset extends Ruleset {
         swapCell(cell, cellToSwap);
       }
     }
+
   }
 
   /**
@@ -77,27 +83,14 @@ public class SegregationRuleset extends Ruleset {
    * @return A suitable empty cell to swap with
    */
   private Cell findSuitableEmptyCell() {
-    List<Cell> candidateCells = new ArrayList<>(emptyCells.keySet());
-    Collections.shuffle(candidateCells);
-    for (Cell c : candidateCells) {
-      if (emptyCells.get(c) >= 1) {
+    List<Cell> shuffledCells = new ArrayList<>(emptyCells);
+    Collections.shuffle(shuffledCells);
+    for (Cell c : shuffledCells) {
+      if (c.getCurrState() != SegregationState.EMPTY || c.getNextState() == SegregationState.EMPTY) {
         return c;
       }
     }
     return null;
-  }
-
-  /**
-   * Function to get the appropriate state of a cell
-   *
-   * @param cell     The cell we wish to get the state of
-   * @param neighbor The neighbors that determine the state of the cell (whether we look at prev or
-   *                 curr state)
-   * @return The appropriate state of the cell
-   */
-  @Override
-  public CellState getState(Cell cell, Cell neighbor) {
-    return neighbor.getCurrState();
   }
 
   /**
@@ -107,12 +100,11 @@ public class SegregationRuleset extends Ruleset {
    * @param cell2 The cell we wish to swap the first cell with
    */
   private void swapCell(Cell cell1, Cell cell2) {
-    CellState temp = cell1.getCurrState();
-    cell1.setCurrState(cell2.getCurrState());
-    cell2.setCurrState(temp);
+    cell1.setNextState(cell2.getCurrState());
+    cell2.setNextState(cell1.getCurrState());
 
     emptyCells.remove(cell2);
-    emptyCells.put(cell1, 0);
+    emptyCells.add(cell1);
   }
 
   /**
@@ -134,23 +126,22 @@ public class SegregationRuleset extends Ruleset {
    */
   @Override
   public Grid createGrid(int rows, int columns, String[] initialStates) {
-    myGrid = new SegregationGrid(rows, columns, new SegregationRuleset(similarityThreshold),
-        initialStates);
+    myGrid = new SegregationGrid(rows, columns, this, initialStates);
     emptyCells = getEmptyCells(myGrid);
     return myGrid;
   }
 
 
-  private Map<Cell, Integer> getEmptyCells(Grid grid) {
-    Map<Cell, Integer> emptyCells = new HashMap<>();
+  private Set<Cell> getEmptyCells(Grid grid) {
+    Set<Cell> emptyCellAux = new HashSet<>();
     for (int i = 0; i < grid.getRows(); i++) {
       for (int j = 0; j < grid.getColumns(); j++) {
         if (grid.getCell(i, j).getCurrState() == SegregationState.EMPTY) {
-          emptyCells.put(grid.getCell(i, j), 1);
+          emptyCellAux.add(grid.getCell(i, j));
         }
       }
     }
-    return emptyCells;
+    return emptyCellAux;
   }
 
 }

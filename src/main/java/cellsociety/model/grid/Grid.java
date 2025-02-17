@@ -100,10 +100,10 @@ public abstract class Grid {
       int row = id / columns;
       int col = id % columns;
       Cell cell = myGrid.get(row).get(col);
-      if(cell.getNextState() != null && cell.getNextState() != cell.getCurrState()){
+//      if(cell.getNextState() != null){
         cell.setCurrState(cell.getNextState());
         cell.setNextState(null);
-      }
+//      }
     }
   }
 

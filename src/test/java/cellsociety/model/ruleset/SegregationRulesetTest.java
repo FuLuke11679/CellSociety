@@ -34,9 +34,11 @@ class SegregationRulesetTest {
         myGrid.getCell(1, 1)
     );
 
-    myRuleset.updateState(myGrid.getCell(0, 0), neighbors);
+    myGrid.update();
+//    myRuleset.updateState(myGrid.getCell(0, 0), neighbors);
+    myGrid.printGrid();
 
-    assertEquals(SegregationState.EMPTY, myGrid.getCell(0, 0).getNextState());
+    assertEquals(SegregationState.EMPTY, myGrid.getCell(0, 0).getCurrState());
   }
 
   @Test
