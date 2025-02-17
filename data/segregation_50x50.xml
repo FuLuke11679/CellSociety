@@ -9,7 +9,7 @@
   <!-- sim configuration -->
   <sim type="Segregation">
     <simvars
-      thresh="0.35"
+      thresh="0.6"
     />
   </sim>
 
