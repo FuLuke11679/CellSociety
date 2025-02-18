@@ -31,10 +31,20 @@ class GeneralConwayRulesetTest {
   }
 
   @Test
-  void updateCellState_SeedVariation_CellDiesButBirthsTwo() {
+  void updateCellState_SeedVariationWithBSRule_CellDiesButBirthsTwo() {
     myGrid.update();
     assertEquals(ConwayState.DEAD, myGrid.getCell(1, 1).getCurrState());
     assertEquals(ConwayState.ALIVE, myGrid.getCell(1, 2).getCurrState());
     assertEquals(ConwayState.ALIVE, myGrid.getCell(2, 1).getCurrState());
   }
+
+  @Test
+  void updateCellState_SeedVariationWithSBRule_CellDiesButBirthsTwo() {
+    myRuleset = new GeneralConwayRuleset("/2");
+    myGrid.update();
+    assertEquals(ConwayState.DEAD, myGrid.getCell(1, 1).getCurrState());
+    assertEquals(ConwayState.ALIVE, myGrid.getCell(1, 2).getCurrState());
+    assertEquals(ConwayState.ALIVE, myGrid.getCell(2, 1).getCurrState());
+  }
+
 }
