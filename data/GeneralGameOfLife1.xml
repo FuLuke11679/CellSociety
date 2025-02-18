@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<simulationConfig>
+  <!-- window and grid configuration -->
+  <display width="800" height="800" title="General Conway Simulation" author="Danny">
+    <grid rows="10" columns="10" />
+    <description text="This is an xml file for the General Game of Life that represents the seed variation"/>
+  </display>
+
+  <!-- sim configuration -->
+  <sim type="GeneralConway">
+    <simvars
+      rules="B2/S"
+    />
+  </sim>
+  <init
+    stateList =
+      "D,A,D,D,A,D,D,A,D,D,
+      A,D,D,A,D,D,A,D,D,A,
+      D,D,A,D,D,A,D,D,A,D,
+      D,A,D,D,A,D,D,A,D,D,
+      A,D,D,A,D,D,A,D,D,A,
+      D,D,A,D,D,A,D,D,A,D,
+      D,A,D,D,A,D,D,A,D,D,
+      A,D,D,A,D,D,A,D,D,A,
+      D,D,A,D,D,A,D,D,A,D,
+      D,A,D,D,A,D,D,A,D,D"
+  >
+  </init>
+
+</simulationConfig>

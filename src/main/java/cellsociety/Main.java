@@ -1,9 +1,7 @@
 package cellsociety;
 
 import cellsociety.model.grid.Grid;
-import cellsociety.model.grid.SugarscapeGrid;
 import cellsociety.model.ruleset.*;
-import cellsociety.parser.InvalidXMLConfigurationException;
 import cellsociety.parser.XMLParser;
 import cellsociety.view.GridView;
 import cellsociety.view.GridView.ColorScheme;
@@ -11,7 +9,6 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
-import java.util.Map;
 import java.util.ResourceBundle;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
@@ -92,6 +89,7 @@ public class Main extends Application {
                 getIntFromParser("fishStarveTime"),
                 getIntFromParser("sharkBreedTime"),
                 getIntFromParser("sharkStarveTime"));
+            case "GeneralConway" -> new GeneralConwayRuleset(myParser.getSimVarsMap().get("rules"));
             case "Sugarscape" -> new SugarscapeRuleset();
             default -> throw new IllegalStateException("Unknown simulation type");
         };

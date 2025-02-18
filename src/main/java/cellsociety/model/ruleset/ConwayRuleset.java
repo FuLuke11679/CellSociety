@@ -17,7 +17,7 @@ public class ConwayRuleset extends Ruleset {
   }
 
   public void updateCellState(Cell cell, List<Cell> neighbors) {
-    int aliveCells = countNeighbors(neighbors);
+    int aliveCells = countAliveNeighbors(neighbors);
 
     if (cell.getCurrState() == ConwayState.ALIVE) {
       // Live cell survives with 2 or 3 neighbors, otherwise it dies
@@ -45,7 +45,7 @@ public class ConwayRuleset extends Ruleset {
    * @param neighbors The list of neighbor cells
    * @return An integer denoting the amount of alive cells
    */
-  private int countNeighbors(List<Cell> neighbors) {
+  protected int countAliveNeighbors(List<Cell> neighbors) {
     int aliveCells = 0;
     for (Cell neighbor : neighbors) {
       if (neighbor.getCurrState() == ConwayState.ALIVE) { //If the cell is alive
@@ -59,7 +59,7 @@ public class ConwayRuleset extends Ruleset {
    * Sets the next state of a cell to DEAD
    * @param cell The cell we wish to kill
    */
-  private void killCell(Cell cell) {
+  protected void killCell(Cell cell) {
     cell.setNextState(ConwayState.DEAD);
   }
 
@@ -67,7 +67,7 @@ public class ConwayRuleset extends Ruleset {
    * Sets the next state of a cell to ALIVE
    * @param cell The cell we wish to birth
    */
-  private void birthCell(Cell cell) {
+  protected void birthCell(Cell cell) {
     cell.setNextState(ConwayState.ALIVE);
   }
 
