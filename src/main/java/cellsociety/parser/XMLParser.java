@@ -115,6 +115,10 @@ public class XMLParser extends Parser {
             .replaceAll("\\s+", "");
         initialStates = stateList.split(",");
 
+        if (initialStates.length != rows * columns) {
+            throw new IllegalArgumentException("Number of cell states does not match grid size.");
+        }
+
         for (String state : initialStates) {
             if (!isInSimulation(state, simType)) {
                 throw new IllegalArgumentException("Invalid cell state: " + state);
