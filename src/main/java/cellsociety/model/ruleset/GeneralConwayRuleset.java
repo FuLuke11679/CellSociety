@@ -22,11 +22,6 @@ public class GeneralConwayRuleset extends ConwayRuleset {
     GeneralConwayParser.parseRuleString(rules, birthVals, survivalVals);
   }
 
-  /**
-   *
-   * @param cell
-   * @param neighbors
-   */
   @Override
   public void updateCellState(Cell cell, List<Cell> neighbors) {
     int aliveCells = countAliveNeighbors(neighbors);
@@ -37,13 +32,6 @@ public class GeneralConwayRuleset extends ConwayRuleset {
     } else {
       killCell(cell);
     }
-  }
-
-  /**
-   *
-   */
-  @Override
-  public void updateGridState() {
   }
 
 }
