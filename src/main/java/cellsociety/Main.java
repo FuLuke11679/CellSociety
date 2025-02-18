@@ -86,13 +86,23 @@ public class Main extends Application {
         return switch (myParser.getSimType()) {
             case "Conway" -> new ConwayRuleset();
             case "Percolation" -> new PercolationRuleset();
-            case "Fire" -> new FireRuleset(Double.parseDouble(myParser.getSimVarsMap().get("probCatch")),
-                Double.parseDouble(myParser.getSimVarsMap().get("probGrow")));
-            case "Segregation" -> new SegregationRuleset(Double.parseDouble(myParser.getSimVarsMap().get("thresh")));
-            case "WatorWorld" -> new WatorRuleset();
+            case "Fire" -> new FireRuleset(getDoubleFromParser("probCatch"), getDoubleFromParser("probGrow"));
+            case "Segregation" -> new SegregationRuleset(getDoubleFromParser("thresh"));
+            case "WatorWorld" -> new WatorRuleset(getIntFromParser("fishBreedTime"),
+                getIntFromParser("fishStarveTime"),
+                getIntFromParser("sharkBreedTime"),
+                getIntFromParser("sharkStarveTime"));
             case "Sugarscape" -> new SugarscapeRuleset();
             default -> throw new IllegalStateException("Unknown simulation type");
         };
+    }
+
+    private int getIntFromParser(String fieldKey) {
+        return Integer.parseInt(myParser.getSimVarsMap().get(fieldKey));
+    }
+
+    private double getDoubleFromParser(String fieldKey) {
+        return Double.parseDouble(myParser.getSimVarsMap().get(fieldKey));
     }
 
     private void startSimulation() {
@@ -224,17 +234,11 @@ public class Main extends Application {
         startButton.setOnAction(e -> startSimulation());
         pauseButton.setOnAction(e -> simLoop.stop());
         saveButton.setOnAction(e -> saveSimulation());
-        resetButton.setOnAction(e -> {
-          try {
-            resetSimulation();
-          } catch (InvalidXMLConfigurationException ex) {
-            throw new RuntimeException(ex);
-          }
-        });
+        resetButton.setOnAction(e -> resetSimulation());
         loadButton.setOnAction(e -> {
             File newFile = FILE_CHOOSER.showOpenDialog(globalStage);
             if (newFile != null) {
-              loadSimulation(newFile);
+                loadSimulation(newFile);
             }
         });
 
@@ -282,7 +286,7 @@ public class Main extends Application {
         }
     }
 
-    private void resetSimulation() throws InvalidXMLConfigurationException {
+    private void resetSimulation() {
         loadSimulation(currentFile);
     }
 

@@ -201,7 +201,7 @@ public abstract class Grid {
     } else if (state instanceof SegregationState) {
       return "SegregationCell";
     } else if (state instanceof SugarscapeState) {
-      return "SegregationCell";
+      return "SugarscapeCell";
     }
     return "Cell";
   }
