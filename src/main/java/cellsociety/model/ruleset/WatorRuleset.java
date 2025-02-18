@@ -4,6 +4,7 @@ import cellsociety.model.cell.Cell;
 import cellsociety.model.cell.WatorCell.WatorState;
 import cellsociety.model.grid.Grid;
 import cellsociety.model.grid.WatorGrid;
+import cellsociety.model.state.CellState;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -72,7 +73,7 @@ public class WatorRuleset extends Ruleset {
       moveFish(c);
     }
 
-    maintainRestOfGrid();
+    maintainRestOfGrid(myGrid);
 
   }
 
@@ -86,7 +87,7 @@ public class WatorRuleset extends Ruleset {
     List<Cell> neighbors = myGrid.getNeighbors(cellRow, cellCol);
     Cell toMove = getRandomEmptySpot(neighbors);
     if (toMove != null) {
-      swapFishAndEmptyCell(cell, toMove);
+      swapActiveAndEmptyCell(cell, toMove, fishEnergyMap, fishReproductionMap, fishReproductionTime);
     }
   }
 
@@ -104,7 +105,7 @@ public class WatorRuleset extends Ruleset {
       if (toMove.getCurrState() == WatorState.FISH) {
         sharkEatFish(cell, toMove);
       } else {
-        swapSharkAndEmptyCell(cell, toMove);
+        swapActiveAndEmptyCell(cell, toMove, sharkEnergyMap, sharkReproductionMap, sharkReproductionTime);
       }
     }
   }
@@ -141,52 +142,30 @@ public class WatorRuleset extends Ruleset {
   }
 
   /**
-   * Function to "swap" two cells in a grid
-   *
-   * @param fish The fish cell we wish to swap
-   * @param emptyCell The empty cell we wish to swap it with
+   * Function to swap any type of cell into an empty cell
+   * @param activeCell The Cell that isn't empty
+   * @param emptyCell The Cell that is empty
+   * @param energyMap The energy map that we wish to modify (specific to to the cell type)
+   * @param reproductionMap The reproduction map that we wish to modify (specific to cell type)
+   * @param reproductionTime The reproduction time of the particular cell type
    */
-  private void swapFishAndEmptyCell(Cell fish, Cell emptyCell) {
-    fish.setNextState(emptyCell.getCurrState());
-    emptyCell.setNextState(fish.getCurrState());
+  private void swapActiveAndEmptyCell(Cell activeCell, Cell emptyCell, Map<Cell, Integer> energyMap,
+      Map<Cell, Integer> reproductionMap, int reproductionTime) {
+    activeCell.setNextState(emptyCell.getCurrState());
+    emptyCell.setNextState(activeCell.getCurrState());
 
-    if (fishEnergyMap.get(fish) > 1) { // If the fish has enough energy to live on
-      fishEnergyMap.put(emptyCell, fishEnergyMap.get(fish) - 1);
-      fishReproductionMap.put(emptyCell, fishReproductionMap.get(fish) - 1);
+    if (energyMap.get(activeCell) > 1) { // If the fish has enough energy to live on
+      energyMap.put(emptyCell, energyMap.get(activeCell) - 1);
+      reproductionMap.put(emptyCell, reproductionMap.get(activeCell) - 1);
     }
-    fishEnergyMap.remove(fish);
+    energyMap.remove(activeCell);
 
-    if (fishReproductionMap.containsKey(emptyCell) && fishReproductionMap.get(emptyCell) == 0) {
-      makeFish(fish);
-      fishReproductionMap.put(emptyCell, fishReproductionTime); // Reset reproduction time for cell that birthed
+    if (reproductionMap.containsKey(emptyCell) && reproductionMap.get(emptyCell) == 0) {
+      makeActiveCell(activeCell);
+      reproductionMap.put(emptyCell, reproductionTime); // Reset reproduction time for cell that birthed
     }
 
   }
-
-  /**
-   * Function to "swap" two cells in a grid
-   *
-   * @param shark The shark cell we wish to swap
-   * @param emptyCell The empty cell we wish to swap it with
-   */
-  private void swapSharkAndEmptyCell(Cell shark, Cell emptyCell) {
-    shark.setNextState(emptyCell.getCurrState());
-    emptyCell.setNextState(shark.getCurrState());
-
-    if (sharkEnergyMap.get(shark) > 1) { // If the fish has enough energy to live on
-      sharkEnergyMap.put(emptyCell, sharkEnergyMap.get(shark) - 1);
-      sharkReproductionMap.put(emptyCell, sharkReproductionMap.get(shark) - 1);
-    }
-    sharkEnergyMap.remove(shark);
-
-    // Reproduce shark if necessary
-    if (sharkReproductionMap.containsKey(emptyCell) && sharkReproductionMap.get(emptyCell) == 0) {
-      makeShark(shark);
-      sharkReproductionMap.put(emptyCell, sharkReproductionTime); // Reset reproduction time for cell that birthed
-    }
-
-  }
-
 
   /**
    * Makes shark eat a fish that is neighboring
@@ -207,29 +186,25 @@ public class WatorRuleset extends Ruleset {
     sharkEnergyMap.remove(shark);
 
     if (sharkReproductionMap.containsKey(fish) && sharkReproductionMap.get(fish) == 0) {
-      makeShark(shark);
+      makeActiveCell(shark);
       sharkReproductionMap.put(fish, sharkReproductionTime); // Reset reproduction time for cell that birthed
     }
   }
 
   /**
-   * Makes a new shark cell. Used for reproduction purposes
-   * @param cell The cell we wish to turn into a new shark cell
+   * Makes a new active cell with the CellState of cell
+   * @param cell The cell we wish to make a new one of
    */
-  private void makeShark(Cell cell) {
-    cell.setNextState(WatorState.SHARK);
-    sharkEnergyMap.put(cell, maxSharkEnergy);
-    sharkReproductionMap.put(cell, sharkReproductionTime);
-  }
-
-  /**
-   * Makes a new fish cell. Used for reproduction purposes.
-   * @param cell The cell we wish to turn into a new fish cell
-   */
-  private void makeFish(Cell cell) {
-    cell.setNextState(WatorState.FISH);
-    fishEnergyMap.put(cell, maxFishEnergy);
-    fishReproductionMap.put(cell, fishReproductionTime);
+  private void makeActiveCell(Cell cell) {
+    if (cell.getCurrState() == WatorState.FISH) {
+      cell.setNextState(WatorState.FISH);
+      fishEnergyMap.put(cell, maxFishEnergy);
+      fishReproductionMap.put(cell, fishReproductionTime);
+    } else if (cell.getCurrState() == WatorState.SHARK) {
+      cell.setNextState(WatorState.SHARK);
+      sharkEnergyMap.put(cell, maxSharkEnergy);
+      sharkReproductionMap.put(cell, sharkReproductionTime);
+    }
   }
 
   /**
@@ -254,19 +229,6 @@ public class WatorRuleset extends Ruleset {
           sharkCells.add(cellToAdd);
           sharkEnergyMap.put(cellToAdd, maxSharkEnergy);
           sharkReproductionMap.put(cellToAdd, sharkReproductionTime);
-        }
-      }
-    }
-  }
-
-  /**
-   * Function that moves all the current states into next states for unaffected cells
-   */
-  protected void maintainRestOfGrid() {
-    for (int i = 0; i < myGrid.getRows(); i++) {
-      for (int j = 0; j < myGrid.getColumns(); j++) {
-        if (myGrid.getCell(i, j).getNextState() == null) {
-          maintainCell(myGrid.getCell(i, j));
         }
       }
     }

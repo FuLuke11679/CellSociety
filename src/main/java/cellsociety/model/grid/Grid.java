@@ -6,20 +6,20 @@ import cellsociety.model.cell.FireCell.FireState;
 import cellsociety.model.cell.PercolationCell.PercolationState;
 import cellsociety.model.cell.SegregationCell.SegregationState;
 import cellsociety.model.cell.WatorCell.WatorState;
-import cellsociety.model.ruleset.ConwayRuleset;
 import cellsociety.model.ruleset.Ruleset;
 import cellsociety.model.state.CellState;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-/*
-Updates Grid based on Cell logic
-Does not display the grid or interact at all with javafx packages (i.e Scene, Groups, etc)
+/**
+ * Author: Luke Fu
+ * Updates Grid based on Cell logic
+ * Does not display the grid or interact at all with javafx packages (i.e Scene, Groups, etc)
  */
 public abstract class Grid {
 
-  protected final static Map<String, CellState> stateMap = Map.ofEntries(
+  protected final static Map<String, CellState> STATE_MAP = Map.ofEntries(
       Map.entry("A", ConwayState.ALIVE),
       Map.entry("D", ConwayState.DEAD),
       Map.entry("B", FireState.BURNING),
@@ -154,7 +154,7 @@ public abstract class Grid {
   }
 
   protected CellState getInitialState(String stateSymbol) {
-    return stateMap.get(stateSymbol);
+    return STATE_MAP.get(stateSymbol);
   }
 
   public int getRows() {

@@ -45,4 +45,17 @@ public abstract class Ruleset {
     cell.setNextState(cell.getCurrState());
   }
 
+  /**
+   * Function that moves all the current states into next states for unaffected cells
+   */
+  protected void maintainRestOfGrid(Grid myGrid) {
+    for (int i = 0; i < myGrid.getRows(); i++) {
+      for (int j = 0; j < myGrid.getColumns(); j++) {
+        if (myGrid.getCell(i, j).getNextState() == null) {
+          maintainCell(myGrid.getCell(i, j));
+        }
+      }
+    }
+  }
+
 }
