@@ -27,6 +27,9 @@ public class XMLParser extends Parser {
     // TODO: modify this so that it has methods to return relevant info in the xml file
     public XMLParser(File file) throws InvalidXMLConfigurationException {
         try {
+            if (!isXMLFile(file)) {
+                throw new IllegalArgumentException("File is not an XML file: " + file.getName());
+            }
             DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
             factory.setFeature("http://xml.org/sax/features/external-general-entities", false);
             factory.setFeature("http://xml.org/sax/features/external-parameter-entities", false);
@@ -42,7 +45,10 @@ public class XMLParser extends Parser {
         }
     }
 
-
+    private boolean isXMLFile(File file) {
+        String fileName = file.getName();
+        return fileName.endsWith(".xml");
+    }
 
     private void handleError(String message, Exception e) {
         System.err.println(message + ": " + e.getMessage());
