@@ -1,35 +1,46 @@
+// Parser.java
 package cellsociety.parser;
 
 import java.util.Map;
 
-public abstract class Parser {
-  //what info is needed from Parser
-  private String simulationType;
-  private String author;
-  private String title;
-  private String description;
-  private int width;
-  private int height;
-  private int rows;
-  private int columns;
-  //we calculate cellSize (based on width, height, rows, columns
-  public Parser(){
-  }
+public interface Parser {
+    /**
+     * @return width of the simulation display
+     */
+    int getWidth();
 
-  public abstract int getWidth();
+    /**
+     * @return height of the simulation display
+     */
+    int getHeight();
 
-  public abstract int getHeight();
+    /**
+     * @return title of the simulation
+     */
+    String getTitle();
 
-  public abstract String getTitle();
+    /**
+     * @return number of rows in the grid
+     */
+    int getRows();
 
-  public abstract int getRows();
+    /**
+     * @return number of columns in the grid
+     */
+    int getColumns();
 
-  public abstract int getColumns();
+    /**
+     * @return array of initial states for the simulation
+     */
+    String[] getInitialStates();
 
-  public abstract String[] getInitialStates();
+    /**
+     * @return type of simulation being run
+     */
+    String getSimType();
 
-  public abstract String getSimType();
-
-  public abstract Map<String, String> getSimVarsMap();
-
+    /**
+     * @return map of simulation variables and their values
+     */
+    Map<String, String> getSimVarsMap();
 }
