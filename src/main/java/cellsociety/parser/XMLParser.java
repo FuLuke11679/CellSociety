@@ -24,34 +24,30 @@ public class XMLParser extends Parser {
 
 
     // TODO: modify this so that it has methods to return relevant info in the xml file
-    public XMLParser(File file) {
+    public XMLParser(File file) throws InvalidXMLConfigurationException {
         try {
             DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
             factory.setFeature("http://xml.org/sax/features/external-general-entities", false);
             factory.setFeature("http://xml.org/sax/features/external-parameter-entities", false);
             factory.setFeature("http://apache.org/xml/features/nonvalidating/load-external-dtd", false);
-            
+
             DocumentBuilder builder = factory.newDocumentBuilder();
             Document document = builder.parse(file);
             document.getDocumentElement().normalize();
-            
+
             parseDocument(document);
-        } catch (ParserConfigurationException e) {
-            handleError("XML Parser Configuration Error", e);
-        } catch (SAXException e) {
-            handleError("XML Parsing Error: The file may be malformed", e);
-        } catch (IOException e) {
-            handleError("File I/O Error", e);
-        } catch (Exception e) {
-            handleError("Unexpected Error", e);
+        } catch (ParserConfigurationException | SAXException | IOException e) {
+            throw new InvalidXMLConfigurationException("XML Parsing Error: " + e.getMessage());
         }
     }
-    
+
+
+
     private void handleError(String message, Exception e) {
         System.err.println(message + ": " + e.getMessage());
     }
     
-    private void parseDocument(Document document) {
+    private void parseDocument(Document document) throws InvalidXMLConfigurationException {
         Element root = document.getDocumentElement();
         
         parseDisplay(document);
@@ -59,7 +55,7 @@ public class XMLParser extends Parser {
         parseInitialStates(document);
     }
     
-    private void parseDisplay(Document document) {
+    private void parseDisplay(Document document) throws InvalidXMLConfigurationException {
         Element display = getRequiredElement(document, "display");
         
         this.width = getRequiredIntAttribute(display, "width");
@@ -75,7 +71,7 @@ public class XMLParser extends Parser {
         this.description = getRequiredAttribute(descElement, "text");
     }
     
-    private void parseSimulation(Document document) {
+    private void parseSimulation(Document document) throws InvalidXMLConfigurationException {
         Element sim = getRequiredElement(document, "sim");
         this.simType = getRequiredAttribute(sim, "type");
         
@@ -88,7 +84,7 @@ public class XMLParser extends Parser {
         }
     }
     
-    private void parseInitialStates(Document document) {
+    private void parseInitialStates(Document document) throws InvalidXMLConfigurationException {
         Element initElement = getRequiredElement(document, "init");
         String stateList = getRequiredAttribute(initElement, "stateList")
             .replaceAll("\\s+", "");
@@ -106,18 +102,19 @@ public class XMLParser extends Parser {
         }
         return (Element) elements.item(0);
     }
-    
-    private String getRequiredAttribute(Element element, String attributeName) {
+
+    private String getRequiredAttribute(Element element, String attributeName) throws InvalidXMLConfigurationException {
         String value = element.getAttribute(attributeName);
         if (value.isEmpty()) {
-            throw new IllegalArgumentException(
-                String.format("Required attribute '%s' missing from element '%s'",
+            throw new InvalidXMLConfigurationException(
+                String.format("Error: Missing required attribute '%s' in element '%s'.",
                     attributeName, element.getTagName()));
         }
         return value;
     }
-    
-    private int getRequiredIntAttribute(Element element, String attributeName) {
+
+    private int getRequiredIntAttribute(Element element, String attributeName)
+        throws InvalidXMLConfigurationException {
         String value = getRequiredAttribute(element, attributeName);
         try {
             return Integer.parseInt(value);
