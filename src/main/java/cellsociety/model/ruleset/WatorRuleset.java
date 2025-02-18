@@ -211,7 +211,7 @@ public class WatorRuleset extends Ruleset {
    * Generates the initial states for all the tracking maps.
    * @param grid The grid to grab the states from.
    */
-  private void generateEnergyAndReproductionMaps(Grid grid) {
+  protected void generateEnergyAndReproductionMaps(Grid grid) {
     fishCells = new ArrayList<>();
     fishEnergyMap = new HashMap<>();
     fishReproductionMap = new HashMap<>();

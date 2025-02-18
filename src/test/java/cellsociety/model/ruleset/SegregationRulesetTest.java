@@ -9,6 +9,11 @@ import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+/**
+ * Author: Daniel Rodriguez-Florido
+ * Testing class for Segregation Simulation
+ */
+
 class SegregationRulesetTest {
 
   private Ruleset myRuleset;
@@ -27,22 +32,15 @@ class SegregationRulesetTest {
   }
 
   @Test
-  void updateCellStateWhenNeedsToSwap() {
-    List<Cell> neighbors = List.of(
-        myGrid.getCell(0, 1),
-        myGrid.getCell(1, 0),
-        myGrid.getCell(1, 1)
-    );
-
+  void updateGridState_CellIsSatisfied_CellSwapsToEmptySpot() {
     myGrid.update();
-//    myRuleset.updateState(myGrid.getCell(0, 0), neighbors);
     myGrid.printGrid();
 
     assertEquals(SegregationState.EMPTY, myGrid.getCell(0, 0).getCurrState());
   }
 
   @Test
-  void updateCellStateWhenDoesntNeedsToSwap() {
+  void updateGridState_CellIsNotSatisfied_CellDoesNotSwapToEmptySpot() {
     myGrid.update();
     myGrid.printGrid();
 
