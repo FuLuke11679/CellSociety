@@ -2,6 +2,7 @@ package cellsociety;
 
 import cellsociety.model.grid.Grid;
 import cellsociety.model.ruleset.*;
+import cellsociety.parser.InvalidXMLConfigurationException;
 import cellsociety.parser.XMLParser;
 import cellsociety.view.GridView;
 import cellsociety.view.GridView.ColorScheme;
@@ -56,25 +57,28 @@ public class Main extends Application {
     }
 
     private void loadSimulation(File dataFile) {
+        try {
+            currentFile = dataFile;
+            myParser = new XMLParser(dataFile);
+            Ruleset ruleset = getRuleset();
+            myGrid = ruleset.createGrid(myParser.getRows(), myParser.getColumns(), myParser.getInitialStates());
+            myGridView = new GridView(
+                myParser.getRows(),
+                myParser.getColumns(),
+                myParser.getSimType(),
+                myParser.getTitle(),
+                myParser.getAuthor(),
+                myParser.getDescription(),
+                myGrid,
+                myScheme);
 
-        currentFile = dataFile;
-        myParser = new XMLParser(dataFile);
-        Ruleset ruleset = getRuleset();
-        myGrid = ruleset.createGrid(myParser.getRows(), myParser.getColumns(), myParser.getInitialStates());
-        myGridView = new GridView(
-            myParser.getRows(),
-            myParser.getColumns(),
-            myParser.getSimType(),
-            myParser.getTitle(),
-            myParser.getAuthor(),
-            myParser.getDescription(),
-            myGrid,
-            myScheme);
-
-        BorderPane layout = initializeLayout();
-
-        //why is this hardcoded???
-        setStage(new Scene(layout, 600, 800));
+            BorderPane layout = initializeLayout();
+            setStage(new Scene(layout, 600, 800));
+        } catch (IllegalArgumentException e) {
+            showMessage("Invalid Configuration File: " + e.getMessage());
+        } catch (Exception e) {
+            showMessage("An error occurred while loading the simulation: " + e.getMessage());
+        }
     }
 
     private Ruleset getRuleset() {
@@ -107,7 +111,7 @@ public class Main extends Application {
         loadButton.setOnAction(e -> {
             File newFile = FILE_CHOOSER.showOpenDialog(globalStage);
             if (newFile != null) {
-                loadSimulation(newFile);
+              loadSimulation(newFile);
             }
         });
         List<MenuButton> controlButtons = loadControlButtons(simInfo);
@@ -218,11 +222,17 @@ public class Main extends Application {
         startButton.setOnAction(e -> startSimulation());
         pauseButton.setOnAction(e -> simLoop.stop());
         saveButton.setOnAction(e -> saveSimulation());
-        resetButton.setOnAction(e -> resetSimulation());
+        resetButton.setOnAction(e -> {
+          try {
+            resetSimulation();
+          } catch (InvalidXMLConfigurationException ex) {
+            throw new RuntimeException(ex);
+          }
+        });
         loadButton.setOnAction(e -> {
             File newFile = FILE_CHOOSER.showOpenDialog(globalStage);
             if (newFile != null) {
-                loadSimulation(newFile);
+              loadSimulation(newFile);
             }
         });
 
@@ -270,7 +280,7 @@ public class Main extends Application {
         }
     }
 
-    private void resetSimulation() {
+    private void resetSimulation() throws InvalidXMLConfigurationException {
         loadSimulation(currentFile);
     }
 
@@ -282,6 +292,15 @@ public class Main extends Application {
     private void showMessage(String message) {
         new Alert(Alert.AlertType.INFORMATION, message).showAndWait();
     }
+
+    private void showErrorDialog(String title, String message) {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle(title);
+        alert.setHeaderText(null);
+        alert.setContentText(message);
+        alert.showAndWait();
+    }
+
 
     public static void main(String[] args) {
         launch(args);

@@ -42,11 +42,12 @@ public class XMLParser extends Parser {
     }
 
 
+
     private void handleError(String message, Exception e) {
         System.err.println(message + ": " + e.getMessage());
     }
     
-    private void parseDocument(Document document) {
+    private void parseDocument(Document document) throws InvalidXMLConfigurationException {
         Element root = document.getDocumentElement();
         
         parseDisplay(document);
@@ -54,7 +55,7 @@ public class XMLParser extends Parser {
         parseInitialStates(document);
     }
     
-    private void parseDisplay(Document document) {
+    private void parseDisplay(Document document) throws InvalidXMLConfigurationException {
         Element display = getRequiredElement(document, "display");
         
         this.width = getRequiredIntAttribute(display, "width");
@@ -70,7 +71,7 @@ public class XMLParser extends Parser {
         this.description = getRequiredAttribute(descElement, "text");
     }
     
-    private void parseSimulation(Document document) {
+    private void parseSimulation(Document document) throws InvalidXMLConfigurationException {
         Element sim = getRequiredElement(document, "sim");
         this.simType = getRequiredAttribute(sim, "type");
         
@@ -83,7 +84,7 @@ public class XMLParser extends Parser {
         }
     }
     
-    private void parseInitialStates(Document document) {
+    private void parseInitialStates(Document document) throws InvalidXMLConfigurationException {
         Element initElement = getRequiredElement(document, "init");
         String stateList = getRequiredAttribute(initElement, "stateList")
             .replaceAll("\\s+", "");
@@ -112,7 +113,8 @@ public class XMLParser extends Parser {
         return value;
     }
 
-    private int getRequiredIntAttribute(Element element, String attributeName) {
+    private int getRequiredIntAttribute(Element element, String attributeName)
+        throws InvalidXMLConfigurationException {
         String value = getRequiredAttribute(element, attributeName);
         try {
             return Integer.parseInt(value);
