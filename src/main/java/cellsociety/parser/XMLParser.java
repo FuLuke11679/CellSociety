@@ -3,6 +3,7 @@ package cellsociety.parser;
 import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -70,17 +71,41 @@ public class XMLParser extends Parser {
         Element descElement = getRequiredElement(display, "description");
         this.description = getRequiredAttribute(descElement, "text");
     }
-    
+
     private void parseSimulation(Document document) throws InvalidXMLConfigurationException {
         Element sim = getRequiredElement(document, "sim");
         this.simType = getRequiredAttribute(sim, "type");
-        
+
+        // Validate simulation type
+        if (!isValidSimulationType(simType)) {
+            throw new IllegalArgumentException("Invalid simulation type: " + simType);
+        }
+
         Element simvars = getRequiredElement(document, "simvars");
         simVarsMap = new HashMap<>();
         NamedNodeMap attributes = simvars.getAttributes();
         for (int i = 0; i < attributes.getLength(); i++) {
             Node attr = attributes.item(i);
-            simVarsMap.put(attr.getNodeName(), attr.getNodeValue());
+            String value = attr.getNodeValue();
+            if (attr.getNodeName().equals("probCatch") || attr.getNodeName().equals("probGrow")) {
+                validateProbability(value);
+            }
+            simVarsMap.put(attr.getNodeName(), value);
+        }
+    }
+
+    private boolean isValidSimulationType(String simType) {
+        return List.of("Conway", "Percolation", "Fire", "Segregation", "WatorWorld").contains(simType);
+    }
+
+    private void validateProbability(String value) {
+        try {
+            double prob = Double.parseDouble(value);
+            if (prob < 0 || prob > 1) {
+                throw new IllegalArgumentException("Probability must be between 0 and 1: " + value);
+            }
+        } catch (NumberFormatException e) {
+            throw new IllegalArgumentException("Invalid probability value: " + value);
         }
     }
     

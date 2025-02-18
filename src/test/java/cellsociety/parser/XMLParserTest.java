@@ -12,7 +12,7 @@ class XMLParserTest {
   XMLParser xmlParser;
 
   @BeforeEach
-  void setUp() {
+  void setUp() throws InvalidXMLConfigurationException {
     File file = new File("data/GameOfLife_1.xml");
 //    xmlParser = new XMLParser(file);
   }
