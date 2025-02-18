@@ -7,6 +7,10 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+/**
+ * Author: Daniel Rodriguez-Florido
+ * This class is the Ruleset for the General Conway Game of Life
+ */
 public class GeneralConwayRuleset extends ConwayRuleset {
 
   Set<Integer> birthVals;
@@ -16,19 +20,10 @@ public class GeneralConwayRuleset extends ConwayRuleset {
     birthVals = new HashSet<>();
     survivalVals = new HashSet<>();
     GeneralConwayParser.parseRuleString(rules, birthVals, survivalVals);
-    System.out.println("Birth Vals: ");
-    for (Integer birthVal : birthVals) {
-      System.out.print(birthVal + " ");
-    }
-    System.out.println();
-    System.out.println("Survival Vals: ");
-    for (Integer survivalVal : survivalVals) {
-      System.out.print(survivalVal + " ");
-    }
-    System.out.println();
   }
 
   /**
+   *
    * @param cell
    * @param neighbors
    */

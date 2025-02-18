@@ -1,0 +1,27 @@
+<?xml version="1.0" ?>
+<simulationConfig>
+  <display width="800" height="800" title="General Conway Simulation" author="Danny">
+    <grid rows="16" columns="16"/>
+    <description text="This is an XML file for Diamoeba"/>
+  </display>
+  <sim type="GeneralConway">
+    <simvars rules="34678/3678"/>
+  </sim>
+  <init stateList="D,D,D,D,D,D,D,D,D,D,D,D,D,D,D,D,
+                D,D,D,D,A,D,A,D,D,D,D,D,D,D,D,D,
+                D,D,D,A,D,A,D,A,D,D,D,D,D,D,D,D,
+                D,D,A,D,D,D,D,D,A,D,D,D,D,D,D,D,
+                D,A,D,D,A,D,A,D,D,A,D,D,D,D,D,D,
+                D,D,A,D,D,D,D,D,A,D,D,D,D,D,D,D,
+                D,D,D,A,D,A,D,A,D,D,D,D,D,D,D,D,
+                D,D,D,D,A,D,A,D,D,D,D,D,D,D,D,D,
+                D,D,D,D,D,D,D,D,D,D,D,D,D,D,D,D,
+                D,D,D,D,A,D,A,D,D,D,D,D,D,D,D,D,
+                D,D,D,A,D,A,D,A,D,D,D,D,D,D,D,D,
+                D,D,A,D,D,D,D,D,A,D,D,D,D,D,D,D,
+                D,A,D,D,A,D,A,D,D,A,D,D,D,D,D,D,
+                D,D,A,D,D,D,D,D,A,D,D,D,D,D,D,D,
+                D,D,D,A,D,A,D,A,D,D,D,D,D,D,D,D,
+                D,D,D,D,A,D,A,D,D,D,D,D,D,D,D,D
+                "/>
+</simulationConfig>
