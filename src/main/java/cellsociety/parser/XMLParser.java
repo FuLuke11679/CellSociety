@@ -108,14 +108,22 @@ public class XMLParser extends Parser {
             throw new IllegalArgumentException("Invalid probability value: " + value);
         }
     }
-    
+
     private void parseInitialStates(Document document) throws InvalidXMLConfigurationException {
         Element initElement = getRequiredElement(document, "init");
         String stateList = getRequiredAttribute(initElement, "stateList")
             .replaceAll("\\s+", "");
         initialStates = stateList.split(",");
+
+        for (String state : initialStates) {
+            if (!isInSimulation(state, simType)) {
+                throw new IllegalArgumentException("Invalid cell state: " + state);
+            }
+        }
     }
-    
+
+
+
     private Element getRequiredElement(Node parent, String tagName) {
         NodeList elements = (parent instanceof Document ? 
             ((Document)parent).getElementsByTagName(tagName) :

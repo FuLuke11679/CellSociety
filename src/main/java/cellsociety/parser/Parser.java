@@ -7,24 +7,17 @@ import cellsociety.model.cell.SegregationCell.SegregationState;
 import cellsociety.model.cell.WatorCell.WatorState;
 import cellsociety.model.state.CellState;
 import java.util.Map;
+import java.util.Set;
 
 public abstract class Parser {
-  private final static Map<String, CellState> stateMap = Map.ofEntries(
-      Map.entry("A", ConwayState.ALIVE),
-      Map.entry("D", ConwayState.DEAD),
-      Map.entry("B", FireState.BURNING),
-      Map.entry("T", FireState.TREE),
-      Map.entry("E", FireState.EMPTY),
-      Map.entry("BL", PercolationState.BLOCKED),
-      Map.entry("P", PercolationState.PERCOLATED),
-      Map.entry("O", PercolationState.OPEN),
-      Map.entry("BLU", SegregationState.BLUE),
-      Map.entry("R", SegregationState.RED),
-      Map.entry("EM", SegregationState.EMPTY),
-      Map.entry("S", WatorState.SHARK),
-      Map.entry("F", WatorState.FISH),
-      Map.entry("W", WatorState.WATER)
+  private final static Map<String, Set<String>> simulationStatesMap = Map.of(
+      "Conway", Set.of("A", "D"),
+      "Fire", Set.of("B", "T", "E"),
+      "Percolation", Set.of("BL", "P", "O"),
+      "Segregation", Set.of("BLU", "R", "EM"),
+      "Wator", Set.of("S", "F", "W")
   );
+
   //what info is needed from Parser
   private String simulationType;
   private String author;
@@ -53,5 +46,10 @@ public abstract class Parser {
   public abstract String getSimType();
 
   public abstract Map<String, String> getSimVarsMap();
+
+  public static boolean isInSimulation(String state, String simulation) {
+    return simulationStatesMap.get(simulation).contains(state);
+  }
+
 
 }
