@@ -95,7 +95,7 @@ public class XMLParser extends Parser {
     }
 
     private boolean isValidSimulationType(String simType) {
-        return List.of("Conway", "Percolation", "Fire", "Segregation", "WatorWorld").contains(simType);
+        return List.of("Conway", "Percolation", "Fire", "Segregation", "WatorWorld", "GeneralConway").contains(simType);
     }
 
     private void validateProbability(String value) {
