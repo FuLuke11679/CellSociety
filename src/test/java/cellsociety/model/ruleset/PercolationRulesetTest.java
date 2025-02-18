@@ -10,6 +10,10 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import java.util.List;
 
+/**
+ * Author: Daniel Rodriguez-Florido
+ * Testing file for Percolation Simulation
+ */
 class PercolationRulesetTest {
 
   Cell cell;
@@ -22,7 +26,7 @@ class PercolationRulesetTest {
   }
 
   @Test
-  void updateCellStateForBlockedCell() {
+  void updateCellState_CellIsBlocked_CellStaysBlocked() {
     cell = new PercolationCell(2, PercolationState.BLOCKED, null);
     neighbors = new ArrayList<>(List.of(
         new PercolationCell(0, PercolationState.BLOCKED, null),
@@ -36,7 +40,7 @@ class PercolationRulesetTest {
   }
 
   @Test
-  void updateCellStateForPercolatedCell() {
+  void updateCellState_CellIsPercolated_CellStaysPercolated() {
     cell = new PercolationCell(2, PercolationState.PERCOLATED, null);
     neighbors = new ArrayList<>(List.of(
         new PercolationCell(0, PercolationState.OPEN, null),
@@ -50,7 +54,7 @@ class PercolationRulesetTest {
   }
 
   @Test
-  void updateCellStateForOpenCellWithoutPercolatedNeighbors() {
+  void updateCellState_OpenCellPercolationWithoutPercolatedNeighbors_OpenCellDoesNotGetPercolated() {
     cell = new PercolationCell(2, PercolationState.OPEN, null);
     neighbors = new ArrayList<>(List.of(
         new PercolationCell(0, PercolationState.OPEN, null),
@@ -64,7 +68,7 @@ class PercolationRulesetTest {
   }
 
   @Test
-  void updateCellStateForOpenCellWithPercolatedNeighbor() {
+  void updateCellState_OpenCellPercolationWithPercolatedNeighbors_OpenCellBecomesPercolated() {
     cell = new PercolationCell(2, PercolationState.OPEN, null);
     neighbors = new ArrayList<>(List.of(
         new PercolationCell(0, PercolationState.PERCOLATED, null),

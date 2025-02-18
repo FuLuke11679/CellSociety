@@ -10,6 +10,10 @@ import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+/**
+ * Author: Daniel Rodriguez-Florido
+ * Testing file for Forest Fire Simulation
+ */
 class FireRulesetTest {
 
   private Cell emptyCell;
@@ -29,7 +33,7 @@ class FireRulesetTest {
   }
 
   @Test
-  void updateCellStateEmptyCellMinProb() {
+  void updateCellState_EmptyCellFireCatching_EmptyCellDoesNotCatchFire() {
     neighbors = new ArrayList<>(List.of(
         new FireCell(0, FireState.TREE, FireState.TREE),
         new FireCell(1, FireState.TREE, FireState.TREE),
@@ -41,7 +45,7 @@ class FireRulesetTest {
   }
 
   @Test
-  void updateCellStateEmptyCellMaxProb() {
+  void updateCellState_EmptyCellFireCatching_EmptyCellCatchesFire() {
     neighbors = new ArrayList<>(List.of(
         new FireCell(0, FireState.TREE, FireState.TREE),
         new FireCell(1, FireState.TREE, FireState.TREE),
@@ -53,7 +57,7 @@ class FireRulesetTest {
   }
 
   @Test
-  void updateCellStateTreeCellWithoutBurningNeighborMinProb() {
+  void updateCellState_TreeCellFireCatching_TreeCellDoesNotCatchFire() {
     neighbors = new ArrayList<>(List.of(
         new FireCell(0, FireState.TREE, FireState.TREE),
         new FireCell(1, FireState.TREE, FireState.TREE),
@@ -65,7 +69,7 @@ class FireRulesetTest {
   }
 
   @Test
-  void updateCellStateTreeCellWithoutBurningNeighborMaxProb() {
+  void updateCellState_TreeCellFireCatching_TreeCellCatchesFire() {
     neighbors = new ArrayList<>(List.of(
         new FireCell(0, FireState.TREE, FireState.TREE),
         new FireCell(1, FireState.TREE, FireState.TREE),
@@ -77,7 +81,7 @@ class FireRulesetTest {
   }
 
   @Test
-  void updateCellStateTreeCellWithBurningNeighbor() {
+  void updateCellState_TreeCellFireCatchingWithBurningNeighbor_TreeCatchesFire() {
     neighbors = new ArrayList<>(List.of(
         new FireCell(0, FireState.BURNING, FireState.BURNING),
         new FireCell(1, FireState.TREE, FireState.TREE),
@@ -88,7 +92,7 @@ class FireRulesetTest {
   }
 
   @Test
-  void updateCellStateBurningCell() {
+  void updateCell_BurningCell_BurningCellBecomesEmpty() {
     rulesetMaxProb.updateCellState(burningCell, neighbors);
     assertEquals(FireState.EMPTY, burningCell.getNextState());
   }
