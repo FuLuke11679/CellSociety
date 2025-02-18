@@ -56,6 +56,10 @@ public class Main extends Application {
 
     private void loadSimulation(File dataFile) {
         try {
+            if (dataFile == null || dataFile.length() == 0) {
+                throw new IllegalArgumentException("File is empty or invalid.");
+            }
+
             currentFile = dataFile;
             myParser = new XMLParser(dataFile);
             Ruleset ruleset = getRuleset();
