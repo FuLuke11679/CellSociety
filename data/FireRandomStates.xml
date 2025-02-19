@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<simulationConfig>
+  <!-- window and grid configuration -->
+  <display width="800" height="800" title="Fire Simulation" author="Palo">
+    <grid rows="6" columns="6" />
+    <description text="Fire simulation with random cell proportions"/>
+  </display>
+
+  <!-- sim configuration -->
+  <sim type="Fire">
+    <simvars
+      probCatch = "0.003"
+      probGrow = "0.03"
+    />
+  </sim>
+  <init
+    randomStates = "true"
+    proportions =
+      "T:0.5,
+       B:0.1"
+  >
+  </init>
+
+</simulationConfig>
