@@ -71,19 +71,50 @@ public class XMLParser extends Parser {
     }
     
     private void parseDisplay(Document document) throws InvalidXMLConfigurationException {
-        Element display = getRequiredElement(document, "display");
-        
-        this.width = getRequiredIntAttribute(display, "width");
-        this.height = getRequiredIntAttribute(display, "height");
-        this.title = getRequiredAttribute(display, "title");
-        this.author = getRequiredAttribute(display, "author");
-        
-        Element grid = getRequiredElement(display, "grid");
-        this.rows = getRequiredIntAttribute(grid, "rows");
-        this.columns = getRequiredIntAttribute(grid, "columns");
-        
-        Element descElement = getRequiredElement(display, "description");
-        this.description = getRequiredAttribute(descElement, "text");
+        try {
+            // CELL-27: Input Missing Parameters
+            Element display = getRequiredElement(document, "display");
+            
+            this.width = getRequiredIntAttribute(display, "width");
+            if (this.width <= 0) {
+                throw new InvalidXMLConfigurationException("Width must be a positive integer");
+            }
+            
+            this.height = getRequiredIntAttribute(display, "height");
+            if (this.height <= 0) {
+                throw new InvalidXMLConfigurationException("Height must be a positive integer");
+            }
+            
+            this.title = getRequiredAttribute(display, "title");
+            if (this.title.trim().isEmpty()) {
+                throw new InvalidXMLConfigurationException("Title cannot be empty");
+            }
+            
+            this.author = getRequiredAttribute(display, "author");
+            if (this.author.trim().isEmpty()) {
+                throw new InvalidXMLConfigurationException("Author cannot be empty");
+            }
+            
+            Element grid = getRequiredElement(display, "grid");
+            this.rows = getRequiredIntAttribute(grid, "rows");
+            if (this.rows <= 0) {
+                throw new InvalidXMLConfigurationException("Rows must be a positive integer");
+            }
+            
+            this.columns = getRequiredIntAttribute(grid, "columns");
+            if (this.columns <= 0) {
+                throw new InvalidXMLConfigurationException("Columns must be a positive integer");
+            }
+            
+            Element descElement = getRequiredElement(display, "description");
+            this.description = getRequiredAttribute(descElement, "text");
+            if (this.description.trim().isEmpty()) {
+                throw new InvalidXMLConfigurationException("Description cannot be empty");
+            }
+            
+        } catch (NullPointerException e) {
+            throw new InvalidXMLConfigurationException("Missing required display elements");
+        }
     }
 
     private void parseSimulation(Document document) throws InvalidXMLConfigurationException {
