@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<data>
+  <display width="800" height="600">
+    <!-- Missing title and author -->
+    <grid rows="10" columns="10"/>
+    <description text="Test simulation"/>
+  </display>
+  <sim type="Conway"/>
+  <simvars/>
+  <init stateList="D,D,D,D,D,D,D,D,D,D,
+                  D,D,D,D,D,D,D,D,D,D,
+                  D,D,D,D,D,D,D,D,D,D,
+                  D,D,D,A,A,A,D,D,D,D,
+                  D,D,D,D,D,D,D,D,D,D,
+                  D,D,D,D,D,D,D,D,D,D,
+                  D,D,D,D,D,D,D,D,D,D,
+                  D,D,D,D,D,D,D,D,D,D,
+                  D,D,D,D,D,D,D,D,D,D,
+                  D,D,D,D,D,D,D,D,D,D"/>
+</data>

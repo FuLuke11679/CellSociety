@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<data>
+  <display width="800" height="600" title="Conway Simulation" author="Test Author">
+    <grid rows="10" columns="10"/>
+    <description text="Test simulation with incorrect number of states"/>
+  </display>
+  <sim type="Conway"/>
+  <simvars/>
+  <init stateList="D,D,D,D,D,D,D,D,D,D,
+                  D,D,D,D,D,D,D,D,D,D,
+                  D,D,D,D,D,D,D,D,D,D"/>
+  <!-- Only 30 states provided for a 10x10 grid (should be 100) -->
+</data>
