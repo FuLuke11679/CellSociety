@@ -8,7 +8,9 @@ import cellsociety.model.cell.ConwayCell.ConwayState;
 import cellsociety.model.cell.FireCell.FireState;
 import cellsociety.model.cell.PercolationCell.PercolationState;
 import cellsociety.model.state.CellState;
+import java.util.Locale;
 import java.util.Map;
+import java.util.ResourceBundle;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.layout.Background;
@@ -33,6 +35,7 @@ public class GridView {
   private VBox infoBox;
   Rectangle[][] cellRectangles;  // Store references for easy updates
   private Grid grid;
+  private Locale myLocale;
 
   public enum ColorScheme{
     LIGHT,
@@ -70,13 +73,14 @@ public class GridView {
   /**
    * Constructor for GridView.
    */
-  public GridView(int rows, int columns, String simType, String title, String author, String description, Grid grid, ColorScheme scheme) {
+  public GridView(int rows, int columns, String simType, String title, String author, String description, Grid grid, ColorScheme scheme, Locale myLocale) {
     this.rows = rows;
     this.columns = columns;
     this.cellSize = SIZE_GRID / rows;
     this.gridPane = new GridPane();
     this.cellRectangles = new Rectangle[rows][columns];
     this.grid = grid;
+    this.myLocale = myLocale;
 
     initializeGrid();
     setupSimulationInfo(simType, title, author, description);
@@ -123,12 +127,13 @@ public class GridView {
    * Displays simulation metadata at the top.
    */
   private void setupSimulationInfo(String simType, String simName, String author, String description) {
+    ResourceBundle simInfo = ResourceBundle.getBundle("SimInfo", myLocale);
     infoBox = new VBox();
     infoBox.getChildren().addAll(
-        new Text("Simulation: " + simName),
-        new Text("Type: " + simType),
-        new Text("Author: " + author),
-        new Text("Description: " + description)
+        new Text(simInfo.getString("simulation") + simName),
+        new Text(simInfo.getString("sim_type") + simType),
+        new Text(simInfo.getString("author") + author),
+        new Text(simInfo.getString("description") + description)
     );
   }
 

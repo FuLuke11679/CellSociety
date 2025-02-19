@@ -55,10 +55,10 @@ public class Main extends Application {
     }
 
     private void loadSimulation(File dataFile) {
-        ResourceBundle simInfo = ResourceBundle.getBundle("SimInfo", myLocale);
+        ResourceBundle simInfo = getResourceBundle("SimInfo");
         try {
             if (dataFile == null || dataFile.length() == 0) {
-                throw new IllegalArgumentException("File is empty or invalid.");
+                throw new IllegalArgumentException(simInfo.getString("invalid_file"));
             }
 
             currentFile = dataFile;
@@ -73,9 +73,10 @@ public class Main extends Application {
                 myParser.getAuthor(),
                 myParser.getDescription(),
                 myGrid,
-                myScheme);
+                myScheme,
+                myLocale);
 
-            BorderPane layout = initializeLayout();
+            BorderPane layout = initializeLayout(simInfo);
             setStage(new Scene(layout, 600, 800));
         } catch (IllegalArgumentException e) {
             showMessage(simInfo.getString("invalid_config") + e.getMessage());
@@ -120,7 +121,7 @@ public class Main extends Application {
     private void loadSplashScreen() {
         BorderPane splash = new BorderPane();
         splashScene = new Scene(splash, 600, 800);
-        ResourceBundle simInfo = ResourceBundle.getBundle("SimInfo", myLocale);
+        ResourceBundle simInfo = getResourceBundle("SimInfo");
         splash = loadSplashText(splash, simInfo);  //returns BorderPane
         Button loadButton = new Button(simInfo.getString("splash_load_sim"));
         loadButton.setOnAction(e -> {
@@ -152,6 +153,7 @@ public class Main extends Application {
         MenuItem language1 = new MenuItem(simInfo.getString("splash_language_1"));
         MenuItem language2 = new MenuItem(simInfo.getString("splash_language_2"));
         MenuItem language3 = new MenuItem(simInfo.getString("splash_language_3"));
+        MenuItem language4 = new MenuItem(simInfo.getString("splash_language_4"));
         language1.setOnAction(e -> {
             if(myLocale != Locale.ENGLISH) {
                 myLocale = Locale.ENGLISH;
@@ -170,26 +172,32 @@ public class Main extends Application {
                 loadSplashScreen();
             }
         });
-        languageSelect.getItems().addAll(language1, language2, language3);
+        language4.setOnAction(e ->{
+            if(myLocale != Locale.ITALIAN){
+                myLocale = Locale.ITALIAN;
+                loadSplashScreen();
+            }
+        });
+        languageSelect.getItems().addAll(language1, language2, language3, language4);
         MenuButton colorScheme = new MenuButton(simInfo.getString("splash_color_button"));
         MenuItem colorScheme1 = new MenuItem(simInfo.getString("splash_color_scheme_1"));
         MenuItem colorScheme2 = new MenuItem(simInfo.getString("splash_color_scheme_2"));
         MenuItem colorScheme3 = new MenuItem(simInfo.getString("splash_color_scheme_3"));
         MenuItem colorScheme4 = new MenuItem(simInfo.getString("splash_color_scheme_4"));
         colorScheme1.setOnAction(e -> {
-            setSplashTheme(splashScene, ColorScheme.DARK); //enum just for switch statememt
+            setSplashTheme(splashScene, ColorScheme.DARK, simInfo); //enum just for switch statememt
             myScheme = ColorScheme.DARK; //this should be eliminated
         });
         colorScheme2.setOnAction(e -> {
-            setSplashTheme(splashScene, ColorScheme.LIGHT);
+            setSplashTheme(splashScene, ColorScheme.LIGHT, simInfo);
             myScheme = ColorScheme.LIGHT;
         });
         colorScheme3.setOnAction(e -> {
-            setSplashTheme(splashScene, ColorScheme.DUKE);
+            setSplashTheme(splashScene, ColorScheme.DUKE, simInfo);
             myScheme = ColorScheme.DUKE;
         });
         colorScheme4.setOnAction(e -> {
-            setSplashTheme(splashScene, ColorScheme.UNC);
+            setSplashTheme(splashScene, ColorScheme.UNC, simInfo);
             myScheme = ColorScheme.UNC;
         });
         colorScheme.getItems().addAll(colorScheme1, colorScheme2, colorScheme3, colorScheme4);
@@ -198,7 +206,7 @@ public class Main extends Application {
         return controlButtons;
     }
 
-    private void setSplashTheme(Scene splashScene, ColorScheme scheme){
+    private void setSplashTheme(Scene splashScene, ColorScheme scheme, ResourceBundle simInfo){
         URL resourcePath = null;
         switch(scheme){
             case DARK:
@@ -216,7 +224,7 @@ public class Main extends Application {
         }
 
         if (resourcePath == null) {
-            System.err.println("Error: Invalid Splash Theme");
+            System.err.println(simInfo.getString("invalid_theme"));
         }
         splashScene.getStylesheets().add(resourcePath.toExternalForm());
         setStage(splashScene);
@@ -224,19 +232,19 @@ public class Main extends Application {
 
 
 
-    private BorderPane initializeLayout() {
+    private BorderPane initializeLayout(ResourceBundle simInfo) {
         BorderPane layout = new BorderPane();
         layout.setCenter(myGridView.getScene().getRoot());
 
-        Button startButton = new Button("Start");
-        Button pauseButton = new Button("Pause");
-        Button saveButton = new Button("Save");
-        Button resetButton = new Button("Reset");
-        Button loadButton = new Button("Load New File");
+        Button startButton = new Button(simInfo.getString("start"));
+        Button pauseButton = new Button(simInfo.getString("pause"));
+        Button saveButton = new Button(simInfo.getString("save"));
+        Button resetButton = new Button(simInfo.getString("reset"));
+        Button loadButton = new Button(simInfo.getString("load_file"));
 
         startButton.setOnAction(e -> startSimulation());
         pauseButton.setOnAction(e -> simLoop.stop());
-        saveButton.setOnAction(e -> saveSimulation());
+        saveButton.setOnAction(e -> saveSimulation(simInfo));
         resetButton.setOnAction(e -> resetSimulation());
         loadButton.setOnAction(e -> {
             File newFile = FILE_CHOOSER.showOpenDialog(globalStage);
@@ -259,13 +267,11 @@ public class Main extends Application {
         return layout;
     }
 
-    private void saveSimulation() {
-        TextInputDialog dialog = new TextInputDialog("Simulation");
-        dialog.setHeaderText("Enter simulation metadata (Title, Author, Description)");
-        dialog.setContentText("Metadata:");
+    private void saveSimulation(ResourceBundle simInfo) {
+        TextInputDialog dialog = new TextInputDialog(simInfo.getString("sim"));
+        dialog.setHeaderText(simInfo.getString("prompt"));
+        dialog.setContentText(simInfo.getString("metadata"));
         dialog.showAndWait();
-
-        ResourceBundle simInfo = ResourceBundle.getBundle("SimInfo", myLocale);
 
         File saveFile = FILE_CHOOSER.showSaveDialog(globalStage);
         if (saveFile != null) {
@@ -310,6 +316,10 @@ public class Main extends Application {
         alert.setHeaderText(null);
         alert.setContentText(message);
         alert.showAndWait();
+    }
+
+    public ResourceBundle getResourceBundle(String name){
+        return ResourceBundle.getBundle(name, myLocale);
     }
 
 
