@@ -12,7 +12,7 @@ public class SugarscapeCell extends Cell {
   private int sugar;
   private int sugarMetabolism;
   private int vision;
-  private SugarscapePatchCell currentPatch; // Reference to the patch the agent is currently on
+  private SugarscapePatch currentPatch; // Reference to the patch the agent is currently on
 
   public SugarscapeCell(int id, CellState currState, CellState nextState, int sugar, int sugarMetabolism, int vision) {
     super(id, currState, nextState);
@@ -38,11 +38,11 @@ public class SugarscapeCell extends Cell {
     return vision;
   }
 
-  public SugarscapePatchCell getCurrentPatch() {
+  public SugarscapePatch getCurrentPatch() {
     return currentPatch;
   }
 
-  public void setCurrentPatch(SugarscapePatchCell patch) {
+  public void setCurrentPatch(SugarscapePatch patch) {
     this.currentPatch = patch;
   }
 
@@ -54,7 +54,7 @@ public class SugarscapeCell extends Cell {
     }
   }
 
-  public void moveToPatch(SugarscapePatchCell destination) {
+  public void moveToPatch(SugarscapePatch destination) {
     if (currentPatch != null) {
       currentPatch.setSugar(currentPatch.getSugar() + 0); // Optionally, leave some sugar behind
     }
