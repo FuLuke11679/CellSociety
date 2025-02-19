@@ -58,15 +58,19 @@ public class XMLParser extends Parser {
     }
 
     private void parseDocument(Document document) throws InvalidXMLConfigurationException {
+        try {
+            parseDisplay(document);
+            parseSimulation(document);
 
-        parseDisplay(document);
-        parseSimulation(document);
-
-        // Check for random configuration
-        if (document.getElementsByTagName("random").getLength() > 0) {
-            parseRandomStates(document);
-        } else {
-            parseInitialStates(document);
+            // Check for random configuration
+            if (document.getElementsByTagName("random").getLength() > 0) {
+                parseRandomStates(document);
+            } else {
+                parseInitialStates(document);
+            }
+        } catch (IllegalArgumentException e) {
+            // Convert IllegalArgumentException to InvalidXMLConfigurationException
+            throw new InvalidXMLConfigurationException(e.getMessage());
         }
     }
     
