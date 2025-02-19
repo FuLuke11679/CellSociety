@@ -50,6 +50,9 @@ public abstract class Parser {
   public static boolean isInSimulation(String state, String simulation) {
     return simulationStatesMap.get(simulation).contains(state);
   }
+  public static boolean validateSimulation(String state) {
+    return simulationStatesMap.containsKey(state);
+  }
 
 
 }
