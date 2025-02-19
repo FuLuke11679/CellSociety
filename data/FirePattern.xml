@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<simulationConfig>
+    <!-- window and grid configuration -->
+    <display width="800" height="800" title="Fire Spread Simulation" author="Palo">
+        <grid rows="6" columns="6" />
+        <description text="Forest fire spread simulation with partial configuration"/>
+    </display>
+
+    <!-- sim configuration -->
+    <sim type="FireSpread">
+        <simvars
+            ignitionThreshold="0.4"
+            windDirection="NORTH"
+            windStrength="0.3"
+            burnRate="0.8"
+        />
+    </sim>
+    
+    <!-- Main grid initialization with empty terrain -->
+    <init
+        stateList =
+            "E,E,E,E,E,E,
+            E,E,E,E,E,E,
+            E,E,E,E,E,E,
+            E,E,E,E,E,E,
+            E,E,E,E,E,E,
+            E,E,E,E,E,E"
+    />
+
+    <!-- Partial configurations that can be overlaid -->
+    <pattern id="forest_patch" startRow="1" startCol="1">
+        stateList =
+            "T,T,T,
+            T,T,T,
+            T,T,T"
+    </pattern>
+
+    <pattern id="fire_start" startRow="4" startCol="2">
+        stateList =
+            "F,F,
+            F,F"
+    </pattern>
+
+    <pattern id="firebreak" startRow="2" startCol="4">
+        stateList =
+            "B,
+            B,
+            B"
+    </pattern>
+</simulationConfig>
