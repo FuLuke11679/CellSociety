@@ -31,6 +31,9 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import java.io.File;
 
+/**
+ * Main class to drive simulations. Extends the Application class of javafx,
+ */
 public class Main extends Application {
     private static final String DATA_FILE_EXTENSION = "*.xml";
     private static final FileChooser FILE_CHOOSER = new FileChooser();
@@ -54,6 +57,10 @@ public class Main extends Application {
 
     }
 
+    /**
+     * Function to load a new simulation
+     * @param dataFile : XML File chosen by user from their local machine
+     */
     private void loadSimulation(File dataFile) {
         ResourceBundle simInfo = getResourceBundle("SimInfo");
         try {
@@ -84,6 +91,11 @@ public class Main extends Application {
             showMessage(simInfo.getString("load_error") + e.getMessage());
         }
     }
+
+    /**
+     * Creates new instance of a ruleset for corresponding simulation
+     * @return Ruleset for loaded simulation
+     */
 
     private Ruleset getRuleset() {
         return switch (myParser.getSimType()) {
@@ -118,6 +130,10 @@ public class Main extends Application {
         simLoop.play();
     }
 
+    /**
+     * Loads opening screen, providing user with customization choices
+     */
+
     private void loadSplashScreen() {
         BorderPane splash = new BorderPane();
         splashScene = new Scene(splash, 600, 800);
@@ -139,6 +155,12 @@ public class Main extends Application {
         setStage(splashScene);
     }
 
+    /**
+     * Generates text on opening screen
+     * @param splash : BorderPane object we are building for splash screen
+     * @param simInfo : resource bundle containing hardcoded simulation text
+     * @return: BorderPane with organized text nodes
+     */
     private BorderPane loadSplashText(BorderPane splash, ResourceBundle simInfo) {
         Text welcome = new Text(simInfo.getString("splash_welcome"));
         TextFlow textFlow = new TextFlow(welcome);
@@ -146,6 +168,12 @@ public class Main extends Application {
         splash.setCenter(textFlow);
         return splash;
     }
+
+    /**
+     * Generates control customization buttons for openining screen
+     * @param simInfo: resource bundle containing hardcoded simulation text
+     * @return List of Buttons
+     */
 
     private List<MenuButton> loadControlButtons(ResourceBundle simInfo) {
         List<MenuButton> controlButtons = new ArrayList<>();
@@ -206,6 +234,12 @@ public class Main extends Application {
         return controlButtons;
     }
 
+    /**
+     * Sets theme of simulation
+     * @param splashScene : current scene we are modifying
+     * @param scheme : color scheme
+     * @param simInfo: resource bundle containing hardcoded simulation text
+     */
     private void setSplashTheme(Scene splashScene, ColorScheme scheme, ResourceBundle simInfo){
         URL resourcePath = null;
         switch(scheme){
@@ -230,7 +264,11 @@ public class Main extends Application {
         setStage(splashScene);
     }
 
-
+    /**
+     * Initializes simulation layout after splash screen
+     * @param simInfo: resource bundle containing hardcoded simulation text
+     * @return : Organized BorderPane holding nodes for simulation
+     */
 
     private BorderPane initializeLayout(ResourceBundle simInfo) {
         BorderPane layout = new BorderPane();
@@ -266,6 +304,11 @@ public class Main extends Application {
         layout.setBottom(controls);
         return layout;
     }
+
+    /**
+     * Saves simulation to an xml file
+     * @param simInfo resource bundle containing hardcoded simulation text
+     */
 
     private void saveSimulation(ResourceBundle simInfo) {
         TextInputDialog dialog = new TextInputDialog(simInfo.getString("sim"));
