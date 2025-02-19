@@ -61,4 +61,6 @@ class XMLParserTest {
     Map<String, String> expected = new HashMap<>();
     assertEquals(expected, xmlParser.getSimVarsMap());
   }
+
+  
 }

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<data>
+  <display width="800" height="600" title="Conway Simulation" author="Test Author">
+    <grid rows="10" columns="10"/>
+    <description text="Test simulation with invalid cell state"/>
+  </display>
+  <sim type="Conway"/>
+  <simvars/>
+  <init stateList="D,D,D,D,D,D,D,D,D,D,
+                  D,D,D,D,D,D,D,D,D,D,
+                  D,D,D,D,D,D,D,D,D,D,
+                  D,D,D,X,A,A,D,D,D,D,
+                  D,D,D,D,D,D,D,D,D,D,
+                  D,D,D,D,D,D,D,D,D,D,
+                  D,D,D,D,D,D,D,D,D,D,
+                  D,D,D,D,D,D,D,D,D,D,
+                  D,D,D,D,D,D,D,D,D,D,
+                  D,D,D,D,D,D,D,D,D,D"/>
+  <!-- X is an invalid state for Conway -->
+</data>
