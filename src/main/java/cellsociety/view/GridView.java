@@ -121,8 +121,6 @@ public class GridView {
   }
 
 
-
-
   /**
    * Displays simulation metadata at the top.
    */
