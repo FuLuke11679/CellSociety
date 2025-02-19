@@ -2,67 +2,70 @@ package cellsociety.model.cell;
 
 import cellsociety.model.state.CellState;
 
-public class SugarscapeCell extends Cell {
-
-  public enum SugarscapeState implements CellState {
-    EMPTY,
-    OCCUPIED
-  }
-
-  private int sugar;
-  private int sugarMetabolism;
+/**
+ * Represents an agent that moves on top of a sugar patch.
+ * This class extends SugarscapePatch so that the underlying sugar
+ * information is preserved even when an agent is present.
+ */
+public class SugarscapeAgent{
+  private int agentSugar;
   private int vision;
-  private SugarscapePatch currentPatch; // Reference to the patch the agent is currently on
+  private int metabolism;
 
-  public SugarscapeCell(int id, CellState currState, CellState nextState, int sugar, int sugarMetabolism, int vision) {
-    super(id, currState, nextState);
-    this.sugar = sugar;
-    this.sugarMetabolism = sugarMetabolism;
+  /**
+   * Constructs a SugarscapeAgent with the given parameters.
+   *
+   * @param agentSugar  The agent's initial sugar level.
+   * @param vision      How far the agent can see (in grid cells).
+   * @param metabolism  The amount of sugar the agent uses per tick.
+   */
+  public SugarscapeAgent(int agentSugar, int vision, int metabolism) {
+    // Initialize the patch portion.
+    this.agentSugar = agentSugar;
     this.vision = vision;
-    this.currentPatch = null; // Initially, the agent is not on any patch
+    this.metabolism = metabolism;
   }
 
-  public int getSugar() {
-    return sugar;
+  /**
+   * Returns the current sugar stored by the agent.
+   */
+  public int getAgentSugar() {
+    return agentSugar;
   }
 
-  public void setSugar(int sugar) {
-    this.sugar = sugar;
-  }
-
-  public int getSugarMetabolism() {
-    return sugarMetabolism;
-  }
-
+  /**
+   * Returns the agent's vision range.
+   */
   public int getVision() {
     return vision;
   }
 
-  public SugarscapePatch getCurrentPatch() {
-    return currentPatch;
+  /**
+   * Returns the agent's metabolism rate.
+   */
+  public int getMetabolism() {
+    return metabolism;
   }
 
-  public void setCurrentPatch(SugarscapePatch patch) {
-    this.currentPatch = patch;
+  /**
+   * Increases the agent's sugar by the specified amount.
+   *
+   * @param amount The sugar collected from the patch.
+   */
+  public void collectSugar(int amount) {
+    agentSugar += amount;
   }
 
+  /**
+   * Consumes sugar equal to the metabolism rate.
+   * If the agent's sugar falls to zero or below, it is considered dead.
+   */
   public void consumeSugar() {
-    if (currentPatch != null && currentPatch.getSugar() > 0) {
-      int sugarConsumed = Math.min(currentPatch.getSugar(), 1); // Example: consume 1 unit of sugar
-      currentPatch.setSugar(currentPatch.getSugar() - sugarConsumed);
-      this.sugar += sugarConsumed;
+    agentSugar -= metabolism;
+    if (agentSugar <= 0) {
+      // Here you could mark the agent as dead.
+      // For instance, you might convert this cell back to a plain patch.
+      agentSugar = 0;
     }
-  }
-
-  public void moveToPatch(SugarscapePatch destination) {
-    if (currentPatch != null) {
-      currentPatch.setSugar(currentPatch.getSugar() + 0); // Optionally, leave some sugar behind
-    }
-    this.currentPatch = destination;
-    this.consumeSugar(); // Consume sugar from the new patch
-  }
-
-  public boolean isAlive() {
-    return this.sugar > 0;
   }
 }

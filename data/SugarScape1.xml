@@ -1,22 +1,21 @@
-<?xml version="1.0" encoding="UTF-8" ?>
-<simulationConfig>
-  <!-- window and grid configuration -->
-  <display width="800" height="800" title="Sugarscape Simulation" author="Luke">
-    <grid rows="5" columns="5" />
-    <description text="This is the Sugarscape simulation"/>
+<?xml version="1.0" encoding="UTF-8"?>
+<simulation>
+  <display width="600" height="600" title="Test Sugarscape Simulation" author="John Doe">
+    <grid rows="5" columns="5"/>
+    <description text="This is a test simulation for Sugarscape with variable initial sugar values."/>
   </display>
-
-  <!-- sim configuration -->
-  <sim type="Sugarscape">
-    <simvars />
-  </sim>
-  <init
-    stateList =
-      "LOW_SUGAR,EMPTY,MEDIUM_SUGAR,HIGH_SUGAR,OCCUPIED,
-       LOW_SUGAR,MEDIUM_SUGAR,HIGH_SUGAR,OCCUPIED,EMPTY,
-       MEDIUM_SUGAR,HIGH_SUGAR,OCCUPIED,EMPTY,LOW_SUGAR,
-       HIGH_SUGAR,OCCUPIED,EMPTY,LOW_SUGAR,MEDIUM_SUGAR,
-       OCCUPIED,EMPTY,LOW_SUGAR,MEDIUM_SUGAR,HIGH_SUGAR"
-  >
-  </init>
-</simulationConfig>
+  <sim type="Sugarscape"/>
+  <simvars sugarGrowBackRate="1" sugarGrowBackInterval="3"/>
+  <!--
+    The init element uses the stateList attribute to set the initial state for each cell.
+    Use "P:<value>" for a patch with a specified sugar value and "A:<value>" for a cell that starts with an agent.
+    In this example, there are 25 comma-separated tokens for a 5x5 grid.
+  -->
+  <init stateList="
+    P:15,P:20,A:10,P:5,P:25,
+    P:15,A:12,P:8,P:18,P:22,
+    P:10,P:15,P:17,P:25,A:12,
+    P:8,P:18,P:22,P:10,P:20,
+    A:10,P:15,P:17,P:25,P:5
+  "/>
+</simulation>

@@ -25,6 +25,7 @@ public class XMLParser extends Parser {
     private String author;
     private String[] initialStates;
     private Map<String, String> simVarsMap;
+    private int[] Values;
 
 
     // TODO: modify this so that it has methods to return relevant info in the xml file
@@ -127,18 +128,29 @@ public class XMLParser extends Parser {
         Element initElement = getRequiredElement(document, "init");
         String stateList = getRequiredAttribute(initElement, "stateList")
             .replaceAll("\\s+", "");
-        initialStates = stateList.split(",");
+        String[] tokens = stateList.split(",");
+        initialStates = new String[tokens.length];
+        // Optionally, create an accompanying array for sugar values.
+        Values = new int[tokens.length];
 
-        if (initialStates.length != rows * columns) {
-            throw new IllegalArgumentException("Number of cell states does not match grid size.");
-        }
-
-        for (String state : initialStates) {
-            if (!isInSimulation(state, simType)) {
-                throw new IllegalArgumentException("Invalid cell state: " + state);
+        for (int i = 0; i < tokens.length; i++) {
+            String token = tokens[i].trim();
+            if (token.contains(":")) {
+                String[] parts = token.split(":");
+                initialStates[i] = parts[0]; // e.g., "P" or "A"
+                Values[i] = Integer.parseInt(parts[1]);
+            } else {
+                initialStates[i] = token;
+                // Use a default sugar value if not provided.
+                Values[i] = 25;
             }
         }
+        // Ensure sugarValues length matches grid size
+        if (Values.length != rows * columns) {
+            throw new IllegalArgumentException("Number of sugar values does not match grid size.");
+        }
     }
+
 
     private void parseRandomStates(Document document) throws InvalidXMLConfigurationException {
         NodeList randomNodes = document.getElementsByTagName("random");
@@ -202,6 +214,7 @@ public class XMLParser extends Parser {
             case "Segregation" -> "EM"; // EMPTY
             case "Wator" -> "W"; // WATER
             case "GeneralConway" -> "D";
+            case "SugarScape" -> "Patch";
             default -> throw new IllegalArgumentException("Unknown simulation type: " + simType);
         };
     }
@@ -278,5 +291,9 @@ public class XMLParser extends Parser {
 
     public Map<String, String> getSimVarsMap() { 
       return simVarsMap; 
+    }
+
+    public int[] getValues() {
+        return Values;
     }
 }

@@ -64,6 +64,9 @@ public class Main extends Application {
             myParser = new XMLParser(dataFile);
             Ruleset ruleset = getRuleset();
             myGrid = ruleset.createGrid(myParser.getRows(), myParser.getColumns(), myParser.getInitialStates());
+            if(myParser.getValues() != null) {
+                ruleset.setValues(myParser.getValues());
+            }
             myGridView = new GridView(
                 myParser.getRows(),
                 myParser.getColumns(),
@@ -89,13 +92,18 @@ public class Main extends Application {
             case "Percolation" -> new PercolationRuleset();
             case "Fire" -> new FireRuleset(getDoubleFromParser("probCatch"), getDoubleFromParser("probGrow"));
             case "Segregation" -> new SegregationRuleset(getDoubleFromParser("thresh"));
-            case "WatorWorld" -> new WatorRuleset(getIntFromParser("fishBreedTime"),
+            case "WatorWorld" -> new WatorRuleset(
+                getIntFromParser("fishBreedTime"),
                 getIntFromParser("fishStarveTime"),
                 getIntFromParser("sharkBreedTime"),
-                getIntFromParser("sharkStarveTime"));
+                getIntFromParser("sharkStarveTime")
+            );
             case "GeneralConway" -> new GeneralConwayRuleset(myParser.getSimVarsMap().get("rules"));
-            case "Sugarscape" -> new SugarscapeRuleset();
-            default -> throw new IllegalStateException("Unknown simulation type");
+            case "Sugarscape" -> new SugarscapeRuleset(
+                getIntFromParser("sugarGrowBackRate"),
+                getIntFromParser("sugarGrowBackInterval")
+            );
+            default -> throw new IllegalStateException("Unknown simulation type: " + myParser.getSimType());
         };
     }
 
@@ -299,14 +307,6 @@ public class Main extends Application {
 
     private void showMessage(String message) {
         new Alert(Alert.AlertType.INFORMATION, message).showAndWait();
-    }
-
-    private void showErrorDialog(String title, String message) {
-        Alert alert = new Alert(Alert.AlertType.ERROR);
-        alert.setTitle(title);
-        alert.setHeaderText(null);
-        alert.setContentText(message);
-        alert.showAndWait();
     }
 
 

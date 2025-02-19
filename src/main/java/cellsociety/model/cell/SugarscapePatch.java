@@ -2,47 +2,71 @@ package cellsociety.model.cell;
 
 import cellsociety.model.state.CellState;
 
-public class SugarscapePatchCell extends Cell {
+/**
+ * Represents a sugar patch in the Sugarscape.
+ * Holds the current sugar level, maximum sugar capacity,
+ * and its grid position.
+ */
+public class SugarscapePatch extends Cell {
+  private int sugarAmount;
+  private int maxSugar;
+  private SugarscapeAgent agent;
 
-  public enum SugarscapePatchState implements CellState {
-    EMPTY,
-    LOW_SUGAR,
-    MEDIUM_SUGAR,
-    HIGH_SUGAR
-  }
-
-  private int sugar;
-  private int maxCapacity;
-  private int growBackRate;
-  private int growBackInterval;
-  private int tickCounter;
-
-  public SugarscapePatchCell(int id, CellState currState, CellState nextState, int sugar, int maxCapacity, int growBackRate, int growBackInterval) {
+  /**
+   * Constructs a SugarscapePatch with the specified parameters.
+   *
+   * @param id         Unique identifier for the cell.
+   * @param currState  The cell's state (e.g., SugarscapeState.PATCH).
+   */
+  public SugarscapePatch(int id, CellState currState, CellState nextState, int initialSugar) {
     super(id, currState, nextState);
-    this.sugar = sugar;
-    this.maxCapacity = maxCapacity;
-    this.growBackRate = growBackRate;
-    this.growBackInterval = growBackInterval;
-    this.tickCounter = 0;
+    //Change from being hard coded
+    this.maxSugar = 25;
+    this.sugarAmount = initialSugar;// Start fully grown.
+    this.agent = null;
   }
 
-  public int getSugar() {
-    return sugar;
+  /**
+   * Returns the current amount of sugar in this patch.
+   */
+  public int getSugarAmount() {
+    return sugarAmount;
   }
 
-  public void setSugar(int sugar) {
-    this.sugar = Math.min(sugar, maxCapacity);
+  /**
+   * Grows the sugar by the specified grow-back rate,
+   * without exceeding the maximum capacity.
+   *
+   * @param growBackRate The number of sugar units to add.
+   */
+  public void growSugar(int growBackRate) {
+    sugarAmount = Math.min(sugarAmount + growBackRate, maxSugar);
   }
 
-  public void growSugar() {
-    tickCounter++;
-    if (tickCounter >= growBackInterval) {
-      sugar = Math.min(sugar + growBackRate, maxCapacity);
-      tickCounter = 0;
-    }
+  /**
+   * Harvests all the sugar from this patch (sets it to 0).
+   */
+  public void harvestSugar() {
+    sugarAmount = 0;
   }
 
-  public boolean isOccupied() {
-    return sugar == 0; // Example rule: patch is occupied if sugar is 0
+  /**
+   * Returns the maximum sugar capacity.
+   */
+  public int getMaxSugar() {
+    return maxSugar;
   }
+  public boolean hasAgent() {
+    return agent != null;
+  }
+  public SugarscapeAgent getAgent() {
+    return agent;
+  }
+  public void setAgent(SugarscapeAgent agent) {
+    this.agent = agent;
+  }
+  public void removeAgent() {
+    this.agent = null;
+  }
+
 }
