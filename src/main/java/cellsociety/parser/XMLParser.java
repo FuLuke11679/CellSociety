@@ -2,9 +2,12 @@ package cellsociety.parser;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -53,13 +56,18 @@ public class XMLParser extends Parser {
     private void handleError(String message, Exception e) {
         System.err.println(message + ": " + e.getMessage());
     }
-    
+
     private void parseDocument(Document document) throws InvalidXMLConfigurationException {
-        Element root = document.getDocumentElement();
-        
+
         parseDisplay(document);
         parseSimulation(document);
-        parseInitialStates(document);
+
+        // Check for random configuration
+        if (document.getElementsByTagName("random").getLength() > 0) {
+            parseRandomStates(document);
+        } else {
+            parseInitialStates(document);
+        }
     }
     
     private void parseDisplay(Document document) throws InvalidXMLConfigurationException {
@@ -101,7 +109,7 @@ public class XMLParser extends Parser {
     }
 
     private boolean isValidSimulationType(String simType) {
-        return List.of("Conway", "Percolation", "Fire", "Segregation", "WatorWorld", "GeneralConway").contains(simType);
+        return validateSimulation(simType);
     }
 
     private void validateProbability(String value) {
@@ -132,6 +140,70 @@ public class XMLParser extends Parser {
         }
     }
 
+    private void parseRandomStates(Document document) throws InvalidXMLConfigurationException {
+        NodeList randomNodes = document.getElementsByTagName("random");
+        if (randomNodes.getLength() > 0) {
+            Element randomElement = (Element) randomNodes.item(0);
+            NodeList stateNodes = randomElement.getElementsByTagName("state");
+
+            // Initialize a map to store state counts
+            Map<String, Integer> stateCounts = new HashMap<>();
+            int totalCells = rows * columns;
+            int assignedCells = 0;
+
+            // Parse state counts
+            for (int i = 0; i < stateNodes.getLength(); i++) {
+                Element stateElement = (Element) stateNodes.item(i);
+                String state = stateElement.getTextContent().trim(); // Trim to remove whitespace
+                int count = getRequiredIntAttribute(stateElement, "count");
+
+                // Validate state
+                if (!isInSimulation(state, simType)) {
+                    throw new IllegalArgumentException("Invalid state for simulation: " + state);
+                }
+
+                stateCounts.put(state, count);
+                assignedCells += count;
+            }
+
+            // Validate total assigned cells
+            if (assignedCells > totalCells) {
+                throw new IllegalArgumentException("Total assigned cells exceed grid size.");
+            }
+
+            // Generate random states
+            initialStates = new String[totalCells];
+            List<String> stateList = new ArrayList<>();
+
+            // Add states based on counts
+            for (Map.Entry<String, Integer> entry : stateCounts.entrySet()) {
+                for (int i = 0; i < entry.getValue(); i++) {
+                    stateList.add(entry.getKey());
+                }
+            }
+
+            // Fill remaining cells with default state (e.g., DEAD or EMPTY)
+            String defaultState = getDefaultState(simType);
+            while (stateList.size() < totalCells) {
+                stateList.add(defaultState);
+            }
+
+            // Shuffle and assign to initialStates
+            Collections.shuffle(stateList);
+            initialStates = stateList.toArray(new String[0]);
+        }
+    }
+
+    private String getDefaultState(String simType) {
+        return switch (simType) {
+            case "Conway" -> "D"; // DEAD
+            case "Fire" -> "E";   // EMPTY
+            case "Percolation" -> "O"; // OPEN
+            case "Segregation" -> "EM"; // EMPTY
+            case "Wator" -> "W"; // WATER
+            default -> throw new IllegalArgumentException("Unknown simulation type: " + simType);
+        };
+    }
 
 
     private Element getRequiredElement(Node parent, String tagName) {

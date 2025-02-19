@@ -1,0 +1,13 @@
+<Simulation>
+  <display width="600" height="600" title="Game of Life" author = "Luke">
+    <grid rows="4" columns="4" />
+    <description text="Random configuration for Game of Life" />
+  </display>
+  <sim type="Conway" >
+  <simvars
+  />
+  </sim>
+  <random>
+    <state count="6">A</state> <!-- 6 ALIVE cells -->
+  </random>
+</Simulation>

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<simulationConfig>
+  <!-- window and grid configuration -->
+  <display width="800" height="800" title="Segregation Simulation" author="Luke">
+    <grid rows="21" columns="21" />
+    <description text="This is the segregation simulation"/>
+  </display>
+
+  <!-- sim configuration -->
+  <sim type="Segregation">
+    <simvars
+      thresh="0.6"
+    />
+  </sim>
+  <random>
+    <state count="150">BLU</state> <!-- 150 Blue cells -->
+    <state count="150">R</state> <!-- 150 Red cells -->
+  </random>
+</simulationConfig>
