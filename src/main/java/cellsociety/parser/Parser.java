@@ -15,7 +15,8 @@ public abstract class Parser {
       "Fire", Set.of("B", "T", "E"),
       "Percolation", Set.of("BL", "P", "O"),
       "Segregation", Set.of("BLU", "R", "EM"),
-      "Wator", Set.of("S", "F", "W")
+      "Wator", Set.of("S", "F", "W"),
+      "GeneralConway", Set.of("D", "A")
   );
 
   //what info is needed from Parser
