@@ -55,6 +55,7 @@ public class Main extends Application {
     }
 
     private void loadSimulation(File dataFile) {
+        ResourceBundle simInfo = ResourceBundle.getBundle("SimInfo", myLocale);
         try {
             if (dataFile == null || dataFile.length() == 0) {
                 throw new IllegalArgumentException("File is empty or invalid.");
@@ -77,9 +78,9 @@ public class Main extends Application {
             BorderPane layout = initializeLayout();
             setStage(new Scene(layout, 600, 800));
         } catch (IllegalArgumentException e) {
-            showMessage("Invalid Configuration File: " + e.getMessage());
+            showMessage(simInfo.getString("invalid_config") + e.getMessage());
         } catch (Exception e) {
-            showMessage("An error occurred while loading the simulation: " + e.getMessage());
+            showMessage(simInfo.getString("load_error") + e.getMessage());
         }
     }
 
@@ -264,6 +265,8 @@ public class Main extends Application {
         dialog.setContentText("Metadata:");
         dialog.showAndWait();
 
+        ResourceBundle simInfo = ResourceBundle.getBundle("SimInfo", myLocale);
+
         File saveFile = FILE_CHOOSER.showSaveDialog(globalStage);
         if (saveFile != null) {
             try {
@@ -283,7 +286,7 @@ public class Main extends Application {
                 StreamResult result = new StreamResult(saveFile);
                 transformer.transform(source, result);
             } catch (Exception e) {
-                showMessage("Error saving file.");
+                showMessage(simInfo.getString("save_error"));
             }
         }
     }
