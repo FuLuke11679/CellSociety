@@ -201,6 +201,7 @@ public class XMLParser extends Parser {
             case "Percolation" -> "O"; // OPEN
             case "Segregation" -> "EM"; // EMPTY
             case "Wator" -> "W"; // WATER
+            case "GeneralConway" -> "D";
             default -> throw new IllegalArgumentException("Unknown simulation type: " + simType);
         };
     }
