@@ -9,6 +9,7 @@
     <properties>
         <project.build.java.version>21</project.build.java.version>
     </properties>
+    
   <dependencies>
     <dependency>
       <groupId>junit</groupId>
@@ -16,10 +17,25 @@
       <version>RELEASE</version>
       <scope>test</scope>
     </dependency>
+    <!-- framework for writing repeatable tests by using assertions about your code's values -->
     <dependency>
       <groupId>org.junit.jupiter</groupId>
       <artifactId>junit-jupiter</artifactId>
       <version>RELEASE</version>
+      <scope>test</scope>
+    </dependency>
+    <!-- provides testing for JavaFX by simulating user interactions and checking using JUnit assertions -->
+    <dependency>
+      <groupId>org.testfx</groupId>
+      <artifactId>testfx-junit5</artifactId>
+      <version>4.0.18</version>
+      <scope>test</scope>
+    </dependency>
+    <!-- allows javafx testing without seeing tests run -->
+    <dependency>
+      <groupId>org.testfx</groupId>
+      <artifactId>openjfx-monocle</artifactId>
+      <version>21.0.2</version>
       <scope>test</scope>
     </dependency>
   </dependencies>
@@ -37,6 +53,23 @@
                     <target>${project.build.java.version}</target>
                 </configuration>
             </plugin>
+            <!-- used to execute the unit tests of an application -->
+	    <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>3.5.2</version>
+                <configuration>
+                    <argLine>
+                        @{argLine}
+                        -XX:+EnableDynamicAgentLoading
+                        --add-exports javafx.graphics/com.sun.javafx.application=ALL-UNNAMED
+                        --add-exports javafx.graphics/com.sun.javafx.util=ALL-UNNAMED
+                        --add-exports javafx.base/com.sun.javafx.logging=ALL-UNNAMED
+                        --add-opens javafx.graphics/com.sun.glass.ui=ALL-UNNAMED
+                        --add-opens javafx.graphics/com.sun.javafx.application=ALL-UNNAMED
+                    </argLine>
+                </configuration>
+            </plugin>	    
         </plugins>
     </build>
 </project>
