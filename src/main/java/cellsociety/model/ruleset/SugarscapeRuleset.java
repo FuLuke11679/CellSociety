@@ -12,6 +12,7 @@ public class SugarscapeRuleset extends Ruleset {
   private int sugarGrowBackRate;
   private int sugarGrowBackInterval;
   private int tickCounter = 0;
+  private int[] initialValues;
 
   public SugarscapeRuleset(int sugarGrowBackRate, int sugarGrowBackInterval) {
     this.sugarGrowBackRate = sugarGrowBackRate;
@@ -62,8 +63,8 @@ public class SugarscapeRuleset extends Ruleset {
       agent.collectSugar(bestPatch.getSugarAmount());
       bestPatch.harvestSugar();
       // Move the agent from the old patch to the best patch.
-      int newRow = bestPatch.getId() / myGrid.getRows();
-      int newCol = bestPatch.getId() % myGrid.getRows();
+      int newRow = bestPatch.getId() / myGrid.getColumns();
+      int newCol = bestPatch.getId() % myGrid.getColumns();
       myGrid.moveAgent(row, col, newRow, newCol);
       // Agent consumes sugar due to metabolism.
       agent.consumeSugar();
@@ -81,8 +82,8 @@ public class SugarscapeRuleset extends Ruleset {
     int maxSugar = -1;
     int minDistance = Integer.MAX_VALUE;
     for (SugarscapePatch patch : candidates) {
-      int patchRow = patch.getId() / myGrid.getRows();
-      int patchCol = patch.getId() % myGrid.getRows();
+      int patchRow = patch.getId() / myGrid.getColumns();
+      int patchCol = patch.getId() % myGrid.getColumns();
       if (!patch.hasAgent() && patch.getSugarAmount() > maxSugar) {
         best = patch;
         maxSugar = patch.getSugarAmount();
@@ -131,4 +132,25 @@ public class SugarscapeRuleset extends Ruleset {
     myGrid = new SugarscapeGrid(rows, columns, this, initialStates);
     return myGrid;
   }
+
+  // Setter for initial values
+  public void setValues(int[] values) {
+    this.initialValues = values;
+    System.out.println("setValues Ruleset");
+
+    for(int i = 0; i< initialValues.length; i++){
+      System.out.print(initialValues[i] + " ");
+    }
+  }
+
+  // Getter for initial values
+  public int[] getInitialValues() {
+    System.out.println("InitialValues Ruleset");
+    System.out.println(sugarGrowBackRate);
+    for(int i = 0; i< initialValues.length; i++){
+      System.out.print(initialValues[i] + " ");
+    }
+    return initialValues;
+  }
+
 }

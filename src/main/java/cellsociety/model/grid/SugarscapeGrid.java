@@ -3,16 +3,15 @@ package cellsociety.model.grid;
 import cellsociety.model.cell.SugarscapePatch;
 import cellsociety.model.cell.SugarscapeAgent;
 import cellsociety.model.cell.Cell;
+import cellsociety.model.ruleset.Ruleset;
 import cellsociety.model.state.CellState;
 import cellsociety.model.state.SugarscapeState;
 import cellsociety.model.ruleset.SugarscapeRuleset;
 
 public class SugarscapeGrid extends Grid {
-  private SugarscapeRuleset ruleset;
 
   public SugarscapeGrid(int rows, int columns, SugarscapeRuleset ruleset, String[] initialStates) {
     super(rows, columns, ruleset, initialStates);
-    this.ruleset = ruleset;
   }
 
   // Helper to determine if a patch at (row, col) has an agent.
@@ -25,39 +24,31 @@ public class SugarscapeGrid extends Grid {
   }
   @Override
   public Cell createCell(int id, CellState currState, CellState nextState, String cellType) {
-    System.out.println("Test");
-    int[] initialValues = getValues();
-    for(int i = 0; i< initialValues.length; i++) {
-      System.out.print(initialValues[i] + " ");
-    }
-    // Retrieve sugar value from precomputed sugarValues array
-    int sugarValue = initialValues[id]; // Assuming sugarValues was populated in XMLParser
-
+    // Retrieve sugar value from the ruleset’s initial values.
+    int[] values = ((SugarscapeRuleset)getRuleset()).getInitialValues();
+    int sugarValue = values[id];
     try {
-      // Dynamically create cell type
-      Class<?> cellClass = Class.forName("cellsociety.model.cell." + cellType);
-
-      if (cellClass.equals(SugarscapePatch.class)) {
-        return (Cell) cellClass.getConstructor(int.class, CellState.class, CellState.class, int.class)
-            .newInstance(id, currState, nextState, sugarValue);
-      }
-      else if (cellClass.equals(SugarscapeAgent.class)) {
-        // Default agent parameters (you may modify as needed)
-        SugarscapeAgent agent = new SugarscapeAgent(10, 3, 2);
-        SugarscapePatch patch = new SugarscapePatch(id, SugarscapeState.PATCH, nextState, sugarValue);
+      // Always create a SugarscapePatch
+      SugarscapePatch patch = new SugarscapePatch(id, currState, nextState, sugarValue);
+      // If the initial state indicates an agent, attach a default agent.
+      if (currState.equals(cellsociety.model.state.SugarscapeState.AGENT)) {
+        SugarscapeAgent agent = new SugarscapeAgent(10, 1, 2); // or use parameters from XML
         patch.setAgent(agent);
-        return patch;
       }
-      else {
-        return (Cell) cellClass.getConstructor(int.class, CellState.class, CellState.class)
-            .newInstance(id, currState, nextState);
-      }
+      return patch;
     } catch (Exception e) {
       e.printStackTrace();
-      return null; // Return a default cell or handle error appropriately
+      return null;
     }
   }
 
+  @Override
+  public void update() {
+    // Perform the grid-level update defined in SugarscapeRuleset
+    getRuleset().updateGridState();
+    // Then move the next states to current states.
+    moveNextStateToCurrent();
+  }
 
   // Moves an agent from one patch to another.
   public void moveAgent(int oldRow, int oldCol, int newRow, int newCol) {

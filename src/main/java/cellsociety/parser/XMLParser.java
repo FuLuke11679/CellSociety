@@ -25,7 +25,7 @@ public class XMLParser extends Parser {
     private String author;
     private String[] initialStates;
     private Map<String, String> simVarsMap;
-    private int[] Values;
+    private int[] initialValues;
 
 
     // TODO: modify this so that it has methods to return relevant info in the xml file
@@ -59,18 +59,29 @@ public class XMLParser extends Parser {
     }
 
     private void parseDocument(Document document) throws InvalidXMLConfigurationException {
-
         parseDisplay(document);
         parseSimulation(document);
 
-        // Check for random configuration
         if (document.getElementsByTagName("random").getLength() > 0) {
             parseRandomStates(document);
         } else {
             parseInitialStates(document);
         }
+
+        // Ensure `initialValues` has been set before proceeding
+        if (initialValues == null) {
+            throw new IllegalStateException("initialValues is NULL after parseInitialStates().");
+        }
+
+        System.out.println("Final check of initialValues after parsing:");
+        for (int i = 0; i < initialValues.length; i++) {
+            System.out.print(initialValues[i] + " ");
+        }
+        System.out.println();
     }
-    
+
+
+
     private void parseDisplay(Document document) throws InvalidXMLConfigurationException {
         Element display = getRequiredElement(document, "display");
         
@@ -130,26 +141,28 @@ public class XMLParser extends Parser {
             .replaceAll("\\s+", "");
         String[] tokens = stateList.split(",");
         initialStates = new String[tokens.length];
-        // Optionally, create an accompanying array for sugar values.
-        Values = new int[tokens.length];
+        initialValues = new int[tokens.length];
 
         for (int i = 0; i < tokens.length; i++) {
             String token = tokens[i].trim();
             if (token.contains(":")) {
                 String[] parts = token.split(":");
                 initialStates[i] = parts[0]; // e.g., "P" or "A"
-                Values[i] = Integer.parseInt(parts[1]);
+                initialValues[i] = Integer.parseInt(parts[1]);
             } else {
                 initialStates[i] = token;
-                // Use a default sugar value if not provided.
-                Values[i] = 25;
+                initialValues[i] = 25; // Default sugar value
             }
         }
-        // Ensure sugarValues length matches grid size
-        if (Values.length != rows * columns) {
-            throw new IllegalArgumentException("Number of sugar values does not match grid size.");
+
+        // Print out final values to confirm assignment
+        System.out.println("Final initialValues:");
+        for (int i = 0; i < initialValues.length; i++) {
+            System.out.print(initialValues[i] + " ");
         }
+        System.out.println();
     }
+
 
 
     private void parseRandomStates(Document document) throws InvalidXMLConfigurationException {
@@ -214,7 +227,7 @@ public class XMLParser extends Parser {
             case "Segregation" -> "EM"; // EMPTY
             case "Wator" -> "W"; // WATER
             case "GeneralConway" -> "D";
-            case "SugarScape" -> "Patch";
+            case "SugarScape" -> "PATCH";
             default -> throw new IllegalArgumentException("Unknown simulation type: " + simType);
         };
     }
@@ -294,6 +307,18 @@ public class XMLParser extends Parser {
     }
 
     public int[] getValues() {
-        return Values;
+        if (initialValues == null) {
+            throw new IllegalStateException("initialValues is NULL in getValues(). Ensure XML file is parsed first.");
+        }
+
+        System.out.println("getValues() is returning:");
+        for (int i = 0; i < initialValues.length; i++) {
+            System.out.print(initialValues[i] + " ");
+        }
+        System.out.println();
+
+        return initialValues;
     }
+
+
 }

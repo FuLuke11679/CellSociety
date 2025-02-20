@@ -202,6 +202,7 @@ public abstract class Grid {
     } else if (state instanceof SegregationState) {
       return "SegregationCell";
     } else if (state instanceof SugarscapeState) {
+      // Always create a patch for Sugarscape.
       return "SugarscapePatch";
     }
     return "Cell";
@@ -217,12 +218,5 @@ public abstract class Grid {
     System.out.println();
   }
 
-  public int[] getValues() {
-    System.out.println("Ruleset");
-    for(int i = 0; i< ruleset.getInitialValues().length; i++){
-      System.out.print(ruleset.getInitialValues()[i] + " ");
-    }
-    return ruleset.getInitialValues();
-  }
 
 }

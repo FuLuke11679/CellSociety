@@ -10,7 +10,6 @@ import java.util.List;
  */
 
 public abstract class Ruleset {
-  private int[] Values;
 
   public Ruleset() {
   }
@@ -58,16 +57,4 @@ public abstract class Ruleset {
       }
     }
   }
-
-  public void setValues(int[] Values) {
-    this.Values = Values;
-  }
-  public int[] getInitialValues() {
-    System.out.print("Initial values: ");
-    for(int i = 0; i<Values.length; i++){
-      System.out.print(Values[i]+" ");
-    }
-    return Values;
-  }
-
 }
