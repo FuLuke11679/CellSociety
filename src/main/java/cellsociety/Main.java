@@ -31,6 +31,9 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import java.io.File;
 
+/**
+ * Main class to drive simulations. Extends the Application class of javafx,
+ */
 public class Main extends Application {
     private static final String DATA_FILE_EXTENSION = "*.xml";
     private static final FileChooser FILE_CHOOSER = new FileChooser();
@@ -54,10 +57,15 @@ public class Main extends Application {
 
     }
 
+    /**
+     * Function to load a new simulation
+     * @param dataFile : XML File chosen by user from their local machine
+     */
     private void loadSimulation(File dataFile) {
+        ResourceBundle simInfo = getResourceBundle("SimInfo");
         try {
             if (dataFile == null || dataFile.length() == 0) {
-                throw new IllegalArgumentException("File is empty or invalid.");
+                throw new IllegalArgumentException(simInfo.getString("invalid_file"));
             }
 
             currentFile = dataFile;
@@ -68,8 +76,6 @@ public class Main extends Application {
                 ((SugarscapeRuleset) ruleset).setValues(values);
             }
             myGrid = ruleset.createGrid(myParser.getRows(), myParser.getColumns(), myParser.getInitialStates());
-
-
             myGridView = new GridView(
                 myParser.getRows(),
                 myParser.getColumns(),
@@ -78,16 +84,22 @@ public class Main extends Application {
                 myParser.getAuthor(),
                 myParser.getDescription(),
                 myGrid,
-                myScheme);
+                myScheme,
+                myLocale);
 
-            BorderPane layout = initializeLayout();
+            BorderPane layout = initializeLayout(simInfo);
             setStage(new Scene(layout, 600, 800));
         } catch (IllegalArgumentException e) {
-            showMessage("Invalid Configuration File: " + e.getMessage());
+            showMessage(simInfo.getString("invalid_config") + e.getMessage());
         } catch (Exception e) {
-            showMessage("An error occurred while loading the simulation: " + e.getMessage());
+            showMessage(simInfo.getString("load_error") + e.getMessage());
         }
     }
+
+    /**
+     * Creates new instance of a ruleset for corresponding simulation
+     * @return Ruleset for loaded simulation
+     */
 
     private Ruleset getRuleset() {
         return switch (myParser.getSimType()) {
@@ -127,10 +139,14 @@ public class Main extends Application {
         simLoop.play();
     }
 
+    /**
+     * Loads opening screen, providing user with customization choices
+     */
+
     private void loadSplashScreen() {
         BorderPane splash = new BorderPane();
         splashScene = new Scene(splash, 600, 800);
-        ResourceBundle simInfo = ResourceBundle.getBundle("SimInfo", myLocale);
+        ResourceBundle simInfo = getResourceBundle("SimInfo");
         splash = loadSplashText(splash, simInfo);  //returns BorderPane
         Button loadButton = new Button(simInfo.getString("splash_load_sim"));
         loadButton.setOnAction(e -> {
@@ -148,6 +164,12 @@ public class Main extends Application {
         setStage(splashScene);
     }
 
+    /**
+     * Generates text on opening screen
+     * @param splash : BorderPane object we are building for splash screen
+     * @param simInfo : resource bundle containing hardcoded simulation text
+     * @return: BorderPane with organized text nodes
+     */
     private BorderPane loadSplashText(BorderPane splash, ResourceBundle simInfo) {
         Text welcome = new Text(simInfo.getString("splash_welcome"));
         TextFlow textFlow = new TextFlow(welcome);
@@ -156,12 +178,19 @@ public class Main extends Application {
         return splash;
     }
 
+    /**
+     * Generates control customization buttons for openining screen
+     * @param simInfo: resource bundle containing hardcoded simulation text
+     * @return List of Buttons
+     */
+
     private List<MenuButton> loadControlButtons(ResourceBundle simInfo) {
         List<MenuButton> controlButtons = new ArrayList<>();
         MenuButton languageSelect = new MenuButton(simInfo.getString("splash_language_button"));
         MenuItem language1 = new MenuItem(simInfo.getString("splash_language_1"));
         MenuItem language2 = new MenuItem(simInfo.getString("splash_language_2"));
         MenuItem language3 = new MenuItem(simInfo.getString("splash_language_3"));
+        MenuItem language4 = new MenuItem(simInfo.getString("splash_language_4"));
         language1.setOnAction(e -> {
             if(myLocale != Locale.ENGLISH) {
                 myLocale = Locale.ENGLISH;
@@ -180,26 +209,32 @@ public class Main extends Application {
                 loadSplashScreen();
             }
         });
-        languageSelect.getItems().addAll(language1, language2, language3);
+        language4.setOnAction(e ->{
+            if(myLocale != Locale.ITALIAN){
+                myLocale = Locale.ITALIAN;
+                loadSplashScreen();
+            }
+        });
+        languageSelect.getItems().addAll(language1, language2, language3, language4);
         MenuButton colorScheme = new MenuButton(simInfo.getString("splash_color_button"));
         MenuItem colorScheme1 = new MenuItem(simInfo.getString("splash_color_scheme_1"));
         MenuItem colorScheme2 = new MenuItem(simInfo.getString("splash_color_scheme_2"));
         MenuItem colorScheme3 = new MenuItem(simInfo.getString("splash_color_scheme_3"));
         MenuItem colorScheme4 = new MenuItem(simInfo.getString("splash_color_scheme_4"));
         colorScheme1.setOnAction(e -> {
-            setSplashTheme(splashScene, ColorScheme.DARK); //enum just for switch statememt
+            setSplashTheme(splashScene, ColorScheme.DARK, simInfo); //enum just for switch statememt
             myScheme = ColorScheme.DARK; //this should be eliminated
         });
         colorScheme2.setOnAction(e -> {
-            setSplashTheme(splashScene, ColorScheme.LIGHT);
+            setSplashTheme(splashScene, ColorScheme.LIGHT, simInfo);
             myScheme = ColorScheme.LIGHT;
         });
         colorScheme3.setOnAction(e -> {
-            setSplashTheme(splashScene, ColorScheme.DUKE);
+            setSplashTheme(splashScene, ColorScheme.DUKE, simInfo);
             myScheme = ColorScheme.DUKE;
         });
         colorScheme4.setOnAction(e -> {
-            setSplashTheme(splashScene, ColorScheme.UNC);
+            setSplashTheme(splashScene, ColorScheme.UNC, simInfo);
             myScheme = ColorScheme.UNC;
         });
         colorScheme.getItems().addAll(colorScheme1, colorScheme2, colorScheme3, colorScheme4);
@@ -208,7 +243,13 @@ public class Main extends Application {
         return controlButtons;
     }
 
-    private void setSplashTheme(Scene splashScene, ColorScheme scheme){
+    /**
+     * Sets theme of simulation
+     * @param splashScene : current scene we are modifying
+     * @param scheme : color scheme
+     * @param simInfo: resource bundle containing hardcoded simulation text
+     */
+    private void setSplashTheme(Scene splashScene, ColorScheme scheme, ResourceBundle simInfo){
         URL resourcePath = null;
         switch(scheme){
             case DARK:
@@ -226,27 +267,31 @@ public class Main extends Application {
         }
 
         if (resourcePath == null) {
-            System.err.println("Error: Invalid Splash Theme");
+            System.err.println(simInfo.getString("invalid_theme"));
         }
         splashScene.getStylesheets().add(resourcePath.toExternalForm());
         setStage(splashScene);
     }
 
+    /**
+     * Initializes simulation layout after splash screen
+     * @param simInfo: resource bundle containing hardcoded simulation text
+     * @return : Organized BorderPane holding nodes for simulation
+     */
 
-
-    private BorderPane initializeLayout() {
+    private BorderPane initializeLayout(ResourceBundle simInfo) {
         BorderPane layout = new BorderPane();
         layout.setCenter(myGridView.getScene().getRoot());
 
-        Button startButton = new Button("Start");
-        Button pauseButton = new Button("Pause");
-        Button saveButton = new Button("Save");
-        Button resetButton = new Button("Reset");
-        Button loadButton = new Button("Load New File");
+        Button startButton = new Button(simInfo.getString("start"));
+        Button pauseButton = new Button(simInfo.getString("pause"));
+        Button saveButton = new Button(simInfo.getString("save"));
+        Button resetButton = new Button(simInfo.getString("reset"));
+        Button loadButton = new Button(simInfo.getString("load_file"));
 
         startButton.setOnAction(e -> startSimulation());
         pauseButton.setOnAction(e -> simLoop.stop());
-        saveButton.setOnAction(e -> saveSimulation());
+        saveButton.setOnAction(e -> saveSimulation(simInfo));
         resetButton.setOnAction(e -> resetSimulation());
         loadButton.setOnAction(e -> {
             File newFile = FILE_CHOOSER.showOpenDialog(globalStage);
@@ -269,10 +314,15 @@ public class Main extends Application {
         return layout;
     }
 
-    private void saveSimulation() {
-        TextInputDialog dialog = new TextInputDialog("Simulation");
-        dialog.setHeaderText("Enter simulation metadata (Title, Author, Description)");
-        dialog.setContentText("Metadata:");
+    /**
+     * Saves simulation to an xml file
+     * @param simInfo resource bundle containing hardcoded simulation text
+     */
+
+    private void saveSimulation(ResourceBundle simInfo) {
+        TextInputDialog dialog = new TextInputDialog(simInfo.getString("sim"));
+        dialog.setHeaderText(simInfo.getString("prompt"));
+        dialog.setContentText(simInfo.getString("metadata"));
         dialog.showAndWait();
 
         File saveFile = FILE_CHOOSER.showSaveDialog(globalStage);
@@ -294,7 +344,7 @@ public class Main extends Application {
                 StreamResult result = new StreamResult(saveFile);
                 transformer.transform(source, result);
             } catch (Exception e) {
-                showMessage("Error saving file.");
+                showMessage(simInfo.getString("save_error"));
             }
         }
     }
@@ -310,6 +360,18 @@ public class Main extends Application {
 
     private void showMessage(String message) {
         new Alert(Alert.AlertType.INFORMATION, message).showAndWait();
+    }
+
+    private void showErrorDialog(String title, String message) {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle(title);
+        alert.setHeaderText(null);
+        alert.setContentText(message);
+        alert.showAndWait();
+    }
+
+    public ResourceBundle getResourceBundle(String name){
+        return ResourceBundle.getBundle(name, myLocale);
     }
 
 
