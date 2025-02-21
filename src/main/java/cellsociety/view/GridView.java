@@ -1,7 +1,8 @@
 package cellsociety.view;
 
+import cellsociety.model.cell.Cell;
 import cellsociety.model.cell.SegregationCell.SegregationState;
-import cellsociety.model.cell.SugarscapeCell.SugarscapeState;
+import cellsociety.model.state.SugarscapeState;
 import cellsociety.model.cell.WatorCell.WatorState;
 import cellsociety.model.grid.Grid;
 import cellsociety.model.cell.ConwayCell.ConwayState;
@@ -59,8 +60,8 @@ public class GridView {
       Map.entry(WatorState.SHARK, Color.LIGHTBLUE),
       Map.entry(WatorState.FISH, Color.LIGHTGREEN),
       Map.entry(WatorState.WATER, Color.WHITE),
-      Map.entry(SugarscapeState.EMPTY, Color.WHITE),
-      Map.entry(SugarscapeState.OCCUPIED, Color.BLACK)
+      Map.entry(SugarscapeState.PATCH, Color.WHITE),
+      Map.entry(SugarscapeState.AGENT, Color.BLACK)
   );
 
   private final Map<ColorScheme, Color> schemeColors = Map.ofEntries(
@@ -115,10 +116,28 @@ public class GridView {
   public void update() {
     for (int row = 0; row < rows; row++) {
       for (int col = 0; col < columns; col++) {
-        cellRectangles[row][col].setFill(cellColors.get(grid.getCell(row, col).getCurrState()));
+        Cell cell = grid.getCell(row, col);
+        Color fillColor;
+        if (cell instanceof cellsociety.model.cell.SugarscapePatch) {
+          cellsociety.model.cell.SugarscapePatch patch = (cellsociety.model.cell.SugarscapePatch) cell;
+          if (patch.hasAgent()) {
+            // Display agents in red.
+            fillColor = Color.RED;
+          } else {
+            // Compute a gradient: low sugar = white, high sugar = dark green.
+            double fraction = (double) patch.getSugarAmount() / patch.getMaxSugar();
+            fillColor = Color.WHITE.interpolate(Color.DARKGREEN, fraction);
+          }
+        } else {
+          // For other simulation types, use the fixed mapping.
+          fillColor = cellColors.get(cell.getCurrState());
+        }
+        cellRectangles[row][col].setFill(fillColor);
       }
     }
   }
+
+
 
 
   /**

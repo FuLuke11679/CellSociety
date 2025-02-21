@@ -4,7 +4,6 @@ import cellsociety.model.cell.Cell;
 import cellsociety.model.cell.WatorCell.WatorState;
 import cellsociety.model.grid.Grid;
 import cellsociety.model.grid.WatorGrid;
-import cellsociety.model.state.CellState;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;

@@ -71,6 +71,10 @@ public class Main extends Application {
             currentFile = dataFile;
             myParser = new XMLParser(dataFile);
             Ruleset ruleset = getRuleset();
+            int[] values = myParser.getValues();
+            if (values != null && myParser.getSimType().equals("Sugarscape")) {
+                ((SugarscapeRuleset) ruleset).setValues(values);
+            }
             myGrid = ruleset.createGrid(myParser.getRows(), myParser.getColumns(), myParser.getInitialStates());
             myGridView = new GridView(
                 myParser.getRows(),
@@ -103,13 +107,18 @@ public class Main extends Application {
             case "Percolation" -> new PercolationRuleset();
             case "Fire" -> new FireRuleset(getDoubleFromParser("probCatch"), getDoubleFromParser("probGrow"));
             case "Segregation" -> new SegregationRuleset(getDoubleFromParser("thresh"));
-            case "WatorWorld" -> new WatorRuleset(getIntFromParser("fishBreedTime"),
+            case "WatorWorld" -> new WatorRuleset(
+                getIntFromParser("fishBreedTime"),
                 getIntFromParser("fishStarveTime"),
                 getIntFromParser("sharkBreedTime"),
-                getIntFromParser("sharkStarveTime"));
+                getIntFromParser("sharkStarveTime")
+            );
             case "GeneralConway" -> new GeneralConwayRuleset(myParser.getSimVarsMap().get("rules"));
-            case "Sugarscape" -> new SugarscapeRuleset();
-            default -> throw new IllegalStateException("Unknown simulation type");
+            case "Sugarscape" -> new SugarscapeRuleset(
+                getIntFromParser("sugarGrowBackRate"),
+                getIntFromParser("sugarGrowBackInterval")
+            );
+            default -> throw new IllegalStateException("Unknown simulation type: " + myParser.getSimType());
         };
     }
 

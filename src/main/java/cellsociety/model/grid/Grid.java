@@ -5,8 +5,7 @@ import cellsociety.model.cell.ConwayCell.ConwayState;
 import cellsociety.model.cell.FireCell.FireState;
 import cellsociety.model.cell.PercolationCell.PercolationState;
 import cellsociety.model.cell.SegregationCell.SegregationState;
-import cellsociety.model.cell.SugarscapeCell;
-import cellsociety.model.cell.SugarscapeCell.SugarscapeState;
+import cellsociety.model.state.SugarscapeState;
 import cellsociety.model.cell.WatorCell.WatorState;
 import cellsociety.model.ruleset.Ruleset;
 import cellsociety.model.state.CellState;
@@ -35,7 +34,9 @@ public abstract class Grid {
       Map.entry("EM", SegregationState.EMPTY),
       Map.entry("S", WatorState.SHARK),
       Map.entry("F", WatorState.FISH),
-      Map.entry("W", WatorState.WATER)
+      Map.entry("W", WatorState.WATER),
+      Map.entry("PATCH", SugarscapeState.PATCH),  // Represents a sugar patch
+      Map.entry("AGENT", SugarscapeState.AGENT)   // Represents an agent in Sugarscape
   );
 
   private int rows;
@@ -201,7 +202,8 @@ public abstract class Grid {
     } else if (state instanceof SegregationState) {
       return "SegregationCell";
     } else if (state instanceof SugarscapeState) {
-      return "SugarscapeCell";
+      // Always create a patch for Sugarscape.
+      return "SugarscapePatch";
     }
     return "Cell";
   }
@@ -215,5 +217,6 @@ public abstract class Grid {
     }
     System.out.println();
   }
+
 
 }
