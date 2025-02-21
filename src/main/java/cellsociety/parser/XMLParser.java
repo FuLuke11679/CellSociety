@@ -15,6 +15,7 @@ import org.w3c.dom.*;
 import org.xml.sax.SAXException;
 
 public class XMLParser extends Parser {
+
     private int width;
     private int height;
     private String title;
@@ -27,8 +28,6 @@ public class XMLParser extends Parser {
     private Map<String, String> simVarsMap;
     private int[] initialValues;
 
-
-    // TODO: modify this so that it has methods to return relevant info in the xml file
     public XMLParser(File file) throws InvalidXMLConfigurationException {
         try {
             if (!isXMLFile(file)) {
@@ -37,12 +36,11 @@ public class XMLParser extends Parser {
             DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
             factory.setFeature("http://xml.org/sax/features/external-general-entities", false);
             factory.setFeature("http://xml.org/sax/features/external-parameter-entities", false);
-            factory.setFeature("http://apache.org/xml/features/nonvalidating/load-external-dtd", false);
-
+            factory.setFeature("http://apache.org/xml/features/nonvalidating/load-external-dtd",
+                false);
             DocumentBuilder builder = factory.newDocumentBuilder();
             Document document = builder.parse(file);
             document.getDocumentElement().normalize();
-
             parseDocument(document);
         } catch (ParserConfigurationException | SAXException | IOException e) {
             throw new InvalidXMLConfigurationException("XML Parsing Error: " + e.getMessage());
@@ -62,38 +60,30 @@ public class XMLParser extends Parser {
         parseDisplay(document);
         parseSimulation(document);
 
+        // If a <random> element is present, parse random states; otherwise, parse explicit initial states.
         if (document.getElementsByTagName("random").getLength() > 0) {
             parseRandomStates(document);
         } else {
             parseInitialStates(document);
         }
 
-        // Ensure `initialValues` has been set before proceeding
+        // Ensure initialValues has been set.
         if (initialValues == null) {
-            throw new IllegalStateException("initialValues is NULL after parseInitialStates().");
+            throw new IllegalStateException("initialValues is NULL after parsing initial states.");
         }
-
-        System.out.println("Final check of initialValues after parsing:");
-        for (int i = 0; i < initialValues.length; i++) {
-            System.out.print(initialValues[i] + " ");
-        }
-        System.out.println();
     }
-
-
 
     private void parseDisplay(Document document) throws InvalidXMLConfigurationException {
         Element display = getRequiredElement(document, "display");
-        
         this.width = getRequiredIntAttribute(display, "width");
         this.height = getRequiredIntAttribute(display, "height");
         this.title = getRequiredAttribute(display, "title");
         this.author = getRequiredAttribute(display, "author");
-        
+
         Element grid = getRequiredElement(display, "grid");
         this.rows = getRequiredIntAttribute(grid, "rows");
         this.columns = getRequiredIntAttribute(grid, "columns");
-        
+
         Element descElement = getRequiredElement(display, "description");
         this.description = getRequiredAttribute(descElement, "text");
     }
@@ -102,7 +92,7 @@ public class XMLParser extends Parser {
         Element sim = getRequiredElement(document, "sim");
         this.simType = getRequiredAttribute(sim, "type");
 
-        // Validate simulation type
+        // Validate simulation type.
         if (!isValidSimulationType(simType)) {
             throw new IllegalArgumentException("Invalid simulation type: " + simType);
         }
@@ -137,33 +127,46 @@ public class XMLParser extends Parser {
 
     private void parseInitialStates(Document document) throws InvalidXMLConfigurationException {
         Element initElement = getRequiredElement(document, "init");
-        String stateList = getRequiredAttribute(initElement, "stateList")
-            .replaceAll("\\s+", "");
-        String[] tokens = stateList.split(",");
+        String stateListStr = getRequiredAttribute(initElement, "stateList").replaceAll("\\s+", "");
+        String[] tokens = stateListStr.split(",");
+        int expectedCells = rows * columns;
+        if (tokens.length != expectedCells) {
+            throw new IllegalArgumentException("Number of cell states (" + tokens.length +
+                ") does not match grid size (" + expectedCells + ").");
+        }
         initialStates = new String[tokens.length];
         initialValues = new int[tokens.length];
 
         for (int i = 0; i < tokens.length; i++) {
             String token = tokens[i].trim();
             if (token.contains(":")) {
-                String[] parts = token.split(":");
-                initialStates[i] = parts[0]; // e.g., "P" or "A"
-                initialValues[i] = Integer.parseInt(parts[1]);
+                // Split token into state and value. Use a default value (25) if the value is missing.
+                String[] parts = token.split(":", 2);
+                if (parts.length != 2) {
+                    throw new IllegalArgumentException("Invalid token format: " + token);
+                }
+                String state = parts[0];
+                int value;
+                if (parts[1].isEmpty()) {
+                    value = 25; // Default value when missing
+                } else {
+                    value = Integer.parseInt(parts[1]);
+                }
+                if (!isInSimulation(state, simType)) {
+                    throw new IllegalArgumentException("Invalid state for simulation: " + state);
+                }
+                initialStates[i] = state;
+                initialValues[i] = value;
             } else {
+                // Token without a colon gets the default value.
+                if (!isInSimulation(token, simType)) {
+                    throw new IllegalArgumentException("Invalid cell state: " + token);
+                }
                 initialStates[i] = token;
-                initialValues[i] = 25; // Default sugar value
+                initialValues[i] = 25;
             }
         }
-
-        // Print out final values to confirm assignment
-        System.out.println("Final initialValues:");
-        for (int i = 0; i < initialValues.length; i++) {
-            System.out.print(initialValues[i] + " ");
-        }
-        System.out.println();
     }
-
-
 
     private void parseRandomStates(Document document) throws InvalidXMLConfigurationException {
         NodeList randomNodes = document.getElementsByTagName("random");
@@ -171,18 +174,16 @@ public class XMLParser extends Parser {
             Element randomElement = (Element) randomNodes.item(0);
             NodeList stateNodes = randomElement.getElementsByTagName("state");
 
-            // Initialize a map to store state counts
+            // Map to store counts for each state.
             Map<String, Integer> stateCounts = new HashMap<>();
             int totalCells = rows * columns;
             int assignedCells = 0;
 
-            // Parse state counts
             for (int i = 0; i < stateNodes.getLength(); i++) {
                 Element stateElement = (Element) stateNodes.item(i);
-                String state = stateElement.getTextContent().trim(); // Trim to remove whitespace
+                String state = stateElement.getTextContent().trim();
                 int count = getRequiredIntAttribute(stateElement, "count");
 
-                // Validate state
                 if (!isInSimulation(state, simType)) {
                     throw new IllegalArgumentException("Invalid state for simulation: " + state);
                 }
@@ -191,61 +192,60 @@ public class XMLParser extends Parser {
                 assignedCells += count;
             }
 
-            // Validate total assigned cells
             if (assignedCells > totalCells) {
                 throw new IllegalArgumentException("Total assigned cells exceed grid size.");
             }
 
-            // Generate random states
-            initialStates = new String[totalCells];
             List<String> stateList = new ArrayList<>();
-
-            // Add states based on counts
             for (Map.Entry<String, Integer> entry : stateCounts.entrySet()) {
                 for (int i = 0; i < entry.getValue(); i++) {
                     stateList.add(entry.getKey());
                 }
             }
 
-            // Fill remaining cells with default state (e.g., DEAD or EMPTY)
+            // Fill remaining cells with the default state.
             String defaultState = getDefaultState(simType);
             while (stateList.size() < totalCells) {
                 stateList.add(defaultState);
             }
 
-            // Shuffle and assign to initialStates
             Collections.shuffle(stateList);
             initialStates = stateList.toArray(new String[0]);
+
+            // NEW: Initialize initialValues for every cell (default value 25)
+            initialValues = new int[totalCells];
+            for (int i = 0; i < totalCells; i++) {
+                initialValues[i] = 25;
+            }
         }
     }
-
     private String getDefaultState(String simType) {
+        // Ensure the simulation type key matches those used in simulationStatesMap.
         return switch (simType) {
             case "Conway" -> "D"; // DEAD
             case "Fire" -> "E";   // EMPTY
             case "Percolation" -> "O"; // OPEN
             case "Segregation" -> "EM"; // EMPTY
-            case "Wator" -> "W"; // WATER
+            case "Wator" -> "W";  // WATER
             case "GeneralConway" -> "D";
-            case "SugarScape" -> "PATCH";
+            case "Sugarscape" -> "PATCH";  // Corrected key for Sugarscape
             default -> throw new IllegalArgumentException("Unknown simulation type: " + simType);
         };
     }
 
-
     private Element getRequiredElement(Node parent, String tagName) {
-        NodeList elements = (parent instanceof Document ? 
-            ((Document)parent).getElementsByTagName(tagName) :
-            ((Element)parent).getElementsByTagName(tagName));
-            
+        NodeList elements = (parent instanceof Document ?
+            ((Document) parent).getElementsByTagName(tagName) :
+            ((Element) parent).getElementsByTagName(tagName));
+
         if (elements.getLength() == 0) {
-            throw new IllegalArgumentException(
-                String.format("Required element '%s' not found", tagName));
+            throw new IllegalArgumentException(String.format("Required element '%s' not found", tagName));
         }
         return (Element) elements.item(0);
     }
 
-    private String getRequiredAttribute(Element element, String attributeName) throws InvalidXMLConfigurationException {
+    private String getRequiredAttribute(Element element, String attributeName)
+        throws InvalidXMLConfigurationException {
         String value = element.getAttribute(attributeName);
         if (value.isEmpty()) {
             throw new InvalidXMLConfigurationException(
@@ -267,58 +267,51 @@ public class XMLParser extends Parser {
         }
     }
 
-    public int getWidth() { 
-      return width; 
+    public int getWidth() {
+        return width;
     }
 
-    public int getHeight() { 
-      return height; 
+    public int getHeight() {
+        return height;
     }
 
     public String getDescription() {
         return description;
     }
 
-    public String getTitle() { 
-      return title; 
+    public String getTitle() {
+        return title;
     }
 
-    public String getSimType() { 
-      return simType; 
+    public String getSimType() {
+        return simType;
     }
 
-    public String getAuthor(){return author;}
-
-    public int getRows() { 
-      return rows; 
+    public String getAuthor() {
+        return author;
     }
 
-    public int getColumns() { 
-      return columns; 
-    }
-    
-    public String[] getInitialStates() { 
-      return initialStates; 
+    public int getRows() {
+        return rows;
     }
 
+    public int getColumns() {
+        return columns;
+    }
 
-    public Map<String, String> getSimVarsMap() { 
-      return simVarsMap; 
+    public String[] getInitialStates() {
+        return initialStates;
+    }
+
+    public Map<String, String> getSimVarsMap() {
+        return simVarsMap;
     }
 
     public int[] getValues() {
         if (initialValues == null) {
             throw new IllegalStateException("initialValues is NULL in getValues(). Ensure XML file is parsed first.");
         }
-
-        System.out.println("getValues() is returning:");
-        for (int i = 0; i < initialValues.length; i++) {
-            System.out.print(initialValues[i] + " ");
-        }
-        System.out.println();
-
         return initialValues;
     }
-
-
 }
+

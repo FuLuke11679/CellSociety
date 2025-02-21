@@ -64,7 +64,7 @@ public class Main extends Application {
             myParser = new XMLParser(dataFile);
             Ruleset ruleset = getRuleset();
             int[] values = myParser.getValues();
-            if (values != null) {
+            if (values != null && myParser.getSimType().equals("Sugarscape")) {
                 ((SugarscapeRuleset) ruleset).setValues(values);
             }
             myGrid = ruleset.createGrid(myParser.getRows(), myParser.getColumns(), myParser.getInitialStates());

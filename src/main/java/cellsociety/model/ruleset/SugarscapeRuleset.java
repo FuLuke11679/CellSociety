@@ -136,20 +136,10 @@ public class SugarscapeRuleset extends Ruleset {
   // Setter for initial values
   public void setValues(int[] values) {
     this.initialValues = values;
-    System.out.println("setValues Ruleset");
-
-    for(int i = 0; i< initialValues.length; i++){
-      System.out.print(initialValues[i] + " ");
-    }
   }
 
   // Getter for initial values
   public int[] getInitialValues() {
-    System.out.println("InitialValues Ruleset");
-    System.out.println(sugarGrowBackRate);
-    for(int i = 0; i< initialValues.length; i++){
-      System.out.print(initialValues[i] + " ");
-    }
     return initialValues;
   }
 
