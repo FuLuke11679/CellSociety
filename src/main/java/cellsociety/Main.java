@@ -5,9 +5,7 @@ import cellsociety.model.ruleset.*;
 import cellsociety.parser.XMLParser;
 import cellsociety.view.GridView;
 import cellsociety.view.GridView.ColorScheme;
-import java.net.URL;
-import java.util.ArrayList;
-import java.util.List;
+import cellsociety.view.SplashScreen;
 import java.util.Locale;
 import java.util.ResourceBundle;
 import javafx.animation.KeyFrame;
@@ -17,9 +15,6 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
-import javafx.scene.text.Text;
-import javafx.scene.text.TextAlignment;
-import javafx.scene.text.TextFlow;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.util.Duration;
@@ -38,6 +33,7 @@ public class Main extends Application {
     private static final String DATA_FILE_EXTENSION = "*.xml";
     private static final FileChooser FILE_CHOOSER = new FileChooser();
     private Timeline simLoop;
+    private Timeline splashLoop;
     private static double SECOND_DELAY = 0.8;
     private static Stage globalStage;
     private GridView myGridView;
@@ -46,7 +42,7 @@ public class Main extends Application {
     private File currentFile;
     private ColorScheme myScheme;
     private Locale myLocale;
-    private Scene splashScene;
+    private SplashScreen mySplashScreen;
 
 
     @Override
@@ -54,7 +50,6 @@ public class Main extends Application {
         globalStage = primaryStage;
         myLocale = Locale.getDefault(); //default should be English
         loadSplashScreen();
-
     }
 
     /**
@@ -62,7 +57,9 @@ public class Main extends Application {
      * @param dataFile : XML File chosen by user from their local machine
      */
     private void loadSimulation(File dataFile) {
-        ResourceBundle simInfo = getResourceBundle("SimInfo");
+        //ResourceBundle simInfo = getResourceBundle("SimInfo");
+        ResourceBundle simInfo = ResourceBundle.getBundle("SimInfo", myLocale);
+        splashLoop.stop();
         try {
             if (dataFile == null || dataFile.length() == 0) {
                 throw new IllegalArgumentException(simInfo.getString("invalid_file"));
@@ -142,135 +139,40 @@ public class Main extends Application {
     /**
      * Loads opening screen, providing user with customization choices
      */
+    private void loadSplashScreen(){
+        mySplashScreen = new SplashScreen(myLocale);
+        setLoadButton();
+        splashLoop();
+    }
 
-    private void loadSplashScreen() {
-        BorderPane splash = new BorderPane();
-        splashScene = new Scene(splash, 600, 800);
+    /**
+     * Generates load button to start selected simulation, labeled with the correct language
+     */
+    private void setLoadButton(){
         ResourceBundle simInfo = getResourceBundle("SimInfo");
-        splash = loadSplashText(splash, simInfo);  //returns BorderPane
         Button loadButton = new Button(simInfo.getString("splash_load_sim"));
         loadButton.setOnAction(e -> {
             File newFile = FILE_CHOOSER.showOpenDialog(globalStage);
             if (newFile != null) {
-              loadSimulation(newFile);
+                loadSimulation(newFile);
             }
         });
-        List<MenuButton> controlButtons = loadControlButtons(simInfo);
-        HBox controls = new HBox(10, loadButton);
-        for (MenuButton controlButton : controlButtons) {
-            controls.getChildren().add(controlButton);
-        }
-        splash.setBottom(controls);
-        setStage(splashScene);
+        mySplashScreen.getSplashPane().setRight(loadButton);
     }
 
     /**
-     * Generates text on opening screen
-     * @param splash : BorderPane object we are building for splash screen
-     * @param simInfo : resource bundle containing hardcoded simulation text
-     * @return: BorderPane with organized text nodes
+     * Continuously updates splash screen as user makes customization choices
      */
-    private BorderPane loadSplashText(BorderPane splash, ResourceBundle simInfo) {
-        Text welcome = new Text(simInfo.getString("splash_welcome"));
-        TextFlow textFlow = new TextFlow(welcome);
-        textFlow.setTextAlignment(TextAlignment.CENTER);
-        splash.setCenter(textFlow);
-        return splash;
-    }
+    private void splashLoop(){
+        splashLoop = new Timeline(new KeyFrame(Duration.seconds(SECOND_DELAY), e -> {
+            myLocale = mySplashScreen.getMyLocale();
+            myScheme = mySplashScreen.getColorScheme();
+            setLoadButton();
+            setStage(mySplashScreen.getSplashScene());
 
-    /**
-     * Generates control customization buttons for openining screen
-     * @param simInfo: resource bundle containing hardcoded simulation text
-     * @return List of Buttons
-     */
-
-    private List<MenuButton> loadControlButtons(ResourceBundle simInfo) {
-        List<MenuButton> controlButtons = new ArrayList<>();
-        MenuButton languageSelect = new MenuButton(simInfo.getString("splash_language_button"));
-        MenuItem language1 = new MenuItem(simInfo.getString("splash_language_1"));
-        MenuItem language2 = new MenuItem(simInfo.getString("splash_language_2"));
-        MenuItem language3 = new MenuItem(simInfo.getString("splash_language_3"));
-        MenuItem language4 = new MenuItem(simInfo.getString("splash_language_4"));
-        language1.setOnAction(e -> {
-            if(myLocale != Locale.ENGLISH) {
-                myLocale = Locale.ENGLISH;
-                loadSplashScreen();  //need to reload if language has been changed
-            }
-        });
-        language2.setOnAction(e -> {
-            if(myLocale != Locale.FRENCH) {
-                myLocale = Locale.FRENCH;
-                loadSplashScreen();
-            }
-        });
-        language3.setOnAction(e ->{
-            if(myLocale != Locale.GERMAN){
-                myLocale = Locale.GERMAN;
-                loadSplashScreen();
-            }
-        });
-        language4.setOnAction(e ->{
-            if(myLocale != Locale.ITALIAN){
-                myLocale = Locale.ITALIAN;
-                loadSplashScreen();
-            }
-        });
-        languageSelect.getItems().addAll(language1, language2, language3, language4);
-        MenuButton colorScheme = new MenuButton(simInfo.getString("splash_color_button"));
-        MenuItem colorScheme1 = new MenuItem(simInfo.getString("splash_color_scheme_1"));
-        MenuItem colorScheme2 = new MenuItem(simInfo.getString("splash_color_scheme_2"));
-        MenuItem colorScheme3 = new MenuItem(simInfo.getString("splash_color_scheme_3"));
-        MenuItem colorScheme4 = new MenuItem(simInfo.getString("splash_color_scheme_4"));
-        colorScheme1.setOnAction(e -> {
-            setSplashTheme(splashScene, ColorScheme.DARK, simInfo); //enum just for switch statememt
-            myScheme = ColorScheme.DARK; //this should be eliminated
-        });
-        colorScheme2.setOnAction(e -> {
-            setSplashTheme(splashScene, ColorScheme.LIGHT, simInfo);
-            myScheme = ColorScheme.LIGHT;
-        });
-        colorScheme3.setOnAction(e -> {
-            setSplashTheme(splashScene, ColorScheme.DUKE, simInfo);
-            myScheme = ColorScheme.DUKE;
-        });
-        colorScheme4.setOnAction(e -> {
-            setSplashTheme(splashScene, ColorScheme.UNC, simInfo);
-            myScheme = ColorScheme.UNC;
-        });
-        colorScheme.getItems().addAll(colorScheme1, colorScheme2, colorScheme3, colorScheme4);
-        controlButtons.add(languageSelect);
-        controlButtons.add(colorScheme);
-        return controlButtons;
-    }
-
-    /**
-     * Sets theme of simulation
-     * @param splashScene : current scene we are modifying
-     * @param scheme : color scheme
-     * @param simInfo: resource bundle containing hardcoded simulation text
-     */
-    private void setSplashTheme(Scene splashScene, ColorScheme scheme, ResourceBundle simInfo){
-        URL resourcePath = null;
-        switch(scheme){
-            case DARK:
-                resourcePath = getClass().getResource("/SplashDark.css");
-                break;
-            case LIGHT:
-                resourcePath = getClass().getResource("/SplashLight.css");
-                break;
-            case DUKE:
-                resourcePath = getClass().getResource("/SplashDuke.css");
-                break;
-            case UNC:
-                resourcePath = getClass().getResource("/SplashUnc.css");
-                break;
-        }
-
-        if (resourcePath == null) {
-            System.err.println(simInfo.getString("invalid_theme"));
-        }
-        splashScene.getStylesheets().add(resourcePath.toExternalForm());
-        setStage(splashScene);
+        }));
+        splashLoop.setCycleCount(Timeline.INDEFINITE);
+        splashLoop.play();
     }
 
     /**
@@ -278,7 +180,6 @@ public class Main extends Application {
      * @param simInfo: resource bundle containing hardcoded simulation text
      * @return : Organized BorderPane holding nodes for simulation
      */
-
     private BorderPane initializeLayout(ResourceBundle simInfo) {
         BorderPane layout = new BorderPane();
         layout.setCenter(myGridView.getScene().getRoot());
@@ -318,7 +219,6 @@ public class Main extends Application {
      * Saves simulation to an xml file
      * @param simInfo resource bundle containing hardcoded simulation text
      */
-
     private void saveSimulation(ResourceBundle simInfo) {
         TextInputDialog dialog = new TextInputDialog(simInfo.getString("sim"));
         dialog.setHeaderText(simInfo.getString("prompt"));
