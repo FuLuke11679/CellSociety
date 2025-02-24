@@ -15,7 +15,7 @@ public abstract class Parser {
       "Fire", Set.of("B", "T", "E"),
       "Percolation", Set.of("BL", "P", "O"),
       "Segregation", Set.of("BLU", "R", "EM"),
-      "Wator", Set.of("S", "F", "W"),
+      "WatorWorld", Set.of("S", "F", "W"),
       "GeneralConway", Set.of("D", "A"),
       "Sugarscape", Set.of("PATCH", "AGENT")
 
