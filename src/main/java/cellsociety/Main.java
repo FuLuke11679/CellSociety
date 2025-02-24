@@ -73,7 +73,7 @@ public class Main extends Application {
             Ruleset ruleset = getRuleset();
             int[] values = myParser.getValues();
             if (values != null && myParser.getSimType().equals("Sugarscape")) {
-                ((SugarscapeRuleset) ruleset).setValues(values);
+                ((SugarscapeRuleset) ruleset).setInitialValues(values);
             }
             myGrid = ruleset.createGrid(myParser.getRows(), myParser.getColumns(), myParser.getInitialStates());
             myGridView = new GridView(
@@ -116,7 +116,9 @@ public class Main extends Application {
             case "GeneralConway" -> new GeneralConwayRuleset(myParser.getSimVarsMap().get("rules"));
             case "Sugarscape" -> new SugarscapeRuleset(
                 getIntFromParser("sugarGrowBackRate"),
-                getIntFromParser("sugarGrowBackInterval")
+                getIntFromParser("sugarGrowBackInterval"),
+                getIntFromParser("agentVision"),
+                getIntFromParser("agentMetabolism")
             );
             default -> throw new IllegalStateException("Unknown simulation type: " + myParser.getSimType());
         };

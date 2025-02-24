@@ -30,7 +30,7 @@ class WatorRulesetTest {
                               "W","W","S","W","W",
                               "W","W","W","W","W",
                               "W","W","W","W","W"};
-    myGrid = myRuleset.createGrid(5, 5, initialStates, );
+    myGrid = myRuleset.createGrid(5, 5, initialStates);
 
     myGrid.update();
 
@@ -54,7 +54,7 @@ class WatorRulesetTest {
                               "W","W","F","W","W",
                               "W","W","W","W","W",
                               "W","W","W","W","W"};
-    myGrid = myRuleset.createGrid(5, 5, initialStates, );
+    myGrid = myRuleset.createGrid(5, 5, initialStates);
 
     myGrid.update();
 
@@ -78,7 +78,7 @@ class WatorRulesetTest {
         "W","F","S","F","W",
         "W","W","F","W","W",
         "W","W","W","W","W"};
-    myGrid = myRuleset.createGrid(5, 5, initialStates, );
+    myGrid = myRuleset.createGrid(5, 5, initialStates);
 
     myGrid.update();
 
@@ -102,7 +102,7 @@ class WatorRulesetTest {
         "W","S","S","S","W",
         "W","W","S","W","W",
         "W","W","W","W","W"};
-    myGrid = myRuleset.createGrid(5, 5, initialStates, );
+    myGrid = myRuleset.createGrid(5, 5, initialStates);
 
     myGrid.update();
 
@@ -116,7 +116,7 @@ class WatorRulesetTest {
         "W","F","F","F","W",
         "W","W","F","W","W",
         "W","W","W","W","W"};
-    myGrid = myRuleset.createGrid(5, 5, initialStates, );
+    myGrid = myRuleset.createGrid(5, 5, initialStates);
 
     myGrid.update();
 
@@ -131,7 +131,7 @@ class WatorRulesetTest {
                               "W","W","S","W","W",
                               "W","W","W","W","W",
                               "W","W","W","W","W"};
-    myGrid = myRuleset.createGrid(5, 5, initialStates, );
+    myGrid = myRuleset.createGrid(5, 5, initialStates);
 
     myGrid.update();
 
