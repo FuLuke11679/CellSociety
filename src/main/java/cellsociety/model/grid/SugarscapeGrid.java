@@ -38,18 +38,19 @@ public class SugarscapeGrid extends Grid {
   @Override
   public List<Cell> getNeighbors(int row, int col) {
     Grid grid = getGrid();
-    List<Cell> neighbors = new ArrayList<>();
 
-    int[] dx = {-1, 1, 0, 0};
-    int[] dy = {0, 0, -1, 1};
+    List<Cell> neighbors = new ArrayList<>();
+    int[] dx = {-1, 0, 0, 1};
+    int[] dy = {0, -1, 1, 0};
 
     for (int i = 0; i < 4; i++) {
-      int numRows = getRows();
-      int numCols = getColumns();
-      int newRow = (row + dx[i] + numRows) % numRows;  // Wrap row
-      int newCol = (col + dy[i] + numCols) % numCols;  // Wrap column
-
-      neighbors.add(grid.getCell(newRow, newCol));
+      int newRow = row + dx[i];
+      int newCol = col + dy[i];
+      int rows = getRows();
+      int columns = getColumns();
+      if (newRow >= 0 && newRow < rows && newCol >= 0 && newCol < columns) {
+        neighbors.add(grid.getCell(newRow, newCol));
+      }
     }
     return neighbors;
   }
