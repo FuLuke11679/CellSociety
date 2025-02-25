@@ -43,6 +43,8 @@ public class Main extends Application {
     private ColorScheme myScheme;
     private Locale myLocale;
     private SplashScreen mySplashScreen;
+    private int width = 800;
+    private int height = 800;
 
 
     @Override
@@ -85,7 +87,7 @@ public class Main extends Application {
                 myLocale);
 
             BorderPane layout = initializeLayout(simInfo);
-            setStage(new Scene(layout, 600, 800));
+            setStage(new Scene(layout, width, height));
         } catch (IllegalArgumentException e) {
             showMessage(simInfo.getString("invalid_config") + e.getMessage());
         } catch (Exception e) {
