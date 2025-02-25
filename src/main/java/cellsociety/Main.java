@@ -11,10 +11,12 @@ import java.util.ResourceBundle;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Application;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.StackPane;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.util.Duration;
@@ -161,14 +163,18 @@ public class Main extends Application {
                 loadSimulation(newFile);
             }
         });
-        mySplashScreen.getSplashPane().setRight(loadButton);
+        HBox splashControls = mySplashScreen.getControls();
+        if(splashControls.getChildren().size()<3){
+            splashControls.getChildren().add(loadButton);
+            mySplashScreen.getSplashPane().setBottom(splashControls);
+        }
     }
 
     /**
      * Continuously updates splash screen as user makes customization choices
      */
     private void splashLoop(){
-        splashLoop = new Timeline(new KeyFrame(Duration.seconds(SECOND_DELAY), e -> {
+        splashLoop = new Timeline(new KeyFrame(Duration.seconds(0.05), e -> {
             myLocale = mySplashScreen.getMyLocale();
             myScheme = mySplashScreen.getColorScheme();
             setLoadButton();
@@ -186,7 +192,9 @@ public class Main extends Application {
      */
     private BorderPane initializeLayout(ResourceBundle simInfo) {
         BorderPane layout = new BorderPane();
-        layout.setCenter(myGridView.getScene().getRoot());
+        HBox centerWrapper = new HBox(myGridView.getScene().getRoot());
+        centerWrapper.setAlignment(Pos.CENTER);
+        layout.setCenter(centerWrapper);
 
         Button startButton = new Button(simInfo.getString("start"));
         Button pauseButton = new Button(simInfo.getString("pause"));

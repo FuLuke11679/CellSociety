@@ -22,6 +22,7 @@ public class SplashScreen {
   private Scene splashScene;
   private Locale myLocale;
   private ColorScheme myScheme; //initialize to LIGHT mode
+  private HBox controls;
 
 
   public SplashScreen(Locale locale){
@@ -111,7 +112,7 @@ public class SplashScreen {
     colorScheme.getItems().addAll(colorScheme1, colorScheme2, colorScheme3, colorScheme4);
     controlButtons.add(languageSelect);
     controlButtons.add(colorScheme);
-    HBox controls = new HBox(10);
+    controls = new HBox(10);
     for (MenuButton controlButton : controlButtons) {
       controls.getChildren().add(controlButton);
     }
@@ -154,7 +155,9 @@ public class SplashScreen {
   public Locale getMyLocale(){
     return myLocale;
   }
-
+  public HBox getControls(){
+    return controls;
+  }
   public ColorScheme getColorScheme(){
     return myScheme;
   }
