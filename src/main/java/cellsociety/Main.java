@@ -43,6 +43,8 @@ public class Main extends Application {
     private ColorScheme myScheme;
     private Locale myLocale;
     private SplashScreen mySplashScreen;
+    private int width = 800;
+    private int height = 800;
 
 
     @Override
@@ -70,7 +72,7 @@ public class Main extends Application {
             Ruleset ruleset = getRuleset();
             int[] values = myParser.getValues();
             if (values != null && myParser.getSimType().equals("Sugarscape")) {
-                ((SugarscapeRuleset) ruleset).setValues(values);
+                ((SugarscapeRuleset) ruleset).setInitialValues(values);
             }
             myGrid = ruleset.createGrid(myParser.getRows(), myParser.getColumns(), myParser.getInitialStates());
             myGridView = new GridView(
@@ -85,7 +87,7 @@ public class Main extends Application {
                 myLocale);
 
             BorderPane layout = initializeLayout(simInfo);
-            setStage(new Scene(layout, 600, 800));
+            setStage(new Scene(layout, width, height));
         } catch (IllegalArgumentException e) {
             showMessage(simInfo.getString("invalid_config") + e.getMessage());
         } catch (Exception e) {
@@ -113,7 +115,9 @@ public class Main extends Application {
             case "GeneralConway" -> new GeneralConwayRuleset(myParser.getSimVarsMap().get("rules"));
             case "Sugarscape" -> new SugarscapeRuleset(
                 getIntFromParser("sugarGrowBackRate"),
-                getIntFromParser("sugarGrowBackInterval")
+                getIntFromParser("sugarGrowBackInterval"),
+                getIntFromParser("agentVision"),
+                getIntFromParser("agentMetabolism")
             );
             default -> throw new IllegalStateException("Unknown simulation type: " + myParser.getSimType());
         };

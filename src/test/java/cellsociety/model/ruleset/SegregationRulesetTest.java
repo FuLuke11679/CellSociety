@@ -26,7 +26,7 @@ class SegregationRulesetTest {
                               "EM", "EM", "EM", "BLU", "R"};
     double similarityThreshold = 0.5;
     myRuleset = new SegregationRuleset(similarityThreshold);
-    myGrid = myRuleset.createGrid(5, 5, initialStates, );
+    myGrid = myRuleset.createGrid(5, 5, initialStates);
   }
 
   @Test
