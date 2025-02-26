@@ -1,0 +1,83 @@
+image: dukedesigncoach/testfx-runner:bellsoftjdk21
+
+stages:
+  - validate
+  - test
+  - report
+
+analyze_codebase:
+  stage: validate
+  when: always
+  script:
+    - "mvn checkstyle:checkstyle || true"
+    - "mvn pmd:pmd -Dformat=net.sourceforge.pmd.renderers.CodeClimateRenderer || true"
+    - "mvn pmd:cpd || true"
+
+    # consolidate the reports
+    - |
+      /report_as_codequality \
+        --cpd-file target/cpd.xml \
+        --pmd-file target/pmd.json \
+        --checkstyle-file target/checkstyle-result.xml \
+        --output-file target/codequality.json
+
+    # after generating the reports, fail the step if they didn't pass
+    - mvn checkstyle:check pmd:check pmd:cpd-check -DfailOnViolation=true
+  artifacts:
+    when: always
+    paths:
+      - target/codequality.json
+    reports:
+      codequality: target/codequality.json
+
+unit_testing:
+  stage: test
+  when: always
+  script:
+    - |
+      mvn test \
+        -Djava.awt.headless=true \
+        -Dtestfx.headless=true \
+        -Dtestfx.robot=glass \
+        -Dembedded=monocle \
+        -Dglass.platform=Monocle \
+        -Dprism.order=sw \
+        -Dprism.fontdir=/usr/share/fonts \
+        -Dtestfx.setup.timeout=12000 \
+        -Dheadless.geometry=1600x1200
+    - /cover2cover target/site/jacoco/jacoco.xml > target/cobertura.xml
+    - cat target/cobertura.xml
+  timeout: 20 minutes
+  artifacts:
+    reports:
+      junit: target/surefire-reports/TEST-*.xml
+      coverage_report:
+        coverage_format: cobertura
+        path: target/cobertura.xml
+    paths:
+      - target
+  # extracted from the cat'd cobertura.xml
+  coverage: '/\<coverage[^\>]+line-rate="[01]\.([0-9]{2})[^"]+"/'
+
+docs:
+  stage: report
+  when: always
+  script:
+    - "mvn javadoc:javadoc -DfailOnError=false || true"
+    - mvn site:site
+  artifacts:
+    paths:
+      - target/site
+
+pages:
+  stage: report
+  when: always
+  needs:
+    - docs
+  script:
+    - mv target/site public
+  artifacts:
+    paths:
+      - public
+  only:
+    - main
