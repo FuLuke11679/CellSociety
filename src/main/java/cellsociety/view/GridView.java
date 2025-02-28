@@ -10,6 +10,7 @@ import cellsociety.model.cell.ConwayCell.ConwayState;
 import cellsociety.model.cell.FireCell.FireState;
 import cellsociety.model.cell.PercolationCell.PercolationState;
 import cellsociety.model.state.CellState;
+import cellsociety.view.shapes.ShapeFactory;
 import java.util.Locale;
 import java.util.Map;
 import java.util.ResourceBundle;
@@ -23,6 +24,7 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
+import javafx.scene.shape.Shape;
 import javafx.scene.text.Text;
 
 public class GridView {
@@ -35,9 +37,10 @@ public class GridView {
   private final int WINDOW_WIDTH = 600;
   private final int WINDOW_HEIGHT = 800;
   private VBox infoBox;
-  Rectangle[][] cellRectangles;  // Store references for easy updates
+  private Shape[][] cellShapes;
   private Grid grid;
   private Locale myLocale;
+  private String currentCellShape = "Rectangular";
 
   public enum ColorScheme{
     LIGHT,
@@ -80,7 +83,7 @@ public class GridView {
     this.columns = columns;
     this.cellSize = SIZE_GRID / rows;
     this.gridPane = new GridPane();
-    this.cellRectangles = new Rectangle[rows][columns];
+    this.cellShapes = new Shape[rows][columns];
     this.grid = grid;
     this.myLocale = myLocale;
 
@@ -99,14 +102,16 @@ public class GridView {
    * Initializes the grid from the given `CellUnit` list.
    */
   private void initializeGrid() {
+    gridPane.getChildren().clear();  // ✅ Clears old shapes before adding new ones
+    gridPane.setGridLinesVisible(true);
+
     for (int row = 0; row < rows; row++) {
       for (int col = 0; col < columns; col++) {
-        Rectangle rect = new Rectangle(cellSize, cellSize);
-        rect.setFill(cellColors.get(grid.getCell(row, col).getCurrState()));
-        rect.setStroke(Color.BLACK);
-        rect.setStrokeWidth(1);
-        gridPane.add(rect, col, row);  // (column, row) order
-        cellRectangles[row][col] = rect;  // Store reference for quick updates
+        Shape shape = ShapeFactory.createShape(currentCellShape, cellSize, row, col);
+        shape.setFill(getCellColor(grid.getCell(row, col)));
+        shape.setStroke(Color.BLACK);
+        gridPane.add(shape, col, row);
+        cellShapes[row][col] = shape;
       }
     }
   }
@@ -118,27 +123,23 @@ public class GridView {
     for (int row = 0; row < rows; row++) {
       for (int col = 0; col < columns; col++) {
         Cell cell = grid.getCell(row, col);
-        Color fillColor;
-        if (cell instanceof SugarscapePatch) {
-          SugarscapePatch patch = (SugarscapePatch) cell;
-          if (patch.hasAgent()) {
-            fillColor = Color.RED;
-          } else {
-            double fraction = (double) patch.getSugarAmount() / patch.getMaxSugar();
-            fillColor = Color.WHITE.interpolate(Color.DARKGREEN, fraction);
-          }
-        }
-        else {
-          // For other simulation types, use the fixed mapping.
-          fillColor = cellColors.get(cell.getCurrState());
-        }
-        cellRectangles[row][col].setFill(fillColor);
+        cellShapes[row][col].setFill(getCellColor(cell));
       }
     }
   }
-
-
-
+  private Color getCellColor(Cell cell) {
+    if (cell instanceof SugarscapePatch) {
+      SugarscapePatch patch = (SugarscapePatch) cell;
+      if (patch.hasAgent()) {
+        return Color.RED;
+      } else {
+        double fraction = (double) patch.getSugarAmount() / patch.getMaxSugar();
+        return Color.WHITE.interpolate(Color.DARKGREEN, fraction);
+      }
+    } else {
+      return cellColors.get(cell.getCurrState());
+    }
+  }
 
   /**
    * Displays simulation metadata at the top.
@@ -152,6 +153,13 @@ public class GridView {
         new Text(simInfo.getString("author") + author),
         new Text(simInfo.getString("description") + description)
     );
+  }
+  public void redrawGrid(int newRows, int newCols, String newShapeClass) {
+    this.rows = newRows;
+    this.columns = newCols;
+    this.cellSize = SIZE_GRID / Math.max(rows, columns);
+    this.currentCellShape = ShapeFactory.getFullyQualifiedName(newShapeClass);
+    initializeGrid();
   }
 
   /**

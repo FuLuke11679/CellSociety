@@ -3,7 +3,7 @@ package cellsociety.model.grid.shape;
 import java.util.ArrayList;
 import java.util.List;
 
-public class TriangleShape implements CellShape {
+public class TriangularShape implements CellShape {
   @Override
   public List<int[]> getNeighborOffsets(int row, int col) {
     List<int[]> offsets = new ArrayList<>();

@@ -1,9 +1,11 @@
 package cellsociety.model.ruleset;
 
 import cellsociety.model.cell.Cell;
+import cellsociety.model.cell.ConwayCell.ConwayState;
 import cellsociety.model.cell.WatorCell.WatorState;
 import cellsociety.model.grid.Grid;
 import cellsociety.model.grid.WatorGrid;
+import cellsociety.model.state.CellState;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -266,5 +268,11 @@ public class WatorRuleset extends Ruleset {
     generateEnergyAndReproductionMaps(myGrid);
     return myGrid;
   }
+
+  @Override
+  public CellState getDefaultCellState() {
+    return WatorState.WATER;
+  }
+
 
 }

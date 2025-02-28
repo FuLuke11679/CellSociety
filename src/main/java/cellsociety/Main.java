@@ -1,11 +1,15 @@
 package cellsociety;
 
+import cellsociety.model.grid.CellShapeFactory;
+import cellsociety.model.grid.EdgeFactory;
 import cellsociety.model.grid.Grid;
+import cellsociety.model.grid.NeighborhoodFactory;
 import cellsociety.model.ruleset.*;
 import cellsociety.parser.XMLParser;
 import cellsociety.view.GridView;
 import cellsociety.view.GridView.ColorScheme;
 import cellsociety.view.SplashScreen;
+import cellsociety.view.shapes.ShapeFactory;
 import java.util.Locale;
 import java.util.ResourceBundle;
 import javafx.animation.KeyFrame;
@@ -15,6 +19,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.util.Duration;
@@ -75,6 +80,9 @@ public class Main extends Application {
                 ((SugarscapeRuleset) ruleset).setInitialValues(values);
             }
             myGrid = ruleset.createGrid(myParser.getRows(), myParser.getColumns(), myParser.getInitialStates());
+            myGrid.setEdgeHandler(EdgeFactory.createEdgeHandler(myParser.getEdgeType()));
+            myGrid.setNeighborhoodStrategy(NeighborhoodFactory.createNeighborhoodStrategy(myParser.getNeighborhoodType()));
+            myGrid.setCellShape(CellShapeFactory.createCellShape(myParser.getCellShape()));
             myGridView = new GridView(
                 myParser.getRows(),
                 myParser.getColumns(),
@@ -216,6 +224,59 @@ public class Main extends Application {
 
         HBox controls = new HBox(10, startButton, pauseButton, saveButton, resetButton, loadButton, new Label("Speed:"), speedSlider);
         layout.setBottom(controls);
+
+        VBox settingsPanel = new VBox(15);
+        settingsPanel.setStyle("-fx-padding: 10;");
+
+        Label settingsTitle = new Label("Grid Settings");
+
+// Edge Dropdown
+        ComboBox<String> edgeDropdown = new ComboBox<>();
+        edgeDropdown.getItems().addAll("toroidal", "mirror", "infinite");
+        edgeDropdown.setValue(myParser.getEdgeType());
+        edgeDropdown.setOnAction(e -> {
+            myGrid.setEdgeHandler(EdgeFactory.createEdgeHandler(edgeDropdown.getValue()));
+        });
+
+// Neighborhood Dropdown
+        ComboBox<String> neighborhoodDropdown = new ComboBox<>();
+        neighborhoodDropdown.getItems().addAll("vonNeumann", "extendedMoore");
+        neighborhoodDropdown.setValue(myParser.getNeighborhoodType());
+        neighborhoodDropdown.setOnAction(e -> {
+            myGrid.setNeighborhoodStrategy(NeighborhoodFactory.createNeighborhoodStrategy(neighborhoodDropdown.getValue()));
+        });
+
+// Shape Dropdown (Dynamic from Factory)
+        ComboBox<String> shapeDropdown = new ComboBox<>();
+        shapeDropdown.getItems().addAll(ShapeFactory.getAvailableShapes()); // Dynamically fetch shapes
+        shapeDropdown.setValue(myParser.getCellShape());
+        shapeDropdown.setOnAction(e -> {
+            String selectedShape = shapeDropdown.getValue();
+
+            if (selectedShape == null || selectedShape.trim().isEmpty()) {
+                System.err.println("Error: Selected shape is null or empty.");
+                return;
+            }
+
+            String fullyQualifiedShape = ShapeFactory.getFullyQualifiedName(selectedShape);
+
+            myGrid.setCellShape(CellShapeFactory.createCellShape(fullyQualifiedShape));
+            myGridView.redrawGrid(myParser.getRows(), myParser.getColumns(), fullyQualifiedShape);
+
+            System.out.println("Redrawing grid with shape: " + fullyQualifiedShape);
+        });
+
+
+
+
+        settingsPanel.getChildren().addAll(
+            settingsTitle,
+            new Label("Edge Type:"), edgeDropdown,
+            new Label("Neighborhood Type:"), neighborhoodDropdown,
+            new Label("Cell Shape:"), shapeDropdown
+        );
+
+        layout.setRight(settingsPanel); // Place settings on the right side
         return layout;
     }
 
@@ -264,14 +325,6 @@ public class Main extends Application {
 
     private void showMessage(String message) {
         new Alert(Alert.AlertType.INFORMATION, message).showAndWait();
-    }
-
-    private void showErrorDialog(String title, String message) {
-        Alert alert = new Alert(Alert.AlertType.ERROR);
-        alert.setTitle(title);
-        alert.setHeaderText(null);
-        alert.setContentText(message);
-        alert.showAndWait();
     }
 
     public ResourceBundle getResourceBundle(String name){

@@ -5,5 +5,5 @@ import cellsociety.model.grid.Grid;
 import java.util.List;
 
 public interface EdgeHandler {
-  List<Cell> handleNeighbors(int row, int col, Grid grid, List<int[]> offsets);
+  List<Cell> handleNeighbors(int row, int col, List<int[]> offsets, Grid grid);
 }

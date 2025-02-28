@@ -2,25 +2,22 @@
 <simulationConfig>
     <!-- window and grid configuration -->
     <display width="800" height="800" title="Conway Simulation" author="Palo">
-        <grid rows="5" columns="5" />
+        <grid rows="5" columns="5" edgeType="Toroidal" neighborhoodType="VonNeumann" cellShape="Rectangular"/>
         <description text="This is Palo's description"/>
     </display>
 
     <!-- sim configuration -->
     <sim type="Conway">
-        <simvars
-        />
+        <simvars />
     </sim>
     <init
-       stateList =
+      stateList =
         "A,A,D,D,D,
-        A,A,D,D,D,
-        A,A,D,D,D,
-        A,A,D,D,D,
-        A,A,D,D,D"
+        D,D,D,D,D,
+        D,D,D,A,A,
+        A,D,A,A,A,
+        A,A,D,A,D"
     >
     </init>
-
 </simulationConfig>
-
 

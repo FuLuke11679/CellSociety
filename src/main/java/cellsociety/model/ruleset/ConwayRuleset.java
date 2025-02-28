@@ -4,6 +4,7 @@ import cellsociety.model.cell.Cell;
 import cellsociety.model.cell.ConwayCell.ConwayState;
 import cellsociety.model.grid.ConwayGrid;
 import cellsociety.model.grid.Grid;
+import cellsociety.model.state.CellState;
 import java.util.List;
 
 /**
@@ -75,5 +76,11 @@ public class ConwayRuleset extends Ruleset {
   public Grid createGrid(int rows, int columns, String[] initialStates) {
     return new ConwayGrid(rows, columns, this, initialStates);
   }
+
+  @Override
+  public CellState getDefaultCellState() {
+    return ConwayState.DEAD;
+  }
+
 
 }

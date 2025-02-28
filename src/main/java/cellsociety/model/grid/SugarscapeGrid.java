@@ -37,8 +37,6 @@ public class SugarscapeGrid extends Grid {
   }
   @Override
   public List<Cell> getNeighbors(int row, int col) {
-    Grid grid = getGrid();
-
     List<Cell> neighbors = new ArrayList<>();
     int[] dx = {-1, 0, 0, 1};
     int[] dy = {0, -1, 1, 0};
@@ -49,7 +47,7 @@ public class SugarscapeGrid extends Grid {
       int rows = getRows();
       int columns = getColumns();
       if (newRow >= 0 && newRow < rows && newCol >= 0 && newCol < columns) {
-        neighbors.add(grid.getCell(newRow, newCol));
+        neighbors.add(this.getCell(newRow, newCol));
       }
     }
     return neighbors;

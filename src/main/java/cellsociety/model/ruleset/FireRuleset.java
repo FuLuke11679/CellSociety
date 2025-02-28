@@ -1,9 +1,11 @@
 package cellsociety.model.ruleset;
 
 import cellsociety.model.cell.Cell;
+import cellsociety.model.cell.ConwayCell.ConwayState;
 import cellsociety.model.cell.FireCell.FireState;
 import cellsociety.model.grid.FireGrid;
 import cellsociety.model.grid.Grid;
+import cellsociety.model.state.CellState;
 import java.util.List;
 
 /**
@@ -95,5 +97,11 @@ public class FireRuleset extends Ruleset {
   public Grid createGrid(int rows, int columns, String[] initialStates) {
     return new FireGrid(rows, columns, this, initialStates);
   }
+
+  @Override
+  public CellState getDefaultCellState() {
+    return FireState.EMPTY;
+  }
+
 
 }

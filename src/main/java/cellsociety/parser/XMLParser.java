@@ -7,7 +7,6 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -33,6 +32,11 @@ public class XMLParser extends Parser {
   private Map<String, GridPattern> patterns;
   private boolean hasRandomStates;
   private Map<String, Double> stateProportions;
+
+  private String edgeType;
+  private String neighborhoodType;
+  private String cellShape;
+
 
   // Nested class to store grid pattern information
   public class GridPattern {
@@ -123,6 +127,13 @@ public class XMLParser extends Parser {
     if (rows <= 0) throw new InvalidXMLConfigurationException("Rows must be positive");
     this.columns = getRequiredIntAttribute(grid, "columns");
     if (columns <= 0) throw new InvalidXMLConfigurationException("Columns must be positive");
+    this.edgeType = grid.getAttribute("edgeType");
+    this.neighborhoodType = grid.getAttribute("neighborhoodType");
+    this.cellShape = grid.getAttribute("cellShape");
+    System.out.println("Parsed XML Values:");
+    System.out.println("Edge Type: " + edgeType);
+    System.out.println("Neighborhood Type: " + neighborhoodType);
+    System.out.println("Cell Shape: " + cellShape);
 
     Element descElement = getRequiredElement(display, "description");
     this.description = getRequiredAttribute(descElement, "text");
@@ -439,4 +450,14 @@ public class XMLParser extends Parser {
   public Map<String, GridPattern> getPatterns() { return patterns; }
   public boolean hasRandomStates() { return hasRandomStates; }
   public Map<String, Double> getStateProportions() { return stateProportions; }
+
+  public String getEdgeType() {
+    return edgeType;
+  }
+  public String getNeighborhoodType() {
+    return neighborhoodType;
+  }
+  public String getCellShape(){
+    return cellShape;
+  }
 }
