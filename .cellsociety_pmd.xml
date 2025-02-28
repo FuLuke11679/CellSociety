@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<ruleset name="CustomRuleset"
+<ruleset name="CompSci 308 Design Ruleset"
   xmlns="http://pmd.sourceforge.net/ruleset/2.0.0"
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="https://pmd.github.io/schema/ruleset_2_0_0.xsd http://pmd.sourceforge.net/ruleset/2.0.0">
@@ -44,12 +44,12 @@
     <properties>
       <property name="xpath">
         <value>
-              <![CDATA[
-                    //FieldDeclaration[not(Annotation) and not(
-                        @Private='true'
-                        or (@Static='true' and @Final='true')
-                    )]
-               ]]>
+          <![CDATA[
+                //FieldDeclaration[not(
+                    @Visibility='private' or
+                    (pmd-java:modifiers()='static' and pmd-java:modifiers()='final')
+                )]
+          ]]>
         </value>
       </property>
     </properties>
