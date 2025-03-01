@@ -9,6 +9,7 @@ import cellsociety.model.grid.ConwayGrid;
 import cellsociety.model.grid.Grid;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -23,7 +24,7 @@ class GeneralConwayRulesetTest {
 
   @BeforeEach
   void setUp() {
-    myRuleset = new GeneralConwayRuleset("B2/S");
+    myRuleset = new GeneralConwayRuleset(Map.of("rules", "B2/S"));
     String[] initialStates = {
         "D","D","D","D","D",
         "D","A","D","D","D",
@@ -44,7 +45,7 @@ class GeneralConwayRulesetTest {
 
   @Test
   void updateCellState_SeedVariationWithSBRule_CellDiesButBirthsTwo() {
-    myRuleset = new GeneralConwayRuleset("/2");
+    myRuleset = new GeneralConwayRuleset(Map.of("rules", "/2"));
     myGrid.update();
     assertEquals(ConwayState.DEAD, myGrid.getCell(1, 1).getCurrState());
     assertEquals(ConwayState.ALIVE, myGrid.getCell(1, 2).getCurrState());

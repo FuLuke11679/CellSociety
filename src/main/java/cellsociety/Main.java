@@ -103,26 +103,27 @@ public class Main extends Application {
      */
 
     private Ruleset getRuleset() {
-        return switch (myParser.getSimType()) {
-            case "Conway" -> new ConwayRuleset();
-            case "Percolation" -> new PercolationRuleset();
-            case "Fire" -> new FireRuleset(getDoubleFromParser("probCatch"), getDoubleFromParser("probGrow"));
-            case "Segregation" -> new SegregationRuleset(getDoubleFromParser("thresh"));
-            case "WatorWorld" -> new WatorRuleset(
-                getIntFromParser("fishBreedTime"),
-                getIntFromParser("fishStarveTime"),
-                getIntFromParser("sharkBreedTime"),
-                getIntFromParser("sharkStarveTime")
-            );
-            case "GeneralConway" -> new GeneralConwayRuleset(myParser.getSimVarsMap().get("rules"));
-            case "Sugarscape" -> new SugarscapeRuleset(
-                getIntFromParser("sugarGrowBackRate"),
-                getIntFromParser("sugarGrowBackInterval"),
-                getIntFromParser("agentVision"),
-                getIntFromParser("agentMetabolism")
-            );
-            default -> throw new IllegalStateException("Unknown simulation type: " + myParser.getSimType());
-        };
+//        return switch (myParser.getSimType()) {
+//            case "Conway" -> new ConwayRuleset();
+//            case "Percolation" -> new PercolationRuleset();
+//            case "Fire" -> new FireRuleset(getDoubleFromParser("probCatch"), getDoubleFromParser("probGrow"));
+//            case "Segregation" -> new SegregationRuleset(getDoubleFromParser("thresh"));
+//            case "WatorWorld" -> new WatorRuleset(
+//                getIntFromParser("fishBreedTime"),
+//                getIntFromParser("fishStarveTime"),
+//                getIntFromParser("sharkBreedTime"),
+//                getIntFromParser("sharkStarveTime")
+//            );
+//            case "GeneralConway" -> new GeneralConwayRuleset(myParser.getSimVarsMap().get("rules"));
+//            case "Sugarscape" -> new SugarscapeRuleset(
+//                getIntFromParser("sugarGrowBackRate"),
+//                getIntFromParser("sugarGrowBackInterval"),
+//                getIntFromParser("agentVision"),
+//                getIntFromParser("agentMetabolism")
+//            );
+//            default -> throw new IllegalStateException("Unknown simulation type: " + myParser.getSimType());
+//        };
+        return RulesetFactory.createRuleset(myParser.getSimType(), myParser.getSimVarsMap());
     }
 
     private int getIntFromParser(String fieldKey) {

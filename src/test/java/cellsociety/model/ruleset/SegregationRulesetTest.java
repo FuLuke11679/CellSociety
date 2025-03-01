@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import cellsociety.model.cell.SegregationCell.SegregationState;
 import cellsociety.model.grid.Grid;
+import java.util.Map;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -24,8 +25,7 @@ class SegregationRulesetTest {
                               "EM", "EM", "EM", "EM", "EM",
                               "EM", "EM", "EM", "BLU", "BLU",
                               "EM", "EM", "EM", "BLU", "R"};
-    double similarityThreshold = 0.5;
-    myRuleset = new SegregationRuleset(similarityThreshold);
+    myRuleset = new SegregationRuleset(Map.of("thresh", "0.5"));
     myGrid = myRuleset.createGrid(5, 5, initialStates);
   }
 

@@ -6,6 +6,7 @@ import cellsociety.model.cell.Cell;
 import cellsociety.model.cell.WatorCell.WatorState;
 import cellsociety.model.grid.Grid;
 import java.util.List;
+import java.util.Map;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -20,7 +21,13 @@ class WatorRulesetTest {
 
   @BeforeEach
   void setUp() {
-    myRuleset = new WatorRuleset(5, 4, 5 ,4);
+    Map<String, String> params = Map.of(
+        "fishBreedTime", "5",
+        "fishStarveTime", "4",
+        "sharkBreedTime", "5",
+        "sharkStarveTime", "4"
+    );
+    myRuleset = new WatorRuleset(params);
   }
 
   @Test
@@ -125,7 +132,13 @@ class WatorRulesetTest {
 
   @Test
   void updateGridState_Reproduction_ActiveCellReproduces() {
-    myRuleset = new WatorRuleset(1, 2, 1, 2);
+    Map<String, String> params = Map.of(
+        "fishBreedTime", "1",
+        "fishStarveTime", "2",
+        "sharkBreedTime", "1",
+        "sharkStarveTime", "2"
+    );
+    myRuleset = new WatorRuleset(params);
     String[] initialStates = {"W","W","W","W","W",
                               "W","W","W","W","W",
                               "W","W","S","W","W",
