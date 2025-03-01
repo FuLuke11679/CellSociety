@@ -5,6 +5,7 @@ import cellsociety.model.cell.ConwayCell.ConwayState;
 import cellsociety.parser.GeneralConwayParser;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 /**
@@ -13,12 +14,20 @@ import java.util.Set;
  */
 public class GeneralConwayRuleset extends ConwayRuleset {
 
-  Set<Integer> birthVals;
-  Set<Integer> survivalVals;
+  private static final String RULE_PARAM_NAME = "rules";
 
-  public GeneralConwayRuleset(String rules) {
+  private final Set<Integer> birthVals;
+  private final Set<Integer> survivalVals;
+
+  /**
+   * Constructor for the General Conway Game of Life Ruleset
+   * @param params Map of relevant parameters to ruleset
+   *               (rules)
+   */
+  public GeneralConwayRuleset(Map<String, String> params) {
     birthVals = new HashSet<>();
     survivalVals = new HashSet<>();
+    String rules = params.get(RULE_PARAM_NAME);
     GeneralConwayParser.parseRuleString(rules, birthVals, survivalVals);
   }
 

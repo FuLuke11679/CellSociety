@@ -7,6 +7,7 @@ import cellsociety.model.cell.FireCell;
 import cellsociety.model.cell.FireCell.FireState;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -22,8 +23,10 @@ class FireRulesetTest {
 
   List<Cell> neighbors;
 
-  Ruleset rulesetMinProb = new FireRuleset(0, 0);
-  Ruleset rulesetMaxProb = new FireRuleset(1, 1);
+  Map<String, String> minProbMap = Map.of("0", "0");
+  Map<String, String> maxProbMap = Map.of("1", "1");
+  Ruleset rulesetMinProb = new FireRuleset(minProbMap);
+  Ruleset rulesetMaxProb = new FireRuleset(maxProbMap);
 
   @BeforeEach
   void setUp() {
