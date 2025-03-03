@@ -259,7 +259,7 @@ public class Main extends Application {
 
 // Edge Dropdown
         ComboBox<String> edgeDropdown = new ComboBox<>();
-        edgeDropdown.getItems().addAll("toroidal", "mirror", "infinite");
+        edgeDropdown.getItems().addAll("Toroidal", "Mirror", "Infinite");
         edgeDropdown.setValue(myParser.getEdgeType());
         edgeDropdown.setOnAction(e -> {
             myGrid.setEdgeHandler(EdgeFactory.createEdgeHandler(edgeDropdown.getValue()));
@@ -267,7 +267,7 @@ public class Main extends Application {
 
 // Neighborhood Dropdown
         ComboBox<String> neighborhoodDropdown = new ComboBox<>();
-        neighborhoodDropdown.getItems().addAll("vonNeumann", "extendedMoore");
+        neighborhoodDropdown.getItems().addAll("VonNeumann", "ExtendedMoore");
         neighborhoodDropdown.setValue(myParser.getNeighborhoodType());
         neighborhoodDropdown.setOnAction(e -> {
             myGrid.setNeighborhoodStrategy(NeighborhoodFactory.createNeighborhoodStrategy(neighborhoodDropdown.getValue()));
