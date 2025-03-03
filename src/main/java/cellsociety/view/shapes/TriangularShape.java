@@ -1,29 +1,45 @@
 package cellsociety.view.shapes;
 
 import javafx.scene.shape.Polygon;
+import javafx.scene.shape.Shape;
 
 public class TriangularShape extends Polygon {
-  public TriangularShape(int sideLength, int row, int col) {
-    double width = sideLength;  // Base width of equilateral triangle
-    double height = Math.sqrt(3) / 2 * sideLength; // Correct height of an equilateral triangle
+  private static final double SCALE_FACTOR = 1.5;
 
-    // Adjust column and row offsets
-    double xOffset = col * width * 0.5; // Shift every other column
-    double yOffset = row * height;
 
-    // If row is even, alternate direction
+  public TriangularShape(int size, int row, int col) {
+    double width = size * SCALE_FACTOR;
+    double height = Math.sqrt(3) / 2 * size;
+
+    double xOffset = col * width * 0.5;
+    double yOffset = row * height - (height * 0.25);  // Adjusted to move up
+
     if ((row % 2 == 0 && col % 2 == 0) || (row % 2 == 1 && col % 2 == 1)) {
       getPoints().addAll(
-          xOffset, yOffset + height,
-          xOffset + width / 2, yOffset,
-          xOffset + width, yOffset + height
+          0.0, height,
+          width / 2, 0.0,
+          width, height
       );
     } else {
       getPoints().addAll(
-          xOffset, yOffset,
-          xOffset + width / 2, yOffset + height,
-          xOffset + width, yOffset
+          0.0, 0.0,
+          width / 2, height,
+          width, 0.0
       );
     }
+
+    setTranslateX(xOffset);
+    setTranslateY(yOffset);
+  }
+
+  public static void setPosition(Shape shape, int row, int col, int size) {
+    double width = size;
+    double height = Math.sqrt(3) / 2 * size;
+
+    double xOffset = col * width * 0.5;
+    double yOffset = row * height - (height * 0.25);  // Adjusted
+
+    shape.setTranslateX(xOffset);
+    shape.setTranslateY(yOffset);
   }
 }

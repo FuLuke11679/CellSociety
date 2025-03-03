@@ -1,11 +1,14 @@
 package cellsociety.view.shapes;
 
+import java.lang.reflect.Method;
 import java.util.List;
 import java.util.Arrays;
 import javafx.scene.shape.Shape;
 
 public class ShapeFactory {
-  private static final List<String> AVAILABLE_SHAPES = Arrays.asList("Rectangular", "Hexagonal", "Triangular");
+
+  private static final List<String> AVAILABLE_SHAPES = Arrays.asList("Rectangular", "Hexagonal",
+      "Triangular");
 
   public static List<String> getAvailableShapes() {
     return AVAILABLE_SHAPES;
@@ -27,13 +30,25 @@ public class ShapeFactory {
         throw new IllegalArgumentException("Shape type is null or empty.");
       }
 
+      // Get the fully qualified class name dynamically
       String className = getFullyQualifiedName(shapeType);
       if (className == null) {
         throw new IllegalArgumentException("Generated class name is null.");
       }
 
+      // Load the class dynamically using reflection
       Class<?> shapeClass = Class.forName(className);
-      return (Shape) shapeClass.getDeclaredConstructor(int.class, int.class, int.class).newInstance(size, row, col);
+      Shape shape = (Shape) shapeClass.getDeclaredConstructor(int.class, int.class, int.class).newInstance(size, row, col);
+
+      // Use reflection to find and call the setPosition() method if it exists
+      try {
+        Method setPositionMethod = shapeClass.getMethod("setPosition", Shape.class, int.class, int.class);
+        setPositionMethod.invoke(null, shape, row, col);
+      } catch (NoSuchMethodException ignored) {
+        // If the shape does not have a custom positioning method, it will use default placement
+      }
+
+      return shape;
     } catch (ClassNotFoundException e) {
       System.err.println("Error: Shape class not found -> " + shapeType);
       e.printStackTrace();
@@ -44,6 +59,9 @@ public class ShapeFactory {
       System.err.println("Unexpected error creating shape -> " + shapeType);
       e.printStackTrace();
     }
-    return new RectangularShape(size, row, col); // Default shape fallback
+
+    // Default fallback to RectangularShape in case of failure
+    return new RectangularShape(size, row, col);
   }
+
 }
