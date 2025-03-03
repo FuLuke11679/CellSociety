@@ -15,12 +15,15 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.ResourceBundle;
 import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.Pane;
+import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
@@ -28,7 +31,7 @@ import javafx.scene.shape.Shape;
 import javafx.scene.text.Text;
 
 public class GridView {
-  private GridPane gridPane;
+  private Pane gridPane;
   private Scene myScene;
   private int rows;
   private int columns;
@@ -82,7 +85,7 @@ public class GridView {
     this.rows = rows;
     this.columns = columns;
     this.cellSize = SIZE_GRID / rows;
-    this.gridPane = new GridPane();
+    this.gridPane = new Pane();
     this.cellShapes = new Shape[rows][columns];
     this.grid = grid;
     this.myLocale = myLocale;
@@ -90,8 +93,13 @@ public class GridView {
     initializeGrid();
     setupSimulationInfo(simType, title, author, description);
 
+    StackPane gridContainer = new StackPane(gridPane);
+    gridContainer.setMinSize(SIZE_GRID, SIZE_GRID);
+    gridContainer.setMaxSize(SIZE_GRID, SIZE_GRID);
+    gridContainer.setAlignment(Pos.CENTER);  // Center it properly
+
     BorderPane layout = new BorderPane();
-    layout.setBottom(gridPane);
+    layout.setCenter(gridContainer);
     layout.setTop(infoBox);
     layout.setBackground(new Background(new BackgroundFill(schemeColors.get(scheme), CornerRadii.EMPTY, Insets.EMPTY)));
 
@@ -103,14 +111,13 @@ public class GridView {
    */
   private void initializeGrid() {
     gridPane.getChildren().clear();  // ✅ Clears old shapes before adding new ones
-    gridPane.setGridLinesVisible(true);
 
     for (int row = 0; row < rows; row++) {
       for (int col = 0; col < columns; col++) {
         Shape shape = ShapeFactory.createShape(currentCellShape, cellSize, row, col);
         shape.setFill(getCellColor(grid.getCell(row, col)));
         shape.setStroke(Color.BLACK);
-        gridPane.add(shape, col, row);
+        gridPane.getChildren().add(shape);
         cellShapes[row][col] = shape;
       }
     }
