@@ -9,6 +9,7 @@ import cellsociety.model.state.CellState;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Author: Daniel Rodriguez-Florido
@@ -17,12 +18,19 @@ import java.util.List;
 
 public class SegregationRuleset extends Ruleset {
 
+  private static final String THRESHOLD_PARAM_NAME = "thresh";
+
   private final double similarityThreshold;
   private SegregationGrid myGrid;
-  List<Cell> emptyCells;
+  private List<Cell> emptyCells;
 
-  public SegregationRuleset(double similarityThreshold) {
-    this.similarityThreshold = similarityThreshold;
+  /**
+   * Constructor for the Segregation Ruleset
+   * @param params Map of String, String for parameters relevant to simulation
+   *               (thresh)
+   */
+  public SegregationRuleset(Map<String, String> params) {
+    this.similarityThreshold = Double.parseDouble(params.get(THRESHOLD_PARAM_NAME));
     emptyCells = new ArrayList<>();
   }
 

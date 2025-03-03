@@ -43,6 +43,7 @@ public class GridView {
   private Shape[][] cellShapes;
   private Grid grid;
   private Locale myLocale;
+  private int numIterations;
   private String currentCellShape = "Rectangular";
 
   public enum ColorScheme{
@@ -89,6 +90,7 @@ public class GridView {
     this.cellShapes = new Shape[rows][columns];
     this.grid = grid;
     this.myLocale = myLocale;
+    this.numIterations = 0;
 
     initializeGrid();
     setupSimulationInfo(simType, title, author, description);
@@ -131,6 +133,8 @@ public class GridView {
       for (int col = 0; col < columns; col++) {
         Cell cell = grid.getCell(row, col);
         cellShapes[row][col].setFill(getCellColor(cell));
+        this.numIterations++;
+        incrementIterations();
       }
     }
   }
@@ -148,6 +152,7 @@ public class GridView {
     }
   }
 
+
   /**
    * Displays simulation metadata at the top.
    */
@@ -158,7 +163,8 @@ public class GridView {
         new Text(simInfo.getString("simulation") + simName),
         new Text(simInfo.getString("sim_type") + simType),
         new Text(simInfo.getString("author") + author),
-        new Text(simInfo.getString("description") + description)
+        new Text(simInfo.getString("description") + description),
+        new Text(simInfo.getString("iterations") + this.numIterations)
     );
   }
   public void redrawGrid(int newRows, int newCols, String newShapeClass) {
@@ -167,6 +173,20 @@ public class GridView {
     this.cellSize = SIZE_GRID / Math.max(rows, columns);
     this.currentCellShape = ShapeFactory.getFullyQualifiedName(newShapeClass);
     initializeGrid();
+  }
+
+  /**
+   *Increments the number of iterations displayed on the Grid
+   */
+  private void incrementIterations(){
+    if (!infoBox.getChildren().isEmpty()) {
+      Text iterationsText = (Text) infoBox.getChildren().get(infoBox.getChildren().size() - 1);
+      ResourceBundle simInfo = ResourceBundle.getBundle("SimInfo", myLocale);
+
+      // Update the text with the new value of this.numIterations
+      iterationsText.setText(simInfo.getString("iterations") + this.numIterations);
+    }
+
   }
 
   /**

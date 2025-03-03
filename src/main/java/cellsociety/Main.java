@@ -16,10 +16,12 @@ import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Application;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
@@ -76,10 +78,10 @@ public class Main extends Application {
             currentFile = dataFile;
             myParser = new XMLParser(dataFile);
             Ruleset ruleset = getRuleset();
-            int[] values = myParser.getValues();
-            if (values != null && myParser.getSimType().equals("Sugarscape")) {
-                ((SugarscapeRuleset) ruleset).setInitialValues(values);
-            }
+//            int[] values = myParser.getValues
+//            if (values != null && myParser.getSimType().equals("Sugarscape")) {
+//                ((SugarscapeRuleset) ruleset).setInitialValues(values);
+//            }
             myGrid = ruleset.createGrid(myParser.getRows(), myParser.getColumns(), myParser.getInitialStates());
             myGrid.setEdgeHandler(EdgeFactory.createEdgeHandler(myParser.getEdgeType()));
             myGrid.setNeighborhoodStrategy(NeighborhoodFactory.createNeighborhoodStrategy(myParser.getNeighborhoodType()));
@@ -110,26 +112,27 @@ public class Main extends Application {
      */
 
     private Ruleset getRuleset() {
-        return switch (myParser.getSimType()) {
-            case "Conway" -> new ConwayRuleset();
-            case "Percolation" -> new PercolationRuleset();
-            case "Fire" -> new FireRuleset(getDoubleFromParser("probCatch"), getDoubleFromParser("probGrow"));
-            case "Segregation" -> new SegregationRuleset(getDoubleFromParser("thresh"));
-            case "WatorWorld" -> new WatorRuleset(
-                getIntFromParser("fishBreedTime"),
-                getIntFromParser("fishStarveTime"),
-                getIntFromParser("sharkBreedTime"),
-                getIntFromParser("sharkStarveTime")
-            );
-            case "GeneralConway" -> new GeneralConwayRuleset(myParser.getSimVarsMap().get("rules"));
-            case "Sugarscape" -> new SugarscapeRuleset(
-                getIntFromParser("sugarGrowBackRate"),
-                getIntFromParser("sugarGrowBackInterval"),
-                getIntFromParser("agentVision"),
-                getIntFromParser("agentMetabolism")
-            );
-            default -> throw new IllegalStateException("Unknown simulation type: " + myParser.getSimType());
-        };
+//        return switch (myParser.getSimType()) {
+//            case "Conway" -> new ConwayRuleset();
+//            case "Percolation" -> new PercolationRuleset();
+//            case "Fire" -> new FireRuleset(getDoubleFromParser("probCatch"), getDoubleFromParser("probGrow"));
+//            case "Segregation" -> new SegregationRuleset(getDoubleFromParser("thresh"));
+//            case "WatorWorld" -> new WatorRuleset(
+//                getIntFromParser("fishBreedTime"),
+//                getIntFromParser("fishStarveTime"),
+//                getIntFromParser("sharkBreedTime"),
+//                getIntFromParser("sharkStarveTime")
+//            );
+//            case "GeneralConway" -> new GeneralConwayRuleset(myParser.getSimVarsMap().get("rules"));
+//            case "Sugarscape" -> new SugarscapeRuleset(
+//                getIntFromParser("sugarGrowBackRate"),
+//                getIntFromParser("sugarGrowBackInterval"),
+//                getIntFromParser("agentVision"),
+//                getIntFromParser("agentMetabolism")
+//            );
+//            default -> throw new IllegalStateException("Unknown simulation type: " + myParser.getSimType());
+//        };
+        return RulesetFactory.createRuleset(myParser.getSimType(), myParser.getSimVarsMap());
     }
 
     private int getIntFromParser(String fieldKey) {
@@ -178,14 +181,18 @@ public class Main extends Application {
                 loadSimulation(newFile);
             }
         });
-        mySplashScreen.getSplashPane().setRight(loadButton);
+        HBox splashControls = mySplashScreen.getControls();
+        if(splashControls.getChildren().size()<3){
+            splashControls.getChildren().add(loadButton);
+            mySplashScreen.getSplashPane().setBottom(splashControls);
+        }
     }
 
     /**
      * Continuously updates splash screen as user makes customization choices
      */
     private void splashLoop(){
-        splashLoop = new Timeline(new KeyFrame(Duration.seconds(SECOND_DELAY), e -> {
+        splashLoop = new Timeline(new KeyFrame(Duration.seconds(0.05), e -> {
             myLocale = mySplashScreen.getMyLocale();
             myScheme = mySplashScreen.getColorScheme();
             setLoadButton();
@@ -203,7 +210,9 @@ public class Main extends Application {
      */
     private BorderPane initializeLayout(ResourceBundle simInfo) {
         BorderPane layout = new BorderPane();
-        layout.setCenter(myGridView.getScene().getRoot());
+        HBox centerWrapper = new HBox(myGridView.getScene().getRoot());
+        centerWrapper.setAlignment(Pos.CENTER);
+        layout.setCenter(centerWrapper);
 
         Button startButton = new Button(simInfo.getString("start"));
         Button pauseButton = new Button(simInfo.getString("pause"));
@@ -343,6 +352,14 @@ public class Main extends Application {
 
     private void showMessage(String message) {
         new Alert(Alert.AlertType.INFORMATION, message).showAndWait();
+    }
+
+    private void showErrorDialog(String title, String message) {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle(title);
+        alert.setHeaderText(null);
+        alert.setContentText(message);
+        alert.showAndWait();
     }
 
     public ResourceBundle getResourceBundle(String name){

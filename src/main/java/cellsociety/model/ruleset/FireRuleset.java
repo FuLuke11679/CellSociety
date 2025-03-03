@@ -7,6 +7,7 @@ import cellsociety.model.grid.FireGrid;
 import cellsociety.model.grid.Grid;
 import cellsociety.model.state.CellState;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Author: Daniel Rodriguez-Florido
@@ -15,12 +16,15 @@ import java.util.List;
 
 public class FireRuleset extends Ruleset {
 
+  private static final String PROB_GROW_PARAM_NAME = "probGrow";
+  private static final String PROB_CATCH_PARAM_NAME = "probCatch";
+
   private final double probGrow;
   private final double probCatch;
 
-  public FireRuleset(double probGrow, double probCatch) {
-    this.probGrow = probGrow;
-    this.probCatch = probCatch;
+  public FireRuleset(Map<String, String> params) {
+    this.probGrow = Double.parseDouble(params.get(PROB_GROW_PARAM_NAME));
+    this.probCatch = Double.parseDouble(params.get(PROB_CATCH_PARAM_NAME));
   }
 
   @Override

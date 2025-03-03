@@ -19,6 +19,11 @@ import java.util.Map;
 
 public class WatorRuleset extends Ruleset {
 
+  private static final String FISH_BREED_PARAM_NAME = "fishBreedTime";
+  private static final String MAX_FISH_ENERGY_PARAM_NAME = "fishStarveTime";
+  private static final String SHARK_BREED_PARAM_NAME = "sharkBreedTime";
+  private static final String MAX_SHARK_ENERGY_PARAM_NAME = "sharkStarveTime";
+
   private static final int FISH_ENERGY_VALUE = 5;
 
   private WatorGrid myGrid;
@@ -37,17 +42,15 @@ public class WatorRuleset extends Ruleset {
 
   /**
    * Constructor for the WatorRuleset
-   * @param fishBreedTime The amount of chronons (time units) it takes for a fish to reproduce
-   * @param fishStarveTime The amount of chronons it takes for a fish to die
-   * @param sharkBreedTime The amount of chronons it takes for a shark to reproduce
-   * @param sharkStarveTime The amount of chronons it takes for a shark to die
+   * @param params The map of parameters relevant to the ruleset
+   *               (fishBreedTime, fishStarveTime, sharkBreedTime, sharkStarveTime)
    */
-  public WatorRuleset(int fishBreedTime, int fishStarveTime, int sharkBreedTime, int sharkStarveTime) {
+  public WatorRuleset(Map<String, String> params) {
     super();
-    fishReproductionTime = fishBreedTime;
-    maxFishEnergy = fishStarveTime;
-    sharkReproductionTime = sharkBreedTime;
-    maxSharkEnergy = sharkStarveTime;
+    fishReproductionTime = Integer.parseInt(params.get(FISH_BREED_PARAM_NAME));
+    maxFishEnergy = Integer.parseInt(params.get(MAX_FISH_ENERGY_PARAM_NAME));
+    sharkReproductionTime = Integer.parseInt(params.get(SHARK_BREED_PARAM_NAME));
+    maxSharkEnergy = Integer.parseInt(params.get(MAX_SHARK_ENERGY_PARAM_NAME));
   }
 
   @Override

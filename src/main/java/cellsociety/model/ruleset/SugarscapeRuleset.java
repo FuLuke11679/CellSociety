@@ -9,9 +9,16 @@ import cellsociety.model.state.CellState;
 import cellsociety.model.state.SugarscapeState;
 import java.util.List;
 import java.util.ArrayList;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 public class SugarscapeRuleset extends Ruleset {
+
+  private static final String SUGAR_GROW_RATE_PARAM_NAME = "sugarGrowBackRate";
+  private static final String SUGAR_GROW_BACK_PARAM_NAME = "sugarGrowBackInterval";
+  private static final String AGENT_VISION_PARAM_NAME = "agentVision";
+  private static final String AGENT_METABOLISM_PARAM_NAME = "agentMetabolism";
+
   private SugarscapeGrid myGrid;
   private final int sugarGrowBackRate;
   private final int sugarGrowBackInterval;
@@ -20,11 +27,11 @@ public class SugarscapeRuleset extends Ruleset {
   private int tickCounter = 0;
   private int[] initialValues;
 
-  public SugarscapeRuleset(int sugarGrowBackRate, int sugarGrowBackInterval, int agentVision, int agentMetabolism) {
-    this.sugarGrowBackRate = sugarGrowBackRate;
-    this.sugarGrowBackInterval = sugarGrowBackInterval;
-    this.agentVision = agentVision;
-    this.agentMetabolism = agentMetabolism;
+  public SugarscapeRuleset(Map<String, String> params) {
+    this.sugarGrowBackRate = Integer.parseInt(params.get(SUGAR_GROW_RATE_PARAM_NAME));
+    this.sugarGrowBackInterval = Integer.parseInt(params.get(SUGAR_GROW_BACK_PARAM_NAME));
+    this.agentVision = Integer.parseInt(params.get(AGENT_VISION_PARAM_NAME));
+    this.agentMetabolism = Integer.parseInt(params.get(AGENT_METABOLISM_PARAM_NAME));
   }
 
   public void setInitialValues(int[] initialValues) {

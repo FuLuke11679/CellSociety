@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import cellsociety.model.cell.SugarscapePatch;
 import cellsociety.model.agent.SugarscapeAgent;
 import cellsociety.model.ruleset.SugarscapeRuleset;
+import java.util.Map;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -28,7 +29,13 @@ class SugarscapeGridTest {
 
   @BeforeEach
   void setUp() {
-    SugarscapeRuleset sugarRuleset = new SugarscapeRuleset(2, 1, 3, 2);
+    Map<String, String> params = Map.of(
+        "sugarGrowBackRate", "1",
+        "sugarGrowBackInterval", "1",
+        "agentVision", "3",
+        "agentMetabolism", "2"
+    );
+    SugarscapeRuleset sugarRuleset = new SugarscapeRuleset(params);
     sugarRuleset.setInitialValues(initialValues);
     grid = sugarRuleset.createGrid(rows, cols, initialStates);
   }
