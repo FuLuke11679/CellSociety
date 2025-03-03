@@ -12,6 +12,7 @@ import cellsociety.view.SplashScreen;
 import cellsociety.view.shapes.ShapeFactory;
 import java.util.Locale;
 import java.util.ResourceBundle;
+import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Application;
@@ -140,13 +141,21 @@ public class Main extends Application {
     }
 
     private void startSimulation() {
-        simLoop = new Timeline(new KeyFrame(Duration.seconds(SECOND_DELAY), e -> {
-            myGrid.update();
-            myGridView.update();
-        }));
-        simLoop.setCycleCount(Timeline.INDEFINITE);
-        simLoop.play();
+        if (simLoop == null) {
+            simLoop = new Timeline(new KeyFrame(Duration.seconds(SECOND_DELAY), e -> {
+                myGrid.update();
+                myGridView.update();
+            }));
+            simLoop.setCycleCount(Timeline.INDEFINITE);
+            simLoop.setRate(1.0 / SECOND_DELAY);  // Ensure speed is set correctly
+        }
+        if (simLoop.getStatus() == Animation.Status.PAUSED) {
+            simLoop.play();  // Resume if paused
+        } else if (simLoop.getStatus() != Animation.Status.RUNNING) {
+            simLoop.playFromStart();  // Start fresh if it wasn't running
+        }
     }
+
 
     /**
      * Loads opening screen, providing user with customization choices
@@ -203,7 +212,16 @@ public class Main extends Application {
         Button loadButton = new Button(simInfo.getString("load_file"));
 
         startButton.setOnAction(e -> startSimulation());
-        pauseButton.setOnAction(e -> simLoop.stop());
+        pauseButton.setOnAction(e -> {
+            if (simLoop != null) {
+                if (simLoop.getStatus() == Animation.Status.RUNNING) {
+                    simLoop.pause();  // Pause without destroying it
+                } else if (simLoop.getStatus() == Animation.Status.PAUSED) {
+                    simLoop.play();  // Resume from where it left off
+                }
+            }
+        });
+
         saveButton.setOnAction(e -> saveSimulation(simInfo));
         resetButton.setOnAction(e -> resetSimulation());
         loadButton.setOnAction(e -> {
@@ -215,10 +233,10 @@ public class Main extends Application {
 
         Slider speedSlider = new Slider(0.1, 2.0, SECOND_DELAY);
         speedSlider.valueProperty().addListener((obs, oldVal, newVal) -> {
-            SECOND_DELAY = 2.1 - newVal.doubleValue();
-            if (!simLoop.getKeyFrames().isEmpty()) {
-                simLoop.stop();
-                startSimulation();
+            SECOND_DELAY = 2.1 - newVal.doubleValue();  // Update speed delay
+
+            if (simLoop != null) {
+                simLoop.setRate(1.0 / SECOND_DELAY);  // Adjust the playback speed
             }
         });
 
