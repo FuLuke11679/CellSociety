@@ -5,10 +5,14 @@ import cellsociety.model.cell.ConwayCell.ConwayState;
 import cellsociety.model.cell.FireCell.FireState;
 import cellsociety.model.cell.PercolationCell.PercolationState;
 import cellsociety.model.cell.SegregationCell.SegregationState;
+import cellsociety.model.grid.handler.EdgeHandler;
+import cellsociety.model.grid.neighborhood.NeighborhoodStrategy;
+import cellsociety.model.grid.shape.CellShape;
 import cellsociety.model.state.SugarscapeState;
 import cellsociety.model.cell.WatorCell.WatorState;
 import cellsociety.model.ruleset.Ruleset;
 import cellsociety.model.state.CellState;
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -35,8 +39,8 @@ public abstract class Grid {
       Map.entry("S", WatorState.SHARK),
       Map.entry("F", WatorState.FISH),
       Map.entry("W", WatorState.WATER),
-      Map.entry("PATCH", SugarscapeState.PATCH),  // Represents a sugar patch
-      Map.entry("AGENT", SugarscapeState.AGENT)   // Represents an agent in Sugarscape
+      Map.entry("PATCH", SugarscapeState.PATCH),
+      Map.entry("AGENT", SugarscapeState.AGENT)
   );
 
   private int rows;
@@ -44,6 +48,21 @@ public abstract class Grid {
   private String[] myCells;
   private List<List<Cell>> myGrid;
   private Ruleset ruleset;
+  private EdgeHandler edgeHandler;
+  private NeighborhoodStrategy neighborhoodStrategy;
+  private CellShape cellShape;
+
+  public void setEdgeHandler(EdgeHandler handler) {
+    this.edgeHandler = handler;
+  }
+
+  public void setNeighborhoodStrategy(NeighborhoodStrategy strategy) {
+    this.neighborhoodStrategy = strategy;
+  }
+
+  public void setCellShape(CellShape shape) {
+    this.cellShape = shape;
+  }
 
   /**
    * Constructor for the Grid object
@@ -128,20 +147,12 @@ public abstract class Grid {
    * @return The 8 neighbors around the cell at Grid[row,col]
    */
   public List<Cell> getNeighbors(int row, int col) {
-    List<Cell> neighbors = new ArrayList<>();
-    int[] dx = {-1, -1, -1, 0, 0, 1, 1, 1};
-    int[] dy = {-1, 0, 1, -1, 1, -1, 0, 1};
+    // 1️⃣ Use cell shape to get base relative offsets
+    List<int[]> neighborOffsets = cellShape.getNeighborOffsets(row, col);
 
-    for (int i = 0; i < 8; i++) {
-      int newRow = row + dx[i];
-      int newCol = col + dy[i];
+    List<int[]> selectedOffsets = neighborhoodStrategy.selectNeighbors(neighborOffsets);
 
-      // ✅ Ensures newRow and newCol are within bounds before adding a neighbor
-      if (newRow >= 0 && newRow < rows && newCol >= 0 && newCol < columns) {
-        neighbors.add(myGrid.get(newRow).get(newCol));
-      }
-    }
-    return neighbors;
+    return edgeHandler.handleNeighbors(row, col, selectedOffsets, this);
   }
 
   /**
@@ -166,10 +177,6 @@ public abstract class Grid {
 
   public int getColumns() {
     return columns;
-  }
-
-  public Grid getGrid() {
-    return this;
   }
 
   protected Ruleset getRuleset() {
@@ -205,6 +212,80 @@ public abstract class Grid {
       return "SugarscapePatch";
     }
     return "Cell";
+  }
+
+  public boolean isValidPosition(int row, int col) {
+    return row >= 0 && row < rows && col >= 0 && col < columns;
+  }
+
+  public void expandGrid(int newRow, int newCol) {
+    int rowShift = 0;
+    int colShift = 0;
+
+    // Determine if we need to shift existing cells
+    if (newRow < 0) rowShift = Math.abs(newRow);
+    if (newCol < 0) colShift = Math.abs(newCol);
+
+    // Compute new grid size
+    int newRows = Math.max(rows + rowShift, newRow + 1);
+    int newCols = Math.max(columns + colShift, newCol + 1);
+
+    // Create a new grid with adjusted dimensions
+    List<List<Cell>> newGrid = new ArrayList<>();
+
+    for (int i = 0; i < newRows; i++) {
+      List<Cell> row = new ArrayList<>();
+      for (int j = 0; j < newCols; j++) {
+        if (i >= rowShift && j >= colShift && (i - rowShift) < rows && (j - colShift) < columns) {
+          // Shift existing cells to their new position
+          row.add(myGrid.get(i - rowShift).get(j - colShift));
+        } else {
+          // Create new cells with default state
+          CellState initialState = ruleset.getDefaultCellState();
+          String cellType = getCellTypeForState(initialState);
+          Cell newCell = createCell(i * newCols + j, initialState, null, cellType);
+          row.add(newCell);
+        }
+      }
+      newGrid.add(row);
+    }
+
+    // Update grid properties
+    myGrid = newGrid;
+    rows = newRows;
+    columns = newCols;
+  }
+
+  public void updateStrategy(String strategyType, String className) {
+    try {
+      Class<?> strategyClass = Class.forName(className);
+      Object strategyInstance = strategyClass.getDeclaredConstructor().newInstance();
+
+      if (strategyType.equalsIgnoreCase("edge")) {
+        this.edgeHandler = (EdgeHandler) strategyInstance;
+      } else if (strategyType.equalsIgnoreCase("neighborhood")) {
+        this.neighborhoodStrategy = (NeighborhoodStrategy) strategyInstance;
+      } else if (strategyType.equalsIgnoreCase("shape")) {
+        this.cellShape = (CellShape) strategyInstance;
+      } else {
+        throw new IllegalArgumentException("Invalid strategy type: " + strategyType);
+      }
+    } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | NoSuchMethodException |
+             InvocationTargetException e) {
+      e.printStackTrace();
+    }
+  }
+
+  public void switchEdgeHandler(String edgeClassName) {
+    updateStrategy("edge", edgeClassName);
+  }
+
+  public void switchNeighborhood(String neighborhoodClassName) {
+    updateStrategy("neighborhood", neighborhoodClassName);
+  }
+
+  public void switchCellShape(String shapeClassName) {
+    updateStrategy("shape", shapeClassName);
   }
 
   public void printGrid() {

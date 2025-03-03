@@ -28,7 +28,6 @@ public class WatorGrid extends Grid {
    */
   @Override
   public List<Cell> getNeighbors(int row, int col) {
-    Grid grid = getGrid();
     List<Cell> neighbors = new ArrayList<>();
 
     int[] dx = {-1, 1, 0, 0};
@@ -40,7 +39,7 @@ public class WatorGrid extends Grid {
       int newRow = (row + dx[i] + numRows) % numRows;  // Wrap row
       int newCol = (col + dy[i] + numCols) % numCols;  // Wrap column
 
-      neighbors.add(grid.getCell(newRow, newCol));
+      neighbors.add(this.getCell(newRow, newCol));
     }
     return neighbors;
   }

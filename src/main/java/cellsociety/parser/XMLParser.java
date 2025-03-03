@@ -7,7 +7,6 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -28,6 +27,11 @@ public class XMLParser extends Parser {
     private Map<String, GridPattern> patterns;
     private boolean hasRandomStates;
     private Map<String, Double> stateProportions;
+
+  private String edgeType;
+  private String neighborhoodType;
+  private String cellShape;
+
 
     // Class to store pattern information
     public class GridPattern {
@@ -56,7 +60,7 @@ public class XMLParser extends Parser {
         patterns = new HashMap<>();
         stateProportions = new HashMap<>();
         hasRandomStates = false;
-        
+
         try {
             if (!isXMLFile(file)) {
                 throw new IllegalArgumentException("File is not an XML file: " + file.getName());
@@ -91,58 +95,60 @@ public class XMLParser extends Parser {
 
         // Parse init section (will handle both random and explicit state lists)
         parseInitSection(document);
-        
+
         // Parse pattern sections if present
         parsePatterns(document);
-        
+
         // If we have patterns, apply them to the initial states
         if (!patterns.isEmpty()) {
             applyPatterns();
         }
     }
-    
+
     private void parseDisplay(Document document) throws InvalidXMLConfigurationException {
         try {
             // CELL-27: Input Missing Parameters
             Element display = getRequiredElement(document, "display");
-            
+
             this.width = getRequiredIntAttribute(display, "width");
             if (this.width <= 0) {
                 throw new InvalidXMLConfigurationException("Width must be a positive integer");
             }
-            
+
             this.height = getRequiredIntAttribute(display, "height");
             if (this.height <= 0) {
                 throw new InvalidXMLConfigurationException("Height must be a positive integer");
             }
-            
+
             this.title = getRequiredAttribute(display, "title");
             if (this.title.trim().isEmpty()) {
                 throw new InvalidXMLConfigurationException("Title cannot be empty");
             }
-            
+
             this.author = getRequiredAttribute(display, "author");
             if (this.author.trim().isEmpty()) {
                 throw new InvalidXMLConfigurationException("Author cannot be empty");
             }
-            
+
             Element grid = getRequiredElement(display, "grid");
             this.rows = getRequiredIntAttribute(grid, "rows");
             if (this.rows <= 0) {
                 throw new InvalidXMLConfigurationException("Rows must be a positive integer");
             }
-            
+
             this.columns = getRequiredIntAttribute(grid, "columns");
             if (this.columns <= 0) {
                 throw new InvalidXMLConfigurationException("Columns must be a positive integer");
             }
-            
+
             Element descElement = getRequiredElement(display, "description");
             this.description = getRequiredAttribute(descElement, "text");
             if (this.description.trim().isEmpty()) {
                 throw new InvalidXMLConfigurationException("Description cannot be empty");
             }
-            
+          this.edgeType = grid.getAttribute("edgeType");
+          this.neighborhoodType = grid.getAttribute("neighborhoodType");
+          this.cellShape = grid.getAttribute("cellShape");
         } catch (NullPointerException e) {
             throw new InvalidXMLConfigurationException("Missing required display elements");
         }
@@ -172,11 +178,11 @@ public class XMLParser extends Parser {
 
     private void parseInitSection(Document document) throws InvalidXMLConfigurationException {
         Element initElement = getRequiredElement(document, "init");
-        
+
         // Check if this is random states
         String randomStatesAttr = initElement.getAttribute("randomStates");
         hasRandomStates = "true".equalsIgnoreCase(randomStatesAttr);
-        
+
         if (hasRandomStates) {
             // Parse proportions attribute
             String proportionsAttr = initElement.getAttribute("proportions");
@@ -186,7 +192,7 @@ public class XMLParser extends Parser {
                 // Fall back to random nodes if no proportions attribute
                 parseRandomStates(document);
             }
-            
+
             // Generate states based on proportions
             generateRandomStates();
         } else {
@@ -199,16 +205,16 @@ public class XMLParser extends Parser {
             }
         }
     }
-    
+
     private void parseProportions(String proportionsAttr) {
         String[] proportionPairs = proportionsAttr.replaceAll("\\s+", "").split(",");
-        
+
         for (String pair : proportionPairs) {
             String[] keyValue = pair.split(":");
             if (keyValue.length == 2) {
                 String state = keyValue[0];
                 double proportion = Double.parseDouble(keyValue[1]);
-                
+
                 // Validate state and proportion
                 if (!isInSimulation(state, simType)) {
                     throw new IllegalArgumentException("Invalid state for simulation: " + state);
@@ -216,21 +222,21 @@ public class XMLParser extends Parser {
                 if (proportion < 0 || proportion > 1) {
                     throw new IllegalArgumentException("Proportion must be between 0 and 1: " + proportion);
                 }
-                
+
                 stateProportions.put(state, proportion);
             }
         }
     }
-    
+
     private void generateRandomStates() {
         int totalCells = rows * columns;
         initialStates = new String[totalCells];
         List<String> stateList = new ArrayList<>();
-        
+
         // Add states based on proportions
         double remainingProportion = 1.0;
         String defaultState = getDefaultState(simType);
-        
+
         for (Map.Entry<String, Double> entry : stateProportions.entrySet()) {
             int count = (int) Math.round(entry.getValue() * totalCells);
             for (int i = 0; i < count; i++) {
@@ -238,7 +244,7 @@ public class XMLParser extends Parser {
             }
             remainingProportion -= entry.getValue();
         }
-        
+
         // Fill remaining cells with default state
         int remaining = totalCells - stateList.size();
         if (remaining > 0) {
@@ -246,12 +252,12 @@ public class XMLParser extends Parser {
                 stateList.add(defaultState);
             }
         }
-        
+
         // Shuffle and assign to initialStates
         Collections.shuffle(stateList);
         initialStates = stateList.toArray(new String[0]);
     }
-    
+
     private void parseStateList(String stateListStr) {
         String cleanedList = stateListStr.replaceAll("\\s+", "");
         if (cleanedList.contains(",")) {
@@ -266,7 +272,7 @@ public class XMLParser extends Parser {
 
         if (initialStates.length != rows * columns) {
             throw new IllegalArgumentException(
-                "Number of cell states (" + initialStates.length + 
+                "Number of cell states (" + initialStates.length +
                 ") does not match grid size (" + (rows * columns) + ").");
         }
 
@@ -330,7 +336,7 @@ public class XMLParser extends Parser {
             initialStates = stateList.toArray(new String[0]);
         }
     }
-    
+
     private void parsePatterns(Document document) throws InvalidXMLConfigurationException {
         NodeList patternNodes = document.getElementsByTagName("pattern");
         for (int i = 0; i < patternNodes.getLength(); i++) {
@@ -338,17 +344,17 @@ public class XMLParser extends Parser {
             String patternId = getRequiredAttribute(patternElement, "id");
             int startRow = getRequiredIntAttribute(patternElement, "startRow");
             int startCol = getRequiredIntAttribute(patternElement, "startCol");
-            
+
             // Parse the state list from the pattern's text content
             String stateListStr = patternElement.getTextContent()
                 .replaceAll("stateList\\s*=", "")
                 .replaceAll("\"", "")
                 .trim();
-            
+
             String[] patternStateArray = parsePatternStateList(stateListStr);
             int patternRows = countRows(stateListStr);
             int patternCols = patternStateArray.length / patternRows;
-            
+
             // Validate pattern dimensions
             if (startRow < 0 || startRow + patternRows > rows) {
                 throw new InvalidXMLConfigurationException("Pattern '" + patternId + "' exceeds grid row bounds");
@@ -356,18 +362,18 @@ public class XMLParser extends Parser {
             if (startCol < 0 || startCol + patternCols > columns) {
                 throw new InvalidXMLConfigurationException("Pattern '" + patternId + "' exceeds grid column bounds");
             }
-            
+
             // Add pattern to the map
             patterns.put(patternId, new GridPattern(startRow, startCol, patternStateArray, patternRows, patternCols));
         }
     }
-    
+
     private String[] parsePatternStateList(String stateListStr) {
         // Remove all whitespace and split by commas
         String cleanedList = stateListStr.replaceAll("\\s+", "");
         return cleanedList.split(",");
     }
-    
+
     private int countRows(String stateListStr) {
         // Count the number of rows by counting newlines
         String[] lines = stateListStr.split("\\n");
@@ -379,7 +385,7 @@ public class XMLParser extends Parser {
         }
         return rowCount;
     }
-    
+
     private void applyPatterns() {
         // Apply each pattern to the initial states
         for (GridPattern pattern : patterns.values()) {
@@ -388,13 +394,13 @@ public class XMLParser extends Parser {
             String[] patternStates = pattern.getPatternStates();
             int patternRows = pattern.getPatternRows();
             int patternCols = pattern.getPatternCols();
-            
+
             // Overlay the pattern onto the initial states
             for (int r = 0; r < patternRows; r++) {
                 for (int c = 0; c < patternCols; c++) {
                     int patternIndex = r * patternCols + c;
                     int gridIndex = (startRow + r) * columns + (startCol + c);
-                    
+
                     if (patternIndex < patternStates.length && gridIndex < initialStates.length) {
                         initialStates[gridIndex] = patternStates[patternIndex];
                     }
@@ -431,10 +437,10 @@ public class XMLParser extends Parser {
     }
 
     private Element getRequiredElement(Node parent, String tagName) {
-        NodeList elements = (parent instanceof Document ? 
+        NodeList elements = (parent instanceof Document ?
             ((Document)parent).getElementsByTagName(tagName) :
             ((Element)parent).getElementsByTagName(tagName));
-            
+
         if (elements.getLength() == 0) {
             throw new IllegalArgumentException(
                 String.format("Required element '%s' not found", tagName));
@@ -464,53 +470,62 @@ public class XMLParser extends Parser {
         }
     }
 
-    public int getWidth() { 
-      return width; 
+    public int getWidth() {
+      return width;
     }
 
-    public int getHeight() { 
-      return height; 
+    public int getHeight() {
+      return height;
     }
 
     public String getDescription() {
         return description;
     }
 
-    public String getTitle() { 
-      return title; 
+    public String getTitle() {
+      return title;
     }
 
-    public String getSimType() { 
-      return simType; 
+    public String getSimType() {
+      return simType;
     }
 
     public String getAuthor(){return author;}
 
-    public int getRows() { 
-      return rows; 
+    public int getRows() {
+      return rows;
     }
 
-    public int getColumns() { 
-      return columns; 
-    }
-    
-    public String[] getInitialStates() { 
-      return initialStates; 
+    public int getColumns() {
+      return columns;
     }
 
-    public Map<String, String> getSimVarsMap() { 
-      return simVarsMap; 
+    public String[] getInitialStates() {
+      return initialStates;
     }
-    
+
+    public Map<String, String> getSimVarsMap() {
+      return simVarsMap;
+    }
+
     public Map<String, GridPattern> getPatterns() {
         return patterns;
     }
-    
+
     public boolean hasRandomStates() {
         return hasRandomStates;
     }
-    
+
     public Map<String, Double> getStateProportions() {
         return stateProportions;
     }
+  public String getEdgeType() {
+    return edgeType;
+  }
+  public String getNeighborhoodType() {
+    return neighborhoodType;
+  }
+  public String getCellShape(){
+    return cellShape;
+  }
 }

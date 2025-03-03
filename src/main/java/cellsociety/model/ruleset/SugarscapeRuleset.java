@@ -1,9 +1,12 @@
 package cellsociety.model.ruleset;
 
+import cellsociety.model.cell.ConwayCell.ConwayState;
 import cellsociety.model.grid.SugarscapeGrid;
 import cellsociety.model.cell.SugarscapePatch;
 import cellsociety.model.agent.SugarscapeAgent;
 import cellsociety.model.cell.Cell;
+import cellsociety.model.state.CellState;
+import cellsociety.model.state.SugarscapeState;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Map;
@@ -102,4 +105,10 @@ public class SugarscapeRuleset extends Ruleset {
   public int[] getInitialValues() {
     return initialValues;
   }
+
+  @Override
+  public CellState getDefaultCellState() {
+    return SugarscapeState.PATCH;
+  }
+
 }
