@@ -38,6 +38,7 @@ public class GridView {
   Rectangle[][] cellRectangles;  // Store references for easy updates
   private Grid grid;
   private Locale myLocale;
+  private int numIterations;
 
   public enum ColorScheme{
     LIGHT,
@@ -83,6 +84,7 @@ public class GridView {
     this.cellRectangles = new Rectangle[rows][columns];
     this.grid = grid;
     this.myLocale = myLocale;
+    this.numIterations = 0;
 
     initializeGrid();
     setupSimulationInfo(simType, title, author, description);
@@ -135,9 +137,9 @@ public class GridView {
         cellRectangles[row][col].setFill(fillColor);
       }
     }
+    this.numIterations++;
+    incrementIterations();
   }
-
-
 
 
   /**
@@ -150,8 +152,23 @@ public class GridView {
         new Text(simInfo.getString("simulation") + simName),
         new Text(simInfo.getString("sim_type") + simType),
         new Text(simInfo.getString("author") + author),
-        new Text(simInfo.getString("description") + description)
+        new Text(simInfo.getString("description") + description),
+        new Text(simInfo.getString("iterations") + this.numIterations)
     );
+  }
+
+  /**
+   *Increments the number of iterations displayed on the Grid
+   */
+  private void incrementIterations(){
+    if (!infoBox.getChildren().isEmpty()) {
+      Text iterationsText = (Text) infoBox.getChildren().get(infoBox.getChildren().size() - 1);
+      ResourceBundle simInfo = ResourceBundle.getBundle("SimInfo", myLocale);
+
+      // Update the text with the new value of this.numIterations
+      iterationsText.setText(simInfo.getString("iterations") + this.numIterations);
+    }
+
   }
 
   /**
