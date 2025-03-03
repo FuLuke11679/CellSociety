@@ -19,22 +19,22 @@ public class SugarscapeGrid extends Grid {
     return cell instanceof SugarscapePatch && ((SugarscapePatch) cell).hasAgent();
   }
 
-  @Override
-  public Cell createCell(int id, CellState currState, CellState nextState, String cellType) {
-    int[] values = ((SugarscapeRuleset)getRuleset()).getInitialValues();
-    int sugarValue = values[id];
-    try {
-      SugarscapePatch patch = new SugarscapePatch(id, currState, nextState, sugarValue, 25);
-      if (currState.equals(cellsociety.model.state.SugarscapeState.AGENT)) {
-        SugarscapeAgent agent = new SugarscapeAgent(10);
-        patch.setAgent(agent);
-      }
-      return patch;
-    } catch (Exception e) {
-      e.printStackTrace();
-      return null;
-    }
-  }
+//  @Override
+//  public Cell createCell(int id, CellState currState, CellState nextState, String cellType) {
+//    int[] values = ((SugarscapeRuleset)getRuleset()).getInitialValues();
+//    int sugarValue = values[id];
+//    try {
+//      SugarscapePatch patch = new SugarscapePatch(id, currState, nextState, sugarValue, 25);
+//      if (currState.equals(cellsociety.model.state.SugarscapeState.AGENT)) {
+//        SugarscapeAgent agent = new SugarscapeAgent(10);
+//        patch.setAgent(agent);
+//      }
+//      return patch;
+//    } catch (Exception e) {
+//      e.printStackTrace();
+//      return null;
+//    }
+//  }
   @Override
   public List<Cell> getNeighbors(int row, int col) {
     Grid grid = getGrid();
