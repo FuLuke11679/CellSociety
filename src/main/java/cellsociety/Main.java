@@ -26,13 +26,6 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
-import javafx.util.Duration;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.transform.*;
-import javax.xml.transform.dom.DOMSource;
-import javax.xml.transform.stream.StreamResult;
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
 import java.io.File;
 
 /**
@@ -52,16 +45,13 @@ public class Main extends Application {
     private ColorScheme myScheme;
     private Locale myLocale;
     private SplashScreen mySplashScreen;
-    private int width = 800;
-    private int height = 800;
+
     private SimulationController myController;
 
 
     @Override
     public void start(Stage primaryStage) {
-        //globalStage = primaryStage;
-        myLocale = Locale.getDefault(); //default should be English
-        //make controller, then make splash screen, pass controller to splash screen
+        myLocale = Locale.getDefault();
         myController = new SimulationController(primaryStage, myLocale);
         mySplashScreen = new SplashScreen(myController);
         mySplashScreen.loadScreen();
