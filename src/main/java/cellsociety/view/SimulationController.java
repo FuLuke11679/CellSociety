@@ -92,6 +92,7 @@ public class SimulationController {
    * @param simInfo resource bundle containing hardcoded simulation text
    */
   public void saveSimulation(ResourceBundle simInfo) {
+    simLoop.stop();
     TextInputDialog dialog = new TextInputDialog(simInfo.getString("sim"));
     dialog.setHeaderText(simInfo.getString("prompt"));
     dialog.setContentText(simInfo.getString("metadata"));
@@ -165,6 +166,14 @@ public class SimulationController {
 
   public void showMessage(String message) {
     new Alert(Alert.AlertType.INFORMATION, message).showAndWait();
+  }
+
+  public SimulationScreen getSimScreen(){
+    return mySimScreen;
+  }
+
+  public File getCurrentFile(){
+    return currentFile;
   }
 
 }
