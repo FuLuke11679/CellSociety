@@ -1,31 +1,15 @@
 package cellsociety.view;
 
-import cellsociety.model.grid.CellShapeFactory;
-import cellsociety.model.grid.EdgeFactory;
-import cellsociety.model.grid.Grid;
-import cellsociety.model.grid.NeighborhoodFactory;
-import cellsociety.model.ruleset.Ruleset;
-import cellsociety.model.ruleset.RulesetFactory;
-import cellsociety.parser.XMLParser;
 import cellsociety.view.GridView.ColorScheme;
-import cellsociety.view.shapes.ShapeFactory;
 import java.io.File;
 import java.util.Locale;
 import java.util.ResourceBundle;
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
-import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.Label;
-import javafx.scene.control.Slider;
 import javafx.scene.control.TextInputDialog;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.util.Duration;
@@ -72,8 +56,6 @@ public class SimulationController {
    * @param dataFile : XML File chosen by user from their local machine
    */
   public void loadSimulation(File dataFile) {
-    //ResourceBundle simInfo = getResourceBundle("SimInfo");
-    //ResourceBundle simInfo = ResourceBundle.getBundle("SimInfo", myLocale);
     if(splashLoop.getStatus() == Animation.Status.RUNNING){
       splashLoop.stop();
     }
