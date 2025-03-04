@@ -10,23 +10,28 @@ import cellsociety.model.cell.ConwayCell.ConwayState;
 import cellsociety.model.cell.FireCell.FireState;
 import cellsociety.model.cell.PercolationCell.PercolationState;
 import cellsociety.model.state.CellState;
+import cellsociety.view.shapes.ShapeFactory;
 import java.util.Locale;
 import java.util.Map;
 import java.util.ResourceBundle;
 import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.Pane;
+import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
+import javafx.scene.shape.Shape;
 import javafx.scene.text.Text;
 
 public class GridView {
-  private GridPane gridPane;
+  private Pane gridPane;
   private Scene myScene;
   private int rows;
   private int columns;
@@ -35,9 +40,11 @@ public class GridView {
   private final int WINDOW_WIDTH = 600;
   private final int WINDOW_HEIGHT = 800;
   private VBox infoBox;
-  Rectangle[][] cellRectangles;  // Store references for easy updates
+  private Shape[][] cellShapes;
   private Grid grid;
   private Locale myLocale;
+  private int numIterations;
+  private String currentCellShape = "Rectangular";
 
   public enum ColorScheme{
     LIGHT,
@@ -79,16 +86,22 @@ public class GridView {
     this.rows = rows;
     this.columns = columns;
     this.cellSize = SIZE_GRID / rows;
-    this.gridPane = new GridPane();
-    this.cellRectangles = new Rectangle[rows][columns];
+    this.gridPane = new Pane();
+    this.cellShapes = new Shape[rows][columns];
     this.grid = grid;
     this.myLocale = myLocale;
+    this.numIterations = 0;
 
     initializeGrid();
     setupSimulationInfo(simType, title, author, description);
 
+    StackPane gridContainer = new StackPane(gridPane);
+    gridContainer.setMinSize(SIZE_GRID, SIZE_GRID);
+    gridContainer.setMaxSize(SIZE_GRID, SIZE_GRID);
+    gridContainer.setAlignment(Pos.CENTER);  // Center it properly
+
     BorderPane layout = new BorderPane();
-    layout.setBottom(gridPane);
+    layout.setCenter(gridContainer);
     layout.setTop(infoBox);
     layout.setBackground(new Background(new BackgroundFill(schemeColors.get(scheme), CornerRadii.EMPTY, Insets.EMPTY)));
 
@@ -99,14 +112,15 @@ public class GridView {
    * Initializes the grid from the given `CellUnit` list.
    */
   private void initializeGrid() {
+    gridPane.getChildren().clear();  // ✅ Clears old shapes before adding new ones
+
     for (int row = 0; row < rows; row++) {
       for (int col = 0; col < columns; col++) {
-        Rectangle rect = new Rectangle(cellSize, cellSize);
-        rect.setFill(cellColors.get(grid.getCell(row, col).getCurrState()));
-        rect.setStroke(Color.BLACK);
-        rect.setStrokeWidth(1);
-        gridPane.add(rect, col, row);  // (column, row) order
-        cellRectangles[row][col] = rect;  // Store reference for quick updates
+        Shape shape = ShapeFactory.createShape(currentCellShape, cellSize, row, col);
+        shape.setFill(getCellColor(grid.getCell(row, col)));
+        shape.setStroke(Color.BLACK);
+        gridPane.getChildren().add(shape);
+        cellShapes[row][col] = shape;
       }
     }
   }
@@ -118,26 +132,25 @@ public class GridView {
     for (int row = 0; row < rows; row++) {
       for (int col = 0; col < columns; col++) {
         Cell cell = grid.getCell(row, col);
-        Color fillColor;
-        if (cell instanceof SugarscapePatch) {
-          SugarscapePatch patch = (SugarscapePatch) cell;
-          if (patch.hasAgent()) {
-            fillColor = Color.RED;
-          } else {
-            double fraction = (double) patch.getSugarAmount() / patch.getMaxSugar();
-            fillColor = Color.WHITE.interpolate(Color.DARKGREEN, fraction);
-          }
-        }
-        else {
-          // For other simulation types, use the fixed mapping.
-          fillColor = cellColors.get(cell.getCurrState());
-        }
-        cellRectangles[row][col].setFill(fillColor);
+        cellShapes[row][col].setFill(getCellColor(cell));
+        this.numIterations++;
+        incrementIterations();
       }
     }
   }
-
-
+  private Color getCellColor(Cell cell) {
+    if (cell instanceof SugarscapePatch) {
+      SugarscapePatch patch = (SugarscapePatch) cell;
+      if (patch.hasAgent()) {
+        return Color.RED;
+      } else {
+        double fraction = (double) patch.getSugarAmount() / patch.getMaxSugar();
+        return Color.WHITE.interpolate(Color.DARKGREEN, fraction);
+      }
+    } else {
+      return cellColors.get(cell.getCurrState());
+    }
+  }
 
 
   /**
@@ -150,8 +163,30 @@ public class GridView {
         new Text(simInfo.getString("simulation") + simName),
         new Text(simInfo.getString("sim_type") + simType),
         new Text(simInfo.getString("author") + author),
-        new Text(simInfo.getString("description") + description)
+        new Text(simInfo.getString("description") + description),
+        new Text(simInfo.getString("iterations") + this.numIterations)
     );
+  }
+  public void redrawGrid(int newRows, int newCols, String newShapeClass) {
+    this.rows = newRows;
+    this.columns = newCols;
+    this.cellSize = SIZE_GRID / Math.max(rows, columns);
+    this.currentCellShape = ShapeFactory.getFullyQualifiedName(newShapeClass);
+    initializeGrid();
+  }
+
+  /**
+   *Increments the number of iterations displayed on the Grid
+   */
+  private void incrementIterations(){
+    if (!infoBox.getChildren().isEmpty()) {
+      Text iterationsText = (Text) infoBox.getChildren().get(infoBox.getChildren().size() - 1);
+      ResourceBundle simInfo = ResourceBundle.getBundle("SimInfo", myLocale);
+
+      // Update the text with the new value of this.numIterations
+      iterationsText.setText(simInfo.getString("iterations") + this.numIterations);
+    }
+
   }
 
   /**

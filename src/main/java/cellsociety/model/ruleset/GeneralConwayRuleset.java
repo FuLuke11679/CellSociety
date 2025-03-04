@@ -2,6 +2,7 @@ package cellsociety.model.ruleset;
 
 import cellsociety.model.cell.Cell;
 import cellsociety.model.cell.ConwayCell.ConwayState;
+import cellsociety.model.state.CellState;
 import cellsociety.parser.GeneralConwayParser;
 import java.util.HashSet;
 import java.util.List;
@@ -42,5 +43,11 @@ public class GeneralConwayRuleset extends ConwayRuleset {
       killCell(cell);
     }
   }
+
+  @Override
+  public CellState getDefaultCellState() {
+    return ConwayState.DEAD;
+  }
+
 
 }
