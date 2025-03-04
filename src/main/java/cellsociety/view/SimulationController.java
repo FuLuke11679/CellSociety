@@ -63,6 +63,7 @@ public class SimulationController {
       simLoop.stop();
     }
     currentFile = dataFile;
+    //System.out.println(currentFile);
     mySimScreen = new SimulationScreen(dataFile, this);
 
   }

@@ -80,11 +80,14 @@ public class SimulationScreen {
    */
   private BorderPane initializeLayout(ResourceBundle simInfo) {
     BorderPane layout = new BorderPane();
+    layout.setId("layout");
     HBox centerWrapper = new HBox(myGridView.getScene().getRoot());
     centerWrapper.setAlignment(Pos.CENTER);
+    centerWrapper.setId("grid");
     layout.setCenter(centerWrapper);
 
     Button startButton = new Button(simInfo.getString("start"));
+    startButton.setId("start");
     Button pauseButton = new Button(simInfo.getString("pause"));
     Button saveButton = new Button(simInfo.getString("save"));
     Button resetButton = new Button(simInfo.getString("reset"));
@@ -122,6 +125,7 @@ public class SimulationScreen {
     });
 
     HBox controls = new HBox(10, startButton, pauseButton, saveButton, resetButton, loadButton, new Label("Speed:"), speedSlider);
+    controls.setId("simControls");
     layout.setBottom(controls);
 
     VBox settingsPanel = new VBox(15);

@@ -33,7 +33,9 @@ public class SplashScreen {
     //myLocale = locale;
     myController = controller;
     splashPane = new BorderPane();
+    splashPane.setId("splashPane");
     splashScene = new Scene(splashPane, 600, 800);
+
     //myScheme = ColorScheme.LIGHT;  //default to light theme
     //loadScreen();
   }
@@ -53,6 +55,7 @@ public class SplashScreen {
    */
   private void loadSplashText(ResourceBundle simInfo) {
     Text welcome = new Text(simInfo.getString("splash_welcome"));
+    welcome.setId("welcome");
     TextFlow textFlow = new TextFlow(welcome);
     textFlow.setTextAlignment(TextAlignment.CENTER);
     splashPane.setCenter(textFlow);
@@ -65,8 +68,10 @@ public class SplashScreen {
   private void loadControlButtons(ResourceBundle simInfo) {
     List<MenuButton> controlButtons = new ArrayList<>();
     MenuButton languageSelect = new MenuButton(simInfo.getString("splash_language_button"));
+    languageSelect.setId("language");
     MenuItem language1 = new MenuItem(simInfo.getString("splash_language_1"));
     MenuItem language2 = new MenuItem(simInfo.getString("splash_language_2"));
+    language2.setId("french");
     MenuItem language3 = new MenuItem(simInfo.getString("splash_language_3"));
     MenuItem language4 = new MenuItem(simInfo.getString("splash_language_4"));
     language1.setOnAction(e -> {
@@ -131,6 +136,7 @@ public class SplashScreen {
       }
     });
     controls = new HBox(10, loadButton);
+    controls.setId("controls");
     for (MenuButton controlButton : controlButtons) {
       controls.getChildren().add(controlButton);
     }
