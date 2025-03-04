@@ -2,6 +2,7 @@ package cellsociety.model.grid;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import cellsociety.model.cell.CellFactory;
 import cellsociety.model.cell.SugarscapePatch;
 import cellsociety.model.agent.SugarscapeAgent;
 import cellsociety.model.ruleset.SugarscapeRuleset;
@@ -54,7 +55,7 @@ class SugarscapeGridTest {
 
   @Test
   void createCell_CreatesPatchCorrectly() {
-    SugarscapePatch cell = (SugarscapePatch) grid.createCell(0, cellsociety.model.state.SugarscapeState.PATCH, null, "SugarscapePatch");
+    SugarscapePatch cell = (SugarscapePatch) CellFactory.createCell(0, cellsociety.model.state.SugarscapeState.PATCH);
     assertNotNull(cell);
     assertEquals(1, cell.getSugarAmount());
   }
