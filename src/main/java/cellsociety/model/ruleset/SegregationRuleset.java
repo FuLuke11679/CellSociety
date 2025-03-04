@@ -22,7 +22,6 @@ public class SegregationRuleset extends Ruleset {
 
   private final double similarityThreshold;
   private SegregationGrid myGrid;
-  private List<Cell> emptyCells;
 
   /**
    * Constructor for the Segregation Ruleset
@@ -31,7 +30,6 @@ public class SegregationRuleset extends Ruleset {
    */
   public SegregationRuleset(Map<String, String> params) {
     this.similarityThreshold = Double.parseDouble(params.get(THRESHOLD_PARAM_NAME));
-    emptyCells = new ArrayList<>();
   }
 
   public void updateCellState(Cell cell, List<Cell> neighbors) {
