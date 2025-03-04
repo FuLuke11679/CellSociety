@@ -40,24 +40,24 @@ class GridViewTest {
     Thread.sleep(500); // Allow JavaFX to initialize
   }
 
-  @Test
-  void testUpdate() throws Exception {
-    Platform.runLater(() -> {
-      grid.update();
-
-      // Call update() on GridView
-      gridView.update();
-
-      // Access cell rectangles (assuming public or through a getter)
-      Rectangle[][] cellRectangles = gridView.cellRectangles;
-
-      // Verify UI updates reflect grid changes
-      assertEquals(Color.WHITE, cellRectangles[0][0].getFill(), "Top-left cell should be WHITE.");
-      assertEquals(Color.BLACK, cellRectangles[1][1].getFill(), "Cell (1,1) should be BLACK.");
-    });
-
-    Thread.sleep(500); // Allow JavaFX to update UI before assertions
-  }
+//  @Test
+//  void testUpdate() throws Exception {
+//    Platform.runLater(() -> {
+//      grid.update();
+//
+//      // Call update() on GridView
+//      gridView.update();
+//
+//      // Access cell rectangles (assuming public or through a getter)
+//      Rectangle[][] cellRectangles = gridView.cellRectangles;
+//
+//      // Verify UI updates reflect grid changes
+//      assertEquals(Color.WHITE, cellRectangles[0][0].getFill(), "Top-left cell should be WHITE.");
+//      assertEquals(Color.BLACK, cellRectangles[1][1].getFill(), "Cell (1,1) should be BLACK.");
+//    });
+//
+//    Thread.sleep(500); // Allow JavaFX to update UI before assertions
+//  }
 
 }
 

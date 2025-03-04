@@ -2,6 +2,11 @@ package cellsociety.model.cell;
 
 import cellsociety.model.state.CellState;
 
+/**
+ * Author: Daniel Rodriguez-Florido
+ *
+ * Abstract cell class that is the parent to all the particular concrete cell classes.
+ */
 public abstract class Cell {
 
   private final int id;
@@ -14,6 +19,9 @@ public abstract class Cell {
     this.nextState = nextState;
   }
 
+  /**
+   * @return The id of the current cell
+   */
   public int getId() {
     return id;
   }

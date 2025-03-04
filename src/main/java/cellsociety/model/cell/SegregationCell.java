@@ -2,6 +2,11 @@ package cellsociety.model.cell;
 
 import cellsociety.model.state.CellState;
 
+/**
+ * Author: Daniel Rodriguez-Florido
+ *
+ * Cell class for the Segregation Simulation
+ */
 public class SegregationCell extends Cell {
 
   public enum SegregationState implements CellState {

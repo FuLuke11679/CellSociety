@@ -7,6 +7,11 @@ import java.util.Properties;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+/**
+ * Author: Daniel Rodriguez-Florido
+ *
+ * Factory to generate any kind of cell based on the given state and id
+ */
 public class CellFactory {
 
   private static final Logger log = LogManager.getLogger(CellFactory.class);
