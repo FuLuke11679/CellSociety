@@ -84,19 +84,22 @@ public class SimulationScreen {
    */
   private BorderPane initializeLayout(ResourceBundle simInfo) {
     BorderPane layout = new BorderPane();
-    layout.setId("layout");
     HBox centerWrapper = new HBox(myGridView.getScene().getRoot());
     centerWrapper.setAlignment(Pos.CENTER);
-    centerWrapper.setId("grid");
+    //centerWrapper.setId("grid");
+    centerWrapper.getStyleClass().add("grid");
     layout.setCenter(centerWrapper);
 
     Button startButton = new Button(simInfo.getString("start"));
-    //startButton.setId("start");
     startButton.getStyleClass().add("start-button");
     Button pauseButton = new Button(simInfo.getString("pause"));
+    pauseButton.getStyleClass().add("pause-button");
     Button saveButton = new Button(simInfo.getString("save"));
+    saveButton.getStyleClass().add("save-button");
     Button resetButton = new Button(simInfo.getString("reset"));
+    resetButton.getStyleClass().add("reset-button");
     Button loadButton = new Button(simInfo.getString("load_file"));
+    loadButton.getStyleClass().add("load-button");
 
     startButton.setOnAction(e -> myController.startSimulation());
     pauseButton.setOnAction(e -> {
@@ -128,6 +131,7 @@ public class SimulationScreen {
         myController.getSimLoop().setRate(1.0 / SECOND_DELAY);  // Adjust the playback speed
       }
     });
+    speedSlider.getStyleClass().add("speed-slider");
 
     HBox controls = new HBox(10, startButton, pauseButton, saveButton, resetButton, loadButton, new Label("Speed:"), speedSlider);
     controls.setId("simControls");
