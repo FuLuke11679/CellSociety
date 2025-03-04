@@ -6,6 +6,7 @@ import java.io.File;
 import java.util.Locale;
 import java.util.ResourceBundle;
 import javafx.animation.Animation;
+import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import javafx.scene.control.Labeled;
 import javafx.scene.control.MenuButton;
@@ -22,6 +23,7 @@ public class SimulationScreenTest extends DukeApplicationTest {
   // keep GUI components used in multiple tests
   private BorderPane myPane;
   private SimulationScreen mySimScreen;
+  private Parent root;
 
   @Override
   public void start (Stage stage) {
@@ -31,23 +33,19 @@ public class SimulationScreenTest extends DukeApplicationTest {
     mySplashScreen.loadScreen();
     File dataFile = new File("/Users/palosilva/Desktop/CS_308/cellsociety_team08/data/segregation/segregation_50x50.xml");
     //need to load a simulation
-    mySimScreen = new SimulationScreen(dataFile, myController);
-
-
-    // components, found using their IDs, that will be reused in different tests
-    //myPane = lookup("#splashPane").query();
-
+    myController.loadSimulation(dataFile);
+    root = myController.getSimScreen().getSimScene().getRoot();
   }
 
   @Test
   void buttonClick_start_simStarts () {
-    Button startButton = lookup("#layout #simControls #start").query();
+    //Button startButton = lookup("#layout #simControls #start").query();
+    Button startButton = (Button) root.lookup(".start-button");
     // GIVEN, app first starts up
     // WHEN, language menu is selected and French is chosen
     //writeInputTo(myTextField, expected);
     clickOn(startButton);
     assert(myController.getSimLoop().getStatus() == Animation.Status.RUNNING);
-    //assertEquals(m
   }
 
 }

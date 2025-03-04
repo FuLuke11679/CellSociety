@@ -33,7 +33,8 @@ public class SplashScreen {
     //myLocale = locale;
     myController = controller;
     splashPane = new BorderPane();
-    splashPane.setId("splashPane");
+    //splashPane.setId("splashPane");
+    splashPane.getStyleClass().add("splash-pane");
     splashScene = new Scene(splashPane, 600, 800);
 
     //myScheme = ColorScheme.LIGHT;  //default to light theme
@@ -55,7 +56,8 @@ public class SplashScreen {
    */
   private void loadSplashText(ResourceBundle simInfo) {
     Text welcome = new Text(simInfo.getString("splash_welcome"));
-    welcome.setId("welcome");
+    //welcome.setId("welcome");
+    welcome.getStyleClass().add("text-welcome");
     TextFlow textFlow = new TextFlow(welcome);
     textFlow.setTextAlignment(TextAlignment.CENTER);
     splashPane.setCenter(textFlow);
@@ -68,10 +70,11 @@ public class SplashScreen {
   private void loadControlButtons(ResourceBundle simInfo) {
     List<MenuButton> controlButtons = new ArrayList<>();
     MenuButton languageSelect = new MenuButton(simInfo.getString("splash_language_button"));
-    languageSelect.setId("language");
+    //languageSelect.setId("language");
     MenuItem language1 = new MenuItem(simInfo.getString("splash_language_1"));
     MenuItem language2 = new MenuItem(simInfo.getString("splash_language_2"));
-    language2.setId("french");
+    //language2.setId("french");
+    language2.getStyleClass().add("french-button");
     MenuItem language3 = new MenuItem(simInfo.getString("splash_language_3"));
     MenuItem language4 = new MenuItem(simInfo.getString("splash_language_4"));
     language1.setOnAction(e -> {
@@ -135,8 +138,10 @@ public class SplashScreen {
         myController.loadSimulation(newFile);
       }
     });
+    loadButton.getStyleClass().add("load-button");
     controls = new HBox(10, loadButton);
-    controls.setId("controls");
+    //controls.setId("controls");
+    controls.getStyleClass().add("controls");
     for (MenuButton controlButton : controlButtons) {
       controls.getChildren().add(controlButton);
     }

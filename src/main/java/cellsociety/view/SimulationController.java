@@ -167,4 +167,8 @@ public class SimulationController {
     new Alert(Alert.AlertType.INFORMATION, message).showAndWait();
   }
 
+  public SimulationScreen getSimScreen(){
+    return mySimScreen;
+  }
+
 }

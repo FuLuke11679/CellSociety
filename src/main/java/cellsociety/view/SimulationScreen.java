@@ -26,6 +26,7 @@ public class SimulationScreen {
   private XMLParser myParser;
   private GridView myGridView;
   private Grid myGrid;
+  private Scene simScene;
   private int width = 800;
   private int height = 800;
   private static double SECOND_DELAY = 0.8;
@@ -61,7 +62,10 @@ public class SimulationScreen {
           myController.getLocale());
 
       BorderPane layout = initializeLayout(simInfo);
-      myController.setStage(new Scene(layout, width, height));
+      layout.getStyleClass().add("layout");
+      simScene = new Scene(layout, width, height);
+      myController.setStage(simScene);
+      //myController.setStage(new Scene(layout, width, height));
     } catch (IllegalArgumentException e) {
       myController.showMessage(simInfo.getString("invalid_config") + e.getMessage());
     } catch (Exception e) {
@@ -87,7 +91,8 @@ public class SimulationScreen {
     layout.setCenter(centerWrapper);
 
     Button startButton = new Button(simInfo.getString("start"));
-    startButton.setId("start");
+    //startButton.setId("start");
+    startButton.getStyleClass().add("start-button");
     Button pauseButton = new Button(simInfo.getString("pause"));
     Button saveButton = new Button(simInfo.getString("save"));
     Button resetButton = new Button(simInfo.getString("reset"));
@@ -187,6 +192,8 @@ public class SimulationScreen {
   public XMLParser getMyParser() {
     return myParser;
   }
+
+  public Scene getSimScene() {return simScene;}
 
 }
 
