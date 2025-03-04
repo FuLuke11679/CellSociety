@@ -2,12 +2,14 @@ package cellsociety.view;
 
 
 import cellsociety.view.GridView.ColorScheme;
+import java.io.File;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import java.util.ResourceBundle;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.control.MenuButton;
 import javafx.scene.control.MenuItem;
 import javafx.scene.layout.BorderPane;
@@ -20,26 +22,30 @@ public class SplashScreen {
 
   private BorderPane splashPane;
   private Scene splashScene;
-  private Locale myLocale;
+  //private Locale myLocale;
   private ColorScheme myScheme; //initialize to LIGHT mode
   private HBox controls;
+  private SimulationController myController;
 
 
-  public SplashScreen(Locale locale){
+  public SplashScreen(SimulationController controller){
     //what variables do we need to set?
-    myLocale = locale;
+    //myLocale = locale;
+    myController = controller;
     splashPane = new BorderPane();
     splashScene = new Scene(splashPane, 600, 800);
-    myScheme = ColorScheme.LIGHT;  //default to light theme
-    loadScreen();
+    //myScheme = ColorScheme.LIGHT;  //default to light theme
+    //loadScreen();
   }
 
-  private void loadScreen(){
-    ResourceBundle simInfo = ResourceBundle.getBundle("SimInfo", myLocale);
+  public void loadScreen(){
+    ResourceBundle simInfo = ResourceBundle.getBundle("SimInfo", myController.getLocale());
     loadSplashText(simInfo);
     loadControlButtons(simInfo);
-    setSplashTheme(myScheme, simInfo);
+    setSplashTheme(myController.getScheme(), simInfo);
+    myController.displaySplashScreen(this.splashScene);
   }
+
 
   /**
    * Generates text on opening screen
@@ -64,26 +70,28 @@ public class SplashScreen {
     MenuItem language3 = new MenuItem(simInfo.getString("splash_language_3"));
     MenuItem language4 = new MenuItem(simInfo.getString("splash_language_4"));
     language1.setOnAction(e -> {
-      if(myLocale != Locale.ENGLISH) {
-        myLocale = Locale.ENGLISH;
+      if(myController.getLocale() != Locale.ENGLISH) {
+        //myLocale = Locale.ENGLISH;
+        myController.setLocale(Locale.ENGLISH);
         loadScreen();
       }
     });
     language2.setOnAction(e -> {
-      if(myLocale != Locale.FRENCH) {
-        myLocale = Locale.FRENCH;
+      if(myController.getLocale() != Locale.FRENCH) {
+        //myLocale = Locale.FRENCH;
+        myController.setLocale(Locale.FRENCH);
         loadScreen();
       }
     });
     language3.setOnAction(e ->{
-      if(myLocale != Locale.GERMAN){
-        myLocale = Locale.GERMAN;
+      if(myController.getLocale() != Locale.GERMAN){
+        myController.setLocale(Locale.GERMAN);
         loadScreen();
       }
     });
     language4.setOnAction(e ->{
-      if(myLocale != Locale.ITALIAN){
-        myLocale = Locale.ITALIAN;
+      if(myController.getLocale() != Locale.ITALIAN){
+        myController.setLocale(Locale.ITALIAN);
         loadScreen();
       }
     });
@@ -94,25 +102,35 @@ public class SplashScreen {
     MenuItem colorScheme3 = new MenuItem(simInfo.getString("splash_color_scheme_3"));
     MenuItem colorScheme4 = new MenuItem(simInfo.getString("splash_color_scheme_4"));
     colorScheme1.setOnAction(e -> {
-      myScheme = ColorScheme.DARK; //this should be eliminated
+      myController.setScheme(ColorScheme.DARK); //this should be eliminated
       loadScreen();
     });
     colorScheme2.setOnAction(e -> {
-      myScheme = ColorScheme.LIGHT;
+      //myScheme = ColorScheme.LIGHT;
+      myController.setScheme(ColorScheme.LIGHT);
       loadScreen();
     });
     colorScheme3.setOnAction(e -> {
-      myScheme = ColorScheme.DUKE;
+      //myScheme = ColorScheme.DUKE;
+      myController.setScheme(ColorScheme.DUKE);
       loadScreen();
     });
     colorScheme4.setOnAction(e -> {
-      myScheme = ColorScheme.UNC;
+      //myScheme = ColorScheme.UNC;
+      myController.setScheme(ColorScheme.UNC);
       loadScreen();
     });
     colorScheme.getItems().addAll(colorScheme1, colorScheme2, colorScheme3, colorScheme4);
     controlButtons.add(languageSelect);
     controlButtons.add(colorScheme);
-    controls = new HBox(10);
+    Button loadButton = new Button(simInfo.getString("splash_load_sim"));
+    loadButton.setOnAction(e -> {
+      File newFile = myController.getFileChooser().showOpenDialog(myController.getStage());
+      if (newFile != null) {
+        myController.loadSimulation(newFile);
+      }
+    });
+    controls = new HBox(10, loadButton);
     for (MenuButton controlButton : controlButtons) {
       controls.getChildren().add(controlButton);
     }
@@ -152,9 +170,13 @@ public class SplashScreen {
   public Scene getSplashScene() {
     return splashScene;
   }
+
+  /*
   public Locale getMyLocale(){
     return myLocale;
   }
+
+   */
   public HBox getControls(){
     return controls;
   }
