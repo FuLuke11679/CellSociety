@@ -133,11 +133,12 @@ public class GridView {
       for (int col = 0; col < columns; col++) {
         Cell cell = grid.getCell(row, col);
         cellShapes[row][col].setFill(getCellColor(cell));
-        this.numIterations++;
-        incrementIterations();
       }
     }
+    this.numIterations++;
+    incrementIterations();
   }
+
   private Color getCellColor(Cell cell) {
     if (cell instanceof SugarscapePatch) {
       SugarscapePatch patch = (SugarscapePatch) cell;
