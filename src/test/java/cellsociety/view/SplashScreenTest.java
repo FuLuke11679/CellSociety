@@ -16,16 +16,14 @@ import javafx.scene.layout.Region;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.testfx.api.FxToolkit;
 import util.DukeApplicationTest;
-
-
 import static org.junit.jupiter.api.Assertions.*;
 import static org.testfx.api.FxAssert.verifyThat;
 import static org.testfx.util.NodeQueryUtils.isVisible;
-import static org.testfx.util.WaitForAsyncUtils.waitFor;
 
-import util.DukeApplicationTest;
 
 public class SplashScreenTest extends DukeApplicationTest {
   // keep only if needed to call application methods in tests
@@ -36,20 +34,18 @@ public class SplashScreenTest extends DukeApplicationTest {
   private Parent root;
   private File dataFile;
 
+
   @Override
   public void start (Stage stage) {
     // create application and add scene for testing to given stage
     myController = new SimulationController(stage, Locale.getDefault());
     mySplashScreen = new SplashScreen(myController);
     mySplashScreen.loadScreen();
-
     root = mySplashScreen.getSplashScene().getRoot();
     dataFile = new File("/Users/palosilva/Desktop/CS_308/cellsociety_team08/data/segregation/segregation_50x50.xml");
-    // components, found using their IDs, that will be reused in different tests
-    //myPane = (BorderPane)root.lookup("#splashPane");
-    //myPane = lookup(".splash-pane").query();
 
   }
+
   @Test
   void testWelcomeVisible(){
     //GIVEN, Splash Screen is loaded
@@ -104,9 +100,11 @@ public class SplashScreenTest extends DukeApplicationTest {
     }
 
     String expected = simInfo.getString("splash_welcome");
-    Parent newRoot = myController.getStage().getScene().getRoot();
-    Text resultNode = (Text) newRoot.lookup(".text-welcome");
+    //Parent newRoot = myController.getStage().getScene().getRoot();
+    //Text resultNode = (Text) newRoot.lookup(".text-welcome");
+    Text resultNode = (Text) root.lookup(".text-welcome");
     String result = resultNode.getText();
+    myController.getSplashLoop().stop();
     assertEquals(expected, result);
   }
 
@@ -116,25 +114,29 @@ public class SplashScreenTest extends DukeApplicationTest {
     MenuButton languageSelect = (MenuButton) root.lookup(".language-select"); //not a button though
     //GIVEN, splash screen is loaded
     //WHEN, germanLanguage is selected, language switches to german
-    clickOn(languageSelect);
-    MenuItem germanOption = null;
-    for (MenuItem item : languageSelect.getItems()) {
-      if (item.getText().equals("German")) {
-        germanOption = item;
-        break;
-      }
-    }
-    if (germanOption != null) {
-      interact(germanOption::fire);  // Simulate selecting the menu item
-    } else {
-      fail("German option not found in language menu.");
-    }
 
-    String expected = simInfo.getString("splash_welcome");
-    Parent newRoot = myController.getStage().getScene().getRoot();
-    Text resultNode = (Text) newRoot.lookup(".text-welcome");
-    String result = resultNode.getText();
-    assertEquals(expected, result);
+      clickOn(languageSelect);
+      MenuItem germanOption = null;
+      for (MenuItem item : languageSelect.getItems()) {
+        if (item.getText().equals("German")) {
+          germanOption = item;
+          break;
+        }
+      }
+      if (germanOption != null) {
+        interact(germanOption::fire);  // Simulate selecting the menu item
+      } else {
+        fail("German option not found in language menu.");
+      }
+
+      String expected = simInfo.getString("splash_welcome");
+      //Parent newRoot = myController.getStage().getScene().getRoot();
+      //Text resultNode = (Text) newRoot.lookup(".text-welcome");
+      Text resultNode = (Text) root.lookup(".text-welcome");
+      String result = resultNode.getText();
+      myController.getSplashLoop().stop();
+      assertEquals(expected, result);
+
   }
 
   @Test
@@ -143,25 +145,27 @@ public class SplashScreenTest extends DukeApplicationTest {
     MenuButton languageSelect = (MenuButton) root.lookup(".language-select"); //not a button though
     //GIVEN, splash screen is loaded
     //WHEN, italianLanguage is selected, language switches to italian
-    clickOn(languageSelect);
-    MenuItem italianOption = null;
-    for (MenuItem item : languageSelect.getItems()) {
-      if (item.getText().equals("Italian")) {
-        italianOption = item;
-        break;
+      clickOn(languageSelect);
+      MenuItem italianOption = null;
+      for (MenuItem item : languageSelect.getItems()) {
+        if (item.getText().equals("Italian")) {
+          italianOption = item;
+          break;
+        }
       }
-    }
-    if (italianOption != null) {
-      interact(italianOption::fire);  // Simulate selecting the menu item
-    } else {
-      fail("Italian option not found in language menu.");
-    }
+      if (italianOption != null) {
+        interact(italianOption::fire);  // Simulate selecting the menu item
+      } else {
+        fail("Italian option not found in language menu.");
+      }
 
-    String expected = simInfo.getString("splash_welcome");
-    Parent newRoot = myController.getStage().getScene().getRoot();
-    Text resultNode = (Text) newRoot.lookup(".text-welcome");
-    String result = resultNode.getText();
-    assertEquals(expected, result);
+      String expected = simInfo.getString("splash_welcome");
+      //Parent newRoot = myController.getStage().getScene().getRoot();
+      //Text resultNode = (Text) newRoot.lookup(".text-welcome");
+      Text resultNode = (Text) root.lookup(".text-welcome");
+      String result = resultNode.getText();
+      myController.getSplashLoop().stop();
+      assertEquals(expected, result);
   }
 
   @Test
@@ -189,6 +193,7 @@ public class SplashScreenTest extends DukeApplicationTest {
     Parent newRoot = myController.getStage().getScene().getRoot();
     Text resultNode = (Text) newRoot.lookup(".text-welcome");
     String result = resultNode.getText();
+    myController.getSplashLoop().stop();
     assertEquals(expected, result);
   }
 
@@ -215,6 +220,7 @@ public class SplashScreenTest extends DukeApplicationTest {
     if (background.getBackground() != null && !background.getBackground().getFills().isEmpty()) {
       backgroundColor = (Color) background.getBackground().getFills().getFirst().getFill();
     }
+    myController.getSplashLoop().stop();
     assertEquals(Color.web("#333333"), backgroundColor);
   }
 
@@ -241,6 +247,7 @@ public class SplashScreenTest extends DukeApplicationTest {
     if (background.getBackground() != null && !background.getBackground().getFills().isEmpty()) {
       backgroundColor = (Color) background.getBackground().getFills().getFirst().getFill();
     }
+    myController.getSplashLoop().stop();
     assertEquals(Color.web("#003080"), backgroundColor);
   }
 
@@ -267,6 +274,7 @@ public class SplashScreenTest extends DukeApplicationTest {
     if (background.getBackground() != null && !background.getBackground().getFills().isEmpty()) {
       backgroundColor = (Color) background.getBackground().getFills().getFirst().getFill();
     }
+    myController.getSplashLoop().stop();
     assertEquals(Color.web("#89CFF0"), backgroundColor);
   }
 
@@ -294,6 +302,7 @@ public class SplashScreenTest extends DukeApplicationTest {
     if (background.getBackground() != null && !background.getBackground().getFills().isEmpty()) {
       backgroundColor = (Color) background.getBackground().getFills().getFirst().getFill();
     }
+    myController.getSplashLoop().stop();
     assertEquals(Color.web("#FAF9F6"), backgroundColor);
   }
 
