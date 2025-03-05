@@ -9,6 +9,8 @@ import cellsociety.model.ruleset.RulesetFactory;
 import cellsociety.parser.XMLParser;
 import cellsociety.view.shapes.ShapeFactory;
 import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.ResourceBundle;
 import javafx.animation.Animation;
 import javafx.geometry.Pos;
@@ -21,6 +23,10 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
+/**
+ * @Author Palo Silva
+ * Class that handles front end logic for displaying a selected simulation
+ */
 public class SimulationScreen {
   private SimulationController myController;
   private XMLParser myParser;
@@ -34,8 +40,12 @@ public class SimulationScreen {
   public SimulationScreen(File file, SimulationController controller){
     myController = controller;
     parseFile(file);
-
   }
+
+  /**
+   * Parses XML file in order to load simulation
+   * @param file: XML file chosen by user
+   */
 
   private void parseFile(File file){
     ResourceBundle simInfo = ResourceBundle.getBundle("SimInfo", myController.getLocale());
@@ -73,12 +83,16 @@ public class SimulationScreen {
     }
   }
 
+  /**
+   * Generates appropriate RuleSet based on XML file
+   * @return RuleSet for chosen simulation
+   */
   private Ruleset getRuleset() {
     return RulesetFactory.createRuleset(myParser.getSimType(), myParser.getSimVarsMap());
   }
 
   /**
-   * Initializes simulation layout after splash screen
+   * Initializes simulation layout
    * @param simInfo: resource bundle containing hardcoded simulation text
    * @return : Organized BorderPane holding nodes for simulation
    */
@@ -86,10 +100,34 @@ public class SimulationScreen {
     BorderPane layout = new BorderPane();
     HBox centerWrapper = new HBox(myGridView.getScene().getRoot());
     centerWrapper.setAlignment(Pos.CENTER);
-    //centerWrapper.setId("grid");
     centerWrapper.getStyleClass().add("grid");
     layout.setCenter(centerWrapper);
 
+    List<Button> controlButtons = loadControlButtons(simInfo);
+
+    Slider speedSlider = makeSpeedControl();
+
+    HBox controls = new HBox(10);
+    for (Button controlButton : controlButtons) {
+      controls.getChildren().add(controlButton);
+    }
+    controls.getChildren().add(new Label("Speed:"));
+    controls.getChildren().add(speedSlider);
+    //controls.setId("simControls");
+    layout.setBottom(controls);
+
+    VBox settingsPanel = loadSettingsPanel();
+    layout.setRight(settingsPanel);
+    return layout;
+  }
+
+  /**
+   * Loads all control buttons for the simulation display
+   * @param simInfo: resource bundle containing hardcoded simulation text
+   * @return : List of all control buttons
+   */
+  private List<Button> loadControlButtons(ResourceBundle simInfo) {
+    List<Button> controlButtons = new ArrayList<>();
     Button startButton = new Button(simInfo.getString("start"));
     startButton.getStyleClass().add("start-button");
     Button pauseButton = new Button(simInfo.getString("pause"));
@@ -102,27 +140,37 @@ public class SimulationScreen {
     loadButton.getStyleClass().add("load-button");
 
     startButton.setOnAction(e -> myController.startSimulation());
+    controlButtons.add(startButton);
     pauseButton.setOnAction(e -> {
       if (myController.getSimLoop() != null) {
         if (myController.getSimLoop().getStatus() == Animation.Status.RUNNING) {
           myController.getSimLoop().pause();  // Pause without destroying it
-
         }
         else if (myController.getSimLoop().getStatus() == Animation.Status.PAUSED) {  //REMOVE?
           myController.getSimLoop().play();  // Resume from where it left off
         }
       }
     });
-
+    controlButtons.add(pauseButton);
     saveButton.setOnAction(e -> myController.saveSimulation(simInfo));
+    controlButtons.add(saveButton);
     resetButton.setOnAction(e -> myController.resetSimulation());
+    controlButtons.add(resetButton);
     loadButton.setOnAction(e -> {
       File newFile = myController.getFileChooser().showOpenDialog(myController.getStage());
       if (newFile != null) {
         myController.loadSimulation(newFile);
       }
     });
+    controlButtons.add(loadButton);
+    return controlButtons;
+  }
 
+  /**
+   * Creates slider to adjust simulation speed
+   * @return Slider object that adjusts speed
+   */
+  private Slider makeSpeedControl() {
     Slider speedSlider = new Slider(0.1, 2.0, SECOND_DELAY);
     speedSlider.valueProperty().addListener((obs, oldVal, newVal) -> {
       SECOND_DELAY = 2.1 - newVal.doubleValue();  // Update speed delay
@@ -132,11 +180,14 @@ public class SimulationScreen {
       }
     });
     speedSlider.getStyleClass().add("speed-slider");
+    return speedSlider;
+  }
 
-    HBox controls = new HBox(10, startButton, pauseButton, saveButton, resetButton, loadButton, new Label("Speed:"), speedSlider);
-    controls.setId("simControls");
-    layout.setBottom(controls);
-
+  /**
+   * Creates UI elements to adjust edge, neighbor, and shape settings of simulation
+   * @return VBox containing all setting UI elements
+   */
+  private VBox loadSettingsPanel(){
     VBox settingsPanel = new VBox(15);
     settingsPanel.setStyle("-fx-padding: 10;");
 
@@ -183,11 +234,12 @@ public class SimulationScreen {
         new Label("Neighborhood Type:"), neighborhoodDropdown,
         new Label("Cell Shape:"), shapeDropdown
     );
-
-    layout.setRight(settingsPanel); // Place settings on the right side
-    return layout;
+    return settingsPanel;
   }
 
+  /**
+   * Updates simulation screen by updating Grid, then GridView
+   */
   public void update(){
     myGrid.update();
     myGridView.update();
