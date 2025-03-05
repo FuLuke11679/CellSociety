@@ -8,7 +8,7 @@ import javafx.scene.shape.Shape;
 public class ShapeFactory {
 
   private static final List<String> AVAILABLE_SHAPES = Arrays.asList("Rectangular", "Hexagonal",
-      "Triangular");
+      "Triangular", "PentagonalTiling");
 
   public static List<String> getAvailableShapes() {
     return AVAILABLE_SHAPES;
