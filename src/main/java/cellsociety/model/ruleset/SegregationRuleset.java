@@ -35,6 +35,12 @@ public class SegregationRuleset extends Ruleset {
   public void updateCellState(Cell cell, List<Cell> neighbors) {
   }
 
+  /**
+   * Updates the state of a grid in the case of a segregation simulation.
+   *
+   * This particular implementation amasses the empty cells and unsatisfied cells into two lists
+   * and matches them accordingly to place the unsatisfied cells into a random empty spot.
+   */
   @Override
   public void updateGridState() {
     List<Cell> emptyCells = getEmptyCells();

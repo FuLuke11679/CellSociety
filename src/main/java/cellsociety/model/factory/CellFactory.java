@@ -20,6 +20,12 @@ public class CellFactory {
   private static final String CELL_CLASS_PROPERTY_FILE_NAME = "cellsociety/cells.properties";
   private static final String CELL_STATE_PROPERTY_FILE_NAME = "cellsociety/cellstates.properties";
 
+  /**
+   * Creates a cell of the desired type based on the given unique CellState
+   * @param id The id of the cell to create
+   * @param state CellState indicating the state of the cell
+   * @return New concrete Cell object which extends Cell
+   */
   public static Cell createCell(int id, CellState state) {
     Properties cellClassProperties = new Properties();
     PropertiesLoader.loadPropertiesFolder(CELL_CLASS_PROPERTY_FILE_NAME, cellClassProperties);

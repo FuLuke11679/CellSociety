@@ -8,6 +8,11 @@ import java.util.Properties;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+/**
+ * Author: Daniel Rodriguez-Florido
+ *
+ * Factory to create rulesets dynamically using reflection
+ */
 public class RulesetFactory {
 
   private static final String PROPERTY_FILE_NAME = "cellsociety/rulesets.properties";

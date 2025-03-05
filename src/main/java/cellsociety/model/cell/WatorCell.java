@@ -1,9 +1,6 @@
 package cellsociety.model.cell;
 
-import cellsociety.model.agent.Fish;
-import cellsociety.model.agent.Shark;
 import cellsociety.model.agent.WatorAgent;
-import cellsociety.model.ruleset.WatorRuleset;
 import cellsociety.model.state.CellState;
 
 /**
@@ -25,10 +22,19 @@ public class WatorCell extends Cell {
     super(id, currState, nextState);
   }
 
+  /**
+   * Getter for the agent on the cell
+   *
+   * @return The active agent on the cell
+   */
   public WatorAgent getAgent() {
     return agent;
   }
 
+  /**
+   * Setter for the agent on the cell
+   * @param agent The agent we wish to instantiate on this cell
+   */
   public void setAgent(WatorAgent agent) {
     this.agent = agent;
   }

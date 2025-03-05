@@ -15,6 +15,9 @@ import java.util.List;
 
 public class PercolationRuleset extends Ruleset {
 
+  /**
+   * Empty constructor since no parameters necessary
+   */
   public PercolationRuleset() {
   }
 
@@ -35,9 +38,11 @@ public class PercolationRuleset extends Ruleset {
 
   }
 
+  /**
+   * Empty function that does not need implementation for this simulation (strategy pattern)
+   */
   @Override
   public void updateGridState() {
-
   }
 
   /**

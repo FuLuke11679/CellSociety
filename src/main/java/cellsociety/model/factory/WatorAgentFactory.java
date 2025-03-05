@@ -38,7 +38,7 @@ public class WatorAgentFactory {
 
   /**
    * Creates a new WatorAgent based on the state of the cell
-   * @param agentType The type of agent we wish to create
+   * @param agentType WatorState indicating The type of agent we wish to create
    * @return The new WatorAgent
    */
   public WatorAgent createWatorAgent(CellState agentType) {
