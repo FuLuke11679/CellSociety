@@ -1,46 +1,32 @@
 package cellsociety.view.shapes;
 
 import javafx.scene.shape.Polygon;
-import javafx.scene.shape.Shape;
 
 public class HexagonalShape extends Polygon {
 
   public HexagonalShape(int size, int row, int col) {
-    double width = size * 0.9;
-    double height = Math.sqrt(3) * width / 2;
+    double width = size;  // Full width of a hexagon
+    double height = Math.sqrt(3) * size / 2;  // Height calculated for flat-top hex
 
-    double xOffset = col * width * 0.75;
-    double yOffset = row * height - (height / 2);  // Adjusted to move up slightly
+    // Correct x and y offsets for proper alignment
+    double xOffset = .75 * col * width;  // Space horizontally by 1.5 times the width
+    double yOffset = row * height;   // Evenly spaced rows
 
-    if (col % 2 == 1) {
+    if (col % 2 == 1) {  // Offset every other column downward
       yOffset += height / 2;
     }
 
+    // Define the hexagon with flat sides at the top and bottom
     getPoints().addAll(
-        0.0, height / 2,
-        width / 2, 0.0,
-        width, height / 2,
-        width, 1.5 * height,
-        width / 2, 2 * height,
-        0.0, 1.5 * height
+        width * 0.25, 0.0,   // Top left
+        width * 0.75, 0.0,   // Top right
+        width, height / 2,   // Middle right
+        width * 0.75, height, // Bottom right
+        width * 0.25, height, // Bottom left
+        0.0, height / 2       // Middle left
     );
 
     setTranslateX(xOffset);
     setTranslateY(yOffset);
-  }
-
-  public static void setPosition(Shape shape, int row, int col, int size) {
-    double width = size * 0.9;
-    double height = Math.sqrt(3) * width / 2;
-
-    double xOffset = col * width * 0.75;
-    double yOffset = row * height - (height / 2);  // Adjusted
-
-    if (col % 2 == 1) {
-      yOffset += height / 2;
-    }
-
-    shape.setTranslateX(xOffset);
-    shape.setTranslateY(yOffset);
   }
 }

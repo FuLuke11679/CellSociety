@@ -3,6 +3,8 @@ package cellsociety.view;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.testfx.util.WaitForAsyncUtils.waitFor;
 
+import cellsociety.model.ruleset.SegregationRuleset;
+import cellsociety.parser.Parser;
 import java.io.File;
 import java.util.Locale;
 import java.util.ResourceBundle;
@@ -31,6 +33,7 @@ public class SimulationScreenTest extends DukeApplicationTest {
   private Button startButton;
   private BorderPane initLayout;
   private HBox initGrid;
+  private Parser myParser;
 
   @Override
   public void start (Stage stage) {
@@ -41,6 +44,8 @@ public class SimulationScreenTest extends DukeApplicationTest {
     File dataFile = new File("/Users/palosilva/Desktop/CS_308/cellsociety_team08/data/segregation/segregation_50x50.xml");
     //need to load a simulation
     myController.loadSimulation(dataFile);
+    mySimScreen = myController.getSimScreen();
+    myParser = mySimScreen.getMyParser();
     root = myController.getSimScreen().getSimScene().getRoot();
     initLayout = (BorderPane) root.lookup(".layout");
     initGrid = (HBox) root.lookup(".grid");
@@ -103,9 +108,6 @@ public class SimulationScreenTest extends DukeApplicationTest {
     }
     assert (myController.getCurrentFile() == switchDataFile);
 
-    //Grids will technically have same address in mem, are considered the same upon comparison
-    //HBox newGrid = (HBox) root.lookup(".grid");
-    //assert(newGrid != initGrid);  // The layout should have changed
   }
 
   @Test
@@ -118,5 +120,6 @@ public class SimulationScreenTest extends DukeApplicationTest {
     double newSpeed = (1.0)/(2.1-1.9); //how new speed is set in speedSlider
     assertEquals(newSpeed, myController.getSimLoop().getRate(), 0.01);
   }
+
 
 }

@@ -176,4 +176,8 @@ public class SimulationController {
     return currentFile;
   }
 
+  public Timeline getSplashLoop(){
+    return splashLoop;
+  }
+
 }

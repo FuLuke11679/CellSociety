@@ -2,7 +2,7 @@
 <simulationConfig>
   <!-- window and grid configuration -->
   <display width="800" height="800" title="Fire Simulation" author="Palo">
-    <grid rows="5" columns="5" />
+    <grid rows="5" columns="5" edgeType="Toroidal" neighborhoodType="VonNeumann" cellShape="Rectangular"/>
     <description text="This is the forest fire simulation"/>
   </display>
 

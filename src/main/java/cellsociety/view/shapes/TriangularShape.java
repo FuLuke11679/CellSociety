@@ -4,6 +4,7 @@ import javafx.scene.shape.Polygon;
 import javafx.scene.shape.Shape;
 
 public class TriangularShape extends Polygon {
+
   private static final double SCALE_FACTOR = 1.5;
 
 
