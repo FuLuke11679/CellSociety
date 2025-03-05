@@ -1,9 +1,9 @@
 package cellsociety.view.shapes;
 
 import javafx.scene.shape.Polygon;
-import javafx.scene.shape.Shape;
 
 public class HexagonalShape extends Polygon {
+
   public HexagonalShape(int size, int row, int col) {
     double width = size;  // Full width of a hexagon
     double height = Math.sqrt(3) * size / 2;  // Height calculated for flat-top hex

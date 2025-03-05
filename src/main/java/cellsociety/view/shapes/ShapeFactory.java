@@ -3,25 +3,30 @@ package cellsociety.view.shapes;
 import java.lang.reflect.Method;
 import java.util.List;
 import java.util.Arrays;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.scene.shape.Shape;
 
 public class ShapeFactory {
 
+  private static final Logger LOGGER = Logger.getLogger(ShapeFactory.class.getName());
+
   private static final List<String> AVAILABLE_SHAPES = Arrays.asList("Rectangular", "Hexagonal",
-      "Triangular", "PentagonalTiling");
+      "Triangular", "Rhombus", "PentagonalTiling");
 
   public static List<String> getAvailableShapes() {
     return AVAILABLE_SHAPES;
   }
 
   public static String getFullyQualifiedName(String shapeName) {
-    String className;
-    if (shapeName.contains(".")) { // Already fully qualified
-      className = shapeName;
-    } else {
-      className = "cellsociety.view.shapes." + shapeName + "Shape";
+    if (shapeName == null || shapeName.trim().isEmpty()) {
+      throw new IllegalArgumentException("Shape name is null or empty.");
     }
-    return className;
+    // If the name already contains a dot, assume it's fully qualified
+    if (shapeName.contains(".")) {
+      return shapeName;
+    }
+    return "cellsociety.view.shapes." + shapeName + "Shape";
   }
 
   public static Shape createShape(String shapeType, int size, int row, int col) {
@@ -32,36 +37,35 @@ public class ShapeFactory {
 
       // Get the fully qualified class name dynamically
       String className = getFullyQualifiedName(shapeType);
-      if (className == null) {
-        throw new IllegalArgumentException("Generated class name is null.");
+      if (className == null || className.trim().isEmpty()) {
+        throw new IllegalArgumentException("Generated class name is null or empty.");
       }
 
       // Load the class dynamically using reflection
       Class<?> shapeClass = Class.forName(className);
-      Shape shape = (Shape) shapeClass.getDeclaredConstructor(int.class, int.class, int.class).newInstance(size, row, col);
+      Shape shape = (Shape) shapeClass
+          .getDeclaredConstructor(int.class, int.class, int.class)
+          .newInstance(size, row, col);
 
       // Use reflection to find and call the setPosition() method if it exists
       try {
         Method setPositionMethod = shapeClass.getMethod("setPosition", Shape.class, int.class, int.class);
         setPositionMethod.invoke(null, shape, row, col);
-      } catch (NoSuchMethodException ignored) {
-        // If the shape does not have a custom positioning method, it will use default placement
+      } catch (NoSuchMethodException e) {
+        // If there is no custom positioning method, that is acceptable.
+        LOGGER.log(Level.FINE, "No custom setPosition method found for {0}; using default placement.", className);
       }
 
       return shape;
     } catch (ClassNotFoundException e) {
-      System.err.println("Error: Shape class not found -> " + shapeType);
-      e.printStackTrace();
+      LOGGER.log(Level.SEVERE, "Shape class not found for type: " + shapeType + ". Falling back to RectangularShape.", e);
     } catch (NoSuchMethodException e) {
-      System.err.println("Error: Constructor (int, int, int) not found in class -> " + shapeType);
-      e.printStackTrace();
+      LOGGER.log(Level.SEVERE, "Constructor (int, int, int) not found for shape: " + shapeType + ". Falling back to RectangularShape.", e);
     } catch (Exception e) {
-      System.err.println("Unexpected error creating shape -> " + shapeType);
-      e.printStackTrace();
+      LOGGER.log(Level.SEVERE, "Unexpected error while creating shape for type: " + shapeType + ". Falling back to RectangularShape.", e);
     }
 
     // Default fallback to RectangularShape in case of failure
     return new RectangularShape(size, row, col);
   }
-
 }
