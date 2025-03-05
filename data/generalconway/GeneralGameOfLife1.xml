@@ -2,7 +2,7 @@
 <simulationConfig>
   <!-- window and grid configuration -->
   <display width="800" height="800" title="General Conway Simulation" author="Danny">
-    <grid rows="10" columns="10" />
+    <grid rows="10" columns="10" edgeType="Toroidal" neighborhoodType="ExtendedMoore" cellShape="Rectangular"/>
     <description text="This is an xml file for the General Game of Life that represents the seed variation"/>
   </display>
 

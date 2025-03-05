@@ -1,7 +1,7 @@
 <?xml version="1.0" ?>
 <simulationConfig>
   <display width="800" height="800" title="General Conway Simulation" author="Danny">
-    <grid rows="16" columns="16"/>
+    <grid rows="16" columns="16" edgeType="Toroidal" neighborhoodType="ExtendedMoore" cellShape="Rectangular"/>
     <description text="This is an XML file for Diamoeba"/>
   </display>
   <sim type="GeneralConway">

@@ -2,7 +2,7 @@
 <simulationConfig>
   <!-- window and grid configuration -->
   <display width="600" height="600" title="Percolation Simulation" author="Palo">
-    <grid rows="8" columns="8" />
+    <grid rows="8" columns="8" edgeType="Toroidal" neighborhoodType="ExtendedMoore" cellShape="Rectangular"/>
     <description text="This is the percolation simulation"/>
   </display>
 

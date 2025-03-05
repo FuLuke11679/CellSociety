@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <data>
   <display width="800" height="600" title="Conway Simulation" author="Test Author">
-    <grid rows="10" columns="10"/>
+    <grid rows="10" columns="10" edgeType="Toroidal" neighborhoodType="ExtendedMoore" cellShape="Rectangular"/>
     <description text="Test simulation with incorrect number of states"/>
   </display>
   <sim type="Conway"/>

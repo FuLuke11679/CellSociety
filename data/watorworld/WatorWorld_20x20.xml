@@ -1,7 +1,7 @@
 <?xml version="1.0" ?>
 <simulationConfig>
   <display width="800" height="800" title="WatorWorld Simulation" author="Palo">
-    <grid rows="20" columns="20"/>
+    <grid rows="20" columns="20" edgeType="Toroidal" neighborhoodType="VonNeumann" cellShape="Rectangular"/>
     <description text="This is the WatorWorld simulation"/>
   </display>
   <sim type="WatorWorld">

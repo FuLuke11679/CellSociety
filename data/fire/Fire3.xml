@@ -2,8 +2,8 @@
 <simulationConfig>
   <!-- window and grid configuration -->
   <display width="800" height="800" title="Fire Simulation" author="Palo">
-    <grid rows="10" columns="10" />
-    <description text="This is the forest fire simulation"/>
+    <grid rows="10" columns="10" edgeType="Toroidal" neighborhoodType="VonNeumann" cellShape="Rectangular"/>
+    <description text="This is the forest fire simulation" />
   </display>
 
   <!-- sim configuration -->
