@@ -24,7 +24,7 @@ public class SugarscapeGrid extends Grid {
     int[] values = ((SugarscapeRuleset)getRuleset()).getInitialValues();
     int sugarValue = values[id];
     try {
-      SugarscapePatch patch = new SugarscapePatch(id, currState, nextState, sugarValue, 25);
+      SugarscapePatch patch = new SugarscapePatch(id, currState, nextState, sugarValue, 10);
       if (currState.equals(cellsociety.model.state.SugarscapeState.AGENT)) {
         SugarscapeAgent agent = new SugarscapeAgent(10);
         patch.setAgent(agent);
