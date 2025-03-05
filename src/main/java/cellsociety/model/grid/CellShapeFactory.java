@@ -2,30 +2,32 @@ package cellsociety.model.grid;
 
 import cellsociety.model.grid.shape.CellShape;
 import cellsociety.model.grid.shape.RectangularShape;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class CellShapeFactory {
+
+  private static final Logger LOGGER = Logger.getLogger(CellShapeFactory.class.getName());
+
   public static CellShape createCellShape(String shapeType) {
     try {
-      if (shapeType == null || shapeType.isEmpty()) {
+      if (shapeType == null || shapeType.trim().isEmpty()) {
         throw new IllegalArgumentException("Cell shape type is null or empty.");
       }
 
       String className = "cellsociety.model.grid.shape." + shapeType + "Shape";
-      System.out.println("Attempting to load CellShape class: " + className);
+      LOGGER.info("Attempting to load CellShape class: " + className);
 
       Class<?> shapeClass = Class.forName(className);
       return (CellShape) shapeClass.getDeclaredConstructor().newInstance();
     } catch (ClassNotFoundException e) {
-      System.err.println("Error: CellShape class not found -> " + shapeType);
-      e.printStackTrace();
+      LOGGER.log(Level.SEVERE, "Error: CellShape class not found for type -> " + shapeType, e);
     } catch (NoSuchMethodException e) {
-      System.err.println("Error: Constructor not found in class -> " + shapeType);
-      e.printStackTrace();
+      LOGGER.log(Level.SEVERE, "Error: No default constructor found in class -> " + shapeType, e);
     } catch (Exception e) {
-      System.err.println("Unexpected error creating CellShape -> " + shapeType);
-      e.printStackTrace();
+      LOGGER.log(Level.SEVERE, "Unexpected error creating CellShape -> " + shapeType, e);
     }
-    return new RectangularShape(); // Default shape fallback
+    // Default fallback to RectangularShape in case of failure
+    return new RectangularShape();
   }
 }
-
