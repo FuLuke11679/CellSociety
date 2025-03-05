@@ -36,7 +36,7 @@ public class RulesetFactory {
       log.error("Ruleset {} not found", rulesetClass);
       throw new RuntimeException("Ruleset " + rulesetClass + " not found");
     } catch (Exception e) {
-      log.error("Ruleset for simulation {} could not be instantiated", simName);
+      log.error("Ruleset for simulation {} could not be instantiated --- {}", simName, rulesetClass);
       throw new RuntimeException("Ruleset for simulation " + simName + " could not be instantiated");
     }
   }

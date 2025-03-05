@@ -9,10 +9,9 @@
   <!-- sim configuration -->
   <sim type="WatorWorld">
     <simvars
-      fishBreedTime="8"
-      fishStarveTime="10"
-      sharkBreedTime="10"
-      sharkStarveTime="8"
+      fishBreedTime="10"
+      sharkEnergyGain="5"
+      sharkBreedTime="3"
     />
   </sim>
 
@@ -20,7 +19,7 @@
     stateList =
       "W,W,W,W,W,
        W,W,W,W,W,
-       W,W,F,W,W,
+       W,W,S,W,W,
        W,W,W,W,W,
        W,W,W,W,W"
   >

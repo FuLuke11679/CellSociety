@@ -1,7 +1,9 @@
 package cellsociety.model.cell;
 
 import cellsociety.model.agent.Fish;
+import cellsociety.model.agent.Shark;
 import cellsociety.model.agent.WatorAgent;
+import cellsociety.model.ruleset.WatorRuleset;
 import cellsociety.model.state.CellState;
 
 /**
@@ -21,11 +23,6 @@ public class WatorCell extends Cell {
 
   public WatorCell(int id, CellState currState, CellState nextState) {
     super(id, currState, nextState);
-    if (currState == WatorState.FISH) {
-      agent = new Fish(5);
-    } else {
-      agent = null;
-    }
   }
 
   public WatorAgent getAgent() {

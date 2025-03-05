@@ -8,9 +8,8 @@ import java.util.List;
 public interface WatorAgent {
   void move(List<Cell> neighbors);
   boolean getMoved();
+  void setMoved(boolean moved);
   int getEnergy();
   int getReproductionTime();
   CellState getState();
 }
-
-

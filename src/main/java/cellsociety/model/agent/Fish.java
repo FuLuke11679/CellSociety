@@ -26,7 +26,6 @@ public class Fish implements WatorAgent {
   @Override
   public void move(List<Cell> neighbors) {
     WatorCell toMove = findNeighborToMove(neighbors);
-    System.out.println("moving");
     if (toMove != null) {
       timeToReproduce--;
       if (timeToReproduce < 0) {
@@ -46,7 +45,6 @@ public class Fish implements WatorAgent {
   private WatorCell findNeighborToMove(List<Cell> neighbors) {
     Collections.shuffle(neighbors);
     for (Cell neighbor : neighbors) {
-      System.out.print(neighbor.getCurrState() + " " + neighbor.getNextState() + " | ");
       if (neighbor.getCurrState() == WatorState.WATER && neighbor.getNextState() == null) {
         return (WatorCell) neighbor;
       }
@@ -57,6 +55,14 @@ public class Fish implements WatorAgent {
 
   public boolean getMoved() {
     return moved;
+  }
+
+  /**
+   * @param moved
+   */
+  @Override
+  public void setMoved(boolean moved) {
+    this.moved = moved;
   }
 
   /**
