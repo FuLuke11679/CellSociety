@@ -70,23 +70,19 @@ public class SplashScreen {
   private void loadControlButtons(ResourceBundle simInfo) {
     List<MenuButton> controlButtons = new ArrayList<>();
     MenuButton languageSelect = new MenuButton(simInfo.getString("splash_language_button"));
-    //languageSelect.setId("language");
+    languageSelect.getStyleClass().add("language-select");
     MenuItem language1 = new MenuItem(simInfo.getString("splash_language_1"));
     MenuItem language2 = new MenuItem(simInfo.getString("splash_language_2"));
-    //language2.setId("french");
-    language2.getStyleClass().add("french-button");
     MenuItem language3 = new MenuItem(simInfo.getString("splash_language_3"));
     MenuItem language4 = new MenuItem(simInfo.getString("splash_language_4"));
     language1.setOnAction(e -> {
       if(myController.getLocale() != Locale.ENGLISH) {
-        //myLocale = Locale.ENGLISH;
         myController.setLocale(Locale.ENGLISH);
         loadScreen();
       }
     });
     language2.setOnAction(e -> {
       if(myController.getLocale() != Locale.FRENCH) {
-        //myLocale = Locale.FRENCH;
         myController.setLocale(Locale.FRENCH);
         loadScreen();
       }
@@ -105,6 +101,7 @@ public class SplashScreen {
     });
     languageSelect.getItems().addAll(language1, language2, language3, language4);
     MenuButton colorScheme = new MenuButton(simInfo.getString("splash_color_button"));
+    colorScheme.getStyleClass().add("color-scheme");
     MenuItem colorScheme1 = new MenuItem(simInfo.getString("splash_color_scheme_1"));
     MenuItem colorScheme2 = new MenuItem(simInfo.getString("splash_color_scheme_2"));
     MenuItem colorScheme3 = new MenuItem(simInfo.getString("splash_color_scheme_3"));
@@ -114,17 +111,14 @@ public class SplashScreen {
       loadScreen();
     });
     colorScheme2.setOnAction(e -> {
-      //myScheme = ColorScheme.LIGHT;
       myController.setScheme(ColorScheme.LIGHT);
       loadScreen();
     });
     colorScheme3.setOnAction(e -> {
-      //myScheme = ColorScheme.DUKE;
       myController.setScheme(ColorScheme.DUKE);
       loadScreen();
     });
     colorScheme4.setOnAction(e -> {
-      //myScheme = ColorScheme.UNC;
       myController.setScheme(ColorScheme.UNC);
       loadScreen();
     });
@@ -140,7 +134,6 @@ public class SplashScreen {
     });
     loadButton.getStyleClass().add("load-button");
     controls = new HBox(10, loadButton);
-    //controls.setId("controls");
     controls.getStyleClass().add("controls");
     for (MenuButton controlButton : controlButtons) {
       controls.getChildren().add(controlButton);
