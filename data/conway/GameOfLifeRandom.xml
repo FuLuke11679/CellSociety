@@ -1,6 +1,6 @@
 <Simulation>
   <display width="600" height="600" title="Game of Life" author = "Luke">
-    <grid rows="4" columns="4" />
+    <grid rows="4" columns="4" edgeType="Toroidal" neighborhoodType="ExtendedMoore" cellShape="Rectangular"/>
     <description text="Random configuration for Game of Life" />
   </display>
   <sim type="Conway" >

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <simulationConfig>
   <display width="600" height="600" title="Ringed Sugarscape Simulation" author="Luke">
-    <grid rows="10" columns="10"/>
+    <grid rows="10" columns="10" edgeType="Toroidal" neighborhoodType="VonNeumann" cellShape="Rectangular"/>
     <description text="Sugarscape simulation with patches of less sugar on the outside and gradually more sugar towards the center, arranged in rings."/>
   </display>
 

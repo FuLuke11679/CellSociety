@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <simulationConfig>
   <display width="800" height="800" title="Dual-Ring Sugarscape with Scattered Agents" author="Luke">
-    <grid rows="20" columns="20"/>
+    <grid rows="20" columns="20" edgeType="Toroidal" neighborhoodType="VonNeumann" cellShape="Rectangular"/>
     <description text="Sugarscape simulation with two high-sugar regions and 8 agents scattered throughout the grid."/>
   </display>
 

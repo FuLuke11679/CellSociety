@@ -1,7 +1,7 @@
 <?xml version="1.0" ?>
 <simulationConfig>
   <display width="800" height="800" title="General Conway Simulation" author="Danny">
-    <grid rows="15" columns="15"/>
+    <grid rows="15" columns="15" edgeType="Toroidal" neighborhoodType="ExtendedMoore" cellShape="Rectangular"/>
     <description text="This is an XML file for the General Game of Life using the rule B36/S23"/>
   </display>
   <sim type="GeneralConway">

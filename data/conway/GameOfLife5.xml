@@ -2,7 +2,7 @@
 <simulationConfig>
   <!-- window and grid configuration -->
   <display width="100" height="200" title="Conway Simulation" author="Palo">
-    <grid rows="8" columns="8" />
+    <grid rows="8" columns="8" edgeType="Toroidal" neighborhoodType="ExtendedMoore" cellShape="Rectangular"/>
     <description text="This is Palo's description"/>
   </display>
 
