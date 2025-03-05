@@ -1,5 +1,6 @@
-package cellsociety.model.ruleset;
+package cellsociety.model.factory;
 
+import cellsociety.model.ruleset.Ruleset;
 import cellsociety.parser.PropertiesLoader;
 import java.lang.reflect.Constructor;
 import java.util.Map;

@@ -1,6 +1,6 @@
 package cellsociety.parser;
 
-import cellsociety.model.ruleset.RulesetFactory;
+import cellsociety.model.factory.RulesetFactory;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;

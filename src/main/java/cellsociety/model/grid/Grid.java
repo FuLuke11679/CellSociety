@@ -1,7 +1,7 @@
 package cellsociety.model.grid;
 
 import cellsociety.model.cell.Cell;
-import cellsociety.model.cell.CellFactory;
+import cellsociety.model.factory.CellFactory;
 import cellsociety.model.cell.ConwayCell.ConwayState;
 import cellsociety.model.cell.FireCell.FireState;
 import cellsociety.model.cell.PercolationCell.PercolationState;

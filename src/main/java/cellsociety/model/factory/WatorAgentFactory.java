@@ -1,5 +1,6 @@
-package cellsociety.model.agent;
+package cellsociety.model.factory;
 
+import cellsociety.model.agent.WatorAgent;
 import cellsociety.model.state.CellState;
 import cellsociety.parser.PropertiesLoader;
 import java.lang.reflect.Constructor;

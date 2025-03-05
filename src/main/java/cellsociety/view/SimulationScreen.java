@@ -5,7 +5,7 @@ import cellsociety.model.grid.EdgeFactory;
 import cellsociety.model.grid.Grid;
 import cellsociety.model.grid.NeighborhoodFactory;
 import cellsociety.model.ruleset.Ruleset;
-import cellsociety.model.ruleset.RulesetFactory;
+import cellsociety.model.factory.RulesetFactory;
 import cellsociety.parser.XMLParser;
 import cellsociety.view.shapes.ShapeFactory;
 import java.io.File;

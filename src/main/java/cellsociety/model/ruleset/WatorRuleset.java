@@ -1,6 +1,6 @@
 package cellsociety.model.ruleset;
 
-import cellsociety.model.agent.WatorAgentFactory;
+import cellsociety.model.factory.WatorAgentFactory;
 import cellsociety.model.cell.Cell;
 import cellsociety.model.cell.WatorCell;
 import cellsociety.model.cell.WatorCell.WatorState;

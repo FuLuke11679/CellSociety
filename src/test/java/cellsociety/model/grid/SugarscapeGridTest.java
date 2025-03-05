@@ -2,9 +2,8 @@ package cellsociety.model.grid;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-import cellsociety.model.cell.CellFactory;
+import cellsociety.model.factory.CellFactory;
 import cellsociety.model.cell.SugarscapePatch;
-import cellsociety.model.agent.SugarscapeAgent;
 import cellsociety.model.ruleset.SugarscapeRuleset;
 import java.util.Map;
 import org.junit.jupiter.api.BeforeEach;

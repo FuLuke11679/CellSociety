@@ -1,5 +1,6 @@
-package cellsociety.model.cell;
+package cellsociety.model.factory;
 
+import cellsociety.model.cell.Cell;
 import cellsociety.model.state.CellState;
 import cellsociety.parser.PropertiesLoader;
 import java.lang.reflect.Constructor;
