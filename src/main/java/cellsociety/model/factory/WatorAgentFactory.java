@@ -56,8 +56,6 @@ public class WatorAgentFactory {
         return (WatorAgent) constructor.newInstance(param1, param2);
       } catch (NoSuchMethodException e) {
         log.warn("No constructor for agent of two params. Trying other constructor.");
-      } catch (Exception e) {
-        log.error("Could not instantiate Agent with two parameters: {}", agentType);
       }
 
       Constructor<?> constructor = clazz.getConstructor(int.class);
@@ -70,6 +68,9 @@ public class WatorAgentFactory {
     } catch (InstantiationException | IllegalAccessException | InvocationTargetException e) {
       log.error("Could not instantiate Agent with one parameter: {}", agentType);
       throw new RuntimeException("Could not instantiate Agent with one parameter " + agentType);
+    } catch (NullPointerException e) {
+      log.error("The provided state does not have a corresponding agent: {}", agentType);
+      throw new RuntimeException("The provided state does not have a corresponding agent: " + agentType);
     }
 
   }

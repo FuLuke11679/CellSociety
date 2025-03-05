@@ -29,7 +29,7 @@ public class SegregationRuleset extends Ruleset {
    *               (thresh)
    */
   public SegregationRuleset(Map<String, String> params) {
-    this.similarityThreshold = Double.parseDouble(params.get(THRESHOLD_PARAM_NAME));
+    this.similarityThreshold = Double.parseDouble(params.getOrDefault(THRESHOLD_PARAM_NAME, "0.4"));
   }
 
   public void updateCellState(Cell cell, List<Cell> neighbors) {

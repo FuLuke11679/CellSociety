@@ -32,7 +32,13 @@ public class CellFactory {
 
     String cellType = getCellType(state);
 
-    String cellClass = cellClassProperties.getProperty(cellType);
+    String cellClass = "";
+    try {
+      cellClass = cellClassProperties.getProperty(cellType);
+    } catch (NullPointerException e) {
+      log.error("No cell class contains this state {}", cellType);
+      throw new IllegalArgumentException("No cell class contains this state " + cellType);
+    }
 
     try {
       Class<? extends Cell> clazz = (Class<? extends Cell>) Class.forName(cellClass);
@@ -42,7 +48,7 @@ public class CellFactory {
       log.error("Could not find cell type: {}", cellType);
     }
 
-    log.error("Could not find cell class: {}", cellClass);
+    log.error("Could not find cell class: {}. Returned null object.", cellClass);
     return null;
 
   }

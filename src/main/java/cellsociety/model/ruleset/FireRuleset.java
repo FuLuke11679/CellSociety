@@ -27,8 +27,8 @@ public class FireRuleset extends Ruleset {
    * @param params The map of relevant parameters
    */
   public FireRuleset(Map<String, String> params) {
-    this.probGrow = Double.parseDouble(params.get(PROB_GROW_PARAM_NAME));
-    this.probCatch = Double.parseDouble(params.get(PROB_CATCH_PARAM_NAME));
+    this.probGrow = Double.parseDouble(params.getOrDefault(PROB_GROW_PARAM_NAME, "0.03"));
+    this.probCatch = Double.parseDouble(params.getOrDefault(PROB_CATCH_PARAM_NAME, "0.003"));
   }
 
   @Override
