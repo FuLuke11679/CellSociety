@@ -2,8 +2,21 @@ package cellsociety.view.shapes;
 
 import javafx.scene.shape.Polygon;
 
+/**
+ * Represents a Pentagonal shape for use in a grid-based simulation.
+ * The Pentagon is sized, flipped, and positioned based on the given grid parameters.
+ *
+ * @author Luke
+ */
 public class PentagonalTilingShape extends Polygon {
 
+  /**
+   * Constructs a PentagonTile with the given size and grid position.
+   *
+   * @param size the size of the hexagon
+   * @param row  the row index in the grid
+   * @param col  the column index in the grid
+   */
   public PentagonalTilingShape(int size, int row, int col) {
     double s = size;
     double xOffset = col * s * 0.75;

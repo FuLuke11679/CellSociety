@@ -7,7 +7,13 @@ public class TriangularShape extends Polygon {
 
   private static final double SCALE_FACTOR = 1.5;
 
-
+  /**
+   * Constructs a Triangle with the given size and grid position.
+   *
+   * @param size the size of the hexagon
+   * @param row  the row index in the grid
+   * @param col  the column index in the grid
+   */
   public TriangularShape(int size, int row, int col) {
     double width = size * SCALE_FACTOR;
     double height = Math.sqrt(3) / 2 * size;
@@ -31,16 +37,5 @@ public class TriangularShape extends Polygon {
 
     setTranslateX(xOffset);
     setTranslateY(yOffset);
-  }
-
-  public static void setPosition(Shape shape, int row, int col, int size) {
-    double width = size;
-    double height = Math.sqrt(3) / 2 * size;
-
-    double xOffset = col * width * 0.5;
-    double yOffset = row * height - (height * 0.25);  // Adjusted
-
-    shape.setTranslateX(xOffset);
-    shape.setTranslateY(yOffset);
   }
 }

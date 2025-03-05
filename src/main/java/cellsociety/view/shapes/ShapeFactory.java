@@ -7,17 +7,35 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.scene.shape.Shape;
 
+/**
+ * This class provides factory methods to create various shape instances used in the grid-based simulation.
+ * It dynamically loads shape classes using reflection and ensures fallback to a default RectangularShape in case of errors.
+ *
+ * @author Luke
+ */
 public class ShapeFactory {
 
   private static final Logger LOGGER = Logger.getLogger(ShapeFactory.class.getName());
 
   private static final List<String> AVAILABLE_SHAPES = Arrays.asList("Rectangular", "Hexagonal",
       "Triangular", "Rhombus", "PentagonalTiling");
-
+  /**
+   * Returns the fully qualified name of a shape class based on its simple name.
+   *
+   * @return the all supported shapes
+   * @throws IllegalArgumentException if the shape name is null or empty
+   */
   public static List<String> getAvailableShapes() {
     return AVAILABLE_SHAPES;
   }
 
+  /**
+   * Returns the fully qualified name of a shape class based on its simple name.
+   *
+   * @param shapeName the simple name of the shape
+   * @return the fully qualified class name of the shape
+   * @throws IllegalArgumentException if the shape name is null or empty
+   */
   public static String getFullyQualifiedName(String shapeName) {
     if (shapeName == null || shapeName.trim().isEmpty()) {
       throw new IllegalArgumentException("Shape name is null or empty.");
@@ -29,6 +47,16 @@ public class ShapeFactory {
     return "cellsociety.view.shapes." + shapeName + "Shape";
   }
 
+  /**
+   * Creates a Shape instance based on the given shape type and grid parameters.
+   * If the specified shape type is invalid or an error occurs, a RectangularShape is returned as fallback.
+   *
+   * @param shapeType the type of shape to create
+   * @param size      the size of the shape
+   * @param row       the row position in the grid
+   * @param col       the column position in the grid
+   * @return a Shape instance of the specified type or a RectangularShape on failure
+   */
   public static Shape createShape(String shapeType, int size, int row, int col) {
     try {
       if (shapeType == null || shapeType.trim().isEmpty()) {
