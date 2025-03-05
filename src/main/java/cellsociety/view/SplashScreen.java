@@ -70,11 +70,9 @@ public class SplashScreen {
   private void loadControlButtons(ResourceBundle simInfo) {
     List<MenuButton> controlButtons = new ArrayList<>();
     MenuButton languageSelect = new MenuButton(simInfo.getString("splash_language_button"));
-    //languageSelect.setId("language");
+    languageSelect.getStyleClass().add("language-select");
     MenuItem language1 = new MenuItem(simInfo.getString("splash_language_1"));
     MenuItem language2 = new MenuItem(simInfo.getString("splash_language_2"));
-    //language2.setId("french");
-    language2.getStyleClass().add("french-button");
     MenuItem language3 = new MenuItem(simInfo.getString("splash_language_3"));
     MenuItem language4 = new MenuItem(simInfo.getString("splash_language_4"));
     language1.setOnAction(e -> {
@@ -105,6 +103,7 @@ public class SplashScreen {
     });
     languageSelect.getItems().addAll(language1, language2, language3, language4);
     MenuButton colorScheme = new MenuButton(simInfo.getString("splash_color_button"));
+    colorScheme.getStyleClass().add("color-scheme");
     MenuItem colorScheme1 = new MenuItem(simInfo.getString("splash_color_scheme_1"));
     MenuItem colorScheme2 = new MenuItem(simInfo.getString("splash_color_scheme_2"));
     MenuItem colorScheme3 = new MenuItem(simInfo.getString("splash_color_scheme_3"));
