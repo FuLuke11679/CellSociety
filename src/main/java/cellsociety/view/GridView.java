@@ -30,6 +30,14 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.Shape;
 import javafx.scene.text.Text;
 
+/**
+ * GridView is responsible for rendering the simulation grid.
+ * It creates and updates the graphical representation of the grid cells based on the simulation state.
+ *
+ * @author Luke
+ * @author Daniel
+ * @author Palo
+ */
 public class GridView {
   private Pane gridPane;
   private Scene myScene;
@@ -46,6 +54,9 @@ public class GridView {
   private int numIterations;
   private String currentCellShape = "Rectangular";
 
+  /**
+   * Enumeration for different color schemes.
+   */
   public enum ColorScheme{
     LIGHT,
     DARK,
@@ -80,7 +91,17 @@ public class GridView {
   );
 
   /**
-   * Constructor for GridView.
+   * Constructs a GridView with the specified parameters.
+   *
+   * @param rows        the number of rows in the grid
+   * @param columns     the number of columns in the grid
+   * @param simType     the type of simulation being displayed
+   * @param title       the title of the simulation
+   * @param author      the author of the simulation
+   * @param description the description of the simulation
+   * @param grid        the grid data model
+   * @param scheme      the color scheme for the simulation
+   * @param myLocale    the locale for resource bundle lookup
    */
   public GridView(int rows, int columns, String simType, String title, String author, String description, Grid grid, ColorScheme scheme, Locale myLocale) {
     this.rows = rows;
@@ -139,6 +160,12 @@ public class GridView {
     incrementIterations();
   }
 
+  /**
+   * Determines the color of a cell based on its current state.
+   *
+   * @param cell the cell whose color is to be determined
+   * @return the color representing the cell's state
+   */
   private Color getCellColor(Cell cell) {
     if (cell instanceof SugarscapePatch) {
       SugarscapePatch patch = (SugarscapePatch) cell;
@@ -168,6 +195,9 @@ public class GridView {
         new Text(simInfo.getString("iterations") + this.numIterations)
     );
   }
+  /**
+   * Redraws grid with new shapes
+   */
   public void redrawGrid(int newRows, int newCols, String newShapeClass) {
     this.rows = newRows;
     this.columns = newCols;
