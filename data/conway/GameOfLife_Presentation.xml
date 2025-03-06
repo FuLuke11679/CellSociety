@@ -3,7 +3,7 @@
   <!-- window and grid configuration -->
   <display width="1000" height="1000" title="Conway Simulation" author="Palo">
     <grid rows="20" columns="20" edgeType="Toroidal" neighborhoodType="ExtendedMoore" cellShape="Rectangular"/>
-    <description text="This is Palo's description"/>
+    <description text="This is Conway's Game of Life"/>
   </display>
 
   <!-- sim configuration -->

@@ -10,7 +10,7 @@
   <sim type="Fire">
     <simvars
       probCatch = "0.003"
-      probGrow = "1"
+      probGrow = "0.03"
     />
   </sim>
   <init
