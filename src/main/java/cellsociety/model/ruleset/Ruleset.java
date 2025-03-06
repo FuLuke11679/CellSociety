@@ -7,9 +7,9 @@ import java.util.List;
 
 /**
  * Author: Daniel Rodriguez-Florido
- * The superclass for all the Rulesets
+ *
+ * The abstract superclass for all the Rulesets to implement
  */
-
 public abstract class Ruleset {
 
   public Ruleset() {
@@ -59,5 +59,8 @@ public abstract class Ruleset {
     }
   }
 
+  /**
+   * @return the default cell state of a ruleset
+   */
   public abstract CellState getDefaultCellState();
 }

@@ -1,6 +1,7 @@
 package cellsociety.model.grid;
 
 import cellsociety.model.cell.Cell;
+import cellsociety.model.factory.CellFactory;
 import cellsociety.model.cell.ConwayCell.ConwayState;
 import cellsociety.model.cell.FireCell.FireState;
 import cellsociety.model.cell.PercolationCell.PercolationState;
@@ -89,8 +90,7 @@ public abstract class Grid {
       List<Cell> row = new ArrayList<>();
       for (int y = 0; y < columns; y++) {
         CellState initialState = getInitialState(myCells[count]);
-        String cellType = getCellTypeForState(initialState); // Map state to cell type name
-        Cell cell = createCell(count, initialState, null, cellType); // Use reflection to create cell
+        Cell cell = CellFactory.createCell(count, initialState); // Use reflection to create cell
         row.add(cell);
         count++;
       }
@@ -183,37 +183,6 @@ public abstract class Grid {
     return ruleset;
   }
 
-  public Cell createCell(int id, CellState currState, CellState nextState, String cellType) {
-    try {
-      // Construct the full class name by using the cellType
-      Class<?> cellClass = Class.forName("cellsociety.model.cell." + cellType);
-
-      // Return an instance of the correct cell type
-      return (Cell) cellClass.getConstructor(int.class, CellState.class, CellState.class)
-          .newInstance(id, currState, nextState);
-    } catch (Exception e) {
-      e.printStackTrace();
-      return null;  // Handle error or return a default cell if necessary
-    }
-  }
-
-  private String getCellTypeForState(CellState state) {
-    if (state instanceof ConwayState) {
-      return "ConwayCell";
-    } else if (state instanceof FireState) {
-      return "FireCell";
-    } else if (state instanceof PercolationState) {
-      return "PercolationCell";
-    } else if (state instanceof WatorState) {
-      return "WatorCell";
-    } else if (state instanceof SegregationState) {
-      return "SegregationCell";
-    } else if (state instanceof SugarscapeState) {
-      return "SugarscapePatch";
-    }
-    return "Cell";
-  }
-
   public boolean isValidPosition(int row, int col) {
     return row >= 0 && row < rows && col >= 0 && col < columns;
   }
@@ -242,8 +211,7 @@ public abstract class Grid {
         } else {
           // Create new cells with default state
           CellState initialState = ruleset.getDefaultCellState();
-          String cellType = getCellTypeForState(initialState);
-          Cell newCell = createCell(i * newCols + j, initialState, null, cellType);
+          Cell newCell = CellFactory.createCell(i * newCols + j, initialState);
           row.add(newCell);
         }
       }

@@ -2,6 +2,11 @@ package cellsociety.model.cell;
 
 import cellsociety.model.state.CellState;
 
+/**
+ * Author: Daniel Rodriguez-Florido
+ *
+ * Cell class for the Fire spreading simulation
+ */
 public class FireCell extends Cell {
 
   public enum FireState implements CellState {
