@@ -6,6 +6,11 @@ import cellsociety.model.cell.PercolationCell.PercolationState;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+/**
+ * Author: Daniel Rodriguez-Florido
+ *
+ * Testing file for the PercolationCell
+ */
 class PercolationCellTest {
 
   Cell cell;

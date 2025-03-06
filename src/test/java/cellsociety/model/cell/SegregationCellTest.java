@@ -6,6 +6,11 @@ import cellsociety.model.cell.SegregationCell.SegregationState;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+/**
+ * Author: Daniel Rodriguez-Florido
+ *
+ * Testing file for SegregationCell
+ */
 class SegregationCellTest {
 
   Cell cell;

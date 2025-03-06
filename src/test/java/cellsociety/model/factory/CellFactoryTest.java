@@ -7,6 +7,11 @@ import cellsociety.model.cell.ConwayCell.ConwayState;
 import cellsociety.model.state.CellState;
 import org.junit.jupiter.api.Test;
 
+/**
+ * Author: Daniel Rodriguez-Florido
+ *
+ * Testing file for the CellFactory object
+ */
 class CellFactoryTest {
 
   enum fakeStates implements CellState {
