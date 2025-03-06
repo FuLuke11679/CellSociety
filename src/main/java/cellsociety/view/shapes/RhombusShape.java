@@ -1,9 +1,9 @@
 package cellsociety.view.shapes;
 
 import javafx.scene.shape.Polygon;
-import javafx.scene.shape.Shape;
 
 public class RhombusShape extends Polygon {
+
   public RhombusShape(int size, int row, int col) {
     double s = size;
     double sqrt3 = Math.sqrt(3);

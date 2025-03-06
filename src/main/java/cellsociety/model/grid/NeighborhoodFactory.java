@@ -11,7 +11,8 @@ public class NeighborhoodFactory {
 
   public static NeighborhoodStrategy createNeighborhoodStrategy(String neighborhoodType) {
     if (neighborhoodType == null || neighborhoodType.trim().isEmpty()) {
-      LOGGER.warning("Neighborhood type is null or empty. Using default ExtendedMooreNeighborhood.");
+      LOGGER.warning(
+          "Neighborhood type is null or empty. Using default ExtendedMooreNeighborhood.");
       return new ExtendedMooreNeighborhood();
     }
 

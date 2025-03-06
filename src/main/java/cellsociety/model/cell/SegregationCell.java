@@ -4,7 +4,7 @@ import cellsociety.model.state.CellState;
 
 /**
  * Author: Daniel Rodriguez-Florido
- *
+ * <p>
  * Cell class for the Segregation Simulation
  */
 public class SegregationCell extends Cell {

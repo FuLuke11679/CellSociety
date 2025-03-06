@@ -4,7 +4,7 @@ import cellsociety.model.state.CellState;
 
 /**
  * Author: Daniel Rodriguez-Florido
- *
+ * <p>
  * Cell class for the Fire spreading simulation
  */
 public class FireCell extends Cell {

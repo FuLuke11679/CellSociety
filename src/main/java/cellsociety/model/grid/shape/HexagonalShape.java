@@ -4,6 +4,7 @@ import java.util.Arrays;
 import java.util.List;
 
 public class HexagonalShape implements CellShape {
+
   @Override
   public List<int[]> getNeighborOffsets(int row, int col) {
     if (col % 2 == 0) {  // Even columns

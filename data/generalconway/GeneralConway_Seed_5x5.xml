@@ -1,0 +1,17 @@
+<?xml version="1.0" ?>
+<simulationConfig>
+  <display width="800" height="800" title="General Conway Simulation" author="Danny">
+    <grid rows="5" columns="5" edgeType="Toroidal" neighborhoodType="ExtendedMoore" cellShape="Rectangular"/>
+    <description text="This is an XML file for the General Game of Life using the rule B2/S"/>
+  </display>
+  <sim type="GeneralConway">
+    <simvars rules="B2/S"/>
+  </sim>
+  <init stateList=
+      "D,D,D,D,D,
+      D,A,D,D,D,
+      D,D,A,D,D,
+      D,D,D,D,D,
+      D,D,D,D,A"
+  />
+</simulationConfig>

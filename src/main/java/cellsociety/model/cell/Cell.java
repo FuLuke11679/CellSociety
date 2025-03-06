@@ -4,7 +4,7 @@ import cellsociety.model.state.CellState;
 
 /**
  * Author: Daniel Rodriguez-Florido
- *
+ * <p>
  * Abstract cell class that is the parent to all the particular concrete cell classes.
  */
 public abstract class Cell {

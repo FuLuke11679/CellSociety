@@ -5,7 +5,7 @@ import cellsociety.model.state.CellState;
 
 /**
  * Author: Daniel Rodriguez-Florido
- *
+ * <p>
  * Cell class for the WatorWorld Simulation
  */
 public class WatorCell extends Cell {
@@ -33,6 +33,7 @@ public class WatorCell extends Cell {
 
   /**
    * Setter for the agent on the cell
+   *
    * @param agent The agent we wish to instantiate on this cell
    */
   public void setAgent(WatorAgent agent) {

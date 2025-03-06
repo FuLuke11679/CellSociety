@@ -4,7 +4,7 @@ import cellsociety.model.state.CellState;
 
 /**
  * Author: Daniel Rodriguez-Florido
- *
+ * <p>
  * Concrete cell class for the Conway Game of Life Simulation
  */
 public class ConwayCell extends Cell {

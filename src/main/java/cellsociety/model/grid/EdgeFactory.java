@@ -22,7 +22,9 @@ public class EdgeFactory {
           .getDeclaredConstructor()
           .newInstance();
     } catch (Exception e) {
-      LOGGER.log(Level.SEVERE, "Error loading EdgeHandler for type: " + edgeType + ". Using default MirrorEdgeHandler.", e);
+      LOGGER.log(Level.SEVERE,
+          "Error loading EdgeHandler for type: " + edgeType + ". Using default MirrorEdgeHandler.",
+          e);
       return new MirrorEdgeHandler();
     }
   }

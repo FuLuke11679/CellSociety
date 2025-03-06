@@ -7,7 +7,7 @@ import java.util.List;
 
 /**
  * Author: Daniel Rodriguez-Florido
- *
+ * <p>
  * The abstract superclass for all the Rulesets to implement
  */
 public abstract class Ruleset {
@@ -17,6 +17,7 @@ public abstract class Ruleset {
 
   /**
    * Function to update a cell state locally based on its neighbors
+   *
    * @param cell
    * @param neighbors
    */

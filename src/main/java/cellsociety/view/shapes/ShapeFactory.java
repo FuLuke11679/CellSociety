@@ -1,8 +1,8 @@
 package cellsociety.view.shapes;
 
 import java.lang.reflect.Method;
-import java.util.List;
 import java.util.Arrays;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.scene.shape.Shape;
@@ -49,20 +49,26 @@ public class ShapeFactory {
 
       // Use reflection to find and call the setPosition() method if it exists
       try {
-        Method setPositionMethod = shapeClass.getMethod("setPosition", Shape.class, int.class, int.class);
+        Method setPositionMethod = shapeClass.getMethod("setPosition", Shape.class, int.class,
+            int.class);
         setPositionMethod.invoke(null, shape, row, col);
       } catch (NoSuchMethodException e) {
         // If there is no custom positioning method, that is acceptable.
-        LOGGER.log(Level.FINE, "No custom setPosition method found for {0}; using default placement.", className);
+        LOGGER.log(Level.FINE,
+            "No custom setPosition method found for {0}; using default placement.", className);
       }
 
       return shape;
     } catch (ClassNotFoundException e) {
-      LOGGER.log(Level.SEVERE, "Shape class not found for type: " + shapeType + ". Falling back to RectangularShape.", e);
+      LOGGER.log(Level.SEVERE,
+          "Shape class not found for type: " + shapeType + ". Falling back to RectangularShape.",
+          e);
     } catch (NoSuchMethodException e) {
-      LOGGER.log(Level.SEVERE, "Constructor (int, int, int) not found for shape: " + shapeType + ". Falling back to RectangularShape.", e);
+      LOGGER.log(Level.SEVERE, "Constructor (int, int, int) not found for shape: " + shapeType
+          + ". Falling back to RectangularShape.", e);
     } catch (Exception e) {
-      LOGGER.log(Level.SEVERE, "Unexpected error while creating shape for type: " + shapeType + ". Falling back to RectangularShape.", e);
+      LOGGER.log(Level.SEVERE, "Unexpected error while creating shape for type: " + shapeType
+          + ". Falling back to RectangularShape.", e);
     }
 
     // Default fallback to RectangularShape in case of failure

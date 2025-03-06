@@ -10,8 +10,7 @@ import java.util.Map;
 import java.util.Set;
 
 /**
- * Author: Daniel Rodriguez-Florido
- * This class is the Ruleset for the General Conway Game of Life
+ * Author: Daniel Rodriguez-Florido This class is the Ruleset for the General Conway Game of Life
  */
 public class GeneralConwayRuleset extends ConwayRuleset {
 
@@ -22,8 +21,8 @@ public class GeneralConwayRuleset extends ConwayRuleset {
 
   /**
    * Constructor for the General Conway Game of Life Ruleset
-   * @param params Map of relevant parameters to ruleset
-   *               (rules)
+   *
+   * @param params Map of relevant parameters to ruleset (rules)
    */
   public GeneralConwayRuleset(Map<String, String> params) {
     birthVals = new HashSet<>();

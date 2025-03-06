@@ -13,7 +13,7 @@ import org.apache.logging.log4j.Logger;
 
 /**
  * Author: Daniel Rodriguez-Florido
- *
+ * <p>
  * Agent factory for the WatorWorld Ruleset (instantiates either fish or shark)
  */
 public class WatorAgentFactory {
@@ -30,6 +30,7 @@ public class WatorAgentFactory {
 
   /**
    * Constructor to take in the params of the agents
+   *
    * @param params The parameters we wish to fill the agents with
    */
   public WatorAgentFactory(Map<String, String> params) {
@@ -38,6 +39,7 @@ public class WatorAgentFactory {
 
   /**
    * Creates a new WatorAgent based on the state of the cell
+   *
    * @param agentType WatorState indicating The type of agent we wish to create
    * @return The new WatorAgent
    */
@@ -70,7 +72,8 @@ public class WatorAgentFactory {
       throw new RuntimeException("Could not instantiate Agent with one parameter " + agentType);
     } catch (NullPointerException e) {
       log.error("The provided state does not have a corresponding agent: {}", agentType);
-      throw new RuntimeException("The provided state does not have a corresponding agent: " + agentType);
+      throw new RuntimeException(
+          "The provided state does not have a corresponding agent: " + agentType);
     }
 
   }

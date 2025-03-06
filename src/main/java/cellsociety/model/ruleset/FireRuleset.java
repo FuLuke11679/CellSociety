@@ -11,8 +11,8 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 /**
- * Author: Daniel Rodriguez-Florido
- * The back-end ruleset logic to preform the Forest Fire Simulation
+ * Author: Daniel Rodriguez-Florido The back-end ruleset logic to preform the Forest Fire
+ * Simulation
  */
 public class FireRuleset extends Ruleset {
 
@@ -26,6 +26,7 @@ public class FireRuleset extends Ruleset {
 
   /**
    * Constructor for the FireRuleset
+   *
    * @param params The map of relevant parameters
    */
   public FireRuleset(Map<String, String> params) {
@@ -95,13 +96,15 @@ public class FireRuleset extends Ruleset {
 
   /**
    * Function to check if a neighboring cell is burning
+   *
    * @param neighbors The neighbors of the target cell
    * @return A boolean denoting true for a burning neighbor, false otherwise
    */
   private boolean isNeighborCellBurning(List<Cell> neighbors) {
 
-    if (neighbors == null)
+    if (neighbors == null) {
       return false;
+    }
 
     for (Cell neighbor : neighbors) {
       if (neighbor.getCurrState() == FireState.BURNING) {
@@ -113,6 +116,7 @@ public class FireRuleset extends Ruleset {
 
   /**
    * Sets a cell's next state to EMPTY
+   *
    * @param cell The target cell
    */
   private void killCell(Cell cell) {
@@ -121,6 +125,7 @@ public class FireRuleset extends Ruleset {
 
   /**
    * Sets a cell's next state to BURNING
+   *
    * @param cell The target cell
    */
   private void lightFire(Cell cell) {
@@ -129,6 +134,7 @@ public class FireRuleset extends Ruleset {
 
   /**
    * Sets a cell's next state to TREE
+   *
    * @param cell The target cell
    */
   private void growTree(Cell cell) {

@@ -1,43 +1,36 @@
 package cellsociety.view;
 
 import cellsociety.model.cell.Cell;
-import cellsociety.model.cell.SegregationCell.SegregationState;
-import cellsociety.model.cell.SugarscapePatch;
-import cellsociety.model.state.SugarscapeState;
-import cellsociety.model.cell.WatorCell.WatorState;
-import cellsociety.model.grid.Grid;
 import cellsociety.model.cell.ConwayCell.ConwayState;
 import cellsociety.model.cell.FireCell.FireState;
 import cellsociety.model.cell.PercolationCell.PercolationState;
+import cellsociety.model.cell.SegregationCell.SegregationState;
+import cellsociety.model.cell.SugarscapePatch;
+import cellsociety.model.cell.WatorCell.WatorState;
+import cellsociety.model.grid.Grid;
 import cellsociety.model.state.CellState;
+import cellsociety.model.state.SugarscapeState;
 import cellsociety.view.shapes.ShapeFactory;
-import java.net.URL;
 import java.util.Locale;
 import java.util.Map;
 import java.util.ResourceBundle;
-import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
-import javafx.scene.layout.Background;
-import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.CornerRadii;
-import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.Shape;
 import javafx.scene.text.Text;
 
 /**
- * @Author Luke Fu, Palo Silva
- * Classes that handles front end display of cells
+ * @Author Luke Fu, Palo Silva Classes that handles front end display of cells
  */
 public class GridView {
-  private Pane gridPane;
-  private Scene myScene;
+
+  private final Pane gridPane;
+  private final Scene myScene;
   private int rows;
   private int columns;
   private int cellSize;
@@ -45,13 +38,13 @@ public class GridView {
   private final int WINDOW_WIDTH = 600;
   private final int WINDOW_HEIGHT = 800;
   private VBox infoBox;
-  private Shape[][] cellShapes;
-  private Grid grid;
-  private Locale myLocale;
+  private final Shape[][] cellShapes;
+  private final Grid grid;
+  private final Locale myLocale;
   private int numIterations;
   private String currentCellShape = "Rectangular";
 
-  public enum ColorScheme{
+  public enum ColorScheme {
     LIGHT,
     DARK,
     DUKE,
@@ -80,7 +73,8 @@ public class GridView {
   /**
    * Constructor for GridView.
    */
-  public GridView(int rows, int columns, String simType, String title, String author, String description, Grid grid, ColorScheme scheme, Locale myLocale) {
+  public GridView(int rows, int columns, String simType, String title, String author,
+      String description, Grid grid, ColorScheme scheme, Locale myLocale) {
     this.rows = rows;
     this.columns = columns;
     this.cellSize = SIZE_GRID / rows;
@@ -124,7 +118,8 @@ public class GridView {
   }
 
   /**
-   * Updates the grid efficiently by modifying only changed cells. Don't want to pass entire grid into front end.
+   * Updates the grid efficiently by modifying only changed cells. Don't want to pass entire grid
+   * into front end.
    */
   public void update() {
     for (int row = 0; row < rows; row++) {
@@ -141,8 +136,7 @@ public class GridView {
    * Returns cell color
    */
   private Color getCellColor(Cell cell) {
-    if (cell instanceof SugarscapePatch) {
-      SugarscapePatch patch = (SugarscapePatch) cell;
+    if (cell instanceof SugarscapePatch patch) {
       if (patch.hasAgent()) {
         return Color.RED;
       } else {
@@ -158,7 +152,8 @@ public class GridView {
   /**
    * Displays simulation metadata at the top.
    */
-  private void setupSimulationInfo(String simType, String simName, String author, String description) {
+  private void setupSimulationInfo(String simType, String simName, String author,
+      String description) {
     ResourceBundle simInfo = ResourceBundle.getBundle("SimInfo", myLocale);
     infoBox = new VBox();
     infoBox.getChildren().addAll(
@@ -172,8 +167,9 @@ public class GridView {
 
   /**
    * Redraws the grid if the cell shape is changed
-   * @param newRows Number of rows
-   * @param newCols Number of columns
+   *
+   * @param newRows       Number of rows
+   * @param newCols       Number of columns
    * @param newShapeClass New shape we are redrawing to
    */
   public void redrawGrid(int newRows, int newCols, String newShapeClass) {
@@ -185,9 +181,9 @@ public class GridView {
   }
 
   /**
-   *Increments the number of iterations displayed on the Grid
+   * Increments the number of iterations displayed on the Grid
    */
-  private void incrementIterations(){
+  private void incrementIterations() {
     if (!infoBox.getChildren().isEmpty()) {
       Text iterationsText = (Text) infoBox.getChildren().get(infoBox.getChildren().size() - 1);
       ResourceBundle simInfo = ResourceBundle.getBundle("SimInfo", myLocale);

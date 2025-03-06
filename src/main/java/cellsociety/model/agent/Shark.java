@@ -9,7 +9,7 @@ import java.util.List;
 
 /**
  * Author: Daniel Rodriguez-Florido
- *
+ * <p>
  * Shark agent that implements WatorAgent. Used for the WatorWorld simulation.
  */
 public class Shark implements WatorAgent {
@@ -23,6 +23,7 @@ public class Shark implements WatorAgent {
 
   /**
    * Constructor for the Shark agent
+   *
    * @param sharkEnergyGain The amount of energy a shark gains when eating a fish
    * @param timeToReproduce The amount of time it takes for a shark to reproduce
    */
@@ -59,6 +60,7 @@ public class Shark implements WatorAgent {
 
   /**
    * Finds a suitable neighbor to move to, prioritizing fish
+   *
    * @param neighbors The list of candidate cells
    * @return The WatorCell to move to
    */
@@ -88,6 +90,7 @@ public class Shark implements WatorAgent {
 
   /**
    * Setter for the moved flag of the agent
+   *
    * @param moved True or false indicating if the agent moved or not
    */
   public void setMoved(boolean moved) {

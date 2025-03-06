@@ -6,12 +6,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class MirrorEdgeHandler implements EdgeHandler {
+
   public List<Cell> handleNeighbors(int row, int col, List<int[]> offsets, Grid grid) {
     List<Cell> neighbors = new ArrayList<>();
     int numRows = grid.getRows();
     int numCols = grid.getColumns();
 
-    for(int[] offset : offsets) {
+    for (int[] offset : offsets) {
       int newRow = (row + offset[0] + numRows) % numRows;
       int newCol = (row + offset[1] + numCols) % numCols;
       neighbors.add(grid.getCell(newRow, newCol));

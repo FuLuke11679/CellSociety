@@ -1,9 +1,7 @@
 package cellsociety.model.grid;
 
 import cellsociety.model.cell.Cell;
-import cellsociety.model.cell.WatorCell;
 import cellsociety.model.ruleset.Ruleset;
-import cellsociety.model.state.CellState;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,6 +20,7 @@ public class WatorGrid extends Grid {
 
   /**
    * A function that determines the four adjacent cells (N,E,S,W)
+   *
    * @param row The row index of the target cell
    * @param col The col index of a target cell
    * @return The four neighbors of a cell

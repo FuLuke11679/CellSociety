@@ -4,7 +4,7 @@ import cellsociety.model.state.CellState;
 
 /**
  * Author: Daniel Rodriguez-Florido
- *
+ * <p>
  * Cell class for the Percolation Simulation
  */
 public class PercolationCell extends Cell {

@@ -11,8 +11,8 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 /**
- * Author: Daniel Rodriguez-Florido
- * The back-end ruleset logic to preform the Conway Game of Life Simulation
+ * Author: Daniel Rodriguez-Florido The back-end ruleset logic to preform the Conway Game of Life
+ * Simulation
  */
 
 public class ConwayRuleset extends Ruleset {
@@ -62,6 +62,7 @@ public class ConwayRuleset extends Ruleset {
 
   /**
    * Function to count the amount of alive neighbors of a cell
+   *
    * @param neighbors The list of neighbor cells
    * @return An integer denoting the amount of alive cells
    */
@@ -77,6 +78,7 @@ public class ConwayRuleset extends Ruleset {
 
   /**
    * Sets the next state of a cell to DEAD
+   *
    * @param cell The cell we wish to kill
    */
   protected void killCell(Cell cell) {
@@ -85,6 +87,7 @@ public class ConwayRuleset extends Ruleset {
 
   /**
    * Sets the next state of a cell to ALIVE
+   *
    * @param cell The cell we wish to birth
    */
   protected void birthCell(Cell cell) {
