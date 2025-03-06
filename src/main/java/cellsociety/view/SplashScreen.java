@@ -37,6 +37,7 @@ public class SplashScreen {
     splashPane.getStyleClass().add("splash-pane");
     splashScene = new Scene(splashPane, 600, 800);
 
+
     //myScheme = ColorScheme.LIGHT;  //default to light theme
     //loadScreen();
   }
@@ -47,6 +48,8 @@ public class SplashScreen {
     loadControlButtons(simInfo);
     setSplashTheme(myController.getScheme(), simInfo);
     myController.displaySplashScreen(this.splashScene);
+
+
   }
 
 
