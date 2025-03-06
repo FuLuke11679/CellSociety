@@ -1,7 +1,6 @@
 package cellsociety.model.ruleset;
 
 import cellsociety.model.cell.Cell;
-import cellsociety.model.cell.ConwayCell.ConwayState;
 import cellsociety.model.cell.FireCell.FireState;
 import cellsociety.model.grid.FireGrid;
 import cellsociety.model.grid.Grid;
@@ -80,7 +79,6 @@ public class FireRuleset extends Ruleset {
    */
   @Override
   public void updateGridState() {
-
   }
 
   /**
