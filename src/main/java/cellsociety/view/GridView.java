@@ -30,6 +30,10 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.Shape;
 import javafx.scene.text.Text;
 
+/**
+ * @Author Luke Fu, Palo Silva
+ * Classes that handles front end display of cells
+ */
 public class GridView {
   private Pane gridPane;
   private Scene myScene;
@@ -112,7 +116,7 @@ public class GridView {
    * Initializes the grid from the given `CellUnit` list.
    */
   private void initializeGrid() {
-    gridPane.getChildren().clear();  // ✅ Clears old shapes before adding new ones
+    gridPane.getChildren().clear();
 
     for (int row = 0; row < rows; row++) {
       for (int col = 0; col < columns; col++) {
@@ -139,6 +143,9 @@ public class GridView {
     incrementIterations();
   }
 
+  /**
+   * Returns cell color
+   */
   private Color getCellColor(Cell cell) {
     if (cell instanceof SugarscapePatch) {
       SugarscapePatch patch = (SugarscapePatch) cell;
@@ -168,6 +175,13 @@ public class GridView {
         new Text(simInfo.getString("iterations") + this.numIterations)
     );
   }
+
+  /**
+   * Redraws the grid if the cell shape is changed
+   * @param newRows Number of rows
+   * @param newCols Number of columns
+   * @param newShapeClass New shape we are redrawing to
+   */
   public void redrawGrid(int newRows, int newCols, String newShapeClass) {
     this.rows = newRows;
     this.columns = newCols;
@@ -184,7 +198,6 @@ public class GridView {
       Text iterationsText = (Text) infoBox.getChildren().get(infoBox.getChildren().size() - 1);
       ResourceBundle simInfo = ResourceBundle.getBundle("SimInfo", myLocale);
 
-      // Update the text with the new value of this.numIterations
       iterationsText.setText(simInfo.getString("iterations") + this.numIterations);
     }
 

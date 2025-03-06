@@ -75,7 +75,6 @@ public class SimulationScreen {
       layout.getStyleClass().add("layout");
       simScene = new Scene(layout, width, height);
       myController.setStage(simScene);
-      //myController.setStage(new Scene(layout, width, height));
     } catch (IllegalArgumentException e) {
       myController.showMessage(simInfo.getString("invalid_config") + e.getMessage());
     } catch (Exception e) {
@@ -113,7 +112,6 @@ public class SimulationScreen {
     }
     controls.getChildren().add(new Label("Speed:"));
     controls.getChildren().add(speedSlider);
-    //controls.setId("simControls");
     layout.setBottom(controls);
 
     VBox settingsPanel = loadSettingsPanel();
@@ -159,6 +157,7 @@ public class SimulationScreen {
     loadButton.setOnAction(e -> {
       File newFile = myController.getFileChooser().showOpenDialog(myController.getStage());
       if (newFile != null) {
+        myController.getSimLoop().stop(); //NEW
         myController.loadSimulation(newFile);
       }
     });
