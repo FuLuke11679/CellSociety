@@ -6,6 +6,11 @@ import cellsociety.model.cell.FireCell.FireState;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+/**
+ * Author: Daniel Rodriguez-Florido
+ *
+ * Test file for the FireCell object
+ */
 class FireCellTest {
 
   Cell cell;

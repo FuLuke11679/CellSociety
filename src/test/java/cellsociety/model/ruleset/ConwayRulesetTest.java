@@ -9,6 +9,11 @@ import java.util.ArrayList;
 import java.util.List;
 import org.junit.jupiter.api.*;
 
+/**
+ * Author: Daniel Rodriguez-Florido
+ *
+ * Testing file for Conway Game of Life Simulation
+ */
 class ConwayRulesetTest {
 
   Cell cell;

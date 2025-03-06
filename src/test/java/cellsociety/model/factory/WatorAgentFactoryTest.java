@@ -10,6 +10,11 @@ import javax.management.RuntimeErrorException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+/**
+ * Author: Daniel Rodriguez-Florido
+ *
+ * Testing file for the WatorAgentFactory object
+ */
 class WatorAgentFactoryTest {
 
   Map<String, String> params;
