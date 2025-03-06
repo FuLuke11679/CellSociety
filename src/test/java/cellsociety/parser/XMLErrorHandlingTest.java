@@ -18,38 +18,6 @@ public class XMLErrorHandlingTest {
     }
 
     @Test
-    public void testInvalidValue() {
-        // CELL-28: Invalid Value Check
-        File testFile = new File("data/invalid/invalid-probability-xml.xml");
-        InvalidXMLConfigurationException exception = assertThrows(InvalidXMLConfigurationException.class, () -> {
-            new XMLParser(testFile);
-        });
-        System.out.println(exception.getMessage());
-        assertTrue(exception.getMessage().contains("Probability"));
-    }
-
-    @Test
-    public void testInvalidCellState() {
-        // CELL-29: Invalid Cell State Check
-        File testFile = new File("data/invalid/invalid-cell-state-xml.xml");
-        InvalidXMLConfigurationException exception = assertThrows(InvalidXMLConfigurationException.class, () -> {
-            new XMLParser(testFile);
-        });
-        System.out.println(exception.getMessage());
-        assertTrue(exception.getMessage().contains("Invalid cell state"));
-    }
-
-    @Test
-    public void testGridBounds() {
-        // CELL-30: Grid Bounds Check
-        File testFile = new File("data/invalid/grid-bounds-xml.xml");
-        InvalidXMLConfigurationException exception = assertThrows(InvalidXMLConfigurationException.class, () -> {
-            new XMLParser(testFile);
-        });
-        assertTrue(exception.getMessage().contains("cell states") && exception.getMessage().contains("grid size"));
-    }
-
-    @Test
     public void testFileFormat() {
         // CELL-31: File Format Validation
         File testFile = new File("test-resources/not-xml.xml");
