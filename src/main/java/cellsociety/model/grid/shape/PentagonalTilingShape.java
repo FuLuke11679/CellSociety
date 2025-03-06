@@ -29,23 +29,25 @@ public class PentagonalTilingShape implements CellShape {
    */
   @Override
   public List<int[]> getNeighborOffsets(int row, int col) {
-    if ((row + col) % 2 == 0) {
-      // Left-tilted pentagon
+    if ((col) % 2 == 0) {
+      // Right facing pentagon
       return Arrays.asList(
           new int[]{-1, 0},  // Top
           new int[]{1, 0},   // Bottom
           new int[]{0, -1},  // Left
           new int[]{0, 1},   // Right
-          new int[]{1, -1}   // Bottom left diagonal
+          new int[]{1, 1},   // Bottom Right diagonal
+          new int []{1, -1}  // Bottom Left
       );
     } else {
-      // Right-tilted pentagon
+      // Left facing pentagon
       return Arrays.asList(
           new int[]{-1, 0},   // Top
           new int[]{1, 0},    // Bottom
           new int[]{0, -1},   // Left
           new int[]{0, 1},    // Right
-          new int[]{-1, 1}    // Top right diagonal
+          new int[]{-1, 1},    // Top Right diagonal
+          new int[] {-1, -1} //top left
       );
     }
   }

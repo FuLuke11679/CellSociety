@@ -22,11 +22,13 @@ public class TriangularShape extends Polygon {
     double yOffset = row * height - (height * 0.25);  // Adjusted to move up
 
     if ((row % 2 == 0 && col % 2 == 0) || (row % 2 == 1 && col % 2 == 1)) {
+      //Upright
       getPoints().addAll(
           0.0, height,
           width / 2, 0.0,
           width, height
       );
+      //Upside Down
     } else {
       getPoints().addAll(
           0.0, 0.0,
