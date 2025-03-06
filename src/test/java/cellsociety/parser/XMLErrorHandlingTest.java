@@ -20,7 +20,7 @@ public class XMLErrorHandlingTest {
     @Test
     public void testFileFormat() {
         // CELL-31: File Format Validation
-        File testFile = new File("test-resources/not-xml.xml");
+        File testFile = new File("invalid/not-xml-file.xml");
         assertThrows(InvalidXMLConfigurationException.class, () -> {
             new XMLParser(testFile);
         });
