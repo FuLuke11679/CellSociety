@@ -1,25 +1,15 @@
 package cellsociety.model.grid.neighborhood;
 
 import java.util.List;
+import cellsociety.model.grid.shape.CellShape;
 
 /**
- * Implementation of the {@link NeighborhoodStrategy} that selects all neighbors in a Moore neighborhood.
- * <p>
- * This strategy returns all neighbor offsets provided (including diagonal neighbors).
- * </p>
- *
- * @author Luke
- * @see NeighborhoodStrategy
+ * Neighborhood strategy that returns all neighbor offsets (including diagonals).
  */
-public class ExtendedMooreNeighborhood implements NeighborhoodStrategy{
-  /**
-   * Filters the base neighbor offsets to include only orthogonal neighbors.
-   *
-   * @param baseOffsets the list of base neighbor offsets
-   * @return a list of offsets pertaining to all possible sides.
-   */
+public class ExtendedMooreNeighborhood implements NeighborhoodStrategy {
   @Override
-  public List<int[]> selectNeighbors(List<int[]> baseOffsets) {
-    return baseOffsets; // Uses all neighbors, including diagonals
+  public List<int[]> getFinalOffsets(CellShape shape, int row, int col) {
+    // Use the complete set of offsets defined in the shape.
+    return shape.getNeighborOffsets(row, col);
   }
 }
