@@ -1,24 +1,19 @@
 package cellsociety.view;
 
-import java.io.File;
+
 import java.util.Locale;
 import java.util.ResourceBundle;
 import javafx.application.Platform;
-import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.control.Button;
-import javafx.scene.control.Labeled;
 import javafx.scene.control.MenuButton;
 import javafx.scene.control.MenuItem;
-import javafx.scene.control.TextInputControl;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Region;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.testfx.api.FxToolkit;
 import util.DukeApplicationTest;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.testfx.api.FxAssert.verifyThat;
@@ -26,25 +21,28 @@ import static org.testfx.util.NodeQueryUtils.isVisible;
 
 
 public class SplashScreenTest extends DukeApplicationTest {
-  // keep only if needed to call application methods in tests
+
   private SimulationController myController;
   private SplashScreen mySplashScreen;
-  // keep GUI components used in multiple tests
-  private BorderPane myPane;
   private Parent root;
-  private File dataFile;
 
 
   @Override
   public void start (Stage stage) {
     // create application and add scene for testing to given stage
-    myController = new SimulationController(stage, Locale.getDefault());
+    myController = new SimulationController(stage, Locale.ENGLISH);
     mySplashScreen = new SplashScreen(myController);
     mySplashScreen.loadScreen();
+    //delay 1 second after loading screen to allow for all UI updates to complete
+    try {
+      Thread.sleep(1000);
+    } catch (InterruptedException e) {
+      myController.showMessage(e.getMessage());
+    }
     root = mySplashScreen.getSplashScene().getRoot();
-    dataFile = new File("/Users/palosilva/Desktop/CS_308/cellsociety_team08/data/segregation/segregation_50x50.xml");
 
   }
+
 
   @Test
   void testWelcomeVisible(){
@@ -81,71 +79,73 @@ public class SplashScreenTest extends DukeApplicationTest {
 
   @Test
   void buttonClick_languageSelectFrench_languageChanged () {
-    ResourceBundle simInfo = ResourceBundle.getBundle("SimInfo", Locale.FRENCH);
-    MenuButton languageSelect = (MenuButton) root.lookup(".language-select"); //not a button though
     //GIVEN, splash screen is loaded
     //WHEN, frenchLanguage is selected, language switches to french
-    clickOn(languageSelect);
-    MenuItem frenchOption = null;
-    for (MenuItem item : languageSelect.getItems()) {
-      if (item.getText().equals("French")) {
-        frenchOption = item;
-        break;
-      }
-    }
-    if (frenchOption != null) {
-      interact(frenchOption::fire);  // Simulate selecting the menu item
-    } else {
-      fail("French option not found in language menu.");
-    }
+    ResourceBundle simInfo = ResourceBundle.getBundle("SimInfo", Locale.FRENCH);
+    Platform.runLater(()-> {
+          MenuButton languageSelect = (MenuButton) root.lookup(".language-select");
+          interact(languageSelect::fire);
+          MenuItem frenchOption = null;
+          for (MenuItem item : languageSelect.getItems()) {
+            if (item.getText().equals("French")) {
+              frenchOption = item;
+              break;
+            }
+          }
+          if (frenchOption != null) {
+            interact(frenchOption::fire);
+          } else {
+            fail("French option not found in language menu.");
+          }
+          String expected = simInfo.getString("splash_welcome");
+          Text resultNode = (Text) root.lookup(".text-welcome");
+          String result = resultNode.getText();
+          myController.getSplashLoop().stop();
+          assertEquals(expected, result);
+    });
 
-    String expected = simInfo.getString("splash_welcome");
-    //Parent newRoot = myController.getStage().getScene().getRoot();
-    //Text resultNode = (Text) newRoot.lookup(".text-welcome");
-    Text resultNode = (Text) root.lookup(".text-welcome");
-    String result = resultNode.getText();
-    myController.getSplashLoop().stop();
-    assertEquals(expected, result);
   }
+
 
   @Test
   void buttonClick_languageSelectGerman_languageChanged () {
-    ResourceBundle simInfo = ResourceBundle.getBundle("SimInfo", Locale.GERMAN);
-    MenuButton languageSelect = (MenuButton) root.lookup(".language-select"); //not a button though
     //GIVEN, splash screen is loaded
     //WHEN, germanLanguage is selected, language switches to german
-
-      clickOn(languageSelect);
-      MenuItem germanOption = null;
-      for (MenuItem item : languageSelect.getItems()) {
-        if (item.getText().equals("German")) {
-          germanOption = item;
-          break;
-        }
-      }
-      if (germanOption != null) {
-        interact(germanOption::fire);  // Simulate selecting the menu item
-      } else {
-        fail("German option not found in language menu.");
-      }
-
-      String expected = simInfo.getString("splash_welcome");
-      //Parent newRoot = myController.getStage().getScene().getRoot();
-      //Text resultNode = (Text) newRoot.lookup(".text-welcome");
-      Text resultNode = (Text) root.lookup(".text-welcome");
-      String result = resultNode.getText();
-      myController.getSplashLoop().stop();
-      assertEquals(expected, result);
+    ResourceBundle simInfo = ResourceBundle.getBundle("SimInfo", Locale.GERMAN);
+    Platform.runLater(()-> {
+          MenuButton languageSelect = (MenuButton) root.lookup(".language-select");
+          myController.setStage(root.getScene());
+          interact(languageSelect::fire);
+          MenuItem germanOption = null;
+          for (MenuItem item : languageSelect.getItems()) {
+            if (item.getText().equals("German")) {
+              germanOption = item;
+              break;
+            }
+          }
+          if (germanOption != null) {
+            interact(germanOption::fire);
+          } else {
+            fail("German option not found in language menu.");
+          }
+          String expected = simInfo.getString("splash_welcome");
+          Text resultNode = (Text) root.lookup(".text-welcome");
+          String result = resultNode.getText();
+          myController.getSplashLoop().stop();
+          assertEquals(expected, result);
+    });
 
   }
 
   @Test
   void buttonClick_languageSelectItalian_languageChanged () {
-    ResourceBundle simInfo = ResourceBundle.getBundle("SimInfo", Locale.ITALIAN);
-    MenuButton languageSelect = (MenuButton) root.lookup(".language-select"); //not a button though
     //GIVEN, splash screen is loaded
     //WHEN, italianLanguage is selected, language switches to italian
-      clickOn(languageSelect);
+    ResourceBundle simInfo = ResourceBundle.getBundle("SimInfo", Locale.ITALIAN);
+    Platform.runLater(()-> {
+      MenuButton languageSelect = (MenuButton) root.lookup(".language-select");
+      myController.setStage(root.getScene());
+      interact(languageSelect::fire);
       MenuItem italianOption = null;
       for (MenuItem item : languageSelect.getItems()) {
         if (item.getText().equals("Italian")) {
@@ -154,156 +154,183 @@ public class SplashScreenTest extends DukeApplicationTest {
         }
       }
       if (italianOption != null) {
-        interact(italianOption::fire);  // Simulate selecting the menu item
+        interact(italianOption::fire);
       } else {
         fail("Italian option not found in language menu.");
       }
-
       String expected = simInfo.getString("splash_welcome");
-      //Parent newRoot = myController.getStage().getScene().getRoot();
-      //Text resultNode = (Text) newRoot.lookup(".text-welcome");
       Text resultNode = (Text) root.lookup(".text-welcome");
       String result = resultNode.getText();
       myController.getSplashLoop().stop();
       assertEquals(expected, result);
+    });
+
   }
 
-  @Test
-  //Negative test to ensure language doesn't change and no errors thrown when currently displayed language is selected again
-  void buttonClick_languageSelectEnglish_languageNotChanged () {
-    ResourceBundle simInfo = ResourceBundle.getBundle("SimInfo", Locale.ENGLISH);
-    MenuButton languageSelect = (MenuButton) root.lookup(".language-select"); //not a button though
-    //GIVEN, splash screen is loaded
-    //WHEN, englishLanguage is selected, language does not change (default state is english)
-    clickOn(languageSelect);
-    MenuItem englishOption = null;
-    for (MenuItem item : languageSelect.getItems()) {
-      if (item.getText().equals("English")) {
-        englishOption = item;
-        break;
-      }
-    }
-    if (englishOption != null) {
-      interact(englishOption::fire);  // Simulate selecting the menu item
-    } else {
-      fail("Italian option not found in language menu.");
-    }
 
-    String expected = simInfo.getString("splash_welcome");
-    Parent newRoot = myController.getStage().getScene().getRoot();
-    Text resultNode = (Text) newRoot.lookup(".text-welcome");
-    String result = resultNode.getText();
-    myController.getSplashLoop().stop();
-    assertEquals(expected, result);
+  @Test
+    //NEGATIVE TEST, EXPECT NO CHANGE TO UI
+  void buttonClick_languageSelectEnglish_languageNotChanged () {
+    //GIVEN, splash screen is loaded
+    //WHEN, englishLanguage is selected, language does change (english is default language)
+    ResourceBundle simInfo = ResourceBundle.getBundle("SimInfo", Locale.ENGLISH);
+    Platform.runLater(()-> {
+      MenuButton languageSelect = (MenuButton) root.lookup(".language-select");
+
+      myController.setStage(root.getScene());
+      interact(languageSelect::fire);
+      MenuItem englishOption = null;
+      for (MenuItem item : languageSelect.getItems()) {
+        if (item.getText().equals("English")) {
+          englishOption = item;
+          break;
+        }
+      }
+      if (englishOption != null) {
+        interact(englishOption::fire);
+      } else {
+        fail("English option not found in language menu.");
+      }
+      String expected = simInfo.getString("splash_welcome");
+      Text resultNode = (Text) root.lookup(".text-welcome");
+      String result = resultNode.getText();
+      myController.getSplashLoop().stop();
+      assertEquals(expected, result);
+    });
+
   }
 
   @Test
   void buttonClick_themeSelectDark_themeChanges () {
-    MenuButton themeSelect = (MenuButton) root.lookup(".color-scheme");
     //GIVEN, splash screen is loaded
-    //WHEN, theme is changed to DARK, color scheme is changed
-    clickOn(themeSelect);
-    MenuItem darkOption = null;
-    for (MenuItem item : themeSelect.getItems()) {
-      if (item.getText().equals("Dark Mode")) {
-        darkOption = item;
-        break;
+    //WHEN, darkTheme is selected, theme switches to dark
+    Platform.runLater(()-> {
+      MenuButton themeSelect = (MenuButton) root.lookup(".color-scheme");
+      myController.setStage(root.getScene());
+      interact(themeSelect::fire);
+      MenuItem darkOption = null;
+      for (MenuItem item : themeSelect.getItems()) {
+        if (item.getText().equals("Dark Mode")) {
+          darkOption = item;
+          break;
+        }
       }
-    }
-    if (darkOption != null) {
-      interact(darkOption::fire);  // Simulate selecting the menu item
-    } else {
-      fail("Dark color theme option not found in theme select menu.");
-    }
-    Region background = (Region) myController.getStage().getScene().getRoot();
-    Color backgroundColor = null;
-    if (background.getBackground() != null && !background.getBackground().getFills().isEmpty()) {
-      backgroundColor = (Color) background.getBackground().getFills().getFirst().getFill();
-    }
-    myController.getSplashLoop().stop();
-    assertEquals(Color.web("#333333"), backgroundColor);
+      if (darkOption != null) {
+        interact(darkOption::fire);
+      } else {
+        fail("Dark color theme option not found in theme select menu.");
+      }
+      Platform.runLater(()-> {
+        Region background = (Region) myController.getStage().getScene().getRoot();
+        Color backgroundColor = null;
+        if (background.getBackground() != null && !background.getBackground().getFills().isEmpty()) {
+          backgroundColor = (Color) background.getBackground().getFills().getFirst().getFill();
+        }
+        myController.getSplashLoop().stop();
+        assertEquals(Color.web("#333333"), backgroundColor);
+      });
+
+    });
+
   }
 
   @Test
   void buttonClick_themeSelectDuke_themeChanges () {
-    MenuButton themeSelect = (MenuButton) root.lookup(".color-scheme");
     //GIVEN, splash screen is loaded
-    //WHEN, theme is changed to DUKE, color scheme is changed
-    clickOn(themeSelect);
-    MenuItem dukeOption = null;
-    for (MenuItem item : themeSelect.getItems()) {
-      if (item.getText().equals("Duke Mode")) {
-        dukeOption = item;
-        break;
+    //WHEN, dukeTheme is selected, theme switches to duke
+    Platform.runLater(()-> {
+      MenuButton themeSelect = (MenuButton) root.lookup(".color-scheme");
+      myController.setStage(root.getScene());
+      interact(themeSelect::fire);
+      MenuItem dukeOption = null;
+      for (MenuItem item : themeSelect.getItems()) {
+        if (item.getText().equals("Duke Mode")) {
+          dukeOption = item;
+          break;
+        }
       }
-    }
-    if (dukeOption != null) {
-      interact(dukeOption::fire);  // Simulate selecting the menu item
-    } else {
-      fail("Duke color theme option not found in theme select menu.");
-    }
-    Region background = (Region) myController.getStage().getScene().getRoot();
-    Color backgroundColor = null;
-    if (background.getBackground() != null && !background.getBackground().getFills().isEmpty()) {
-      backgroundColor = (Color) background.getBackground().getFills().getFirst().getFill();
-    }
-    myController.getSplashLoop().stop();
-    assertEquals(Color.web("#003080"), backgroundColor);
+      if (dukeOption != null) {
+        interact(dukeOption::fire);
+      } else {
+        fail("Duke color theme option not found in theme select menu.");
+      }
+      Platform.runLater(()-> {
+        Region background = (Region) myController.getStage().getScene().getRoot();
+        Color backgroundColor = null;
+        if (background.getBackground() != null && !background.getBackground().getFills().isEmpty()) {
+          backgroundColor = (Color) background.getBackground().getFills().getFirst().getFill();
+        }
+        myController.getSplashLoop().stop();
+        assertEquals(Color.web("#003080"), backgroundColor);
+      });
+    });
   }
 
   @Test
   void buttonClick_themeSelectUNC_themeChanges () {
-    MenuButton themeSelect = (MenuButton) root.lookup(".color-scheme");
     //GIVEN, splash screen is loaded
-    //WHEN, theme is changed to UNC, color scheme is changed
-    clickOn(themeSelect);
-    MenuItem uncOption = null;
-    for (MenuItem item : themeSelect.getItems()) {
-      if (item.getText().equals("UNC Mode")) {
-        uncOption = item;
-        break;
+    //WHEN, uncTheme is selected, theme switches to unc
+    Platform.runLater(()-> {
+      MenuButton themeSelect = (MenuButton) root.lookup(".color-scheme");
+      myController.setStage(root.getScene());
+      interact(themeSelect::fire);
+      MenuItem uncOption = null;
+      for (MenuItem item : themeSelect.getItems()) {
+        if (item.getText().equals("UNC Mode")) {
+          uncOption = item;
+          break;
+        }
       }
-    }
-    if (uncOption != null) {
-      interact(uncOption::fire);  // Simulate selecting the menu item
-    } else {
-      fail("UNC color theme option not found in theme select menu.");
-    }
-    Region background = (Region) myController.getStage().getScene().getRoot();
-    Color backgroundColor = null;
-    if (background.getBackground() != null && !background.getBackground().getFills().isEmpty()) {
-      backgroundColor = (Color) background.getBackground().getFills().getFirst().getFill();
-    }
-    myController.getSplashLoop().stop();
-    assertEquals(Color.web("#89CFF0"), backgroundColor);
+      if (uncOption != null) {
+        interact(uncOption::fire);
+      } else {
+        fail("UNC color theme option not found in theme select menu.");
+      }
+      Platform.runLater(()-> {
+        Region background = (Region) myController.getStage().getScene().getRoot();
+        Color backgroundColor = null;
+        if (background.getBackground() != null && !background.getBackground().getFills().isEmpty()) {
+          backgroundColor = (Color) background.getBackground().getFills().getFirst().getFill();
+        }
+        myController.getSplashLoop().stop();
+        assertEquals(Color.web("#89CFF0"), backgroundColor);
+      });
+
+    });
+
   }
 
   @Test
-  //negative test, default theme is LIGHT so expect no change to UI
+  //NEGATIVE TEST, EXPECT NO CHANGE TO UI
   void buttonClick_themeSelectLight_themeNoChange () {
-    MenuButton themeSelect = (MenuButton) root.lookup(".color-scheme");
     //GIVEN, splash screen is loaded
-    //WHEN, theme is changed to LIGHT, color scheme does not change
-    clickOn(themeSelect);
-    MenuItem lightOption = null;
-    for (MenuItem item : themeSelect.getItems()) {
-      if (item.getText().equals("Light Mode")) {
-        lightOption = item;
-        break;
+    //WHEN, lightTheme is selected, theme does not change (light theme is default)
+    Platform.runLater(()-> {
+      MenuButton themeSelect = (MenuButton) root.lookup(".color-scheme");
+      myController.setStage(root.getScene());
+      interact(themeSelect::fire);
+      MenuItem lightOption = null;
+      for (MenuItem item : themeSelect.getItems()) {
+        if (item.getText().equals("Light Mode")) {
+          lightOption = item;
+          break;
+        }
       }
-    }
-    if (lightOption != null) {
-      interact(lightOption::fire);  // Simulate selecting the menu item
-    } else {
-      fail("Light color theme option not found in theme select menu.");
-    }
-    Region background = (Region) myController.getStage().getScene().getRoot();
-    Color backgroundColor = null;
-    if (background.getBackground() != null && !background.getBackground().getFills().isEmpty()) {
-      backgroundColor = (Color) background.getBackground().getFills().getFirst().getFill();
-    }
-    myController.getSplashLoop().stop();
-    assertEquals(Color.web("#FAF9F6"), backgroundColor);
+      if (lightOption != null) {
+        interact(lightOption::fire);
+      } else {
+        fail("Light color theme option not found in theme select menu.");
+      }
+      Platform.runLater(()-> {
+        Region background = (Region) myController.getStage().getScene().getRoot();
+        Color backgroundColor = null;
+        if (background.getBackground() != null && !background.getBackground().getFills().isEmpty()) {
+          backgroundColor = (Color) background.getBackground().getFills().getFirst().getFill();
+        }
+        myController.getSplashLoop().stop();
+        assertEquals(Color.web("#FAF9F6"), backgroundColor);
+      });
+    });
   }
 
 

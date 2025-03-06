@@ -18,35 +18,39 @@ import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 import javafx.scene.text.TextFlow;
 
+/**
+ * @Author Palo Silva
+ * Class that handles the front end logic for displaying splash screen
+ */
+
 public class SplashScreen {
 
   private BorderPane splashPane;
   private Scene splashScene;
-  //private Locale myLocale;
-  private ColorScheme myScheme; //initialize to LIGHT mode
   private HBox controls;
   private SimulationController myController;
+  private int width = 600;
+  private int height = 800;
 
 
   public SplashScreen(SimulationController controller){
-    //what variables do we need to set?
-    //myLocale = locale;
     myController = controller;
     splashPane = new BorderPane();
-    //splashPane.setId("splashPane");
     splashPane.getStyleClass().add("splash-pane");
-    splashScene = new Scene(splashPane, 600, 800);
+    splashScene = new Scene(splashPane, width, height);
 
-    //myScheme = ColorScheme.LIGHT;  //default to light theme
-    //loadScreen();
   }
 
+  /**
+   * Loads splash screen to stage using controller
+   */
   public void loadScreen(){
     ResourceBundle simInfo = ResourceBundle.getBundle("SimInfo", myController.getLocale());
     loadSplashText(simInfo);
     loadControlButtons(simInfo);
     setSplashTheme(myController.getScheme(), simInfo);
     myController.displaySplashScreen(this.splashScene);
+
   }
 
 
@@ -107,7 +111,7 @@ public class SplashScreen {
     MenuItem colorScheme3 = new MenuItem(simInfo.getString("splash_color_scheme_3"));
     MenuItem colorScheme4 = new MenuItem(simInfo.getString("splash_color_scheme_4"));
     colorScheme1.setOnAction(e -> {
-      myController.setScheme(ColorScheme.DARK); //this should be eliminated
+      myController.setScheme(ColorScheme.DARK);
       loadScreen();
     });
     colorScheme2.setOnAction(e -> {
@@ -129,6 +133,7 @@ public class SplashScreen {
     loadButton.setOnAction(e -> {
       File newFile = myController.getFileChooser().showOpenDialog(myController.getStage());
       if (newFile != null) {
+        //myController.getSplashLoop().stop();  //NEW
         myController.loadSimulation(newFile);
       }
     });
@@ -148,25 +153,17 @@ public class SplashScreen {
    * @param simInfo: resource bundle containing hardcoded simulation text
    */
   private void setSplashTheme(ColorScheme scheme, ResourceBundle simInfo){
-    URL resourcePath = null;
-    switch(scheme){
-      case DARK:
-        resourcePath = getClass().getResource("/SplashDark.css");
-        break;
-      case LIGHT:
-        resourcePath = getClass().getResource("/SplashLight.css");
-        break;
-      case DUKE:
-        resourcePath = getClass().getResource("/SplashDuke.css");
-        break;
-      case UNC:
-        resourcePath = getClass().getResource("/SplashUnc.css");
-        break;
-    }
+    URL resourcePath = switch (scheme) {
+      case DARK -> getClass().getResource("/SplashDark.css");
+      case LIGHT -> getClass().getResource("/SplashLight.css");
+      case DUKE -> getClass().getResource("/SplashDuke.css");
+      case UNC -> getClass().getResource("/SplashUnc.css");
+    };
 
     if (resourcePath == null) {
       System.err.println(simInfo.getString("invalid_theme"));
     }
+    splashScene.getStylesheets().clear();
     splashScene.getStylesheets().add(resourcePath.toExternalForm());
 
   }
@@ -175,21 +172,5 @@ public class SplashScreen {
     return splashScene;
   }
 
-  /*
-  public Locale getMyLocale(){
-    return myLocale;
-  }
-
-   */
-  public HBox getControls(){
-    return controls;
-  }
-  public ColorScheme getColorScheme(){
-    return myScheme;
-  }
-
-  public BorderPane getSplashPane(){
-    return splashPane;
-  }
 
 }

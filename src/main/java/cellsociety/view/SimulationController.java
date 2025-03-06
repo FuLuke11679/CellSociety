@@ -2,6 +2,7 @@ package cellsociety.view;
 
 import cellsociety.view.GridView.ColorScheme;
 import java.io.File;
+import java.net.URL;
 import java.util.Locale;
 import java.util.ResourceBundle;
 import javafx.animation.Animation;
@@ -22,6 +23,11 @@ import javax.xml.transform.stream.StreamResult;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
+/**
+ * @Author Palo Silva
+ * Class that handles control of the simulation and transitions
+ * between splash screen and simulation screen
+ */
 public class SimulationController {
   private final FileChooser FILE_CHOOSER = new FileChooser();
   private Timeline simLoop;
@@ -63,9 +69,7 @@ public class SimulationController {
       simLoop.stop();
     }
     currentFile = dataFile;
-    //System.out.println(currentFile);
     mySimScreen = new SimulationScreen(dataFile, this);
-
   }
 
   /**
@@ -78,12 +82,12 @@ public class SimulationController {
         mySimScreen.update();
       }));
       simLoop.setCycleCount(Timeline.INDEFINITE);
-      simLoop.setRate(1.0 / SECOND_DELAY);  // Ensure speed is set correctly
+      simLoop.setRate(1.0 / SECOND_DELAY);
     }
     if (simLoop.getStatus() == Animation.Status.PAUSED) {
-      simLoop.play();  // Resume if paused
+      simLoop.play();
     } else if (simLoop.getStatus() != Animation.Status.RUNNING) {
-      simLoop.playFromStart();  // Start fresh if it wasn't running
+      simLoop.playFromStart();
     }
   }
 
@@ -122,7 +126,10 @@ public class SimulationController {
     }
   }
 
+
+
   public void resetSimulation() {
+    //simLoop.stop();
     loadSimulation(currentFile);
   }
 
