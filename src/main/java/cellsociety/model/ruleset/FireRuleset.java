@@ -14,7 +14,6 @@ import org.apache.logging.log4j.Logger;
  * Author: Daniel Rodriguez-Florido
  * The back-end ruleset logic to preform the Forest Fire Simulation
  */
-
 public class FireRuleset extends Ruleset {
 
   Logger log = LogManager.getLogger(FireRuleset.class);
@@ -30,14 +29,27 @@ public class FireRuleset extends Ruleset {
    * @param params The map of relevant parameters
    */
   public FireRuleset(Map<String, String> params) {
-    double tempProbGrow = Double.parseDouble(params.get(PROB_GROW_PARAM_NAME));
+    double tempProbGrow;
+    try {
+      tempProbGrow = Double.parseDouble(params.getOrDefault(PROB_GROW_PARAM_NAME, "0.03"));
+    } catch (NumberFormatException e) {
+      log.error("Invalid probGrow parameter did not contain double. Using default value.");
+      tempProbGrow = 0.03;
+    }
 
     if (tempProbGrow < 0 || tempProbGrow > 1) {
       log.error("Invalid probGrow parameter outside of range. Using default value.");
       tempProbGrow = 0.03;
     }
 
-    double tempProbCatch = Double.parseDouble(params.get(PROB_CATCH_PARAM_NAME));
+    double tempProbCatch;
+    try {
+      tempProbCatch = Double.parseDouble(params.getOrDefault(PROB_CATCH_PARAM_NAME, "0.003"));
+    } catch (NumberFormatException e) {
+      log.error("Invalid probCatch parameter did not contain double. Using default value.");
+      tempProbCatch = 0.003;
+    }
+
     if (tempProbCatch < 0 || tempProbCatch > 1) {
       log.error("Invalid probCatch parameter outside of range. Using default value.");
       tempProbCatch = 0.003;
