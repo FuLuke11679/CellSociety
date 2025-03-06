@@ -1,6 +1,7 @@
 package cellsociety.model.grid;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import cellsociety.model.grid.shape.CellShape;
 import cellsociety.model.grid.shape.RectangularShape;
@@ -21,6 +22,7 @@ class CellShapeFactoryTest {
     // For an invalid type, the factory should fall back to RectangularShape.
     CellShape cellShape = CellShapeFactory.createCellShape("NonExistentShape");
     assertNotNull(cellShape, "The fallback CellShape instance should not be null.");
-    assertTrue(cellShape instanceof RectangularShape, "Expected fallback instance of RectangularShape.");
+    assertTrue(cellShape instanceof RectangularShape,
+        "Expected fallback instance of RectangularShape.");
   }
 }

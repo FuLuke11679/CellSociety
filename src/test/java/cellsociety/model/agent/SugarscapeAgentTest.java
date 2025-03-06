@@ -1,12 +1,14 @@
 package cellsociety.model.agent;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 
 import cellsociety.model.cell.SugarscapePatch;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 class SugarscapeAgentTest {
+
   private SugarscapeAgent agent;
   private SugarscapePatch patch;
 

@@ -1,23 +1,24 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <simulationConfig>
   <!-- window and grid configuration -->
-  <display width="500" height="500" title="Conway Simulation" author="Palo">
-    <grid rows="4" columns="4" edgeType="Toroidal" neighborhoodType="ExtendedMoore" cellShape="Rectangular"/>
+  <display author="Palo" height="500" title="Conway Simulation" width="500">
     <description text="This is Palo's description"/>
+    <grid cellShape="Rectangular" columns="4" edgeType="Toroidal" neighborhoodType="ExtendedMoore"
+      rows="4"/>
   </display>
 
   <!-- sim configuration -->
-  <sim type="Conway">
-    <simvars
-    />
-  </sim>
   <init
-    stateList =
+    stateList=
       "D,D,D,A,
         D,A,D,D,
         D,A,A,D,
         A,D,D,A"
   >
   </init>
+  <sim type="Conway">
+    <simvars
+    />
+  </sim>
 
 </simulationConfig>

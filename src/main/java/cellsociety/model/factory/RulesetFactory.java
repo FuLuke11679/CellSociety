@@ -10,7 +10,7 @@ import org.apache.logging.log4j.Logger;
 
 /**
  * Author: Daniel Rodriguez-Florido
- * <p>
+ *
  * Factory to create rulesets dynamically using reflection
  */
 public class RulesetFactory {
@@ -37,7 +37,7 @@ public class RulesetFactory {
       }
 
       Constructor<? extends Ruleset> defaultConstructor = clazz.getDeclaredConstructor();
-      return defaultConstructor.newInstance();
+      return (Ruleset) defaultConstructor.newInstance();
     } catch (NoSuchMethodException | ClassNotFoundException e) {
       log.error("Ruleset {} not found", rulesetClass);
       throw new RuntimeException("Ruleset " + rulesetClass + " not found");

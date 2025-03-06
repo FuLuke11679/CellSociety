@@ -34,17 +34,17 @@ public abstract class Cell {
   }
 
   /**
-   * @return The current state of the cell
-   */
-  public CellState getNextState() {
-    return nextState;
-  }
-
-  /**
    * @param state The state you wish to set the previous state of the cell to
    */
   public void setCurrState(CellState state) {
     currState = state;
+  }
+
+  /**
+   * @return The current state of the cell
+   */
+  public CellState getNextState() {
+    return nextState;
   }
 
   /**

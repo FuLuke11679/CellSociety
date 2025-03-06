@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <data>
-  <display width="800" height="600" title="Conway Simulation" author="Test Author">
-    <grid rows="10" columns="10" edgeType="Toroidal" neighborhoodType="ExtendedMoore" cellShape="Rectangular"/>
+  <display author="Test Author" height="600" title="Conway Simulation" width="800">
     <description text="Test simulation with invalid cell state"/>
+    <grid cellShape="Rectangular" columns="10" edgeType="Toroidal" neighborhoodType="ExtendedMoore"
+      rows="10"/>
   </display>
-  <sim type="Conway"/>
-  <simvars/>
   <init stateList="D,D,D,D,D,D,D,D,D,D,
                   D,D,D,D,D,D,D,D,D,D,
                   D,D,D,D,D,D,D,D,D,D,
@@ -16,5 +15,7 @@
                   D,D,D,D,D,D,D,D,D,D,
                   D,D,D,D,D,D,D,D,D,D,
                   D,D,D,D,D,D,D,D,D,D"/>
+  <sim type="Conway"/>
+  <simvars/>
   <!-- X is an invalid state for Conway -->
 </data>

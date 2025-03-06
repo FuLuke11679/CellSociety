@@ -33,9 +33,10 @@ public class XMLParser extends Parser {
   private String author;
   private String[] initialStates;
   private Map<String, String> simVarsMap;
-  private final Map<String, GridPattern> patterns;
+  private Map<String, GridPattern> patterns;
   private boolean hasRandomStates;
-  private final Map<String, Double> stateProportions;
+  private Map<String, Double> stateProportions;
+  private int[] initialValues;
 
   private String edgeType;
   private String neighborhoodType;
@@ -82,6 +83,12 @@ public class XMLParser extends Parser {
     }
   }
 
+  /**
+   * Constructs an XMLParser and parses the provided XML file.
+   *
+   * @param file the XML file to be parsed
+   * @throws InvalidXMLConfigurationException if the XML file is not valid or parsing fails
+   */
   public XMLParser(File file) throws InvalidXMLConfigurationException {
     patterns = new HashMap<>();
     stateProportions = new HashMap<>();
@@ -107,10 +114,10 @@ public class XMLParser extends Parser {
   }
 
   /**
-   * Validates we have been provided with an xml file
+   * Checks whether the provided file has an XML file extension.
    *
-   * @param file input file
-   * @return boolean representing whether or not we have an XML file
+   * @param file the file to check
+   * @return true if the file name ends with ".xml", false otherwise
    */
   private boolean isXMLFile(File file) {
     String fileName = file.getName();
@@ -118,10 +125,16 @@ public class XMLParser extends Parser {
   }
 
   /**
-   * Parses XML document
+   * Parses the entire XML document.
+   * <p>
+   * This method extracts display settings, simulation parameters, initialization data, and optional
+   * pattern sections from the XML document. If any patterns are defined, they are applied to the
+   * initial states.
+   * </p>
    *
-   * @param document
-   * @throws InvalidXMLConfigurationException
+   * @param document the XML Document to parse
+   * @throws InvalidXMLConfigurationException if any required elements or attributes are missing or
+   *                                          invalid
    */
   private void parseDocument(Document document) throws InvalidXMLConfigurationException {
     parseDisplay(document);
@@ -140,12 +153,16 @@ public class XMLParser extends Parser {
   }
 
   /**
-   * Parses display parameters (height, width) and sim info
+   * Parses display-related information from the XML document.
+   * <p>
+   * Extracts attributes such as width, height, title, author, grid dimensions, description, and
+   * optional grid attributes like edgeType, neighborhoodType, and cellShape.
+   * </p>
    *
-   * @param document
-   * @throws InvalidXMLConfigurationException
+   * @param document the XML Document to parse
+   * @throws InvalidXMLConfigurationException if any required display elements or attributes are
+   *                                          missing or invalid
    */
-
   private void parseDisplay(Document document) throws InvalidXMLConfigurationException {
     try {
       // CELL-27: Input Missing Parameters
@@ -196,10 +213,15 @@ public class XMLParser extends Parser {
   }
 
   /**
-   * Parses simulation type and simulation specific variables
+   * Parses simulation-related information from the XML document.
+   * <p>
+   * Extracts simulation type and simulation variables (simvars). Validates the simulation type and
+   * reads all attributes from the simvars element.
+   * </p>
    *
-   * @param document
-   * @throws InvalidXMLConfigurationException
+   * @param document the XML Document to parse
+   * @throws InvalidXMLConfigurationException if required simulation elements or attributes are
+   *                                          missing or invalid
    */
   private void parseSimulation(Document document) throws InvalidXMLConfigurationException {
     Element sim = getRequiredElement(document, "sim");
@@ -221,16 +243,19 @@ public class XMLParser extends Parser {
       }
       simVarsMap.put(attr.getNodeName(), value);
     }
-
-
   }
 
-
   /**
-   * Initializes states, handles random initialization if necessary
+   * Parses the initialization section from the XML document.
+   * <p>
+   * Determines whether cell states should be generated randomly or explicitly from a state list.
+   * For random initialization, parses proportions (if provided) or random nodes; for explicit
+   * initialization, verifies the provided state list.
+   * </p>
    *
-   * @param document
-   * @throws InvalidXMLConfigurationException
+   * @param document the XML Document to parse
+   * @throws InvalidXMLConfigurationException if required initialization attributes are missing or
+   *                                          invalid
    */
   private void parseInitSection(Document document) throws InvalidXMLConfigurationException {
     Element initElement = getRequiredElement(document, "init");
@@ -263,11 +288,10 @@ public class XMLParser extends Parser {
   }
 
   /**
-   * Parses proportions for states if supplied
+   * Parses a proportions attribute to determine the percentage of each state.
    *
-   * @param proportionsAttr
+   * @param proportionsAttr the attribute value specifying state proportions (e.g., "A:0.5,B:0.3")
    */
-
   private void parseProportions(String proportionsAttr) {
     String[] proportionPairs = proportionsAttr.replaceAll("\\s+", "").split(",");
 
@@ -291,9 +315,13 @@ public class XMLParser extends Parser {
   }
 
   /**
-   * Generates random states for initialization
+   * Generates initial cell states based on the state proportions.
+   * <p>
+   * This method calculates how many cells should be assigned to each state based on the total grid
+   * size and the specified proportions. Remaining cells are filled with the default state. The
+   * resulting list is shuffled to randomize cell placement.
+   * </p>
    */
-
   private void generateRandomStates() {
     int totalCells = rows * columns;
     initialStates = new String[totalCells];
@@ -325,44 +353,87 @@ public class XMLParser extends Parser {
   }
 
   /**
-   * Handles non-random initial state initialization
+   * Parses the state list from XML, extracting both states and optional per-cell numerical values.
+   * Ensures valid states are used and assigns default values where necessary.
    *
-   * @param stateListStr
-   * @throws InvalidXMLConfigurationException
+   * @param stateListStr The raw state list string from XML.
+   * @throws InvalidXMLConfigurationException if states are missing or improperly formatted.
    */
-
   private void parseStateList(String stateListStr) throws InvalidXMLConfigurationException {
     String cleanedList = stateListStr.replaceAll("\\s+", "");
-    if (cleanedList.contains(",")) {
-      initialStates = cleanedList.split(",");
-    } else {
-      // Handle case where commas might be missing
-      initialStates = new String[cleanedList.length()];
-      for (int i = 0; i < cleanedList.length(); i++) {
-        initialStates[i] = String.valueOf(cleanedList.charAt(i));
+    String[] tokens = cleanedList.split(",");
+
+    int expectedCells = rows * columns;
+    if (tokens.length != expectedCells) {
+      throw new IllegalArgumentException("Number of cell states (" + tokens.length +
+          ") does not match grid size (" + expectedCells + ").");
+    }
+
+    // Initialize arrays
+    initialStates = new String[tokens.length];
+    initialValues = new int[tokens.length];
+
+    boolean requiresValues = requiresValues(simType);
+    boolean foundValues = false; // Tracks if at least one value is found
+
+    for (int i = 0; i < tokens.length; i++) {
+      String token = tokens[i].trim();
+
+      if (token.contains(":")) { // If the format is "STATE:VALUE"
+        String[] parts = token.split(":", 2);
+        if (parts.length != 2) {
+          throw new IllegalArgumentException("Invalid token format: " + token);
+        }
+
+        String state = parts[0];
+        int value;
+
+        try {
+          value = Integer.parseInt(parts[1]);
+        } catch (NumberFormatException e) {
+          throw new IllegalArgumentException("Invalid numeric value for state: " + token);
+        }
+
+        // Ensure state is valid
+        if (!isInSimulation(state, simType)) {
+          throw new IllegalArgumentException("Invalid state for simulation: " + state);
+        }
+
+        initialStates[i] = state;
+        initialValues[i] = value;
+        foundValues = true; // At least one value was found
+
+      } else { // If only state is provided
+        if (!isInSimulation(token, simType)) {
+          throw new IllegalArgumentException("Invalid cell state: " + token);
+        }
+
+        initialStates[i] = token;
+        initialValues[i] = requiresValues ? -1 : 0; // If required, flag missing values with -1
       }
     }
 
-    if (initialStates.length != rows * columns) {
-      throw new InvalidXMLConfigurationException(
-          "Number of cell states (" + initialStates.length +
-              ") does not match grid size (" + (rows * columns) + ").");
-    }
-
-    for (String state : initialStates) {
-      if (!isInSimulation(state, simType)) {
-        throw new InvalidXMLConfigurationException("Invalid cell state: " + state);
-      }
+    // If the simulation REQUIRES per-cell values but none were provided, throw an error
+    if (requiresValues && !foundValues) {
+      throw new IllegalArgumentException(
+          "Simulation type " + simType + " requires per-cell values, but none were provided.");
     }
   }
 
   /**
-   * Initializes random state
+   * Parses an explicit state list for initialization.
    *
-   * @param document
-   * @throws InvalidXMLConfigurationException
+   * @param stateListStr a comma-separated string or contiguous string representing cell states
+   * @throws IllegalArgumentException if the number of states does not match the grid size or if an invalid state is encountered
    */
 
+  /**
+   * Parses random state definitions from a dedicated random section in the XML.
+   *
+   * @param document the XML Document containing random state definitions
+   * @throws InvalidXMLConfigurationException if the total assigned state count exceeds the grid
+   *                                          size or an invalid state is found
+   */
   private void parseRandomStates(Document document) throws InvalidXMLConfigurationException {
     NodeList randomNodes = document.getElementsByTagName("random");
     if (randomNodes.getLength() > 0) {
@@ -418,12 +489,15 @@ public class XMLParser extends Parser {
   }
 
   /**
-   * Handles patterns in initial states
+   * Parses pattern sections from the XML document.
+   * <p>
+   * For each "pattern" element, the method reads the starting position, pattern state list, and
+   * computes the dimensions of the pattern. Patterns are then stored in a map.
+   * </p>
    *
-   * @param document
-   * @throws InvalidXMLConfigurationException
+   * @param document the XML Document to parse
+   * @throws InvalidXMLConfigurationException if a pattern exceeds grid bounds
    */
-
   private void parsePatterns(Document document) throws InvalidXMLConfigurationException {
     NodeList patternNodes = document.getElementsByTagName("pattern");
     for (int i = 0; i < patternNodes.getLength(); i++) {
@@ -465,12 +539,18 @@ public class XMLParser extends Parser {
    * @return
    */
 
-  private String[] parsePatternStateList(String stateListStr) {
-    // Remove all whitespace and split by commas
-    String cleanedList = stateListStr.replaceAll("\\s+", "");
-    return cleanedList.split(",");
-  }
+    private String[] parsePatternStateList(String stateListStr) {
+        // Remove all whitespace and split by commas
+        String cleanedList = stateListStr.replaceAll("\\s+", "");
+        return cleanedList.split(",");
+    }
 
+  /**
+   * Counts the number of non-empty rows in the given pattern state list string.
+   *
+   * @param stateListStr the pattern state list string
+   * @return the number of rows in the pattern
+   */
   private int countRows(String stateListStr) {
     // Count the number of rows by counting newlines
     String[] lines = stateListStr.split("\\n");
@@ -483,6 +563,13 @@ public class XMLParser extends Parser {
     return rowCount;
   }
 
+  /**
+   * Applies all defined patterns to the initial states array.
+   * <p>
+   * For each pattern, overlays its state values onto the corresponding positions in the overall
+   * grid.
+   * </p>
+   */
   private void applyPatterns() {
     // Apply each pattern to the initial states
     for (GridPattern pattern : patterns.values()) {
@@ -507,37 +594,39 @@ public class XMLParser extends Parser {
   }
 
   /**
-   * Validates simulation type
+   * Validates whether the simulation type is valid.
    *
-   * @param simType
-   * @return
+   * @param simType the simulation type to validate
+   * @return true if the simulation type is valid, false otherwise
    */
-
   private boolean isValidSimulationType(String simType) {
     return validateSimulation(simType);
   }
 
   /**
-   * Validates provided probabilties in xml
+   * Validates that a probability value is a number between 0 and 1.
    *
-   * @param value
-   * @throws InvalidXMLConfigurationException
+   * @param value the probability value as a string
+   * @throws IllegalArgumentException if the value is not a valid probability
    */
-  private void validateProbability(String value) throws InvalidXMLConfigurationException {
-
+  private void validateProbability(String value) {
     try {
       double prob = Double.parseDouble(value);
       if (prob < 0 || prob > 1) {
-        throw new InvalidXMLConfigurationException("Probability must be between 0 and 1: " + value);
+        throw new IllegalArgumentException("Probability must be between 0 and 1: " + value);
       }
     } catch (NumberFormatException e) {
-      throw new IllegalArgumentException("Invalid probability value: " + value, e);
-    } catch (InvalidXMLConfigurationException e) {
-      throw new InvalidXMLConfigurationException("Probability must be between 0 and 1: " + value);
+      throw new IllegalArgumentException("Invalid probability value: " + value);
     }
-
   }
 
+  /**
+   * Returns the default state symbol for the given simulation type.
+   *
+   * @param simType the simulation type (e.g., "Conway", "Fire")
+   * @return the default state symbol for the simulation
+   * @throws IllegalArgumentException if the simulation type is unknown
+   */
   private String getDefaultState(String simType) {
     return switch (simType) {
       case "Conway", "GameOfLife" -> "D"; // DEAD
@@ -546,18 +635,19 @@ public class XMLParser extends Parser {
       case "Segregation" -> "EM"; // EMPTY
       case "WatorWorld" -> "W"; // WATER
       case "GeneralConway" -> "D";
+      case "Sugarscape" -> "Patch";
       default -> throw new IllegalArgumentException("Unknown simulation type: " + simType);
     };
   }
 
   /**
-   * Extracts Element from xml file
+   * Retrieves a required element with the given tag name from the parent node.
    *
-   * @param parent
-   * @param tagName
-   * @return
+   * @param parent  the parent node (Document or Element)
+   * @param tagName the tag name of the required element
+   * @return the required Element
+   * @throws IllegalArgumentException if the element is not found
    */
-
   private Element getRequiredElement(Node parent, String tagName) {
     NodeList elements = (parent instanceof Document ?
         ((Document) parent).getElementsByTagName(tagName) :
@@ -571,14 +661,13 @@ public class XMLParser extends Parser {
   }
 
   /**
-   * Extracts attribute string from xml file
+   * Retrieves a required attribute value from an element.
    *
-   * @param element
-   * @param attributeName
-   * @return
-   * @throws InvalidXMLConfigurationException
+   * @param element       the element from which to retrieve the attribute
+   * @param attributeName the name of the attribute
+   * @return the attribute value
+   * @throws InvalidXMLConfigurationException if the attribute is missing or empty
    */
-
   private String getRequiredAttribute(Element element, String attributeName)
       throws InvalidXMLConfigurationException {
     String value = element.getAttribute(attributeName);
@@ -591,14 +680,13 @@ public class XMLParser extends Parser {
   }
 
   /**
-   * Extracts integer attribute from xml file
+   * Retrieves a required integer attribute from an element.
    *
-   * @param element
-   * @param attributeName
-   * @return
-   * @throws InvalidXMLConfigurationException
+   * @param element       the element from which to retrieve the attribute
+   * @param attributeName the name of the attribute
+   * @return the integer value of the attribute
+   * @throws InvalidXMLConfigurationException if the attribute is missing, empty, or not an integer
    */
-
   private int getRequiredIntAttribute(Element element, String attributeName)
       throws InvalidXMLConfigurationException {
     String value = getRequiredAttribute(element, attributeName);
@@ -611,6 +699,7 @@ public class XMLParser extends Parser {
     }
   }
 
+  // Getter methods for various configuration properties
   public int getWidth() {
     return width;
   }
@@ -647,6 +736,14 @@ public class XMLParser extends Parser {
     return initialStates;
   }
 
+  public int[] getValues() {
+    if (initialValues == null) {
+      throw new IllegalStateException(
+          "initialValues is NULL in getValues(). Ensure XML file is parsed first.");
+    }
+    return initialValues;
+  }
+
   public Map<String, String> getSimVarsMap() {
     return simVarsMap;
   }
@@ -674,4 +771,5 @@ public class XMLParser extends Parser {
   public String getCellShape() {
     return cellShape;
   }
+
 }

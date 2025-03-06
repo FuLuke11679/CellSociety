@@ -17,8 +17,21 @@ public abstract class Parser {
       "GeneralConway", Set.of("D", "A"),
       "Sugarscape", Set.of("PATCH", "AGENT")
   );
+  private final static Set<String> requiresValues = Set.of("Sugarscape");
 
   public Parser() {
+  }
+
+  public static boolean isInSimulation(String state, String simulation) {
+    return simulationStatesMap.get(simulation).contains(state);
+  }
+
+  public static boolean validateSimulation(String state) {
+    return simulationStatesMap.containsKey(state);
+  }
+
+  public static boolean requiresValues(String state) {
+    return requiresValues.contains(state);
   }
 
   public abstract int getWidth();
@@ -36,14 +49,6 @@ public abstract class Parser {
   public abstract String getSimType();
 
   public abstract Map<String, String> getSimVarsMap();
-
-  public static boolean isInSimulation(String state, String simulation) {
-    return simulationStatesMap.get(simulation).contains(state);
-  }
-
-  public static boolean validateSimulation(String state) {
-    return simulationStatesMap.containsKey(state);
-  }
 
 
 }

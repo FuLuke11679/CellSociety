@@ -1,6 +1,9 @@
 package cellsociety.model.grid;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import cellsociety.model.cell.Cell;
 import cellsociety.model.cell.ConwayCell;
@@ -10,7 +13,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 class GridTest {
-  private Grid grid;
+
   private final int rows = 5;
   private final int cols = 5;
   private final String[] initialStates = {
@@ -20,6 +23,7 @@ class GridTest {
       "D", "A", "D", "A", "D",
       "A", "D", "A", "D", "A"
   };
+  private Grid grid;
 
   @BeforeEach
   void setUp() {

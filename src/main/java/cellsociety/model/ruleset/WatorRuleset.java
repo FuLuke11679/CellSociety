@@ -20,8 +20,8 @@ import java.util.Map;
 
 public class WatorRuleset extends Ruleset {
 
-  private WatorGrid myGrid;
   private final WatorAgentFactory agentFactory;
+  private WatorGrid myGrid;
 
   /**
    * Constructor for the WatorRuleset

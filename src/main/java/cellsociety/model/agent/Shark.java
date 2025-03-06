@@ -15,10 +15,9 @@ import java.util.List;
 public class Shark implements WatorAgent {
 
   private final int reproductionTimeConstant;
-
+  private final int sharkEnergyGain;
   private int energy;
   private int timeToReproduce;
-  private final int sharkEnergyGain;
   private boolean moved;
 
   /**

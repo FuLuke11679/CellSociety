@@ -1,6 +1,7 @@
 package cellsociety.model.ruleset;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import cellsociety.model.cell.Cell;
 import cellsociety.model.cell.FireCell;
@@ -12,32 +13,26 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 /**
- * Author: Daniel Rodriguez-Florido
- * Testing file for Forest Fire Simulation
+ * Author: Daniel Rodriguez-Florido Testing file for Forest Fire Simulation
  */
 class FireRulesetTest {
-
-  private Cell emptyCell;
-  private Cell burningCell;
-  private Cell treeCell;
-
-  private List<Cell> neighbors;
 
   private final Map<String, String> minProbMap = Map.of(
       "probGrow", "0",
       "probCatch", "0"
   );
-
   private final Map<String, String> maxProbMap = Map.of(
       "probGrow", "1",
       "probCatch", "1"
   );
-
   private final Map<String, String> garbageProbMap = Map.of(
       "probGrow", "123",
       "probCatch", "-125235"
   );
-
+  private Cell emptyCell;
+  private Cell burningCell;
+  private Cell treeCell;
+  private List<Cell> neighbors;
   private Ruleset rulesetMinProb;
   private Ruleset rulesetMaxProb;
   private Ruleset rulesetGarbageProb;

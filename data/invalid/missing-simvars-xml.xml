@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <data>
   <display author="Test Author" height="600" title="Fire Simulation" width="800">
-    <description text="Test simulation with invalid probability"/>
+    <description text="Test simulation with missing simulation variables"/>
     <grid cellShape="Rectangular" columns="10" edgeType="Toroidal" neighborhoodType="ExtendedMoore"
       rows="10"/>
   </display>
@@ -16,6 +16,6 @@
                   E,E,E,E,E,E,E,E,E,E,
                   E,E,E,E,E,E,E,E,E,E"/>
   <sim type="Fire"/>
-  <!-- probCatch > 1.0 is invalid -->
-  <simvars probCatch="1.5"/>
+  <!-- Missing probCatch parameter -->
+  <simvars/>
 </data>

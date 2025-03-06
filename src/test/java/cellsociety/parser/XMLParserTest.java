@@ -9,6 +9,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 class XMLParserTest {
+
   XMLParser xmlParser;
 
   @BeforeEach
@@ -16,6 +17,7 @@ class XMLParserTest {
     File file = new File("data/conway/GameOfLife_1.xml");
     xmlParser = new XMLParser(file);
   }
+
   @Test
   void getWidth_returnCorrectWidth() {
     assertEquals(800, xmlParser.getWidth());
@@ -62,5 +64,5 @@ class XMLParserTest {
     assertEquals(expected, xmlParser.getSimVarsMap());
   }
 
-  
+
 }

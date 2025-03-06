@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
-<ruleset name="CompSci 308 Design Ruleset"
+<ruleset xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  name="CompSci 308 Design Ruleset"
   xmlns="http://pmd.sourceforge.net/ruleset/2.0.0"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="https://pmd.github.io/schema/ruleset_2_0_0.xsd http://pmd.sourceforge.net/ruleset/2.0.0">
+>
 
   <description>
     PMD ruleset for CellSociety based on the CellSociety design requirements.
@@ -17,8 +17,8 @@
   <!-- DESIGN-03 - Named Constants -->
   <rule ref="category/java/errorprone.xml/AvoidLiteralsInIfCondition">
     <properties>
-      <property name="ignoreMagicNumbers" value="-1,0" />
-      <property name="ignoreExpressions" value="false" />
+      <property name="ignoreMagicNumbers" value="-1,0"/>
+      <property name="ignoreExpressions" value="false"/>
     </properties>
   </rule>
   <rule ref="category/java/design.xml/FinalFieldCouldBeStatic">
@@ -33,12 +33,13 @@
   <rule ref="category/java/design.xml/MutableStaticState">
     <priority>1</priority>
   </rule>
-  <rule name="InstanceVariablesMustBePrivate"
-        language="java"
-        message="Class-level variables must be private; 'static final' constants may be private, protected, default, or public."
-        class="net.sourceforge.pmd.lang.rule.xpath.XPathRule">
+  <rule class="net.sourceforge.pmd.lang.rule.xpath.XPathRule"
+    language="java"
+    message="Class-level variables must be private; 'static final' constants may be private, protected, default, or public."
+    name="InstanceVariablesMustBePrivate">
     <description>
-      This rule ensures that all class-level variables are declared as private unless they are 'static' and 'final'.
+      This rule ensures that all class-level variables are declared as private unless they are
+      'static' and 'final'.
     </description>
     <priority>1</priority>
     <properties>
@@ -98,29 +99,29 @@
   </rule>
   <rule ref="category/java/design.xml/NcssCount">
     <properties>
-      <property name="methodReportLevel" value="30" />
-      <property name="classReportLevel" value="1200" />
+      <property name="methodReportLevel" value="30"/>
+      <property name="classReportLevel" value="1200"/>
     </properties>
   </rule>
 
   <!-- DESIGN-08 - Comments -->
   <rule ref="category/java/documentation.xml/CommentRequired">
-    <properties>
-      <property name="accessorCommentRequirement" value="Required" />
-      <property name="classCommentRequirement" value="Required" />
-      <property name="publicMethodCommentRequirement" value="Required" />
-      <property name="fieldCommentRequirement" value="Ignored" />
-      <property name="protectedMethodCommentRequirement" value="Ignored" />
-    </properties>
     <priority>2</priority>
+    <properties>
+      <property name="accessorCommentRequirement" value="Required"/>
+      <property name="classCommentRequirement" value="Required"/>
+      <property name="publicMethodCommentRequirement" value="Required"/>
+      <property name="fieldCommentRequirement" value="Ignored"/>
+      <property name="protectedMethodCommentRequirement" value="Ignored"/>
+    </properties>
   </rule>
   <!-- Rest enforced through checkstyle -->
 
   <!-- DESIGN-09 - Model-View Separation -->
-  <rule name="AvoidJavaFXImportsInModelPackages"
+  <rule class="net.sourceforge.pmd.lang.rule.xpath.XPathRule"
     language="java"
     message="JavaFX packages should only be used in the View (view package). The model should be agnostic of how it is displayed."
-    class="net.sourceforge.pmd.lang.rule.xpath.XPathRule">
+    name="AvoidJavaFXImportsInModelPackages">
     <description>
       This rule identifies if a class within 'model', '*.model', or '*.model.*' packages is
       importing anything from the javafx package.
@@ -215,10 +216,10 @@
   </rule>
 
   <!-- DESIGN-15 - Externalize Configuration -->
-  <rule name="AvoidMagicNumbers"
+  <rule class="net.sourceforge.pmd.lang.rule.xpath.XPathRule"
     language="java"
     message="Avoid using magic numbers in the code."
-    class="net.sourceforge.pmd.lang.rule.xpath.XPathRule">
+    name="AvoidMagicNumbers">
     <description>
       Magic numbers are numbers that occur multiple time in code without an explanatory name.
       This rule excludes -1, 0, 1, and 2 which are commonly used in a non-magic context.
@@ -234,10 +235,10 @@
       </property>
     </properties>
   </rule>
-  <rule name="AvoidLiteralHexColorCodes"
+  <rule class="net.sourceforge.pmd.lang.rule.xpath.XPathRule"
     language="java"
     message="Avoid using literal hex color codes in the code. Consider using a constant or resource instead."
-    class="net.sourceforge.pmd.lang.rule.xpath.XPathRule">
+    name="AvoidLiteralHexColorCodes">
     <description>
       This rule finds instances where hex color codes are used directly in the code, which can make
       maintenance more difficult and the code less readable.
@@ -261,12 +262,12 @@
   </rule>
 
   <!-- DESIGN-16 - No Dead Code -->
-  <rule ref="category/java/documentation.xml/UncommentedEmptyConstructor"
-        message="The constructor body is empty. If this is your intent, document it with a comment.">
+  <rule message="The constructor body is empty. If this is your intent, document it with a comment."
+    ref="category/java/documentation.xml/UncommentedEmptyConstructor">
     <priority>2</priority>
   </rule>
-  <rule ref="category/java/documentation.xml/UncommentedEmptyMethodBody"
-        message="The method body is empty. If this is your intent, document it with a comment.">
+  <rule message="The method body is empty. If this is your intent, document it with a comment."
+    ref="category/java/documentation.xml/UncommentedEmptyMethodBody">
     <priority>2</priority>
   </rule>
   <rule ref="category/java/bestpractices.xml/UnusedAssignment">

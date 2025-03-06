@@ -12,8 +12,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 /**
- * Author: Daniel Rodriguez-Florido
- * Testing class for Segregation Simulation
+ * Author: Daniel Rodriguez-Florido Testing class for Segregation Simulation
  */
 
 class SegregationRulesetTest {

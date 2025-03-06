@@ -16,6 +16,6 @@
   <suppress checks="VariableDeclarationUsageDistance" files="."/>
   <suppress checks="OperatorWrap" files="."/>
   <suppress checks="CommentsIndentation" files="."/>
-  <suppress checks="CustomImportOrderCheck" files="." />
+  <suppress checks="CustomImportOrderCheck" files="."/>
 
 </suppressions>

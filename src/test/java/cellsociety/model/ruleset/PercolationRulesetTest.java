@@ -1,18 +1,17 @@
 package cellsociety.model.ruleset;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import cellsociety.model.cell.Cell;
 import cellsociety.model.cell.PercolationCell;
 import cellsociety.model.cell.PercolationCell.PercolationState;
 import java.util.ArrayList;
+import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import java.util.List;
 
 /**
- * Author: Daniel Rodriguez-Florido
- * Testing file for Percolation Simulation
+ * Author: Daniel Rodriguez-Florido Testing file for Percolation Simulation
  */
 class PercolationRulesetTest {
 

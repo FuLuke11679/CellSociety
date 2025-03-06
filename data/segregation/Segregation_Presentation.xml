@@ -1,20 +1,15 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <simulationConfig>
   <!-- window and grid configuration -->
-  <display width="800" height="800" title="Segregation Simulation" author="Palo">
-    <grid rows="50" columns="50" edgeType="Toroidal" neighborhoodType="ExtendedMoore" cellShape="Rectangular"/>
+  <display author="Palo" height="800" title="Segregation Simulation" width="800">
     <description text="This is the segregation simulation"/>
+    <grid cellShape="Rectangular" columns="50" edgeType="Toroidal" neighborhoodType="ExtendedMoore"
+      rows="50"/>
   </display>
 
   <!-- sim configuration -->
-  <sim type="Segregation">
-    <simvars
-      thresh="0.6"
-    />
-  </sim>
-
   <init
-    stateList = "
+    stateList="
       BLU, EM, EM, BLU, BLU, BLU, BLU, EM, BLU, R, R, R, BLU, EM, EM, EM, R, BLU, BLU, R, BLU, BLU, R, BLU, BLU, R, BLU, R, BLU, R, BLU, R, R, EM, BLU, R, R, BLU, BLU, BLU, R, BLU, BLU, R, EM, R, BLU, R, BLU, BLU,
 BLU, BLU, BLU, EM, R, R, R, EM, EM, BLU, R, BLU, BLU, BLU, R, R, BLU, BLU, R, BLU, EM, R, BLU, EM, R, BLU, EM, EM, R, R, BLU, BLU, EM, EM, R, R, R, R, EM, BLU, EM, BLU, BLU, BLU, R, EM, R, BLU, R, R,
 EM, R, BLU, R, R, R, R, R, R, BLU, R, BLU, BLU, BLU, BLU, BLU, R, R, BLU, R, BLU, BLU, BLU, R, EM, R, EM, EM, BLU, EM, BLU, R, EM, BLU, BLU, BLU, R, R, EM, EM, BLU, BLU, BLU, BLU, EM, BLU, BLU, R, R, EM,
@@ -68,4 +63,10 @@ R, EM, R, R, EM, BLU, EM, EM, R, R, EM, R, EM, R, R, BLU, BLU, BLU, BLU, R, BLU,
     "
   >
   </init>
+
+  <sim type="Segregation">
+    <simvars
+      thresh="0.6"
+    />
+  </sim>
 </simulationConfig>

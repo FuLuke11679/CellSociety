@@ -2,8 +2,21 @@ package cellsociety.view.shapes;
 
 import javafx.scene.shape.Polygon;
 
+/**
+ * Represents a Rhombus shape for use in a grid-based simulation. The Rhombus is sized and
+ * positioned based on the given grid parameters.
+ *
+ * @author Luke
+ */
 public class RhombusShape extends Polygon {
 
+  /**
+   * Constructs a Rhombus with the given size and grid position.
+   *
+   * @param size the size of the hexagon
+   * @param row  the row index in the grid
+   * @param col  the column index in the grid
+   */
   public RhombusShape(int size, int row, int col) {
     double s = size;
     double sqrt3 = Math.sqrt(3);

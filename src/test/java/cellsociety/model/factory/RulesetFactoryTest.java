@@ -1,12 +1,12 @@
 package cellsociety.model.factory;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import cellsociety.model.ruleset.Ruleset;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -66,7 +66,7 @@ class RulesetFactoryTest {
   void createRuleset_withInvalidSimNameNoParams_fail() { // Negative Test
     params = new HashMap<>();
     assertThrows(RuntimeException.class, () ->
-      RulesetFactory.createRuleset("Gibberish", params)
+        RulesetFactory.createRuleset("Gibberish", params)
     );
   }
 

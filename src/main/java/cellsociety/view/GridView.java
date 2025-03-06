@@ -14,6 +14,7 @@ import cellsociety.view.shapes.ShapeFactory;
 import java.util.Locale;
 import java.util.Map;
 import java.util.ResourceBundle;
+import java.util.Set;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.layout.BorderPane;
@@ -25,9 +26,16 @@ import javafx.scene.shape.Shape;
 import javafx.scene.text.Text;
 
 /**
- * @Author Luke Fu, Palo Silva Classes that handles front end display of cells
+ * GridView is responsible for rendering the simulation grid. It creates and updates the graphical
+ * representation of the grid cells based on the simulation state.
+ *
+ * @author Luke
+ * @author Daniel
+ * @author Palo
  */
 public class GridView {
+
+  private final static Set<Class<?>> hasGradient = Set.of(SugarscapePatch.class);
 
   private final Pane gridPane;
   private final Scene myScene;
@@ -71,7 +79,17 @@ public class GridView {
   );
 
   /**
-   * Constructor for GridView.
+   * Constructs a GridView with the specified parameters.
+   *
+   * @param rows        the number of rows in the grid
+   * @param columns     the number of columns in the grid
+   * @param simType     the type of simulation being displayed
+   * @param title       the title of the simulation
+   * @param author      the author of the simulation
+   * @param description the description of the simulation
+   * @param grid        the grid data model
+   * @param scheme      the color scheme for the simulation
+   * @param myLocale    the locale for resource bundle lookup
    */
   public GridView(int rows, int columns, String simType, String title, String author,
       String description, Grid grid, ColorScheme scheme, Locale myLocale) {
@@ -133,21 +151,24 @@ public class GridView {
   }
 
   /**
-   * Returns cell color
+   * Determines the color of a cell based on its current state.
+   *
+   * @param cell the cell whose color is to be determined
+   * @return the color representing the cell's state
    */
   private Color getCellColor(Cell cell) {
-    if (cell instanceof SugarscapePatch patch) {
+    if (hasGradient.contains(cell.getClass())) {
+      SugarscapePatch patch = (SugarscapePatch) cell;
       if (patch.hasAgent()) {
         return Color.RED;
       } else {
         double fraction = (double) patch.getSugarAmount() / patch.getMaxSugar();
-        return Color.WHITE.interpolate(Color.DARKGREEN, fraction);
+        return Color.WHITE.interpolate(cellColors.get(SugarscapeState.PATCH), fraction);
       }
     } else {
       return cellColors.get(cell.getCurrState());
     }
   }
-
 
   /**
    * Displays simulation metadata at the top.

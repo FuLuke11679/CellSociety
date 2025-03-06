@@ -12,12 +12,6 @@ public class WatorCell extends Cell {
 
   private WatorAgent agent;
 
-  public enum WatorState implements CellState {
-    FISH,
-    SHARK,
-    WATER
-  }
-
   public WatorCell(int id, CellState currState, CellState nextState) {
     super(id, currState, nextState);
   }
@@ -38,6 +32,12 @@ public class WatorCell extends Cell {
    */
   public void setAgent(WatorAgent agent) {
     this.agent = agent;
+  }
+
+  public enum WatorState implements CellState {
+    FISH,
+    SHARK,
+    WATER
   }
 
 }

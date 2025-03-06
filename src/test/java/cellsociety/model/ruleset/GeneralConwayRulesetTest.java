@@ -1,27 +1,19 @@
 package cellsociety.model.ruleset;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import cellsociety.model.cell.Cell;
-import cellsociety.model.cell.ConwayCell;
 import cellsociety.model.cell.ConwayCell.ConwayState;
 import cellsociety.model.grid.CellShapeFactory;
 import cellsociety.model.grid.ConwayGrid;
 import cellsociety.model.grid.EdgeFactory;
 import cellsociety.model.grid.Grid;
 import cellsociety.model.grid.NeighborhoodFactory;
-import cellsociety.model.grid.neighborhood.NeighborhoodStrategy;
-import cellsociety.model.grid.shape.RectangularShape;
-import cellsociety.view.shapes.ShapeFactory;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 /**
- * Author: Daniel Rodriguez-Florido
- * Testing file for General Conway Game of Life
+ * Author: Daniel Rodriguez-Florido Testing file for General Conway Game of Life
  */
 class GeneralConwayRulesetTest {
 

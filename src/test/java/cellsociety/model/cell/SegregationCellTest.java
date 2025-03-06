@@ -1,6 +1,6 @@
 package cellsociety.model.cell;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import cellsociety.model.cell.SegregationCell.SegregationState;
 import org.junit.jupiter.api.BeforeEach;

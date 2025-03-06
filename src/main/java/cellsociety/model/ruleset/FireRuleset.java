@@ -16,13 +16,11 @@ import org.apache.logging.log4j.Logger;
  */
 public class FireRuleset extends Ruleset {
 
-  Logger log = LogManager.getLogger(FireRuleset.class);
-
   private static final String PROB_GROW_PARAM_NAME = "probGrow";
   private static final String PROB_CATCH_PARAM_NAME = "probCatch";
-
   private final double probGrow;
   private final double probCatch;
+  Logger log = LogManager.getLogger(FireRuleset.class);
 
   /**
    * Constructor for the FireRuleset

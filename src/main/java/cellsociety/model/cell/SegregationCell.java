@@ -9,14 +9,14 @@ import cellsociety.model.state.CellState;
  */
 public class SegregationCell extends Cell {
 
+  public SegregationCell(int id, CellState currState, CellState nextState) {
+    super(id, currState, nextState);
+  }
+
   public enum SegregationState implements CellState {
     RED,
     BLUE,
     EMPTY
-  }
-
-  public SegregationCell(int id, CellState currState, CellState nextState) {
-    super(id, currState, nextState);
   }
 
 }

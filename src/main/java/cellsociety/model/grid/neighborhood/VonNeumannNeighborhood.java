@@ -1,15 +1,16 @@
 package cellsociety.model.grid.neighborhood;
 
+import cellsociety.model.grid.shape.CellShape;
 import java.util.List;
-import java.util.stream.Collectors;
 
+/**
+ * Neighborhood strategy that returns only the direct (orthogonal) neighbor offsets.
+ */
 public class VonNeumannNeighborhood implements NeighborhoodStrategy {
 
   @Override
-  public List<int[]> selectNeighbors(List<int[]> baseOffsets) {
-    return baseOffsets.stream()
-        .filter(
-            offset -> Math.abs(offset[0]) + Math.abs(offset[1]) == 1) // Only orthogonal neighbors
-        .collect(Collectors.toList());
+  public List<int[]> getFinalOffsets(CellShape shape, int row, int col) {
+    // Use only the inner offsets that represent directly touching neighbors.
+    return shape.getInnerNeighborOffsets(row, col);
   }
 }
