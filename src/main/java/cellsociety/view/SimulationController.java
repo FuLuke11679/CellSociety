@@ -49,6 +49,9 @@ public class SimulationController {
    * Continuously updates splash screen as user makes customization choices
    */
   public void displaySplashScreen(Scene splashScene){
+    if(splashLoop != null){
+      splashLoop.stop();
+    }
     splashLoop = new Timeline(new KeyFrame(Duration.seconds(0.05), e -> {
       setStage(splashScene);
     }));
