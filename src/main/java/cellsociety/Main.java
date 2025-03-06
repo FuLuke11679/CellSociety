@@ -11,14 +11,9 @@ import javafx.stage.Stage;
  */
 public class Main extends Application {
 
-  ;
   private Locale myLocale;
   private SplashScreen mySplashScreen;
   private SimulationController myController;
-
-  public static void main(String[] args) {
-    launch(args);
-  }
 
   @Override
   public void start(Stage primaryStage) {
@@ -26,6 +21,10 @@ public class Main extends Application {
     myController = new SimulationController(primaryStage, myLocale);
     mySplashScreen = new SplashScreen(myController);
     mySplashScreen.loadScreen();
+  }
+
+  public static void main(String[] args) {
+    launch(args);
   }
 }
 

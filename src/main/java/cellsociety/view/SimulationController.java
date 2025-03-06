@@ -28,11 +28,12 @@ import org.w3c.dom.Element;
  */
 public class SimulationController {
 
-  private static double SECOND_DELAY = 0.8;
+
   private final FileChooser FILE_CHOOSER = new FileChooser();
   private Timeline simLoop;
   private Timeline splashLoop;
-  private Stage myStage;
+  private static final double SECOND_DELAY = 0.8;
+  private final Stage myStage;
   private File currentFile;
   private ColorScheme myScheme;
   private Locale myLocale;

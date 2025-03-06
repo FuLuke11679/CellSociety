@@ -31,14 +31,14 @@ import javafx.scene.layout.VBox;
  */
 public class SimulationScreen {
 
-  private static double SECOND_DELAY = 0.8;
-  private SimulationController myController;
+  private final SimulationController myController;
   private XMLParser myParser;
   private GridView myGridView;
   private Grid myGrid;
   private Scene simScene;
-  private int width = 800;
-  private int height = 800;
+  private final int width = 800;
+  private final int height = 800;
+  private static double SECOND_DELAY = 0.8;
 
   public SimulationScreen(File file, SimulationController controller) {
     myController = controller;

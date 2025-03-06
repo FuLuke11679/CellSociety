@@ -16,18 +16,17 @@ import javafx.stage.Stage;
 import org.junit.jupiter.api.Test;
 import util.DukeApplicationTest;
 
+/**
+ * @Author Palo Silva
+ * Test file for front end simulation screen
+ *
+ */
 public class SimulationScreenTest extends DukeApplicationTest {
-
   private SimulationController myController;
   private SplashScreen mySplashScreen;
   // keep GUI components used in multiple tests
-  private BorderPane myPane;
-  private SimulationScreen mySimScreen;
   private Parent root;
   private Button startButton;
-  private BorderPane initLayout;
-  private HBox initGrid;
-  private Parser myParser;
 
   @Override
   public void start(Stage stage) {
@@ -35,15 +34,10 @@ public class SimulationScreenTest extends DukeApplicationTest {
     myController = new SimulationController(stage, Locale.getDefault());
     mySplashScreen = new SplashScreen(myController);
     mySplashScreen.loadScreen();
-    File dataFile = new File(
-        "/Users/palosilva/Desktop/CS_308/cellsociety_team08/data/segregation/segregation_50x50.xml");
+    File dataFile = new File("data/segregation/Segregation_Presentation.xml");
     //need to load a simulation
     myController.loadSimulation(dataFile);
-    mySimScreen = myController.getSimScreen();
-    myParser = mySimScreen.getMyParser();
     root = myController.getSimScreen().getSimScene().getRoot();
-    initLayout = (BorderPane) root.lookup(".layout");
-    initGrid = (HBox) root.lookup(".grid");
     startButton = (Button) root.lookup(".start-button");
   }
 
@@ -86,9 +80,8 @@ public class SimulationScreenTest extends DukeApplicationTest {
   }
 
   @Test
-  void buttonClick_loadNewSim_newSimLoaded() {
-    File switchDataFile = new File(
-        "/Users/palosilva/Desktop/CS_308/cellsociety_team08/data/segregation/Segregation1.xml");
+  void buttonClick_loadNewSim_newSimLoaded(){
+    File switchDataFile = new File("data/segregation/Segregation1.xml");
     clickOn(startButton);
     //GIVEN, simulation is running
     //WHEN, load sim button is clicked and new data file is chosen, we render new simulation

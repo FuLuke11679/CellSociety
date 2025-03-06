@@ -10,6 +10,11 @@ import java.util.Map;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+/**
+ * Author: Daniel Rodriguez-Florido
+ *
+ * Testing file for the RulesetFactory object
+ */
 class RulesetFactoryTest {
 
   private Map<String, String> params;

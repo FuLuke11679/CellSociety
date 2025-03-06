@@ -10,7 +10,7 @@ import org.apache.logging.log4j.Logger;
 
 /**
  * Author: Daniel Rodriguez-Florido
- * <p>
+ *
  * Factory to create rulesets dynamically using reflection
  */
 public class RulesetFactory {

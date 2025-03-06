@@ -1,7 +1,6 @@
 package cellsociety.parser;
 
-import static org.junit.jupiter.api.Assertions.assertArrayEquals;
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.File;
 import java.util.HashMap;
@@ -15,8 +14,8 @@ class XMLParserTest {
 
   @BeforeEach
   void setUp() throws InvalidXMLConfigurationException {
-    File file = new File("data/GameOfLife_1.xml");
-//    xmlParser = new XMLParser(file);
+    File file = new File("data/conway/GameOfLife_1.xml");
+    xmlParser = new XMLParser(file);
   }
 
   @Test
@@ -51,11 +50,11 @@ class XMLParserTest {
 
   @Test
   void getInitialStates_returnsCorrectInitialStates() {
-    String[] expected = {"A", "A", "D", "D", "D",
-        "A", "A", "D", "D", "D",
-        "A", "A", "D", "D", "D",
-        "A", "A", "D", "D", "D",
-        "A", "A", "D", "D", "D",};
+    String[] expected = {"A","A","D","D","D",
+        "D","D","D","D","D",
+        "D","D","D","A","A",
+        "A","D","A","A","A",
+        "A","A","D","A","D",};
     assertArrayEquals(expected, xmlParser.getInitialStates());
   }
 

@@ -20,6 +20,10 @@ import javafx.stage.Stage;
 import org.junit.jupiter.api.Test;
 import util.DukeApplicationTest;
 
+/**
+ * @Author Palo Silva
+ * Tests for front end splash screen
+ */
 
 public class SplashScreenTest extends DukeApplicationTest {
 

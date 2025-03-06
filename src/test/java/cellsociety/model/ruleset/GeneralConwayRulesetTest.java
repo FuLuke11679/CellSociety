@@ -19,38 +19,66 @@ class GeneralConwayRulesetTest {
 
   Ruleset myRuleset;
   Grid myGrid;
+  Map<String, String> params;
 
   @BeforeEach
   void setUp() {
-    myRuleset = new GeneralConwayRuleset(Map.of("rules", "B2/S"));
+    params = Map.of("rules", "B2/S");
+    myRuleset = new GeneralConwayRuleset(params);
     String[] initialStates = {
-        "D", "D", "D", "D", "D",
-        "D", "A", "D", "D", "D",
-        "D", "D", "A", "D", "D",
-        "D", "D", "D", "D", "D",
-        "D", "D", "D", "D", "D",
+        "D","D","D","D","D",
+        "D","A","D","D","D",
+        "D","D","A","D","D",
+        "D","D","D","D","D",
+        "D","D","D","D","A",
     };
     myGrid = new ConwayGrid(5, 5, myRuleset, initialStates);
-    myGrid.setEdgeHandler(EdgeFactory.createEdgeHandler(""));
-    myGrid.setNeighborhoodStrategy(NeighborhoodFactory.createNeighborhoodStrategy(""));
-    myGrid.setCellShape(CellShapeFactory.createCellShape(""));
+    myGrid.setEdgeHandler(EdgeFactory.createEdgeHandler("Toroidal"));
+    myGrid.setNeighborhoodStrategy(NeighborhoodFactory.createNeighborhoodStrategy("ExtendedMoore"));
+    myGrid.setCellShape(CellShapeFactory.createCellShape("Rectangular"));
   }
 
   @Test
   void updateCellState_SeedVariationWithBSRule_CellDiesButBirthsTwo() {
+    myGrid.printGrid();
     myGrid.update();
+    myGrid.printGrid();
+
     assertEquals(ConwayState.DEAD, myGrid.getCell(1, 1).getCurrState());
     assertEquals(ConwayState.ALIVE, myGrid.getCell(1, 2).getCurrState());
     assertEquals(ConwayState.ALIVE, myGrid.getCell(2, 1).getCurrState());
+    assertEquals(ConwayState.DEAD, myGrid.getCell(2, 2).getCurrState());
   }
 
   @Test
   void updateCellState_SeedVariationWithSBRule_CellDiesButBirthsTwo() {
-    myRuleset = new GeneralConwayRuleset(Map.of("rules", "/2"));
+    myGrid.printGrid();
     myGrid.update();
+    myGrid.printGrid();
+
     assertEquals(ConwayState.DEAD, myGrid.getCell(1, 1).getCurrState());
     assertEquals(ConwayState.ALIVE, myGrid.getCell(1, 2).getCurrState());
     assertEquals(ConwayState.ALIVE, myGrid.getCell(2, 1).getCurrState());
+    assertEquals(ConwayState.DEAD, myGrid.getCell(2, 2).getCurrState());
+  }
+
+  @Test
+  void updateCellState_ruleStringNotValid_UsesDefaultRuleString() {
+    myRuleset = new GeneralConwayRuleset(Map.of("rules", "gibbbsdhkf"));
+    String[] initialStates = {
+        "D","D","D","D","D",
+        "D","D","A","D","D",
+        "D","D","A","D","D",
+        "D","D","D","D","D",
+        "D","D","D","D","A",
+    };
+    myGrid = new ConwayGrid(5, 5, myRuleset, initialStates);
+    myGrid.setEdgeHandler(EdgeFactory.createEdgeHandler(""));
+    myGrid.setNeighborhoodStrategy(NeighborhoodFactory.createNeighborhoodStrategy(""));
+    myGrid.setCellShape(CellShapeFactory.createCellShape("Rectangular"));
+
+    myGrid.update();
+    assertEquals(ConwayState.DEAD, myGrid.getCell(4, 4).getCurrState());
   }
 
 }

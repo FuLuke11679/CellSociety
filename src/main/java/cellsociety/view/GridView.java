@@ -36,9 +36,29 @@ import javafx.scene.text.Text;
 public class GridView {
 
   private final static Set<Class<?>> hasGradient = Set.of(SugarscapePatch.class);
+
+  private final Pane gridPane;
+  private final Scene myScene;
+  private int rows;
+  private int columns;
+  private int cellSize;
   private final int SIZE_GRID = 600;
   private final int WINDOW_WIDTH = 600;
   private final int WINDOW_HEIGHT = 800;
+  private VBox infoBox;
+  private final Shape[][] cellShapes;
+  private final Grid grid;
+  private final Locale myLocale;
+  private int numIterations;
+  private String currentCellShape = "Rectangular";
+
+  public enum ColorScheme {
+    LIGHT,
+    DARK,
+    DUKE,
+    UNC
+  }
+
   private final Map<CellState, Color> cellColors = Map.ofEntries(
       Map.entry(ConwayState.ALIVE, Color.BLACK),
       Map.entry(ConwayState.DEAD, Color.WHITE),
@@ -57,17 +77,6 @@ public class GridView {
       Map.entry(SugarscapeState.PATCH, Color.GREEN),
       Map.entry(SugarscapeState.AGENT, Color.RED)
   );
-  private Pane gridPane;
-  private Scene myScene;
-  private int rows;
-  private int columns;
-  private int cellSize;
-  private VBox infoBox;
-  private Shape[][] cellShapes;
-  private Grid grid;
-  private Locale myLocale;
-  private int numIterations;
-  private String currentCellShape = "Rectangular";
 
   /**
    * Constructs a GridView with the specified parameters.
@@ -210,12 +219,5 @@ public class GridView {
    */
   public Scene getScene() {
     return myScene;
-  }
-
-  public enum ColorScheme {
-    LIGHT,
-    DARK,
-    DUKE,
-    UNC
   }
 }

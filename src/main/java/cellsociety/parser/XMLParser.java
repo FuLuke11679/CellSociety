@@ -17,6 +17,10 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
+/**
+ * @Author Palo Silva, Ishan Madan, Luke Fu XML Parser class to parse simulation data from an xml
+ * file
+ */
 public class XMLParser extends Parser {
 
   private int width;
@@ -38,6 +42,46 @@ public class XMLParser extends Parser {
   private String neighborhoodType;
   private String cellShape;
 
+  /**
+   * @Author Ishan Madan Class to store pattern information
+   */
+  public class GridPattern {
+
+    private final int startRow;
+    private final int startCol;
+    private final String[] patternStates;
+    private final int patternRows;
+    private final int patternCols;
+
+    public GridPattern(int startRow, int startCol, String[] patternStates, int patternRows,
+        int patternCols) {
+      this.startRow = startRow;
+      this.startCol = startCol;
+      this.patternStates = patternStates;
+      this.patternRows = patternRows;
+      this.patternCols = patternCols;
+    }
+
+    public int getStartRow() {
+      return startRow;
+    }
+
+    public int getStartCol() {
+      return startCol;
+    }
+
+    public String[] getPatternStates() {
+      return patternStates;
+    }
+
+    public int getPatternRows() {
+      return patternRows;
+    }
+
+    public int getPatternCols() {
+      return patternCols;
+    }
+  }
 
   /**
    * Constructs an XMLParser and parses the provided XML file.
@@ -489,16 +533,17 @@ public class XMLParser extends Parser {
   }
 
   /**
-   * Parses a pattern state list string into an array of state symbols.
+   * Helper method to parse pattern list
    *
-   * @param stateListStr the string containing the pattern state list
-   * @return an array of state symbols
+   * @param stateListStr
+   * @return
    */
-  private String[] parsePatternStateList(String stateListStr) {
-    // Remove all whitespace and split by commas
-    String cleanedList = stateListStr.replaceAll("\\s+", "");
-    return cleanedList.split(",");
-  }
+
+    private String[] parsePatternStateList(String stateListStr) {
+        // Remove all whitespace and split by commas
+        String cleanedList = stateListStr.replaceAll("\\s+", "");
+        return cleanedList.split(",");
+    }
 
   /**
    * Counts the number of non-empty rows in the given pattern state list string.
@@ -590,6 +635,7 @@ public class XMLParser extends Parser {
       case "Segregation" -> "EM"; // EMPTY
       case "WatorWorld" -> "W"; // WATER
       case "GeneralConway" -> "D";
+      case "Sugarscape" -> "Patch";
       default -> throw new IllegalArgumentException("Unknown simulation type: " + simType);
     };
   }
@@ -726,54 +772,4 @@ public class XMLParser extends Parser {
     return cellShape;
   }
 
-  /**
-   * Inner class to store pattern information. A GridPattern represents a subsection of the grid
-   * with its own state values, starting at a specified row and column with given dimensions.
-   */
-  public class GridPattern {
-
-    private int startRow;
-    private int startCol;
-    private String[] patternStates;
-    private int patternRows;
-    private int patternCols;
-
-    /**
-     * Constructs a GridPattern.
-     *
-     * @param startRow      the starting row index of the pattern in the grid
-     * @param startCol      the starting column index of the pattern in the grid
-     * @param patternStates an array of state symbols for the pattern
-     * @param patternRows   the number of rows in the pattern
-     * @param patternCols   the number of columns in the pattern
-     */
-    public GridPattern(int startRow, int startCol, String[] patternStates, int patternRows,
-        int patternCols) {
-      this.startRow = startRow;
-      this.startCol = startCol;
-      this.patternStates = patternStates;
-      this.patternRows = patternRows;
-      this.patternCols = patternCols;
-    }
-
-    public int getStartRow() {
-      return startRow;
-    }
-
-    public int getStartCol() {
-      return startCol;
-    }
-
-    public String[] getPatternStates() {
-      return patternStates;
-    }
-
-    public int getPatternRows() {
-      return patternRows;
-    }
-
-    public int getPatternCols() {
-      return patternCols;
-    }
-  }
 }

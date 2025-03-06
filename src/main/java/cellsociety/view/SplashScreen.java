@@ -24,12 +24,12 @@ import javafx.scene.text.TextFlow;
 
 public class SplashScreen {
 
-  private BorderPane splashPane;
-  private Scene splashScene;
+  private final BorderPane splashPane;
+  private final Scene splashScene;
   private HBox controls;
-  private SimulationController myController;
-  private int width = 600;
-  private int height = 800;
+  private final SimulationController myController;
+  private final int width = 600;
+  private final int height = 800;
 
 
   public SplashScreen(SimulationController controller) {

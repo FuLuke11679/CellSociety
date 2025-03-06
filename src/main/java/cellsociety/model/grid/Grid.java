@@ -56,9 +56,9 @@ public abstract class Grid {
 
   private int rows;
   private int columns;
-  private String[] myCells;
+  private final String[] myCells;
   private List<List<Cell>> myGrid;
-  private Ruleset ruleset;
+  private final Ruleset ruleset;
   private EdgeHandler edgeHandler;
   private NeighborhoodStrategy neighborhoodStrategy;
   private CellShape cellShape;
@@ -187,7 +187,6 @@ public abstract class Grid {
    * @param row the row index of the desired cell
    * @param col the column index of the desired cell
    * @return the {@link Cell} located at (row, col) in the grid
-   */
   public Cell getCell(int row, int col) {
     return myGrid.get(row).get(col);
   }

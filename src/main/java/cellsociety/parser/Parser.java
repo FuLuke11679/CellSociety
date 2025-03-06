@@ -3,6 +3,9 @@ package cellsociety.parser;
 import java.util.Map;
 import java.util.Set;
 
+/**
+ * @Author Palo Silva, Ishan Madan Abstract interface for general Parser
+ */
 public abstract class Parser {
 
   private final static Map<String, Set<String>> simulationStatesMap = Map.of(
@@ -16,17 +19,6 @@ public abstract class Parser {
   );
   private final static Set<String> requiresValues = Set.of("Sugarscape");
 
-  //what info is needed from Parser
-  private String simulationType;
-  private String author;
-  private String title;
-  private String description;
-  private int width;
-  private int height;
-  private int rows;
-  private int columns;
-
-  //we calculate cellSize (based on width, height, rows, columns
   public Parser() {
   }
 

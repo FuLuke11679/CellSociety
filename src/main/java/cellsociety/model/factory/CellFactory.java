@@ -49,12 +49,11 @@ public class CellFactory {
             CellState.class);
         return constructor.newInstance(id, state, null);
       }
-    } catch (Exception e) {
+    } catch (Exception classNotFoundException) {
       log.error("Could not instantiate cell type: {}", cellType);
       throw new RuntimeException("Error creating cell of type " + cellType, e);
     }
   }
-
 
   /**
    * Function to figure out what type of cell to make depending on the unique state

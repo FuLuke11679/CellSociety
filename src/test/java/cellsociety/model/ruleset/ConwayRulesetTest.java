@@ -10,6 +10,11 @@ import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+/**
+ * Author: Daniel Rodriguez-Florido
+ *
+ * Testing file for Conway Game of Life Simulation
+ */
 class ConwayRulesetTest {
 
   Cell cell;
