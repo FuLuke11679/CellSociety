@@ -194,11 +194,8 @@ public abstract class Grid {
    */
   public List<Cell> getNeighbors(int row, int col) {
     // 1️Use cell shape to get base relative offsets
-    List<int[]> neighborOffsets = cellShape.getNeighborOffsets(row, col);
-
-    List<int[]> selectedOffsets = neighborhoodStrategy.selectNeighbors(neighborOffsets);
-    // Handle edge cases and return the valid neighbor cells.
-    return edgeHandler.handleNeighbors(row, col, selectedOffsets, this);
+    List<int[]> finalOffsets = neighborhoodStrategy.getFinalOffsets(cellShape, row, col);
+    return edgeHandler.handleNeighbors(row, col, finalOffsets, this);
   }
 
   /**
@@ -313,7 +310,7 @@ public abstract class Grid {
       }
     } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | NoSuchMethodException |
              InvocationTargetException e) {
-      e.printStackTrace();
+      throw new IllegalArgumentException("No such strategy, neighborhood, or shape combination" + strategyType);
     }
   }
 

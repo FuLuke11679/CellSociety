@@ -35,6 +35,7 @@ public class PentagonalTilingShape extends Polygon {
     // Set the base rotation to 90° so the house is horizontal.
     double rotation = 90;
     // Alternate orientation for (row + col) odd: add 180° (i.e. 90 or 270°)
+    //Right Facing
     if ((col) % 2 != 0) {
       rotation += 180;
       yOffset += size / 2;
