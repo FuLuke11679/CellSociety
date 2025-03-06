@@ -6,10 +6,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Edge handler implementation that simulates mirror boundaries.
- * In a mirrored grid, if a neighbor’s position is out-of-bounds, it is reflected
- * back into the grid. This reflection is computed such that the edge cells are "mirrored"
- * to create a full neighborhood.
+ * Edge handler implementation that simulates mirror boundaries. In a mirrored grid, if a neighbor’s
+ * position is out-of-bounds, it is reflected back into the grid. This reflection is computed such
+ * that the edge cells are "mirrored" to create a full neighborhood.
  *
  * @see EdgeHandler
  */
@@ -34,8 +33,8 @@ public class MirrorEdgeHandler implements EdgeHandler {
   /**
    * Handles the retrieval of neighbors using mirror reflection at the grid edges.
    * <p>
-   * For each neighbor offset, the new row and column indices are computed using the mirrorIndex method.
-   * This reflects the neighbor positions instead of wrapping them around.
+   * For each neighbor offset, the new row and column indices are computed using the mirrorIndex
+   * method. This reflects the neighbor positions instead of wrapping them around.
    * </p>
    *
    * @param row     the row index of the target cell

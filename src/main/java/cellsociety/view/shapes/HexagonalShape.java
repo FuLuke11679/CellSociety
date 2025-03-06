@@ -3,8 +3,8 @@ package cellsociety.view.shapes;
 import javafx.scene.shape.Polygon;
 
 /**
- * Represents a hexagonal shape for use in a grid-based simulation.
- * The hexagon is sized and positioned based on the given grid parameters.
+ * Represents a hexagonal shape for use in a grid-based simulation. The hexagon is sized and
+ * positioned based on the given grid parameters.
  *
  * @author Luke
  */

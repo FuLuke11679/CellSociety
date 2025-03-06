@@ -1,8 +1,10 @@
 package cellsociety.model.grid.neighborhood;
+
 import cellsociety.model.grid.shape.CellShape;
 import java.util.List;
 
 public interface NeighborhoodStrategy {
+
   /**
    * Computes the final neighbor offsets for a cell at (row, col) using the provided cell shape.
    *

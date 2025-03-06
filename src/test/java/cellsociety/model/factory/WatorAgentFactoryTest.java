@@ -1,12 +1,11 @@
 package cellsociety.model.factory;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import cellsociety.model.agent.WatorAgent;
 import cellsociety.model.cell.WatorCell.WatorState;
-import java.util.HashMap;
 import java.util.Map;
-import javax.management.RuntimeErrorException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

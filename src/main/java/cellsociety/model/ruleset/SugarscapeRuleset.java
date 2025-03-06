@@ -1,8 +1,8 @@
 package cellsociety.model.ruleset;
 
-import cellsociety.model.cell.SugarscapePatch;
 import cellsociety.model.agent.SugarscapeAgent;
 import cellsociety.model.cell.Cell;
+import cellsociety.model.cell.SugarscapePatch;
 import cellsociety.model.grid.SugarscapeGrid;
 import cellsociety.model.state.CellState;
 import cellsociety.model.state.SugarscapeState;
@@ -11,8 +11,9 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
- * Defines the ruleset for the Sugarscape simulation.
- * Handles agent movement, sugar growth, and other Sugarscape-specific logic.
+ * Defines the ruleset for the Sugarscape simulation. Handles agent movement, sugar growth, and
+ * other Sugarscape-specific logic.
+ *
  * @author Luke
  */
 public class SugarscapeRuleset extends Ruleset {
@@ -21,34 +22,25 @@ public class SugarscapeRuleset extends Ruleset {
   private static final String SUGAR_GROW_BACK_PARAM_NAME = "sugarGrowBackInterval";
   private static final String AGENT_VISION_PARAM_NAME = "agentVision";
   private static final String AGENT_METABOLISM_PARAM_NAME = "agentMetabolism";
-
-  private SugarscapeGrid myGrid;
   private final int sugarGrowBackRate;
   private final int sugarGrowBackInterval;
   private final int agentVision;
   private final int agentMetabolism;
+  private SugarscapeGrid myGrid;
   private int tickCounter = 0;
   private int[] initialValues;
 
   /**
    * Constructs a new SugarscapeRuleset based on the given parameters.
    *
-   * @param params A map containing relevant simulation parameters such as sugar growth rate and agent vision.
+   * @param params A map containing relevant simulation parameters such as sugar growth rate and
+   *               agent vision.
    */
   public SugarscapeRuleset(Map<String, String> params) {
     this.sugarGrowBackRate = Integer.parseInt(params.get(SUGAR_GROW_RATE_PARAM_NAME));
     this.sugarGrowBackInterval = Integer.parseInt(params.get(SUGAR_GROW_BACK_PARAM_NAME));
     this.agentVision = Integer.parseInt(params.get(AGENT_VISION_PARAM_NAME));
     this.agentMetabolism = Integer.parseInt(params.get(AGENT_METABOLISM_PARAM_NAME));
-  }
-
-  /**
-   * Sets the initial values for sugar levels in each patch.
-   *
-   * @param initialValues An array of initial sugar levels for each cell.
-   */
-  public void setInitialValues(int[] initialValues) {
-    this.initialValues = initialValues;
   }
 
   /**
@@ -117,7 +109,8 @@ public class SugarscapeRuleset extends Ruleset {
   }
 
   @Override
-  public void updateCellState(Cell cell, List<Cell> neighbors) {}
+  public void updateCellState(Cell cell, List<Cell> neighbors) {
+  }
 
   /**
    * Creates a new SugarscapeGrid and initializes agent placements and sugar levels.
@@ -153,7 +146,8 @@ public class SugarscapeRuleset extends Ruleset {
         SugarscapePatch patch = (SugarscapePatch) myGrid.getCell(i, j);
         if (patch.getCurrState().toString().equals("AGENT")) {
           int index = i * myGrid.getColumns() + j;
-          int initSugar = (initialValues != null && index < initialValues.length) ? initialValues[index] : 0;
+          int initSugar =
+              (initialValues != null && index < initialValues.length) ? initialValues[index] : 0;
           patch.setAgent(new SugarscapeAgent(initSugar));
         }
       }
@@ -167,6 +161,15 @@ public class SugarscapeRuleset extends Ruleset {
    */
   public int[] getInitialValues() {
     return initialValues;
+  }
+
+  /**
+   * Sets the initial values for sugar levels in each patch.
+   *
+   * @param initialValues An array of initial sugar levels for each cell.
+   */
+  public void setInitialValues(int[] initialValues) {
+    this.initialValues = initialValues;
   }
 
   /**

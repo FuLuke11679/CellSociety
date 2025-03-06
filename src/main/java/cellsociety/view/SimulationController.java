@@ -2,7 +2,6 @@ package cellsociety.view;
 
 import cellsociety.view.GridView.ColorScheme;
 import java.io.File;
-import java.net.URL;
 import java.util.Locale;
 import java.util.ResourceBundle;
 import javafx.animation.Animation;
@@ -24,22 +23,22 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
 /**
- * @Author Palo Silva
- * Class that handles control of the simulation and transitions
- * between splash screen and simulation screen
+ * @Author Palo Silva Class that handles control of the simulation and transitions between splash
+ * screen and simulation screen
  */
 public class SimulationController {
+
+  private static double SECOND_DELAY = 0.8;
   private final FileChooser FILE_CHOOSER = new FileChooser();
   private Timeline simLoop;
   private Timeline splashLoop;
-  private static double SECOND_DELAY = 0.8;
   private Stage myStage;
   private File currentFile;
   private ColorScheme myScheme;
   private Locale myLocale;
   private SimulationScreen mySimScreen;
 
-  public SimulationController(Stage stage, Locale locale){
+  public SimulationController(Stage stage, Locale locale) {
     myStage = stage;
     myLocale = locale;
     myScheme = ColorScheme.LIGHT;
@@ -48,8 +47,8 @@ public class SimulationController {
   /**
    * Continuously updates splash screen as user makes customization choices
    */
-  public void displaySplashScreen(Scene splashScene){
-    if(splashLoop != null){
+  public void displaySplashScreen(Scene splashScene) {
+    if (splashLoop != null) {
       splashLoop.stop();
     }
     splashLoop = new Timeline(new KeyFrame(Duration.seconds(0.05), e -> {
@@ -62,6 +61,7 @@ public class SimulationController {
 
   /**
    * Function to load a new simulation
+   *
    * @param dataFile : XML File chosen by user from their local machine
    */
   public void loadSimulation(File dataFile) {
@@ -96,6 +96,7 @@ public class SimulationController {
 
   /**
    * Saves simulation to an xml file
+   *
    * @param simInfo resource bundle containing hardcoded simulation text
    */
   public void saveSimulation(ResourceBundle simInfo) {
@@ -130,33 +131,32 @@ public class SimulationController {
   }
 
 
-
   public void resetSimulation() {
     //simLoop.stop();
     loadSimulation(currentFile);
   }
 
-  public FileChooser getFileChooser(){
+  public FileChooser getFileChooser() {
     return FILE_CHOOSER;
   }
 
-  public Locale getLocale(){
+  public Locale getLocale() {
     return myLocale;
   }
 
-  public void setLocale(Locale locale){
+  public void setLocale(Locale locale) {
     myLocale = locale;
   }
 
-  public ColorScheme getScheme(){
+  public ColorScheme getScheme() {
     return myScheme;
   }
 
-  public void setScheme(ColorScheme scheme){
+  public void setScheme(ColorScheme scheme) {
     myScheme = scheme;
   }
 
-  public Stage getStage(){
+  public Stage getStage() {
     return myStage;
   }
 
@@ -165,11 +165,11 @@ public class SimulationController {
     myStage.show();
   }
 
-  public Timeline getSimLoop(){
+  public Timeline getSimLoop() {
     return simLoop;
   }
 
-  public void setSimLoop(Timeline simLoop){
+  public void setSimLoop(Timeline simLoop) {
     this.simLoop = simLoop;
   }
 
@@ -178,15 +178,15 @@ public class SimulationController {
     new Alert(Alert.AlertType.INFORMATION, message).showAndWait();
   }
 
-  public SimulationScreen getSimScreen(){
+  public SimulationScreen getSimScreen() {
     return mySimScreen;
   }
 
-  public File getCurrentFile(){
+  public File getCurrentFile() {
     return currentFile;
   }
 
-  public Timeline getSplashLoop(){
+  public Timeline getSplashLoop() {
     return splashLoop;
   }
 

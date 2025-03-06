@@ -1,6 +1,7 @@
 package cellsociety.parser;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.io.File;
 import java.util.HashMap;
@@ -9,6 +10,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 class XMLParserTest {
+
   XMLParser xmlParser;
 
   @BeforeEach
@@ -16,6 +18,7 @@ class XMLParserTest {
     File file = new File("data/GameOfLife_1.xml");
 //    xmlParser = new XMLParser(file);
   }
+
   @Test
   void getWidth_returnCorrectWidth() {
     assertEquals(800, xmlParser.getWidth());
@@ -48,11 +51,11 @@ class XMLParserTest {
 
   @Test
   void getInitialStates_returnsCorrectInitialStates() {
-    String[] expected = {"A","A","D","D","D",
-        "A","A","D","D","D",
-        "A","A","D","D","D",
-        "A","A","D","D","D",
-        "A","A","D","D","D",};
+    String[] expected = {"A", "A", "D", "D", "D",
+        "A", "A", "D", "D", "D",
+        "A", "A", "D", "D", "D",
+        "A", "A", "D", "D", "D",
+        "A", "A", "D", "D", "D",};
     assertArrayEquals(expected, xmlParser.getInitialStates());
   }
 
@@ -62,5 +65,5 @@ class XMLParserTest {
     assertEquals(expected, xmlParser.getSimVarsMap());
   }
 
-  
+
 }

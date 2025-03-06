@@ -1,26 +1,27 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <simulationConfig>
-    <!-- window and grid configuration -->
-    <display width="800" height="800" title="Fire Simulation" author="Palo">
-        <grid rows="5" columns="5" edgeType="Toroidal" neighborhoodType="VonNeumann" cellShape="Rectangular"/>
-        <description text="This is the forest fire simulation"/>
-    </display>
+  <!-- window and grid configuration -->
+  <display author="Palo" height="800" title="Fire Simulation" width="800">
+    <description text="This is the forest fire simulation"/>
+    <grid cellShape="Rectangular" columns="5" edgeType="Toroidal" neighborhoodType="VonNeumann"
+      rows="5"/>
+  </display>
 
-    <!-- sim configuration -->
-    <sim type="Fire">
-        <simvars
-          probCatch = "0.003"
-          probGrow = "0.03"
-        />
-    </sim>
-    <init
-      stateList =
-        "T,B,E,E,E,
+  <!-- sim configuration -->
+  <init
+    stateList=
+      "T,B,E,E,E,
         T,B,E,E,E,
         T,B,E,E,E,
         T,B,E,E,E,
         T,B,E,E,E"
-    >
-    </init>
+  >
+  </init>
+  <sim type="Fire">
+    <simvars
+      probCatch="0.003"
+      probGrow="0.03"
+    />
+  </sim>
 
 </simulationConfig>

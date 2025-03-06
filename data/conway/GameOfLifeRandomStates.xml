@@ -1,23 +1,24 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <simulationConfig>
   <!-- window and grid configuration -->
-  <display width="800" height="800" title="Game of Life" author="Palo">
-    <grid rows="6" columns="6" edgeType="Toroidal" neighborhoodType="ExtendedMoore" cellShape="Rectangular"/>
+  <display author="Palo" height="800" title="Game of Life" width="800">
     <description text="This is the Game of Life simulation"/>
+    <grid cellShape="Rectangular" columns="6" edgeType="Toroidal" neighborhoodType="ExtendedMoore"
+      rows="6"/>
   </display>
 
   <!-- sim configuration -->
-  <sim type="GameOfLife">
-    <simvars
-      birthThreshold = "3"
-      survivalThreshold = "2,3"
-    />
-  </sim>
   <init
-    randomStates = "true"
-    proportions =
+    proportions=
       "X:0.4"
+    randomStates="true"
   >
   </init>
+  <sim type="GameOfLife">
+    <simvars
+      birthThreshold="3"
+      survivalThreshold="2,3"
+    />
+  </sim>
 
 </simulationConfig>

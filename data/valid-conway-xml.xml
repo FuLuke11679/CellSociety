@@ -1,11 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <data>
-  <display width="800" height="600" title="Conway Game of Life" author="Test Author">
-    <grid rows="10" columns="10"/>
+  <display author="Test Author" height="600" title="Conway Game of Life" width="800">
     <description text="A valid Conway Game of Life simulation"/>
+    <grid columns="10" rows="10"/>
   </display>
-  <sim type="Conway"/>
-  <simvars/>
   <init stateList="D,D,D,D,D,D,D,D,D,D,
                   D,D,D,D,D,D,D,D,D,D,
                   D,D,D,D,D,D,D,D,D,D,
@@ -16,4 +14,6 @@
                   D,D,D,D,D,D,D,D,D,D,
                   D,D,D,D,D,D,D,D,D,D,
                   D,D,D,D,D,D,D,D,D,D"/>
+  <sim type="Conway"/>
+  <simvars/>
 </data>

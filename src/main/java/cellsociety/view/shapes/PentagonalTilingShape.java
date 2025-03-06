@@ -3,8 +3,8 @@ package cellsociety.view.shapes;
 import javafx.scene.shape.Polygon;
 
 /**
- * Represents a Pentagonal shape for use in a grid-based simulation.
- * The Pentagon is sized, flipped, and positioned based on the given grid parameters.
+ * Represents a Pentagonal shape for use in a grid-based simulation. The Pentagon is sized, flipped,
+ * and positioned based on the given grid parameters.
  *
  * @author Luke
  */

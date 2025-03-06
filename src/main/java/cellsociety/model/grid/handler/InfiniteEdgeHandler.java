@@ -5,17 +5,17 @@ import cellsociety.model.grid.Grid;
 import java.util.List;
 
 /**
- * Edge handler implementation for an infinite grid.
- * If the cell position is outside the current grid boundaries, this handler expands the grid dynamically,
- * then retrieves the neighbors.
+ * Edge handler implementation for an infinite grid. If the cell position is outside the current
+ * grid boundaries, this handler expands the grid dynamically, then retrieves the neighbors.
  *
  * @see EdgeHandler
  */
 public class InfiniteEdgeHandler implements EdgeHandler {
+
   /**
-   * Handles the retrieval of neighbors by expanding the grid if necessary.
-   * If the target cell position is invalid, the grid is expanded to include the position,
-   * and then neighbors are retrieved from the updated grid.
+   * Handles the retrieval of neighbors by expanding the grid if necessary. If the target cell
+   * position is invalid, the grid is expanded to include the position, and then neighbors are
+   * retrieved from the updated grid.
    *
    * @param row     the row index of the cell
    * @param col     the column index of the cell

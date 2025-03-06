@@ -4,9 +4,9 @@ import java.util.Arrays;
 import java.util.List;
 
 /**
- * Implementation of {@link CellShape} for a hexagonal grid.
- * This class calculates neighbor offsets for cells in a hexagonal tiling.
- * The offsets differ based on whether the column index is even or odd.
+ * Implementation of {@link CellShape} for a hexagonal grid. This class calculates neighbor offsets
+ * for cells in a hexagonal tiling. The offsets differ based on whether the column index is even or
+ * odd.
  *
  * @author Luke
  * @see CellShape
@@ -14,8 +14,8 @@ import java.util.List;
 public class HexagonalShape implements CellShape {
 
   /**
-   * Computes neighbor offsets for a cell in a hexagonal grid.
-   * For even columns, the neighbor offsets are set accordingly; for odd columns, the offsets are adjusted.
+   * Computes neighbor offsets for a cell in a hexagonal grid. For even columns, the neighbor
+   * offsets are set accordingly; for odd columns, the offsets are adjusted.
    *
    * @param row the row index of the cell
    * @param col the column index of the cell
@@ -37,9 +37,10 @@ public class HexagonalShape implements CellShape {
       );
     }
   }
+
   /**
-   * Computes inner neighbor offsets for a cell in a hexagonal grid.
-   * Since they are the same, it returns the results of getNeighborOffsets
+   * Computes inner neighbor offsets for a cell in a hexagonal grid. Since they are the same, it
+   * returns the results of getNeighborOffsets
    *
    * @param row the row index of the cell
    * @param col the column index of the cell

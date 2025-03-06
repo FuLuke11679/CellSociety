@@ -2,10 +2,11 @@ package cellsociety.model.grid.shape;
 
 import java.util.ArrayList;
 import java.util.List;
+
 /**
- * Implementation of {@link CellShape} for a Triangular grid.
- * This class calculates neighbor offsets for cells in a triangular tiling.
- * The offsets differ based on whether the column index is even or odd.
+ * Implementation of {@link CellShape} for a Triangular grid. This class calculates neighbor offsets
+ * for cells in a triangular tiling. The offsets differ based on whether the column index is even or
+ * odd.
  *
  * @author Luke
  * @see CellShape
@@ -13,8 +14,8 @@ import java.util.List;
 public class TriangularShape implements CellShape {
 
   /**
-   * Computes and returns a list of relative neighbor offsets for a cell in a triangular grid.
-   * When the sum of the row and column indices is even, the method returns the following offsets:
+   * Computes and returns a list of relative neighbor offsets for a cell in a triangular grid. When
+   * the sum of the row and column indices is even, the method returns the following offsets:
    *
    * @param row the row index of the cell
    * @param col the column index of the cell
@@ -55,9 +56,10 @@ public class TriangularShape implements CellShape {
     }
     return offsets;
   }
+
   /**
-   * Computes inner neighbor offsets for a cell in a Pentagonal grid.
-   * Returns left, and right and top or bottom depending on if its faced upward or downward
+   * Computes inner neighbor offsets for a cell in a Pentagonal grid. Returns left, and right and
+   * top or bottom depending on if its faced upward or downward
    *
    * @param row the row index of the cell
    * @param col the column index of the cell

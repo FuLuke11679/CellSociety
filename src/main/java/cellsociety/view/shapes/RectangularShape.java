@@ -1,11 +1,10 @@
 package cellsociety.view.shapes;
 
 import javafx.scene.shape.Rectangle;
-import javafx.scene.shape.Shape;
 
 /**
- * Represents a rectangular shape for use in a grid-based simulation.
- * The rectangle is positioned and sized based on the provided grid parameters.
+ * Represents a rectangular shape for use in a grid-based simulation. The rectangle is positioned
+ * and sized based on the provided grid parameters.
  *
  * @author Luke
  */

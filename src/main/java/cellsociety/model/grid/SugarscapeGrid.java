@@ -1,8 +1,6 @@
 package cellsociety.model.grid;
 
 import cellsociety.model.ruleset.SugarscapeRuleset;
-import cellsociety.model.cell.Cell;
-import java.util.List;
 
 /**
  * Grid for the Sugarscape simulation.

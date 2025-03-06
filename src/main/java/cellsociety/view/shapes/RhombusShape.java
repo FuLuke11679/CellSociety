@@ -1,11 +1,10 @@
 package cellsociety.view.shapes;
 
 import javafx.scene.shape.Polygon;
-import javafx.scene.shape.Shape;
 
 /**
- * Represents a Rhombus shape for use in a grid-based simulation.
- * The Rhombus is sized and positioned based on the given grid parameters.
+ * Represents a Rhombus shape for use in a grid-based simulation. The Rhombus is sized and
+ * positioned based on the given grid parameters.
  *
  * @author Luke
  */

@@ -1,10 +1,11 @@
 # Breakout Abstractions Lab Discussion
-#### Names: Luke Fu, Ishan Madan, Daniel Rodriguez-Florido, and , and Palo Silva
 
+#### Names: Luke Fu, Ishan Madan, Daniel Rodriguez-Florido, and , and Palo Silva
 
 ### Block
 
 This superclass's purpose as an abstraction:
+
 ```java
  public class Block {
   //defines block class that includes health and position
@@ -27,6 +28,7 @@ This superclass's purpose as an abstraction:
 #### Subclasses
 
 Each subclass's high-level behavorial differences from the superclass
+
 ```java
 //Needs to be set a different color 
 public class default_Block extends Block {
@@ -50,18 +52,19 @@ public class default_Block extends Block {
  }
 ```
 
-
-
 #### Affect on Game/Level class
 
 Which methods are simplified by using this abstraction and why
-* Methods of a seperate destroyBlock and updateColor for blocks that are included in the main Block class.
-* UpdateColor is implicitely changed in the construction of each block as a seperate variable
 
+* Methods of a seperate destroyBlock and updateColor for blocks that are included in the main Block
+  class.
+* UpdateColor is implicitely changed in the construction of each block as a seperate variable
 
 ### Power-up
 
-This superclass's purpose as an abstraction: Reduces the number of variables passed and additional methods in the main Block class
+This superclass's purpose as an abstraction: Reduces the number of variables passed and additional
+methods in the main Block class
+
 ```java
 //in this version of destroy block, power up is activated
 public class powerup_Block extends Block {
@@ -88,14 +91,13 @@ public class powerup_Block extends Block {
 #### Subclasses
 
 Each subclass's high-level behavioral differences from the superclass:
-* Different colors and behaviors when block is removed(exploding, speeding up, etc.)
 
+* Different colors and behaviors when block is removed(exploding, speeding up, etc.)
 
 #### Affect on Game/Level class
 
 Which methods are simplified by using this abstraction and why
+
 * DestroyBlock and updateBlockColor
-
-
 
 ### Others?

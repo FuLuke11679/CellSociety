@@ -1,11 +1,6 @@
 package cellsociety.model.grid;
 
-import cellsociety.model.cell.Cell;
-import cellsociety.model.cell.PercolationCell;
 import cellsociety.model.ruleset.Ruleset;
-import cellsociety.model.state.CellState;
-import java.util.ArrayList;
-import java.util.List;
 
 /*
 Updates Grid based on Cell logic

@@ -1,11 +1,11 @@
 package cellsociety.view;
 
+import cellsociety.model.factory.RulesetFactory;
 import cellsociety.model.grid.CellShapeFactory;
 import cellsociety.model.grid.EdgeFactory;
 import cellsociety.model.grid.Grid;
 import cellsociety.model.grid.NeighborhoodFactory;
 import cellsociety.model.ruleset.Ruleset;
-import cellsociety.model.factory.RulesetFactory;
 import cellsociety.model.ruleset.SugarscapeRuleset;
 import cellsociety.parser.XMLParser;
 import cellsociety.view.GridView.ColorScheme;
@@ -27,10 +27,11 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
 /**
- * @Author Palo Silva
- * Class that handles front end logic for displaying a selected simulation
+ * @Author Palo Silva Class that handles front end logic for displaying a selected simulation
  */
 public class SimulationScreen {
+
+  private static double SECOND_DELAY = 0.8;
   private SimulationController myController;
   private XMLParser myParser;
   private GridView myGridView;
@@ -38,19 +39,19 @@ public class SimulationScreen {
   private Scene simScene;
   private int width = 800;
   private int height = 800;
-  private static double SECOND_DELAY = 0.8;
 
-  public SimulationScreen(File file, SimulationController controller){
+  public SimulationScreen(File file, SimulationController controller) {
     myController = controller;
     parseFile(file);
   }
 
   /**
    * Parses XML file in order to load simulation
+   *
    * @param file: XML file chosen by user
    */
 
-  private void parseFile(File file){
+  private void parseFile(File file) {
     ResourceBundle simInfo = ResourceBundle.getBundle("SimInfo", myController.getLocale());
     try {
       if (file == null || file.length() == 0) {
@@ -63,9 +64,11 @@ public class SimulationScreen {
       if (values != null && myParser.getSimType().equals("Sugarscape")) {
         ((SugarscapeRuleset) ruleset).setInitialValues(values);
       }
-      myGrid = ruleset.createGrid(myParser.getRows(), myParser.getColumns(), myParser.getInitialStates());
+      myGrid = ruleset.createGrid(myParser.getRows(), myParser.getColumns(),
+          myParser.getInitialStates());
       myGrid.setEdgeHandler(EdgeFactory.createEdgeHandler(myParser.getEdgeType()));
-      myGrid.setNeighborhoodStrategy(NeighborhoodFactory.createNeighborhoodStrategy(myParser.getNeighborhoodType()));
+      myGrid.setNeighborhoodStrategy(
+          NeighborhoodFactory.createNeighborhoodStrategy(myParser.getNeighborhoodType()));
       myGrid.setCellShape(CellShapeFactory.createCellShape(myParser.getCellShape()));
       myGridView = new GridView(
           myParser.getRows(),
@@ -92,6 +95,7 @@ public class SimulationScreen {
 
   /**
    * Generates appropriate RuleSet based on XML file
+   *
    * @return RuleSet for chosen simulation
    */
   private Ruleset getRuleset() {
@@ -100,6 +104,7 @@ public class SimulationScreen {
 
   /**
    * Initializes simulation layout
+   *
    * @param simInfo: resource bundle containing hardcoded simulation text
    * @return : Organized BorderPane holding nodes for simulation
    */
@@ -129,6 +134,7 @@ public class SimulationScreen {
 
   /**
    * Loads all control buttons for the simulation display
+   *
    * @param simInfo: resource bundle containing hardcoded simulation text
    * @return : List of all control buttons
    */
@@ -151,8 +157,7 @@ public class SimulationScreen {
       if (myController.getSimLoop() != null) {
         if (myController.getSimLoop().getStatus() == Animation.Status.RUNNING) {
           myController.getSimLoop().pause();  // Pause without destroying it
-        }
-        else if (myController.getSimLoop().getStatus() == Animation.Status.PAUSED) {  //REMOVE?
+        } else if (myController.getSimLoop().getStatus() == Animation.Status.PAUSED) {  //REMOVE?
           myController.getSimLoop().play();  // Resume from where it left off
         }
       }
@@ -175,6 +180,7 @@ public class SimulationScreen {
 
   /**
    * Creates slider to adjust simulation speed
+   *
    * @return Slider object that adjusts speed
    */
   private Slider makeSpeedControl() {
@@ -192,9 +198,10 @@ public class SimulationScreen {
 
   /**
    * Creates UI elements to adjust edge, neighbor, and shape settings of simulation
+   *
    * @return VBox containing all setting UI elements
    */
-  private VBox loadSettingsPanel(){
+  private VBox loadSettingsPanel() {
     VBox settingsPanel = new VBox(15);
     settingsPanel.setStyle("-fx-padding: 10;");
 
@@ -213,7 +220,8 @@ public class SimulationScreen {
     neighborhoodDropdown.getItems().addAll("VonNeumann", "ExtendedMoore");
     neighborhoodDropdown.setValue(myParser.getNeighborhoodType());
     neighborhoodDropdown.setOnAction(e -> {
-      myGrid.setNeighborhoodStrategy(NeighborhoodFactory.createNeighborhoodStrategy(neighborhoodDropdown.getValue()));
+      myGrid.setNeighborhoodStrategy(
+          NeighborhoodFactory.createNeighborhoodStrategy(neighborhoodDropdown.getValue()));
     });
 
 // Shape Dropdown (Dynamic from Factory)
@@ -246,10 +254,11 @@ public class SimulationScreen {
 
   /**
    * Sets Color Theme of simulation screen
-   * @param scheme Color scheme given by controller
+   *
+   * @param scheme  Color scheme given by controller
    * @param simInfo Resource bundle
    */
-  private void setSimTheme(ColorScheme scheme, ResourceBundle simInfo){
+  private void setSimTheme(ColorScheme scheme, ResourceBundle simInfo) {
     URL resourcePath = switch (scheme) {
       case DARK -> getClass().getResource("/SplashDark.css");
       case LIGHT -> getClass().getResource("/SplashLight.css");
@@ -267,7 +276,7 @@ public class SimulationScreen {
   /**
    * Updates simulation screen by updating Grid, then GridView
    */
-  public void update(){
+  public void update() {
     myGrid.update();
     myGridView.update();
   }
@@ -276,7 +285,9 @@ public class SimulationScreen {
     return myParser;
   }
 
-  public Scene getSimScene() {return simScene;}
+  public Scene getSimScene() {
+    return simScene;
+  }
 
 }
 

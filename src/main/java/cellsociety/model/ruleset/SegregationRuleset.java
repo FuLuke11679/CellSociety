@@ -11,8 +11,8 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Author: Daniel Rodriguez-Florido
- * The back-end ruleset logic to preform the Segregation Simulation
+ * Author: Daniel Rodriguez-Florido The back-end ruleset logic to preform the Segregation
+ * Simulation
  */
 
 public class SegregationRuleset extends Ruleset {
@@ -24,8 +24,8 @@ public class SegregationRuleset extends Ruleset {
 
   /**
    * Constructor for the Segregation Ruleset
-   * @param params Map of String, String for parameters relevant to simulation
-   *               (thresh)
+   *
+   * @param params Map of String, String for parameters relevant to simulation (thresh)
    */
   public SegregationRuleset(Map<String, String> params) {
     this.similarityThreshold = Double.parseDouble(params.getOrDefault(THRESHOLD_PARAM_NAME, "0.4"));
@@ -36,9 +36,9 @@ public class SegregationRuleset extends Ruleset {
 
   /**
    * Updates the state of a grid in the case of a segregation simulation.
-   *
-   * This particular implementation amasses the empty cells and unsatisfied cells into two lists
-   * and matches them accordingly to place the unsatisfied cells into a random empty spot.
+   * <p>
+   * This particular implementation amasses the empty cells and unsatisfied cells into two lists and
+   * matches them accordingly to place the unsatisfied cells into a random empty spot.
    */
   @Override
   public void updateGridState() {
@@ -101,6 +101,7 @@ public class SegregationRuleset extends Ruleset {
 
   /**
    * Generates a list of the empty cells in the grid
+   *
    * @return A List of cells
    */
   private List<Cell> getEmptyCells() {
@@ -117,6 +118,7 @@ public class SegregationRuleset extends Ruleset {
 
   /**
    * Generates a List of the unsatisfied cells in the grid
+   *
    * @return A List of cells
    */
   private List<Cell> getUnsatisfiedCells() {

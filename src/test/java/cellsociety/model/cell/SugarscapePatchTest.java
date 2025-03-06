@@ -1,18 +1,22 @@
 package cellsociety.model.cell;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import cellsociety.model.agent.SugarscapeAgent;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 class SugarscapePatchTest {
+
   private SugarscapePatch patch;
   private SugarscapeAgent agent;
 
   @BeforeEach
   void setUp() {
-    patch = new SugarscapePatch(0, null,null, 10, 20);
+    patch = new SugarscapePatch(0, null, null, 10, 20);
     agent = new SugarscapeAgent(15);
   }
 

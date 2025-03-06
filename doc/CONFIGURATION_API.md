@@ -1,6 +1,9 @@
 # Cell Society API Lab Discussion
+
 ### Team Number 8
+
 ### Names
+
 Palo Silva *(pds27)*
 Luke Fu *(lmf59)*
 Daniel Rodriquez-Florido *(dr285)*
@@ -76,9 +79,11 @@ API Task Description
 
 English
 
-The API should provide methods to configure and run simulations dynamically. Users should be able to define rules and behaviors through configuration files without modifying core code.
+The API should provide methods to configure and run simulations dynamically. Users should be able to
+define rules and behaviors through configuration files without modifying core code.
 
 Java
 
-The implementation should include interfaces for defining cell behavior, abstract classes for common functionality, and a robust system for loading and validating configurations.
+The implementation should include interfaces for defining cell behavior, abstract classes for common
+functionality, and a robust system for loading and validating configurations.
 

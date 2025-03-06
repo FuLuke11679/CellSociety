@@ -4,6 +4,7 @@ import cellsociety.model.cell.SugarscapePatch;
 import java.util.List;
 
 public class SugarscapeAgent {
+
   private int agentSugar;
   private boolean alreadyMoved;
 
@@ -12,9 +13,17 @@ public class SugarscapeAgent {
     this.alreadyMoved = false;
   }
 
-  public int getAgentSugar() { return agentSugar; }
-  public boolean hasMoved() { return alreadyMoved; }
-  public void resetMovement() { alreadyMoved = false; }
+  public int getAgentSugar() {
+    return agentSugar;
+  }
+
+  public boolean hasMoved() {
+    return alreadyMoved;
+  }
+
+  public void resetMovement() {
+    alreadyMoved = false;
+  }
 
   public void collectSugar(SugarscapePatch patch) {
     agentSugar += patch.getSugarAmount();
@@ -28,8 +37,11 @@ public class SugarscapeAgent {
     }
   }
 
-  public void move(List<SugarscapePatch> visionPatches, SugarscapePatch currentPatch, int vision, int metabolism) {
-    if (alreadyMoved) return;
+  public void move(List<SugarscapePatch> visionPatches, SugarscapePatch currentPatch, int vision,
+      int metabolism) {
+    if (alreadyMoved) {
+      return;
+    }
     SugarscapePatch bestPatch = findBestPatch(visionPatches);
     if (bestPatch != null) {
       collectSugar(bestPatch);

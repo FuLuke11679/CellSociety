@@ -6,17 +6,18 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Edge handler implementation for toroidal (wrap-around) boundaries.
- * This handler computes neighbor positions by wrapping around the grid edges.
+ * Edge handler implementation for toroidal (wrap-around) boundaries. This handler computes neighbor
+ * positions by wrapping around the grid edges.
+ *
  * @author Luke
  * @see EdgeHandler
  */
 public class ToroidalEdgeHandler implements EdgeHandler {
 
   /**
-   * Handles the retrieval of neighbors using toroidal (wrap-around) boundaries.
-   * For each neighbor offset, the new row and column indices are computed using modulo arithmetic,
-   * ensuring that positions wrap around the grid.
+   * Handles the retrieval of neighbors using toroidal (wrap-around) boundaries. For each neighbor
+   * offset, the new row and column indices are computed using modulo arithmetic, ensuring that
+   * positions wrap around the grid.
    *
    * @param row     the row index of the target cell
    * @param col     the column index of the target cell
@@ -29,7 +30,7 @@ public class ToroidalEdgeHandler implements EdgeHandler {
     int numRows = grid.getRows();
     int numCols = grid.getColumns();
 
-    for(int[] offset : offsets) {
+    for (int[] offset : offsets) {
       int newRow = (row + offset[0] + numRows) % numRows;
       int newCol = (col + offset[1] + numCols) % numCols;
       neighbors.add(grid.getCell(newRow, newCol));

@@ -1,18 +1,15 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <simulationConfig>
   <!-- window and grid configuration -->
-  <display width="800" height="800" title="Percolation Simulation" author="Palo">
-    <grid rows="10" columns="10" edgeType="Toroidal" neighborhoodType="ExtendedMoore" cellShape="Rectangular"/>
+  <display author="Palo" height="800" title="Percolation Simulation" width="800">
     <description text="This is the percolation simulation"/>
+    <grid cellShape="Rectangular" columns="10" edgeType="Toroidal" neighborhoodType="ExtendedMoore"
+      rows="10"/>
   </display>
 
   <!-- sim configuration -->
-  <sim type="Percolation">
-    <simvars
-    />
-  </sim>
   <init
-    stateList =
+    stateList=
       "P,BL,O,BL,O,O,O,O,BL,P,
         O,BL,O,O,BL,O,BL,O,O,O,
         O,BL,O,BL,O,O,O,O,O,O,
@@ -25,5 +22,9 @@
         O,BL,O,O,O,O,O,BL,O,O,"
   >
   </init>
+  <sim type="Percolation">
+    <simvars
+    />
+  </sim>
 
 </simulationConfig>

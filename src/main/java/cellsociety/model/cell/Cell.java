@@ -4,7 +4,7 @@ import cellsociety.model.state.CellState;
 
 /**
  * Author: Daniel Rodriguez-Florido
- *
+ * <p>
  * Abstract cell class that is the parent to all the particular concrete cell classes.
  */
 public abstract class Cell {
@@ -34,17 +34,17 @@ public abstract class Cell {
   }
 
   /**
-   * @return The current state of the cell
-   */
-  public CellState getNextState() {
-    return nextState;
-  }
-
-  /**
    * @param state The state you wish to set the previous state of the cell to
    */
   public void setCurrState(CellState state) {
     currState = state;
+  }
+
+  /**
+   * @return The current state of the cell
+   */
+  public CellState getNextState() {
+    return nextState;
   }
 
   /**

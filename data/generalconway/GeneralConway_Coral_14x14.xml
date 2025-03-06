@@ -1,12 +1,10 @@
 <?xml version="1.0" ?>
 <simulationConfig>
-  <display width="800" height="800" title="General Conway Simulation" author="Danny">
-    <grid rows="14" columns="14" edgeType="Toroidal" neighborhoodType="ExtendedMoore" cellShape="Rectangular"/>
+  <display author="Danny" height="800" title="General Conway Simulation" width="800">
     <description text="This is an XML file for Coral"/>
+    <grid cellShape="Rectangular" columns="14" edgeType="Toroidal" neighborhoodType="ExtendedMoore"
+      rows="14"/>
   </display>
-  <sim type="GeneralConway">
-    <simvars rules="34/245"/>
-  </sim>
   <init stateList="D,D,D,D,D,D,D,D,D,D,D,D,D,D,
                   D,D,D,A,A,D,D,D,D,D,D,D,D,D,
                   D,D,A,D,D,A,D,D,D,D,D,D,D,D,
@@ -22,4 +20,7 @@
                   D,D,D,D,D,D,D,D,D,D,D,D,D,D,
                   D,D,D,D,D,D,D,D,D,D,D,D,D,D
                   "/>
+  <sim type="GeneralConway">
+    <simvars rules="34/245"/>
+  </sim>
 </simulationConfig>

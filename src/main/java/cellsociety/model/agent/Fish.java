@@ -9,7 +9,7 @@ import java.util.List;
 
 /**
  * Author: Daniel Rodriguez-Florido
- *
+ * <p>
  * Fish agent that implements WatorAgent. Agent used in WatorWorld
  */
 public class Fish implements WatorAgent {
@@ -21,6 +21,7 @@ public class Fish implements WatorAgent {
 
   /**
    * Constructor for the Fish agent
+   *
    * @param timeToReproduce The amount of time it takes for a fish to reproduce
    */
   public Fish(int timeToReproduce) {
@@ -48,6 +49,7 @@ public class Fish implements WatorAgent {
 
   /**
    * Gets a random empty neighbor to move a cell to
+   *
    * @param neighbors The neighbors of the cell to check
    * @return An empty Cell that is the candidate for swapping to
    */
@@ -64,6 +66,7 @@ public class Fish implements WatorAgent {
 
   /**
    * Getter to check if the agent has moved or not
+   *
    * @return If the agent has moved or not
    */
   public boolean getMoved() {
@@ -72,6 +75,7 @@ public class Fish implements WatorAgent {
 
   /**
    * Setter for the moved status of an agent
+   *
    * @param moved boolean indicating true if an agent has moved, false otherwise
    */
   @Override
@@ -80,8 +84,8 @@ public class Fish implements WatorAgent {
   }
 
   /**
-   * @return -1 to indicate nothing. This is a do-nothing function that is only implemented
-   *         for sharks.
+   * @return -1 to indicate nothing. This is a do-nothing function that is only implemented for
+   * sharks.
    */
   @Override
   public int getEnergy() {
@@ -100,6 +104,7 @@ public class Fish implements WatorAgent {
 
   /**
    * Getter for the state of the agent.
+   *
    * @return FISH state since a Fish agent corresponds to fish state.
    */
   public CellState getState() {

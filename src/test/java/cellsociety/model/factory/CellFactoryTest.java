@@ -1,6 +1,7 @@
 package cellsociety.model.factory;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import cellsociety.model.cell.Cell;
 import cellsociety.model.cell.ConwayCell.ConwayState;
@@ -8,11 +9,6 @@ import cellsociety.model.state.CellState;
 import org.junit.jupiter.api.Test;
 
 class CellFactoryTest {
-
-  enum fakeStates implements CellState {
-    FAKE1,
-    FAKE2
-  }
 
   @Test
   void createCell_validCellName_success() {
@@ -24,6 +20,11 @@ class CellFactoryTest {
   void createCell_invalidCellName_failure() { // Negative Test
     assertThrows(RuntimeException.class,
         () -> CellFactory.createCell(0, fakeStates.FAKE1, null));
+  }
+
+  enum fakeStates implements CellState {
+    FAKE1,
+    FAKE2
   }
 
 }

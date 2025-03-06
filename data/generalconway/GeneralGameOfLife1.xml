@@ -1,19 +1,16 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <simulationConfig>
   <!-- window and grid configuration -->
-  <display width="800" height="800" title="General Conway Simulation" author="Danny">
-    <grid rows="10" columns="10" edgeType="Toroidal" neighborhoodType="ExtendedMoore" cellShape="Rectangular"/>
-    <description text="This is an xml file for the General Game of Life that represents the seed variation"/>
+  <display author="Danny" height="800" title="General Conway Simulation" width="800">
+    <description
+      text="This is an xml file for the General Game of Life that represents the seed variation"/>
+    <grid cellShape="Rectangular" columns="10" edgeType="Toroidal" neighborhoodType="ExtendedMoore"
+      rows="10"/>
   </display>
 
   <!-- sim configuration -->
-  <sim type="GeneralConway">
-    <simvars
-      rules="B2/S"
-    />
-  </sim>
   <init
-    stateList =
+    stateList=
       "D,A,D,D,A,D,D,A,D,D,
       A,D,D,A,D,D,A,D,D,A,
       D,D,A,D,D,A,D,D,A,D,
@@ -26,5 +23,10 @@
       D,A,D,D,A,D,D,A,D,D"
   >
   </init>
+  <sim type="GeneralConway">
+    <simvars
+      rules="B2/S"
+    />
+  </sim>
 
 </simulationConfig>

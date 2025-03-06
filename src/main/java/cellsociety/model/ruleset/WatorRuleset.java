@@ -1,10 +1,10 @@
 package cellsociety.model.ruleset;
 
-import cellsociety.model.factory.WatorAgentFactory;
+import cellsociety.model.agent.WatorAgent;
 import cellsociety.model.cell.Cell;
 import cellsociety.model.cell.WatorCell;
 import cellsociety.model.cell.WatorCell.WatorState;
-import cellsociety.model.agent.WatorAgent;
+import cellsociety.model.factory.WatorAgentFactory;
 import cellsociety.model.grid.Grid;
 import cellsociety.model.grid.WatorGrid;
 import cellsociety.model.state.CellState;
@@ -13,21 +13,21 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Author: Daniel Rodriguez-Florido
- * The back-end ruleset logic to preform the WatorWorld Simulation
- *
+ * Author: Daniel Rodriguez-Florido The back-end ruleset logic to preform the WatorWorld Simulation
+ * <p>
  * The agent factory handles and retrieves all the necessary parameters when creating agents
  */
 
 public class WatorRuleset extends Ruleset {
 
-  private WatorGrid myGrid;
   private final WatorAgentFactory agentFactory;
+  private WatorGrid myGrid;
 
   /**
    * Constructor for the WatorRuleset
-   * @param params The map of parameters relevant to the ruleset
-   *               (fishBreedTime, fishStarveTime, sharkBreedTime, sharkStarveTime)
+   *
+   * @param params The map of parameters relevant to the ruleset (fishBreedTime, fishStarveTime,
+   *               sharkBreedTime, sharkStarveTime)
    */
   public WatorRuleset(Map<String, String> params) {
     super();
@@ -73,6 +73,7 @@ public class WatorRuleset extends Ruleset {
 
   /**
    * Moves the cell from one spot to the next
+   *
    * @param cell The cell we wish to move
    */
   private void moveCell(WatorCell cell) {
@@ -87,6 +88,7 @@ public class WatorRuleset extends Ruleset {
 
   /**
    * Function to create a new agent once reproduction time has come
+   *
    * @param cell The cell we wish to spawn an agent on
    */
   private void reproduceCell(WatorCell cell) {
@@ -98,6 +100,7 @@ public class WatorRuleset extends Ruleset {
 
   /**
    * Gets the active agents on the grid
+   *
    * @return List of WatorCells that have an active agent on them
    */
   private List<WatorCell> getAgentCells() {
@@ -130,6 +133,7 @@ public class WatorRuleset extends Ruleset {
 
   /**
    * Checks whether a cell has died either by running out of energy or by leaving a space
+   *
    * @param cell The cell we wish to check if dead
    * @return Whether the cell is dead or not
    */

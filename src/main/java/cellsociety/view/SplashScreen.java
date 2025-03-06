@@ -19,8 +19,7 @@ import javafx.scene.text.TextAlignment;
 import javafx.scene.text.TextFlow;
 
 /**
- * @Author Palo Silva
- * Class that handles the front end logic for displaying splash screen
+ * @Author Palo Silva Class that handles the front end logic for displaying splash screen
  */
 
 public class SplashScreen {
@@ -33,7 +32,7 @@ public class SplashScreen {
   private int height = 800;
 
 
-  public SplashScreen(SimulationController controller){
+  public SplashScreen(SimulationController controller) {
     myController = controller;
     splashPane = new BorderPane();
     splashPane.getStyleClass().add("splash-pane");
@@ -44,7 +43,7 @@ public class SplashScreen {
   /**
    * Loads splash screen to stage using controller
    */
-  public void loadScreen(){
+  public void loadScreen() {
     ResourceBundle simInfo = ResourceBundle.getBundle("SimInfo", myController.getLocale());
     loadSplashText(simInfo);
     loadControlButtons(simInfo);
@@ -56,6 +55,7 @@ public class SplashScreen {
 
   /**
    * Generates text on opening screen
+   *
    * @param simInfo : resource bundle containing hardcoded simulation text
    */
   private void loadSplashText(ResourceBundle simInfo) {
@@ -69,6 +69,7 @@ public class SplashScreen {
 
   /**
    * Generates control customization buttons for opening screen
+   *
    * @param simInfo: resource bundle containing hardcoded simulation text
    */
   private void loadControlButtons(ResourceBundle simInfo) {
@@ -80,25 +81,25 @@ public class SplashScreen {
     MenuItem language3 = new MenuItem(simInfo.getString("splash_language_3"));
     MenuItem language4 = new MenuItem(simInfo.getString("splash_language_4"));
     language1.setOnAction(e -> {
-      if(myController.getLocale() != Locale.ENGLISH) {
+      if (myController.getLocale() != Locale.ENGLISH) {
         myController.setLocale(Locale.ENGLISH);
         loadScreen();
       }
     });
     language2.setOnAction(e -> {
-      if(myController.getLocale() != Locale.FRENCH) {
+      if (myController.getLocale() != Locale.FRENCH) {
         myController.setLocale(Locale.FRENCH);
         loadScreen();
       }
     });
-    language3.setOnAction(e ->{
-      if(myController.getLocale() != Locale.GERMAN){
+    language3.setOnAction(e -> {
+      if (myController.getLocale() != Locale.GERMAN) {
         myController.setLocale(Locale.GERMAN);
         loadScreen();
       }
     });
-    language4.setOnAction(e ->{
-      if(myController.getLocale() != Locale.ITALIAN){
+    language4.setOnAction(e -> {
+      if (myController.getLocale() != Locale.ITALIAN) {
         myController.setLocale(Locale.ITALIAN);
         loadScreen();
       }
@@ -149,10 +150,11 @@ public class SplashScreen {
 
   /**
    * Sets theme of simulation
-   * @param scheme : color scheme
+   *
+   * @param scheme   : color scheme
    * @param simInfo: resource bundle containing hardcoded simulation text
    */
-  private void setSplashTheme(ColorScheme scheme, ResourceBundle simInfo){
+  private void setSplashTheme(ColorScheme scheme, ResourceBundle simInfo) {
     URL resourcePath = switch (scheme) {
       case DARK -> getClass().getResource("/SplashDark.css");
       case LIGHT -> getClass().getResource("/SplashLight.css");

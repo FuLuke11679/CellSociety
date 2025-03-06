@@ -1,6 +1,7 @@
 package cellsociety.model.ruleset;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import cellsociety.model.cell.Cell;
 import cellsociety.model.cell.WatorCell.WatorState;
@@ -14,8 +15,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 /**
- * Author: Daniel Rodriguez-Florido
- * Testing class for WatorWorld
+ * Author: Daniel Rodriguez-Florido Testing class for WatorWorld
  */
 class WatorRulesetTest {
 
@@ -41,11 +41,11 @@ class WatorRulesetTest {
 
   @Test
   void updateGridState_SharkMoves_SharkMovesRandomlyToAdjacentSpot() {
-    String[] initialStates = {"W","W","W","W","W",
-                              "W","W","W","W","W",
-                              "W","W","S","W","W",
-                              "W","W","W","W","W",
-                              "W","W","W","W","W"};
+    String[] initialStates = {"W", "W", "W", "W", "W",
+        "W", "W", "W", "W", "W",
+        "W", "W", "S", "W", "W",
+        "W", "W", "W", "W", "W",
+        "W", "W", "W", "W", "W"};
     myGrid = myRuleset.createGrid(5, 5, initialStates);
     setGridParams(myGrid);
 
@@ -66,11 +66,11 @@ class WatorRulesetTest {
 
   @Test
   void updateGridState_FishMoves_FishMovesRandomlyToAdjacentSpot() {
-    String[] initialStates = {"W","W","W","W","W",
-                              "W","W","W","W","W",
-                              "W","W","F","W","W",
-                              "W","W","W","W","W",
-                              "W","W","W","W","W"};
+    String[] initialStates = {"W", "W", "W", "W", "W",
+        "W", "W", "W", "W", "W",
+        "W", "W", "F", "W", "W",
+        "W", "W", "W", "W", "W",
+        "W", "W", "W", "W", "W"};
     myGrid = myRuleset.createGrid(5, 5, initialStates);
     setGridParams(myGrid);
 
@@ -91,11 +91,11 @@ class WatorRulesetTest {
 
   @Test
   void updateGridState_SharkEatsFish_SharkEatsFishAtRandomlyAtAdjacentSpot() {
-    String[] initialStates = {"W","W","W","W","W",
-        "W","W","F","W","W",
-        "W","F","S","F","W",
-        "W","W","F","W","W",
-        "W","W","W","W","W"};
+    String[] initialStates = {"W", "W", "W", "W", "W",
+        "W", "W", "F", "W", "W",
+        "W", "F", "S", "F", "W",
+        "W", "W", "F", "W", "W",
+        "W", "W", "W", "W", "W"};
     myGrid = myRuleset.createGrid(5, 5, initialStates);
     setGridParams(myGrid);
 
@@ -116,11 +116,11 @@ class WatorRulesetTest {
 
   @Test
   void updateGridState_SharkMove_SharkDoesNotMoveWhenBlocked() {
-    String[] initialStates = {"W","W","W","W","W",
-        "W","W","S","W","W",
-        "W","S","S","S","W",
-        "W","W","S","W","W",
-        "W","W","W","W","W"};
+    String[] initialStates = {"W", "W", "W", "W", "W",
+        "W", "W", "S", "W", "W",
+        "W", "S", "S", "S", "W",
+        "W", "W", "S", "W", "W",
+        "W", "W", "W", "W", "W"};
     myGrid = myRuleset.createGrid(5, 5, initialStates);
     setGridParams(myGrid);
 
@@ -131,11 +131,11 @@ class WatorRulesetTest {
 
   @Test
   void updateGridState_FishMove_FishDoesNotMoveWhenBlocked() {
-    String[] initialStates = {"W","W","W","W","W",
-        "W","W","F","W","W",
-        "W","F","F","F","W",
-        "W","W","F","W","W",
-        "W","W","W","W","W"};
+    String[] initialStates = {"W", "W", "W", "W", "W",
+        "W", "W", "F", "W", "W",
+        "W", "F", "F", "F", "W",
+        "W", "W", "F", "W", "W",
+        "W", "W", "W", "W", "W"};
     myGrid = myRuleset.createGrid(5, 5, initialStates);
     setGridParams(myGrid);
 
@@ -153,11 +153,11 @@ class WatorRulesetTest {
         "sharkStarveTime", "2"
     );
     myRuleset = new WatorRuleset(params);
-    String[] initialStates = {"W","W","W","W","W",
-                              "W","W","W","W","W",
-                              "W","W","S","W","W",
-                              "W","W","W","W","W",
-                              "W","W","W","W","W"};
+    String[] initialStates = {"W", "W", "W", "W", "W",
+        "W", "W", "W", "W", "W",
+        "W", "W", "S", "W", "W",
+        "W", "W", "W", "W", "W",
+        "W", "W", "W", "W", "W"};
     myGrid = myRuleset.createGrid(5, 5, initialStates);
     setGridParams(myGrid);
 

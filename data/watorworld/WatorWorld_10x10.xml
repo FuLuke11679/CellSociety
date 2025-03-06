@@ -1,16 +1,10 @@
 <?xml version="1.0" ?>
 <simulationConfig>
-  <display width="800" height="800" title="WatorWorld Simulation" author="Palo">
-    <grid rows="10" columns="10" edgeType="Toroidal" neighborhoodType="VonNeumann" cellShape="Rectangular"/>
+  <display author="Palo" height="800" title="WatorWorld Simulation" width="800">
     <description text="This is the WatorWorld simulation"/>
+    <grid cellShape="Rectangular" columns="10" edgeType="Toroidal" neighborhoodType="VonNeumann"
+      rows="10"/>
   </display>
-  <sim type="WatorWorld">
-    <simvars
-      fishBreedTime="10"
-      sharkEnergyGain="5"
-      sharkBreedTime="8"
-    />
-  </sim>
   <init stateList="F,F,W,F,S,W,S,F,F,W,
        S,S,W,S,F,F,S,S,F,S,
        S,S,W,F,F,W,W,F,W,W,
@@ -21,4 +15,11 @@
        W,S,W,F,W,F,W,W,S,W,
        S,S,S,W,F,S,S,F,W,W,
        S,W,S,S,F,W,S,F,S,W"/>
+  <sim type="WatorWorld">
+    <simvars
+      fishBreedTime="10"
+      sharkBreedTime="8"
+      sharkEnergyGain="5"
+    />
+  </sim>
 </simulationConfig>

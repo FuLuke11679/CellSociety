@@ -1,14 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <simulationConfig>
-  <display width="600" height="600" title="Simple Sugarscape" author="Luke">
-    <grid rows="5" columns="5" edgeType="Toroidal" neighborhoodType="VonNeumann" cellShape="Rectangular"/>
-    <description text="A small-scale Sugarscape simulation with a central high-sugar patch and a few agents."/>
+  <display author="Luke" height="600" title="Simple Sugarscape" width="600">
+    <description
+      text="A small-scale Sugarscape simulation with a central high-sugar patch and a few agents."/>
+    <grid cellShape="Rectangular" columns="5" edgeType="Toroidal" neighborhoodType="VonNeumann"
+      rows="5"/>
   </display>
-
-  <sim type="Sugarscape">
-    <simvars sugarGrowBackRate="1" sugarGrowBackInterval="5"
-      agentVision="1" agentMetabolism="3"/>
-  </sim>
 
   <init stateList="
     PATCH:5, PATCH:5, PATCH:5, PATCH:5, PATCH:5,
@@ -17,4 +14,9 @@
     PATCH:5, PATCH:10, PATCH:10, PATCH:10, PATCH:5,
     PATCH:5, PATCH:5, PATCH:5, PATCH:5, PATCH:5
   "/>
+
+  <sim type="Sugarscape">
+    <simvars agentMetabolism="3" agentVision="1"
+      sugarGrowBackInterval="5" sugarGrowBackRate="1"/>
+  </sim>
 </simulationConfig>

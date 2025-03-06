@@ -1,17 +1,17 @@
 # Collections API Lab Discussion
+
 ### NAMES
-Palo 
+
+Palo
 Danny
 Ishan
-Luke 
+Luke
 
 ### TEAM 8
 
-
-
 ## In your experience using these collections, are they hard or easy to use?
 
-These collections are quite easy to use. Each collection interface has its own unique 
+These collections are quite easy to use. Each collection interface has its own unique
 implementation with a distinct set of object classes (e.g List --> ArrayList or LinkedList).
 
 ## In your experience using these collections, do you feel mistakes are easy to avoid?
@@ -20,20 +20,19 @@ Yes, mistakes are easy to avoid.
 
 ## What methods are common to all collections (except Maps)?
 
-Some methods that are common to all collections are add, remove, sort, reverse. 
-
+Some methods that are common to all collections are add, remove, sort, reverse.
 
 ## What methods are common to all Deques?
 
 Methods that are common to all Deques include: push_front(), push_back(), pop_front(), pop_back(),
-front(), back(), empty(), size(). 
-
+front(), back(), empty(), size().
 
 ## What is the purpose of each interface implemented by LinkedList?
 
 LinkedList implements the List and Queue, Deque interfaces. The purpose of the List implementation
-is to provide the user with a standard LinkedList. The purpose of the Queue, Deque implementations is to
-provide the user with a LinkedList that supports queueing/dequeing. 
+is to provide the user with a standard LinkedList. The purpose of the Queue, Deque implementations
+is to
+provide the user with a LinkedList that supports queueing/dequeing.
 
 ## How many different implementations are there for a Set?
 

@@ -1,12 +1,10 @@
 <?xml version="1.0" ?>
 <simulationConfig>
-  <display width="800" height="800" title="General Conway Simulation" author="Danny">
-    <grid rows="12" columns="12" edgeType="Toroidal" neighborhoodType="ExtendedMoore" cellShape="Rectangular"/>
+  <display author="Danny" height="800" title="General Conway Simulation" width="800">
     <description text="This is an XML file for Amoeba"/>
+    <grid cellShape="Rectangular" columns="12" edgeType="Toroidal" neighborhoodType="ExtendedMoore"
+      rows="12"/>
   </display>
-  <sim type="GeneralConway">
-    <simvars rules="1357/1357"/>
-  </sim>
   <init stateList="D,D,D,D,D,D,D,D,D,D,D,D,
                   D,D,A,D,A,D,D,D,D,D,D,D,
                   D,A,D,A,D,A,D,D,D,D,D,D,
@@ -20,4 +18,7 @@
                   D,D,D,D,D,D,D,D,D,D,D,D,
                   D,D,D,D,D,D,D,D,D,D,D,D
                   "/>
+  <sim type="GeneralConway">
+    <simvars rules="1357/1357"/>
+  </sim>
 </simulationConfig>

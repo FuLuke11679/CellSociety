@@ -1,6 +1,7 @@
 package cellsociety.model.grid;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import cellsociety.model.grid.handler.EdgeHandler;
 import cellsociety.model.grid.handler.MirrorEdgeHandler;
@@ -14,7 +15,8 @@ class EdgeFactoryTest {
     EdgeHandler edgeHandler = EdgeFactory.createEdgeHandler("Mirror");
     assertNotNull(edgeHandler, "The EdgeHandler instance should not be null.");
     // The factory may return a MirrorEdgeHandler directly if it's the only supported type.
-    assertTrue(edgeHandler instanceof MirrorEdgeHandler, "Expected instance of MirrorEdgeHandler for valid input.");
+    assertTrue(edgeHandler instanceof MirrorEdgeHandler,
+        "Expected instance of MirrorEdgeHandler for valid input.");
   }
 
   @Test
@@ -22,6 +24,7 @@ class EdgeFactoryTest {
     // For an invalid edge type, the factory should fall back to MirrorEdgeHandler.
     EdgeHandler edgeHandler = EdgeFactory.createEdgeHandler("InvalidType");
     assertNotNull(edgeHandler, "The fallback EdgeHandler instance should not be null.");
-    assertTrue(edgeHandler instanceof MirrorEdgeHandler, "Expected fallback instance of MirrorEdgeHandler.");
+    assertTrue(edgeHandler instanceof MirrorEdgeHandler,
+        "Expected fallback instance of MirrorEdgeHandler.");
   }
 }

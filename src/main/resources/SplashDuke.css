@@ -1,11 +1,13 @@
 .root {
   -fx-background-color: #003080;
 }
+
 Text {
   -fx-fill: white; /* Changes font color to white */
   -fx-font-family: "Garamond"; /* Sets font type to Arial */
   -fx-font-size: 14px; /* Optional: Adjusts font size */
 }
+
 Label {
   -fx-text-fill: white;
   -fx-font-family: "Garamond";

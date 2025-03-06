@@ -8,8 +8,8 @@ import cellsociety.model.state.CellState;
 import java.util.List;
 
 /**
- * Author: Daniel Rodriguez-Florido
- * The back-end ruleset logic to preform the Percolation Simulation
+ * Author: Daniel Rodriguez-Florido The back-end ruleset logic to preform the Percolation
+ * Simulation
  */
 
 public class PercolationRuleset extends Ruleset {
@@ -46,6 +46,7 @@ public class PercolationRuleset extends Ruleset {
 
   /**
    * Checks whether a cell has any neighboring cells that have been percolated
+   *
    * @param neighbors The neighbors of the target cell
    * @return True if the cell has percolated neighbors
    */
@@ -60,6 +61,7 @@ public class PercolationRuleset extends Ruleset {
 
   /**
    * Sets the next state of the cell to PERCOLATED
+   *
    * @param cell The target cell
    */
   private void percolateCell(Cell cell) {

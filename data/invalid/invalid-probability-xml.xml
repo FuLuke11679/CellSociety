@@ -1,12 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <data>
-  <display width="800" height="600" title="Fire Simulation" author="Test Author">
-    <grid rows="10" columns="10" edgeType="Toroidal" neighborhoodType="ExtendedMoore" cellShape="Rectangular"/>
+  <display author="Test Author" height="600" title="Fire Simulation" width="800">
     <description text="Test simulation with invalid probability"/>
+    <grid cellShape="Rectangular" columns="10" edgeType="Toroidal" neighborhoodType="ExtendedMoore"
+      rows="10"/>
   </display>
-  <sim type="Fire"/>
-  <simvars probCatch="1.5"/>
-  <!-- probCatch > 1.0 is invalid -->
   <init stateList="E,E,E,E,E,E,E,E,E,E,
                   E,E,E,T,T,T,E,E,E,E,
                   E,E,T,T,T,T,T,E,E,E,
@@ -17,4 +15,7 @@
                   E,E,E,E,E,E,E,E,E,E,
                   E,E,E,E,E,E,E,E,E,E,
                   E,E,E,E,E,E,E,E,E,E"/>
+  <sim type="Fire"/>
+  <!-- probCatch > 1.0 is invalid -->
+  <simvars probCatch="1.5"/>
 </data>

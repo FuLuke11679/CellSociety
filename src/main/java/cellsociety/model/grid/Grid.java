@@ -1,31 +1,30 @@
 package cellsociety.model.grid;
 
 import cellsociety.model.cell.Cell;
-import cellsociety.model.factory.CellFactory;
 import cellsociety.model.cell.ConwayCell.ConwayState;
 import cellsociety.model.cell.FireCell.FireState;
 import cellsociety.model.cell.PercolationCell.PercolationState;
 import cellsociety.model.cell.SegregationCell.SegregationState;
+import cellsociety.model.cell.WatorCell.WatorState;
+import cellsociety.model.factory.CellFactory;
 import cellsociety.model.grid.handler.EdgeHandler;
 import cellsociety.model.grid.neighborhood.NeighborhoodStrategy;
 import cellsociety.model.grid.shape.CellShape;
-import cellsociety.model.ruleset.SugarscapeRuleset;
-import cellsociety.model.state.SugarscapeState;
-import cellsociety.model.cell.WatorCell.WatorState;
 import cellsociety.model.ruleset.Ruleset;
+import cellsociety.model.ruleset.SugarscapeRuleset;
 import cellsociety.model.state.CellState;
+import cellsociety.model.state.SugarscapeState;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
 /**
- * Updates Grid based on Cell logic.
- * This abstract class manages a grid of cells and applies a given ruleset
- * to update cell states. It does not handle any UI or JavaFX display logic.
-
- * The grid is initialized using a provided array of state symbols, which are
- * mapped to specific {@link CellState} instances via a static state map.
+ * Updates Grid based on Cell logic. This abstract class manages a grid of cells and applies a given
+ * ruleset to update cell states. It does not handle any UI or JavaFX display logic.
+ * <p>
+ * The grid is initialized using a provided array of state symbols, which are mapped to specific
+ * {@link CellState} instances via a static state map.
  *
  * @author Luke
  * @author Palo
@@ -65,6 +64,22 @@ public abstract class Grid {
   private CellShape cellShape;
 
   /**
+   * Constructs a Grid with the specified dimensions, ruleset, and initial cell states.
+   *
+   * @param rows    the number of rows in the grid
+   * @param columns the number of columns in the grid
+   * @param ruleset the {@link Ruleset} to apply to this grid
+   * @param cells   an array of state symbols representing the initial states of the cells
+   */
+  public Grid(int rows, int columns, Ruleset ruleset, String[] cells) {
+    this.rows = rows;
+    this.columns = columns;
+    this.ruleset = ruleset;
+    this.myCells = cells;
+    initializeGrid();
+  }
+
+  /**
    * Sets the edge handling strategy for the grid.
    *
    * @param handler the {@link EdgeHandler} to be used for processing edge cases
@@ -85,26 +100,11 @@ public abstract class Grid {
   /**
    * Sets the cell shape strategy for the grid.
    *
-   * @param shape the {@link CellShape} that defines how cell positions and neighbor offsets are computed
+   * @param shape the {@link CellShape} that defines how cell positions and neighbor offsets are
+   *              computed
    */
   public void setCellShape(CellShape shape) {
     this.cellShape = shape;
-  }
-
-  /**
-   * Constructs a Grid with the specified dimensions, ruleset, and initial cell states.
-   *
-   * @param rows    the number of rows in the grid
-   * @param columns the number of columns in the grid
-   * @param ruleset the {@link Ruleset} to apply to this grid
-   * @param cells   an array of state symbols representing the initial states of the cells
-   */
-  public Grid(int rows, int columns, Ruleset ruleset, String[] cells) {
-    this.rows = rows;
-    this.columns = columns;
-    this.ruleset = ruleset;
-    this.myCells = cells;
-    initializeGrid();
   }
 
   /**
@@ -142,8 +142,8 @@ public abstract class Grid {
   /**
    * Updates the grid for a single simulation step.
    * <p>
-   * For each cell, the method obtains its neighbors and updates its state based on the
-   * rules defined in the {@link Ruleset}. After processing all cells, the new states are applied.
+   * For each cell, the method obtains its neighbors and updates its state based on the rules
+   * defined in the {@link Ruleset}. After processing all cells, the new states are applied.
    * </p>
    */
   public void update() {
@@ -164,9 +164,11 @@ public abstract class Grid {
   }
 
   /**
-   * Applies the next state for all cells by moving the generated next state into the current state.
+   * Applies the next state for all cells by moving the generated next state into the current
+   * state.
    * <p>
-   * After updating all cells, this method ensures that each cell's state is properly updated for the next simulation step.
+   * After updating all cells, this method ensures that each cell's state is properly updated for
+   * the next simulation step.
    * </p>
    */
   protected void moveNextStateToCurrent() {
@@ -262,8 +264,12 @@ public abstract class Grid {
     int colShift = 0;
 
     // Determine if existing cells need to be shifted.
-    if (newRow < 0) rowShift = Math.abs(newRow);
-    if (newCol < 0) colShift = Math.abs(newCol);
+    if (newRow < 0) {
+      rowShift = Math.abs(newRow);
+    }
+    if (newCol < 0) {
+      colShift = Math.abs(newCol);
+    }
 
     // Calculate new grid dimensions.
     int newRows = Math.max(rows + rowShift, newRow + 1);
@@ -295,8 +301,8 @@ public abstract class Grid {
   /**
    * Updates a strategy (edge, neighborhood, or shape) used by the grid.
    * <p>
-   * This method uses reflection to instantiate a new strategy object based on its fully qualified class name,
-   * then assigns it to the appropriate handler.
+   * This method uses reflection to instantiate a new strategy object based on its fully qualified
+   * class name, then assigns it to the appropriate handler.
    * </p>
    *
    * @param strategyType the type of strategy to update ("edge", "neighborhood", or "shape")
@@ -316,16 +322,19 @@ public abstract class Grid {
       } else {
         throw new IllegalArgumentException("Invalid strategy type: " + strategyType);
       }
-    } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | NoSuchMethodException |
+    } catch (ClassNotFoundException | InstantiationException | IllegalAccessException |
+             NoSuchMethodException |
              InvocationTargetException e) {
-      throw new IllegalArgumentException("No such strategy, neighborhood, or shape combination" + strategyType);
+      throw new IllegalArgumentException(
+          "No such strategy, neighborhood, or shape combination" + strategyType);
     }
   }
 
   /**
    * Switches the edge handling strategy to a new implementation.
    *
-   * @param edgeClassName the fully qualified class name of the new {@link EdgeHandler} implementation
+   * @param edgeClassName the fully qualified class name of the new {@link EdgeHandler}
+   *                      implementation
    */
   public void switchEdgeHandler(String edgeClassName) {
     updateStrategy("edge", edgeClassName);
@@ -334,7 +343,8 @@ public abstract class Grid {
   /**
    * Switches the neighborhood strategy to a new implementation.
    *
-   * @param neighborhoodClassName the fully qualified class name of the new {@link NeighborhoodStrategy} implementation
+   * @param neighborhoodClassName the fully qualified class name of the new
+   *                              {@link NeighborhoodStrategy} implementation
    */
   public void switchNeighborhood(String neighborhoodClassName) {
     updateStrategy("neighborhood", neighborhoodClassName);
@@ -343,7 +353,8 @@ public abstract class Grid {
   /**
    * Switches the cell shape strategy to a new implementation.
    *
-   * @param shapeClassName the fully qualified class name of the new {@link CellShape} implementation
+   * @param shapeClassName the fully qualified class name of the new {@link CellShape}
+   *                       implementation
    */
   public void switchCellShape(String shapeClassName) {
     updateStrategy("shape", shapeClassName);

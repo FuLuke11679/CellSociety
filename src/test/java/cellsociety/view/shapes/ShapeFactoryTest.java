@@ -1,6 +1,9 @@
 package cellsociety.view.shapes;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.Arrays;
 import java.util.List;
@@ -11,7 +14,8 @@ class ShapeFactoryTest {
 
   @Test
   void testGetAvailableShapes() {
-    List<String> expected = Arrays.asList("Rectangular", "Hexagonal", "Triangular", "Rhombus", "PentagonalTiling");
+    List<String> expected = Arrays.asList("Rectangular", "Hexagonal", "Triangular", "Rhombus",
+        "PentagonalTiling");
     List<String> actual = ShapeFactory.getAvailableShapes();
     assertEquals(expected, actual, "The available shapes list should match the expected list.");
   }
@@ -21,7 +25,8 @@ class ShapeFactoryTest {
     String shapeName = "Rectangular";
     String expected = "cellsociety.view.shapes.RectangularShape";
     String actual = ShapeFactory.getFullyQualifiedName(shapeName);
-    assertEquals(expected, actual, "A simple shape name should be converted to a fully qualified class name.");
+    assertEquals(expected, actual,
+        "A simple shape name should be converted to a fully qualified class name.");
   }
 
   @Test
@@ -46,7 +51,8 @@ class ShapeFactoryTest {
     // When creating a valid shape type, e.g., "Rectangular", the factory should return a RectangularShape instance.
     Shape shape = ShapeFactory.createShape("Rectangular", 50, 1, 2);
     assertNotNull(shape, "The shape instance should not be null.");
-    assertTrue(shape instanceof RectangularShape, "The shape should be an instance of RectangularShape.");
+    assertTrue(shape instanceof RectangularShape,
+        "The shape should be an instance of RectangularShape.");
   }
 
   @Test
@@ -54,6 +60,7 @@ class ShapeFactoryTest {
     // When providing an invalid shape type, the factory falls back to RectangularShape.
     Shape shape = ShapeFactory.createShape("NonExistent", 50, 1, 2);
     assertNotNull(shape, "The fallback shape instance should not be null.");
-    assertTrue(shape instanceof RectangularShape, "The fallback shape should be an instance of RectangularShape.");
+    assertTrue(shape instanceof RectangularShape,
+        "The fallback shape should be an instance of RectangularShape.");
   }
 }

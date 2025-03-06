@@ -11,7 +11,7 @@ import org.apache.logging.log4j.Logger;
 
 /**
  * Author: Daniel Rodriguez-Florido
- *
+ * <p>
  * Factory to generate any kind of cell based on the given state and id
  */
 public class CellFactory {
@@ -23,7 +23,8 @@ public class CellFactory {
 
   /**
    * Creates a cell of the desired type based on the given unique CellState
-   * @param id The id of the cell to create
+   *
+   * @param id    The id of the cell to create
    * @param state CellState indicating the state of the cell
    * @return New concrete Cell object which extends Cell
    */
@@ -39,11 +40,13 @@ public class CellFactory {
 
       // Handle SugarscapePatch separately since it requires initialSugar
       if (clazz.equals(SugarscapePatch.class)) {
-        Constructor<? extends Cell> constructor = clazz.getConstructor(int.class, CellState.class, CellState.class, int.class, int.class);
+        Constructor<? extends Cell> constructor = clazz.getConstructor(int.class, CellState.class,
+            CellState.class, int.class, int.class);
         int sugarValue = (initialSugar != null) ? initialSugar : 0; // Default to 0 if not provided
         return constructor.newInstance(id, state, null, sugarValue, 25); // Assuming maxSugar is 25
       } else {
-        Constructor<? extends Cell> constructor = clazz.getConstructor(int.class, CellState.class, CellState.class);
+        Constructor<? extends Cell> constructor = clazz.getConstructor(int.class, CellState.class,
+            CellState.class);
         return constructor.newInstance(id, state, null);
       }
     } catch (Exception e) {
@@ -53,9 +56,9 @@ public class CellFactory {
   }
 
 
-
   /**
    * Function to figure out what type of cell to make depending on the unique state
+   *
    * @param state The state I am looking for
    * @return The Cell type the state belongs to
    */
