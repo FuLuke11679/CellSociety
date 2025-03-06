@@ -13,8 +13,8 @@ class XMLParserTest {
 
   @BeforeEach
   void setUp() throws InvalidXMLConfigurationException {
-    File file = new File("data/GameOfLife_1.xml");
-//    xmlParser = new XMLParser(file);
+    File file = new File("data/conway/GameOfLife_1.xml");
+    xmlParser = new XMLParser(file);
   }
   @Test
   void getWidth_returnCorrectWidth() {
@@ -49,10 +49,10 @@ class XMLParserTest {
   @Test
   void getInitialStates_returnsCorrectInitialStates() {
     String[] expected = {"A","A","D","D","D",
-        "A","A","D","D","D",
-        "A","A","D","D","D",
-        "A","A","D","D","D",
-        "A","A","D","D","D",};
+        "D","D","D","D","D",
+        "D","D","D","A","A",
+        "A","D","A","A","A",
+        "A","A","D","A","D",};
     assertArrayEquals(expected, xmlParser.getInitialStates());
   }
 

@@ -19,6 +19,10 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.testfx.api.FxAssert.verifyThat;
 import static org.testfx.util.NodeQueryUtils.isVisible;
 
+/**
+ * @Author Palo Silva
+ * Tests for front end splash screen
+ */
 
 public class SplashScreenTest extends DukeApplicationTest {
 

@@ -166,15 +166,19 @@ public class XMLParser extends Parser {
         Element simvars = getRequiredElement(document, "simvars");
         simVarsMap = new HashMap<>();
         NamedNodeMap attributes = simvars.getAttributes();
-        for (int i = 0; i < attributes.getLength(); i++) {
-            Node attr = attributes.item(i);
-            String value = attr.getNodeValue();
-            if (attr.getNodeName().equals("probCatch") || attr.getNodeName().equals("probGrow")) {
-                validateProbability(value);
+            for (int i = 0; i < attributes.getLength(); i++) {
+                Node attr = attributes.item(i);
+                String value = attr.getNodeValue();
+                if (attr.getNodeName().equals("probCatch") || attr.getNodeName().equals("probGrow")) {
+                    validateProbability(value);
+                }
+                simVarsMap.put(attr.getNodeName(), value);
             }
-            simVarsMap.put(attr.getNodeName(), value);
-        }
+
+
     }
+
+
 
     private void parseInitSection(Document document) throws InvalidXMLConfigurationException {
         Element initElement = getRequiredElement(document, "init");
@@ -258,7 +262,7 @@ public class XMLParser extends Parser {
         initialStates = stateList.toArray(new String[0]);
     }
 
-    private void parseStateList(String stateListStr) {
+    private void parseStateList(String stateListStr) throws InvalidXMLConfigurationException {
         String cleanedList = stateListStr.replaceAll("\\s+", "");
         if (cleanedList.contains(",")) {
             initialStates = cleanedList.split(",");
@@ -271,14 +275,14 @@ public class XMLParser extends Parser {
         }
 
         if (initialStates.length != rows * columns) {
-            throw new IllegalArgumentException(
+            throw new InvalidXMLConfigurationException(
                 "Number of cell states (" + initialStates.length +
                 ") does not match grid size (" + (rows * columns) + ").");
         }
 
         for (String state : initialStates) {
             if (!isInSimulation(state, simType)) {
-                throw new IllegalArgumentException("Invalid cell state: " + state);
+                throw new InvalidXMLConfigurationException("Invalid cell state: " + state);
             }
         }
     }
@@ -413,15 +417,19 @@ public class XMLParser extends Parser {
         return validateSimulation(simType);
     }
 
-    private void validateProbability(String value) {
+    private void validateProbability(String value) throws InvalidXMLConfigurationException {
+
         try {
             double prob = Double.parseDouble(value);
             if (prob < 0 || prob > 1) {
-                throw new IllegalArgumentException("Probability must be between 0 and 1: " + value);
+                throw new InvalidXMLConfigurationException("Probability must be between 0 and 1: " + value);
             }
         } catch (NumberFormatException e) {
-            throw new IllegalArgumentException("Invalid probability value: " + value);
+            throw new IllegalArgumentException("Invalid probability value: " + value, e);
+        } catch (InvalidXMLConfigurationException e) {
+          throw new InvalidXMLConfigurationException("Probability must be between 0 and 1: " + value);
         }
+
     }
 
     private String getDefaultState(String simType) {
