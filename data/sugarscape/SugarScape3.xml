@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<simulationConfig>
+  <display width="600" height="600" title="Sugarscape with Random Agents" author="Luke">
+    <grid rows="6" columns="6" edgeType="Toroidal" neighborhoodType="ExtendedMoore" cellShape="Rectangular"/>
+    <description text="A Sugarscape simulation with a scattered sugar distribution and multiple agents."/>
+  </display>
+
+  <sim type="Sugarscape">
+    <simvars sugarGrowBackRate="2" sugarGrowBackInterval="4"
+      agentVision="2" agentMetabolism="4"/>
+  </sim>
+
+  <init stateList="
+    PATCH:5, PATCH:10, PATCH:15, PATCH:10, PATCH:5, AGENT:8,
+    PATCH:10, PATCH:15, PATCH:20, PATCH:15, PATCH:10, PATCH:5,
+    PATCH:5, PATCH:10, AGENT:6, PATCH:10, PATCH:15, PATCH:5,
+    PATCH:10, AGENT:4, PATCH:15, PATCH:10, PATCH:5, PATCH:10,
+    PATCH:5, PATCH:10, PATCH:5, PATCH:15, PATCH:10, PATCH:5,
+    AGENT:7, PATCH:5, PATCH:10, PATCH:15, PATCH:10, PATCH:5
+  "/>
+</simulationConfig>

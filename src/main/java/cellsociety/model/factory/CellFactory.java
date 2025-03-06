@@ -27,44 +27,31 @@ public class CellFactory {
    * @param state CellState indicating the state of the cell
    * @return New concrete Cell object which extends Cell
    */
-  public static Cell createCell(int id, CellState state) {
+  public static Cell createCell(int id, CellState state, Integer initialSugar) {
     Properties cellClassProperties = new Properties();
     PropertiesLoader.loadPropertiesFolder(CELL_CLASS_PROPERTY_FILE_NAME, cellClassProperties);
 
     String cellType = getCellType(state);
-
-    String cellClass = "";
-    try {
-      cellClass = cellClassProperties.getProperty(cellType);
-    } catch (NullPointerException e) {
-      log.error("No cell class contains this state {}", cellType);
-      throw new IllegalArgumentException("No cell class contains this state " + cellType);
-    }
+    String cellClass = cellClassProperties.getProperty(cellType);
 
     try {
       Class<? extends Cell> clazz = (Class<? extends Cell>) Class.forName(cellClass);
 
-      // Handle SugarscapePatch separately
+      // Handle SugarscapePatch separately since it requires initialSugar
       if (clazz.equals(SugarscapePatch.class)) {
         Constructor<? extends Cell> constructor = clazz.getConstructor(int.class, CellState.class, CellState.class, int.class, int.class);
-
-        // Default values for now (modify to pull from simulation parameters if available)
-        int initialSugar = 5;
-        int maxSugar = 25;
-
-        return constructor.newInstance(id, state, null, initialSugar, maxSugar);
+        int sugarValue = (initialSugar != null) ? initialSugar : 0; // Default to 0 if not provided
+        return constructor.newInstance(id, state, null, sugarValue, 25); // Assuming maxSugar is 25
       } else {
         Constructor<? extends Cell> constructor = clazz.getConstructor(int.class, CellState.class, CellState.class);
         return constructor.newInstance(id, state, null);
       }
-
     } catch (Exception e) {
-      log.error("Could not find or instantiate cell type: {}", cellType, e);
+      log.error("Could not instantiate cell type: {}", cellType);
+      throw new RuntimeException("Error creating cell of type " + cellType, e);
     }
-
-    log.error("Could not find cell class: {}. Returned null object.", cellClass);
-    return null;
   }
+
 
 
   /**

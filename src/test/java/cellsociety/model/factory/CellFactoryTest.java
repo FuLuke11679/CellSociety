@@ -16,14 +16,14 @@ class CellFactoryTest {
 
   @Test
   void createCell_validCellName_success() {
-    Cell c = CellFactory.createCell(0, ConwayState.ALIVE);
+    Cell c = CellFactory.createCell(0, ConwayState.ALIVE, null);
     assertNotNull(c);
   }
 
   @Test
   void createCell_invalidCellName_failure() { // Negative Test
     assertThrows(RuntimeException.class,
-        () -> CellFactory.createCell(0, fakeStates.FAKE1));
+        () -> CellFactory.createCell(0, fakeStates.FAKE1, null));
   }
 
 }

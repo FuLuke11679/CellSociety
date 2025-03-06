@@ -9,6 +9,7 @@ import cellsociety.model.cell.SegregationCell.SegregationState;
 import cellsociety.model.grid.handler.EdgeHandler;
 import cellsociety.model.grid.neighborhood.NeighborhoodStrategy;
 import cellsociety.model.grid.shape.CellShape;
+import cellsociety.model.ruleset.SugarscapeRuleset;
 import cellsociety.model.state.SugarscapeState;
 import cellsociety.model.cell.WatorCell.WatorState;
 import cellsociety.model.ruleset.Ruleset;
@@ -116,18 +117,27 @@ public abstract class Grid {
   public void initializeGrid() {
     myGrid = new ArrayList<>();
     int count = 0;
+
     for (int x = 0; x < rows; x++) {
       List<Cell> row = new ArrayList<>();
       for (int y = 0; y < columns; y++) {
-        // Map the symbol to an initial state.
+        // Get the initial state of the cell
         CellState initialState = getInitialState(myCells[count]);
-        Cell cell = CellFactory.createCell(count, initialState); // Use reflection to create cell
+
+        // Determine initial sugar amount if the simulation is Sugarscape
+        Integer initialSugar = (ruleset instanceof SugarscapeRuleset) ?
+            ((SugarscapeRuleset) ruleset).getInitialValues()[count] : null;
+
+        // Create the cell with or without initial sugar
+        Cell cell = CellFactory.createCell(count, initialState, initialSugar);
+
         row.add(cell);
         count++;
       }
       myGrid.add(row);
     }
   }
+
 
   /**
    * Updates the grid for a single simulation step.
@@ -271,8 +281,6 @@ public abstract class Grid {
         } else {
           // Create a new cell with the default state.
           CellState initialState = ruleset.getDefaultCellState();
-          Cell newCell = CellFactory.createCell(i * newCols + j, initialState);
-          row.add(newCell);
         }
       }
       newGrid.add(row);

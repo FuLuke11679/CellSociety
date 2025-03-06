@@ -15,6 +15,7 @@ import java.net.URL;
 import java.util.Locale;
 import java.util.Map;
 import java.util.ResourceBundle;
+import java.util.Set;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -54,6 +55,7 @@ public class GridView {
   private Locale myLocale;
   private int numIterations;
   private String currentCellShape = "Rectangular";
+  private final static Set<Class<?>> hasGradient = Set.of(SugarscapePatch.class);
 
   public enum ColorScheme{
     LIGHT,
@@ -158,13 +160,13 @@ public class GridView {
    * @return the color representing the cell's state
    */
   private Color getCellColor(Cell cell) {
-    if (cell instanceof SugarscapePatch) {
+    if (hasGradient.contains(cell.getClass())) {
       SugarscapePatch patch = (SugarscapePatch) cell;
       if (patch.hasAgent()) {
         return Color.RED;
       } else {
         double fraction = (double) patch.getSugarAmount() / patch.getMaxSugar();
-        return Color.WHITE.interpolate(Color.DARKGREEN, fraction);
+        return Color.WHITE.interpolate(cellColors.get(SugarscapeState.PATCH), fraction);
       }
     } else {
       return cellColors.get(cell.getCurrState());
