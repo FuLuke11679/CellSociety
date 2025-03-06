@@ -18,12 +18,22 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Author: Luke Fu
- * Updates Grid based on Cell logic
- * Does not display the grid or interact at all with javafx packages (i.e Scene, Groups, etc)
+ * Updates Grid based on Cell logic.
+ * This abstract class manages a grid of cells and applies a given ruleset
+ * to update cell states. It does not handle any UI or JavaFX display logic.
+ *
+ * The grid is initialized using a provided array of state symbols, which are
+ * mapped to specific {@link CellState} instances via a static state map.
+ *
+ * @author Luke
+ * @author Palo
+ * @author Daniel
  */
 public abstract class Grid {
 
+  /**
+   * Mapping from state symbols to their corresponding CellState objects.
+   */
   protected final static Map<String, CellState> STATE_MAP = Map.ofEntries(
       Map.entry("A", ConwayState.ALIVE),
       Map.entry("D", ConwayState.DEAD),
@@ -52,24 +62,40 @@ public abstract class Grid {
   private NeighborhoodStrategy neighborhoodStrategy;
   private CellShape cellShape;
 
+  /**
+   * Sets the edge handling strategy for the grid.
+   *
+   * @param handler the {@link EdgeHandler} to be used for processing edge cases
+   */
   public void setEdgeHandler(EdgeHandler handler) {
     this.edgeHandler = handler;
   }
 
+  /**
+   * Sets the neighborhood strategy for the grid.
+   *
+   * @param strategy the {@link NeighborhoodStrategy} to be used to select cell neighbors
+   */
   public void setNeighborhoodStrategy(NeighborhoodStrategy strategy) {
     this.neighborhoodStrategy = strategy;
   }
 
+  /**
+   * Sets the cell shape strategy for the grid.
+   *
+   * @param shape the {@link CellShape} that defines how cell positions and neighbor offsets are computed
+   */
   public void setCellShape(CellShape shape) {
     this.cellShape = shape;
   }
 
   /**
-   * Constructor for the Grid object
-   * @param rows The amount of rows we want in the grid
-   * @param columns The amount of columns we want in the grid
-   * @param ruleset The ruleset we want to apply to this grid
-   * @param cells The initial states of the cells in a String[]
+   * Constructs a Grid with the specified dimensions, ruleset, and initial cell states.
+   *
+   * @param rows    the number of rows in the grid
+   * @param columns the number of columns in the grid
+   * @param ruleset the {@link Ruleset} to apply to this grid
+   * @param cells   an array of state symbols representing the initial states of the cells
    */
   public Grid(int rows, int columns, Ruleset ruleset, String[] cells) {
     this.rows = rows;
@@ -80,7 +106,11 @@ public abstract class Grid {
   }
 
   /**
-   * Initialize the grid with Cells
+   * Initializes the grid by creating cells based on the provided state symbols.
+   * <p>
+   * Each cell is created by mapping its state symbol to a {@link CellState} via
+   * {@link #getInitialState(String)} and then dynamically instantiating the appropriate cell type.
+   * </p>
    */
   public void initializeGrid() {
     myGrid = new ArrayList<>();
@@ -88,9 +118,12 @@ public abstract class Grid {
     for (int x = 0; x < rows; x++) {
       List<Cell> row = new ArrayList<>();
       for (int y = 0; y < columns; y++) {
+        // Map the symbol to an initial state.
         CellState initialState = getInitialState(myCells[count]);
-        String cellType = getCellTypeForState(initialState); // Map state to cell type name
-        Cell cell = createCell(count, initialState, null, cellType); // Use reflection to create cell
+        // Determine the cell type name based on the state.
+        String cellType = getCellTypeForState(initialState);
+        // Create the cell using reflection.
+        Cell cell = createCell(count, initialState, null, cellType);
         row.add(cell);
         count++;
       }
@@ -99,65 +132,79 @@ public abstract class Grid {
   }
 
   /**
-   * Function to update the grid each frame.
+   * Updates the grid for a single simulation step.
+   * <p>
+   * For each cell, the method obtains its neighbors and updates its state based on the
+   * rules defined in the {@link Ruleset}. After processing all cells, the new states are applied.
+   * </p>
    */
   public void update() {
-    //return a list of cell ids that were changed,
-    //loop over all cells and randomly change color of alive cells with probability 0.4
     int length = getLength();
     for (int id = 0; id < length; id++) {
       int row = id / columns;
       int col = id % columns;
       Cell cell = myGrid.get(row).get(col);
+      // Retrieve neighbors for the current cell.
       List<Cell> neighbors = getNeighbors(row, col);
+      // Update cell state based on the ruleset.
       ruleset.updateCellState(cell, new ArrayList<>(neighbors));
     }
-    // Second pass: Apply new states and update cells to utilize the next state
+    // Apply all updated states.
     moveNextStateToCurrent();
   }
 
   /**
-   * Function to move all the generated next states into the current states of the cells
+   * Applies the next state for all cells by moving the generated next state into the current state.
+   * <p>
+   * After updating all cells, this method ensures that each cell's state is properly updated for the next simulation step.
+   * </p>
    */
   protected void moveNextStateToCurrent() {
-    for( int id = 0; id < getLength(); id++) {
+    for (int id = 0; id < getLength(); id++) {
       int row = id / columns;
       int col = id % columns;
       Cell cell = myGrid.get(row).get(col);
-
       cell.setCurrState(cell.getNextState());
       cell.setNextState(null);
     }
   }
 
   /**
-   * Getter to get a cell
-   * @param row The row index in which the cell is contained
-   * @param col The column index in which the cell is contained.
-   * @return The Cell at Grid[row,col]
+   * Retrieves the cell at the specified grid position.
+   *
+   * @param row the row index of the desired cell
+   * @param col the column index of the desired cell
+   * @return the {@link Cell} located at (row, col) in the grid
    */
   public Cell getCell(int row, int col) {
     return myGrid.get(row).get(col);
   }
 
   /**
-   * Function to get the 8 neighbors around a cell
-   * @param row The row index of the target cell
-   * @param col The col index of a target cell
-   * @return The 8 neighbors around the cell at Grid[row,col]
+   * Retrieves the neighboring cells for the cell at the specified position.
+   * <p>
+   * The method uses the current {@link CellShape} to obtain a list of base neighbor offsets,
+   * applies the {@link NeighborhoodStrategy} to select a subset of these offsets, and then
+   * processes them using the {@link EdgeHandler} to account for grid boundaries.
+   * </p>
+   *
+   * @param row the row index of the target cell
+   * @param col the column index of the target cell
+   * @return a list of neighboring {@link Cell} objects surrounding the cell at (row, col)
    */
   public List<Cell> getNeighbors(int row, int col) {
-    // 1️⃣ Use cell shape to get base relative offsets
+    // Get base neighbor offsets from the cell shape.
     List<int[]> neighborOffsets = cellShape.getNeighborOffsets(row, col);
-
+    // Select neighbors based on the neighborhood strategy.
     List<int[]> selectedOffsets = neighborhoodStrategy.selectNeighbors(neighborOffsets);
-
+    // Handle edge cases and return the valid neighbor cells.
     return edgeHandler.handleNeighbors(row, col, selectedOffsets, this);
   }
 
   /**
-   * Counts up the number of cells in the grid
-   * @return The amount of cells in the grid
+   * Computes the total number of cells in the grid.
+   *
+   * @return the total count of cells in the grid
    */
   public int getLength() {
     int totalCount = 0;
@@ -167,36 +214,78 @@ public abstract class Grid {
     return totalCount;
   }
 
+  /**
+   * Maps a state symbol to its corresponding {@link CellState} using the defined state map.
+   *
+   * @param stateSymbol the symbol representing the cell state
+   * @return the {@link CellState} corresponding to the provided symbol
+   */
   protected CellState getInitialState(String stateSymbol) {
     return STATE_MAP.get(stateSymbol);
   }
 
+  /**
+   * Returns the number of rows in the grid.
+   *
+   * @return the grid's row count
+   */
   public int getRows() {
     return rows;
   }
 
+  /**
+   * Returns the number of columns in the grid.
+   *
+   * @return the grid's column count
+   */
   public int getColumns() {
     return columns;
   }
 
+  /**
+   * Returns the {@link Ruleset} associated with this grid.
+   *
+   * @return the current ruleset
+   */
   protected Ruleset getRuleset() {
     return ruleset;
   }
 
+  /**
+   * Dynamically creates a cell instance based on the given parameters.
+   * <p>
+   * The method uses reflection to instantiate a cell class located in the
+   * "cellsociety.model.cell" package. The cell type is determined by the provided cellType parameter.
+   * </p>
+   *
+   * @param id        a unique identifier for the cell
+   * @param currState the current state of the cell
+   * @param nextState the next state of the cell (may be null)
+   * @param cellType  the name of the cell class to instantiate (e.g., "ConwayCell")
+   * @return a new {@link Cell} instance, or null if instantiation fails
+   */
   public Cell createCell(int id, CellState currState, CellState nextState, String cellType) {
     try {
-      // Construct the full class name by using the cellType
+      // Construct the full class name using the cellType.
       Class<?> cellClass = Class.forName("cellsociety.model.cell." + cellType);
-
-      // Return an instance of the correct cell type
+      // Instantiate and return the cell.
       return (Cell) cellClass.getConstructor(int.class, CellState.class, CellState.class)
           .newInstance(id, currState, nextState);
     } catch (Exception e) {
       e.printStackTrace();
-      return null;  // Handle error or return a default cell if necessary
+      return null;  // Handle error or return a default cell if necessary.
     }
   }
 
+  /**
+   * Determines the cell type name corresponding to a given {@link CellState}.
+   * <p>
+   * This method maps specific state instances to their associated cell type names.
+   * </p>
+   *
+   * @param state the {@link CellState} for which to determine the cell type
+   * @return the name of the cell class corresponding to the state
+   */
   private String getCellTypeForState(CellState state) {
     if (state instanceof ConwayState) {
       return "ConwayCell";
@@ -214,33 +303,50 @@ public abstract class Grid {
     return "Cell";
   }
 
+  /**
+   * Checks if the given row and column indices represent a valid position in the grid.
+   *
+   * @param row the row index to check
+   * @param col the column index to check
+   * @return true if the position is within grid bounds; false otherwise
+   */
   public boolean isValidPosition(int row, int col) {
     return row >= 0 && row < rows && col >= 0 && col < columns;
   }
 
+  /**
+   * Expands the grid to include a specified new row and/or column.
+   * <p>
+   * If the provided newRow or newCol is negative, the grid is shifted to maintain valid indices.
+   * New cells are created using the default state from the ruleset.
+   * </p>
+   *
+   * @param newRow the new row index to include (can be negative)
+   * @param newCol the new column index to include (can be negative)
+   */
   public void expandGrid(int newRow, int newCol) {
     int rowShift = 0;
     int colShift = 0;
 
-    // Determine if we need to shift existing cells
+    // Determine if existing cells need to be shifted.
     if (newRow < 0) rowShift = Math.abs(newRow);
     if (newCol < 0) colShift = Math.abs(newCol);
 
-    // Compute new grid size
+    // Calculate new grid dimensions.
     int newRows = Math.max(rows + rowShift, newRow + 1);
     int newCols = Math.max(columns + colShift, newCol + 1);
 
-    // Create a new grid with adjusted dimensions
+    // Create a new grid with updated dimensions.
     List<List<Cell>> newGrid = new ArrayList<>();
 
     for (int i = 0; i < newRows; i++) {
       List<Cell> row = new ArrayList<>();
       for (int j = 0; j < newCols; j++) {
         if (i >= rowShift && j >= colShift && (i - rowShift) < rows && (j - colShift) < columns) {
-          // Shift existing cells to their new position
+          // Shift existing cell to new position.
           row.add(myGrid.get(i - rowShift).get(j - colShift));
         } else {
-          // Create new cells with default state
+          // Create a new cell with the default state.
           CellState initialState = ruleset.getDefaultCellState();
           String cellType = getCellTypeForState(initialState);
           Cell newCell = createCell(i * newCols + j, initialState, null, cellType);
@@ -250,12 +356,22 @@ public abstract class Grid {
       newGrid.add(row);
     }
 
-    // Update grid properties
+    // Update grid properties.
     myGrid = newGrid;
     rows = newRows;
     columns = newCols;
   }
 
+  /**
+   * Updates a strategy (edge, neighborhood, or shape) used by the grid.
+   * <p>
+   * This method uses reflection to instantiate a new strategy object based on its fully qualified class name,
+   * then assigns it to the appropriate handler.
+   * </p>
+   *
+   * @param strategyType the type of strategy to update ("edge", "neighborhood", or "shape")
+   * @param className    the fully qualified class name of the new strategy implementation
+   */
   public void updateStrategy(String strategyType, String className) {
     try {
       Class<?> strategyClass = Class.forName(className);
@@ -276,18 +392,39 @@ public abstract class Grid {
     }
   }
 
+  /**
+   * Switches the edge handling strategy to a new implementation.
+   *
+   * @param edgeClassName the fully qualified class name of the new {@link EdgeHandler} implementation
+   */
   public void switchEdgeHandler(String edgeClassName) {
     updateStrategy("edge", edgeClassName);
   }
 
+  /**
+   * Switches the neighborhood strategy to a new implementation.
+   *
+   * @param neighborhoodClassName the fully qualified class name of the new {@link NeighborhoodStrategy} implementation
+   */
   public void switchNeighborhood(String neighborhoodClassName) {
     updateStrategy("neighborhood", neighborhoodClassName);
   }
 
+  /**
+   * Switches the cell shape strategy to a new implementation.
+   *
+   * @param shapeClassName the fully qualified class name of the new {@link CellShape} implementation
+   */
   public void switchCellShape(String shapeClassName) {
     updateStrategy("shape", shapeClassName);
   }
 
+  /**
+   * Prints the current grid to the console.
+   * <p>
+   * Each cell's current state is printed in row-major order with each row on a new line.
+   * </p>
+   */
   public void printGrid() {
     for (int i = 0; i < rows; i++) {
       for (int j = 0; j < columns; j++) {
@@ -297,6 +434,4 @@ public abstract class Grid {
     }
     System.out.println();
   }
-
-
 }
