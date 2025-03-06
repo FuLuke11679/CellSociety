@@ -14,6 +14,9 @@ import java.util.List;
 
 public class ConwayRuleset extends Ruleset {
 
+  /**
+   * Default constructor that does not take in any parameters
+   */
   public ConwayRuleset() {
   }
 
@@ -37,6 +40,9 @@ public class ConwayRuleset extends Ruleset {
     }
   }
 
+  /**
+   * Dummy function that does not require implementation for this simulation (strategy pattern)
+   */
   @Override
   public void updateGridState() {
   }

@@ -5,7 +5,11 @@
     <description text="This is the WatorWorld simulation"/>
   </display>
   <sim type="WatorWorld">
-    <simvars fishBreedTime="8" fishStarveTime="9" sharkBreedTime="12" sharkStarveTime="5"/>
+    <simvars
+      fishBreedTime="2"
+      sharkEnergyGain="3"
+      sharkBreedTime="6"
+    />
   </sim>
   <init stateList="W,W,F,S,S,F,S,F,F,F,S,F,S,W,S,S,F,F,S,F,W,F,F,W,S,S,F,S,S,F,W,S,F,S,F,S,S,F,W,W,S,F,W,F,W,F,F,F,S,F,
        S,W,W,W,F,S,F,S,F,W,F,W,W,S,S,S,F,S,W,W,W,F,S,F,S,W,W,S,S,S,F,W,F,S,F,F,S,W,F,S,W,S,S,F,F,S,S,W,W,F,

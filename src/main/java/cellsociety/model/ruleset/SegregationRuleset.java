@@ -22,7 +22,6 @@ public class SegregationRuleset extends Ruleset {
 
   private final double similarityThreshold;
   private SegregationGrid myGrid;
-  private List<Cell> emptyCells;
 
   /**
    * Constructor for the Segregation Ruleset
@@ -30,13 +29,18 @@ public class SegregationRuleset extends Ruleset {
    *               (thresh)
    */
   public SegregationRuleset(Map<String, String> params) {
-    this.similarityThreshold = Double.parseDouble(params.get(THRESHOLD_PARAM_NAME));
-    emptyCells = new ArrayList<>();
+    this.similarityThreshold = Double.parseDouble(params.getOrDefault(THRESHOLD_PARAM_NAME, "0.4"));
   }
 
   public void updateCellState(Cell cell, List<Cell> neighbors) {
   }
 
+  /**
+   * Updates the state of a grid in the case of a segregation simulation.
+   *
+   * This particular implementation amasses the empty cells and unsatisfied cells into two lists
+   * and matches them accordingly to place the unsatisfied cells into a random empty spot.
+   */
   @Override
   public void updateGridState() {
     List<Cell> emptyCells = getEmptyCells();
