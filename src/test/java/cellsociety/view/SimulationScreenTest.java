@@ -41,7 +41,7 @@ public class SimulationScreenTest extends DukeApplicationTest {
     myController = new SimulationController(stage, Locale.getDefault());
     mySplashScreen = new SplashScreen(myController);
     mySplashScreen.loadScreen();
-    File dataFile = new File("/Users/palosilva/Desktop/CS_308/cellsociety_team08/data/segregation/segregation_50x50.xml");
+    File dataFile = new File("data/segregation/Segregation_Presentation.xml");
     //need to load a simulation
     myController.loadSimulation(dataFile);
     root = myController.getSimScreen().getSimScene().getRoot();
