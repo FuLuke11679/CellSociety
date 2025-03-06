@@ -15,10 +15,8 @@ public class ToroidalEdgeHandler implements EdgeHandler {
 
   /**
    * Handles the retrieval of neighbors using toroidal (wrap-around) boundaries.
-   * <p>
    * For each neighbor offset, the new row and column indices are computed using modulo arithmetic,
    * ensuring that positions wrap around the grid.
-   * </p>
    *
    * @param row     the row index of the target cell
    * @param col     the column index of the target cell

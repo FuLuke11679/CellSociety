@@ -6,20 +6,16 @@ import java.util.List;
 
 /**
  * Edge handler implementation for an infinite grid.
- * <p>
  * If the cell position is outside the current grid boundaries, this handler expands the grid dynamically,
  * then retrieves the neighbors.
- * </p>
  *
  * @see EdgeHandler
  */
 public class InfiniteEdgeHandler implements EdgeHandler {
   /**
    * Handles the retrieval of neighbors by expanding the grid if necessary.
-   * <p>
    * If the target cell position is invalid, the grid is expanded to include the position,
    * and then neighbors are retrieved from the updated grid.
-   * </p>
    *
    * @param row     the row index of the cell
    * @param col     the column index of the cell
