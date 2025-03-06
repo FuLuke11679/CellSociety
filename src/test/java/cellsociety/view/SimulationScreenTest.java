@@ -92,7 +92,7 @@ public class SimulationScreenTest extends DukeApplicationTest {
 
   @Test
   void buttonClick_loadNewSim_newSimLoaded(){
-    File switchDataFile = new File("/Users/palosilva/Desktop/CS_308/cellsociety_team08/data/segregation/Segregation1.xml");
+    File switchDataFile = new File("data/segregation/Segregation1.xml");
     clickOn(startButton);
     //GIVEN, simulation is running
     //WHEN, load sim button is clicked and new data file is chosen, we render new simulation
