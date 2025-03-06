@@ -1,7 +1,6 @@
 package cellsociety.model.ruleset;
 
 import cellsociety.model.cell.Cell;
-import cellsociety.model.cell.ConwayCell.ConwayState;
 import cellsociety.model.cell.SegregationCell.SegregationState;
 import cellsociety.model.grid.Grid;
 import cellsociety.model.grid.SegregationGrid;

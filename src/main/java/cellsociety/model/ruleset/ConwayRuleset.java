@@ -5,7 +5,10 @@ import cellsociety.model.cell.ConwayCell.ConwayState;
 import cellsociety.model.grid.ConwayGrid;
 import cellsociety.model.grid.Grid;
 import cellsociety.model.state.CellState;
+import java.util.ArrayList;
 import java.util.List;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  * Author: Daniel Rodriguez-Florido
@@ -14,6 +17,8 @@ import java.util.List;
 
 public class ConwayRuleset extends Ruleset {
 
+  Logger log = LogManager.getLogger(ConwayRuleset.class);
+
   /**
    * Default constructor that does not take in any parameters
    */
@@ -21,7 +26,15 @@ public class ConwayRuleset extends Ruleset {
   }
 
   public void updateCellState(Cell cell, List<Cell> neighbors) {
-    int aliveCells = countAliveNeighbors(neighbors);
+    int aliveCells;
+    try {
+      aliveCells = countAliveNeighbors(neighbors);
+    } catch (NullPointerException e) {
+      log.error("Attempted to use null neighbor list. Using empty list instead.");
+      neighbors = new ArrayList<>();
+      aliveCells = countAliveNeighbors(neighbors);
+      log.warn("Using empty list returned {} alive cell count.", aliveCells);
+    }
 
     if (cell.getCurrState() == ConwayState.ALIVE) {
       // Live cell survives with 2 or 3 neighbors, otherwise it dies

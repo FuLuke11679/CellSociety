@@ -1,13 +1,14 @@
 package cellsociety.model.ruleset;
 
 import cellsociety.model.cell.Cell;
-import cellsociety.model.cell.ConwayCell.ConwayState;
 import cellsociety.model.cell.FireCell.FireState;
 import cellsociety.model.grid.FireGrid;
 import cellsociety.model.grid.Grid;
 import cellsociety.model.state.CellState;
 import java.util.List;
 import java.util.Map;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  * Author: Daniel Rodriguez-Florido
@@ -15,6 +16,8 @@ import java.util.Map;
  */
 
 public class FireRuleset extends Ruleset {
+
+  Logger log = LogManager.getLogger(FireRuleset.class);
 
   private static final String PROB_GROW_PARAM_NAME = "probGrow";
   private static final String PROB_CATCH_PARAM_NAME = "probCatch";
@@ -27,8 +30,21 @@ public class FireRuleset extends Ruleset {
    * @param params The map of relevant parameters
    */
   public FireRuleset(Map<String, String> params) {
-    this.probGrow = Double.parseDouble(params.getOrDefault(PROB_GROW_PARAM_NAME, "0.03"));
-    this.probCatch = Double.parseDouble(params.getOrDefault(PROB_CATCH_PARAM_NAME, "0.003"));
+    double tempProbGrow = Double.parseDouble(params.get(PROB_GROW_PARAM_NAME));
+
+    if (tempProbGrow < 0 || tempProbGrow > 1) {
+      log.error("Invalid probGrow parameter outside of range. Using default value.");
+      tempProbGrow = 0.03;
+    }
+
+    double tempProbCatch = Double.parseDouble(params.get(PROB_CATCH_PARAM_NAME));
+    if (tempProbCatch < 0 || tempProbCatch > 1) {
+      log.error("Invalid probCatch parameter outside of range. Using default value.");
+      tempProbCatch = 0.003;
+    }
+
+    this.probGrow = tempProbGrow;
+    this.probCatch = tempProbCatch;
   }
 
   @Override
@@ -48,7 +64,7 @@ public class FireRuleset extends Ruleset {
     }
 
     // The following code will only execute if tree
-    if (isNeighborCellBurning(neighbors)) {
+    if (isNeighborCellBurning(neighbors) || Math.random() < probCatch) {
       lightFire(cell);
     } else if (Math.random() < probCatch) {
       lightFire(cell);
@@ -63,7 +79,6 @@ public class FireRuleset extends Ruleset {
    */
   @Override
   public void updateGridState() {
-
   }
 
   /**
@@ -72,6 +87,10 @@ public class FireRuleset extends Ruleset {
    * @return A boolean denoting true for a burning neighbor, false otherwise
    */
   private boolean isNeighborCellBurning(List<Cell> neighbors) {
+
+    if (neighbors == null)
+      return false;
+
     for (Cell neighbor : neighbors) {
       if (neighbor.getCurrState() == FireState.BURNING) {
         return true;

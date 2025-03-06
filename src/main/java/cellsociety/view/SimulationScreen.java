@@ -7,8 +7,10 @@ import cellsociety.model.grid.NeighborhoodFactory;
 import cellsociety.model.ruleset.Ruleset;
 import cellsociety.model.factory.RulesetFactory;
 import cellsociety.parser.XMLParser;
+import cellsociety.view.GridView.ColorScheme;
 import cellsociety.view.shapes.ShapeFactory;
 import java.io.File;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
@@ -74,8 +76,8 @@ public class SimulationScreen {
       BorderPane layout = initializeLayout(simInfo);
       layout.getStyleClass().add("layout");
       simScene = new Scene(layout, width, height);
+      setSimTheme(myController.getScheme(), simInfo);
       myController.setStage(simScene);
-      //myController.setStage(new Scene(layout, width, height));
     } catch (IllegalArgumentException e) {
       myController.showMessage(simInfo.getString("invalid_config") + e.getMessage());
     } catch (Exception e) {
@@ -113,7 +115,6 @@ public class SimulationScreen {
     }
     controls.getChildren().add(new Label("Speed:"));
     controls.getChildren().add(speedSlider);
-    //controls.setId("simControls");
     layout.setBottom(controls);
 
     VBox settingsPanel = loadSettingsPanel();
@@ -159,6 +160,7 @@ public class SimulationScreen {
     loadButton.setOnAction(e -> {
       File newFile = myController.getFileChooser().showOpenDialog(myController.getStage());
       if (newFile != null) {
+        //myController.getSimLoop().stop(); //NEW
         myController.loadSimulation(newFile);
       }
     });
@@ -235,6 +237,26 @@ public class SimulationScreen {
         new Label("Cell Shape:"), shapeDropdown
     );
     return settingsPanel;
+  }
+
+  /**
+   * Sets Color Theme of simulation screen
+   * @param scheme Color scheme given by controller
+   * @param simInfo Resource bundle
+   */
+  private void setSimTheme(ColorScheme scheme, ResourceBundle simInfo){
+    URL resourcePath = switch (scheme) {
+      case DARK -> getClass().getResource("/SplashDark.css");
+      case LIGHT -> getClass().getResource("/SplashLight.css");
+      case DUKE -> getClass().getResource("/SplashDuke.css");
+      case UNC -> getClass().getResource("/SplashUnc.css");
+    };
+
+    if (resourcePath == null) {
+      System.err.println(simInfo.getString("invalid_theme"));
+    }
+    simScene.getStylesheets().clear();
+    simScene.getStylesheets().add(resourcePath.toExternalForm());
   }
 
   /**

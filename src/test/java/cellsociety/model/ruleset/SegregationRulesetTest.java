@@ -3,7 +3,10 @@ package cellsociety.model.ruleset;
 import static org.junit.jupiter.api.Assertions.*;
 
 import cellsociety.model.cell.SegregationCell.SegregationState;
+import cellsociety.model.grid.CellShapeFactory;
+import cellsociety.model.grid.EdgeFactory;
 import cellsociety.model.grid.Grid;
+import cellsociety.model.grid.NeighborhoodFactory;
 import java.util.Map;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -27,6 +30,9 @@ class SegregationRulesetTest {
                               "EM", "EM", "EM", "BLU", "R"};
     myRuleset = new SegregationRuleset(Map.of("thresh", "0.5"));
     myGrid = myRuleset.createGrid(5, 5, initialStates);
+    myGrid.setEdgeHandler(EdgeFactory.createEdgeHandler(""));
+    myGrid.setNeighborhoodStrategy(NeighborhoodFactory.createNeighborhoodStrategy(""));
+    myGrid.setCellShape(CellShapeFactory.createCellShape(""));
   }
 
   @Test
