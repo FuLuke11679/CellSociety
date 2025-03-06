@@ -11,6 +11,7 @@ import cellsociety.model.cell.FireCell.FireState;
 import cellsociety.model.cell.PercolationCell.PercolationState;
 import cellsociety.model.state.CellState;
 import cellsociety.view.shapes.ShapeFactory;
+import java.net.URL;
 import java.util.Locale;
 import java.util.Map;
 import java.util.ResourceBundle;
@@ -76,13 +77,6 @@ public class GridView {
       Map.entry(SugarscapeState.AGENT, Color.RED)
   );
 
-  private final Map<ColorScheme, Color> schemeColors = Map.ofEntries(
-      Map.entry(ColorScheme.LIGHT, Color.WHITESMOKE),
-      Map.entry(ColorScheme.DARK, Color.GRAY),
-      Map.entry(ColorScheme.DUKE, Color.BLUE),
-      Map.entry(ColorScheme.UNC, Color.LIGHTBLUE)
-  );
-
   /**
    * Constructor for GridView.
    */
@@ -95,6 +89,7 @@ public class GridView {
     this.grid = grid;
     this.myLocale = myLocale;
     this.numIterations = 0;
+    ResourceBundle simInfo = ResourceBundle.getBundle("SimInfo", myLocale);
 
     initializeGrid();
     setupSimulationInfo(simType, title, author, description);
@@ -107,9 +102,8 @@ public class GridView {
     BorderPane layout = new BorderPane();
     layout.setCenter(gridContainer);
     layout.setTop(infoBox);
-    layout.setBackground(new Background(new BackgroundFill(schemeColors.get(scheme), CornerRadii.EMPTY, Insets.EMPTY)));
-
     this.myScene = new Scene(layout, WINDOW_WIDTH, WINDOW_HEIGHT);
+
   }
 
   /**

@@ -62,6 +62,12 @@ public class SimulationController {
    * @param dataFile : XML File chosen by user from their local machine
    */
   public void loadSimulation(File dataFile) {
+    if(splashLoop.getStatus() == Animation.Status.RUNNING){
+      splashLoop.stop();
+    }
+    else if(simLoop.getStatus() == Animation.Status.RUNNING){
+      simLoop.stop();
+    }
     currentFile = dataFile;
     mySimScreen = new SimulationScreen(dataFile, this);
   }
@@ -123,7 +129,7 @@ public class SimulationController {
 
 
   public void resetSimulation() {
-    simLoop.stop();
+    //simLoop.stop();
     loadSimulation(currentFile);
   }
 

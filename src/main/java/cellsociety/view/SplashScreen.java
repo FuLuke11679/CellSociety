@@ -133,7 +133,7 @@ public class SplashScreen {
     loadButton.setOnAction(e -> {
       File newFile = myController.getFileChooser().showOpenDialog(myController.getStage());
       if (newFile != null) {
-        myController.getSplashLoop().stop();  //NEW
+        //myController.getSplashLoop().stop();  //NEW
         myController.loadSimulation(newFile);
       }
     });
