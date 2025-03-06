@@ -1,6 +1,7 @@
 package cellsociety.model.grid;
 
 import cellsociety.model.cell.Cell;
+import cellsociety.model.factory.CellFactory;
 import cellsociety.model.cell.ConwayCell.ConwayState;
 import cellsociety.model.cell.FireCell.FireState;
 import cellsociety.model.cell.PercolationCell.PercolationState;
@@ -21,7 +22,7 @@ import java.util.Map;
  * Updates Grid based on Cell logic.
  * This abstract class manages a grid of cells and applies a given ruleset
  * to update cell states. It does not handle any UI or JavaFX display logic.
- *
+
  * The grid is initialized using a provided array of state symbols, which are
  * mapped to specific {@link CellState} instances via a static state map.
  *
@@ -120,10 +121,7 @@ public abstract class Grid {
       for (int y = 0; y < columns; y++) {
         // Map the symbol to an initial state.
         CellState initialState = getInitialState(myCells[count]);
-        // Determine the cell type name based on the state.
-        String cellType = getCellTypeForState(initialState);
-        // Create the cell using reflection.
-        Cell cell = createCell(count, initialState, null, cellType);
+        Cell cell = CellFactory.createCell(count, initialState); // Use reflection to create cell
         row.add(cell);
         count++;
       }
@@ -139,6 +137,8 @@ public abstract class Grid {
    * </p>
    */
   public void update() {
+    //return a list of cell ids that were changed,
+    //loop over all cells and randomly change color of alive cells with probability 0.4
     int length = getLength();
     for (int id = 0; id < length; id++) {
       int row = id / columns;
@@ -193,9 +193,9 @@ public abstract class Grid {
    * @return a list of neighboring {@link Cell} objects surrounding the cell at (row, col)
    */
   public List<Cell> getNeighbors(int row, int col) {
-    // Get base neighbor offsets from the cell shape.
+    // 1️Use cell shape to get base relative offsets
     List<int[]> neighborOffsets = cellShape.getNeighborOffsets(row, col);
-    // Select neighbors based on the neighborhood strategy.
+
     List<int[]> selectedOffsets = neighborhoodStrategy.selectNeighbors(neighborOffsets);
     // Handle edge cases and return the valid neighbor cells.
     return edgeHandler.handleNeighbors(row, col, selectedOffsets, this);
@@ -224,92 +224,18 @@ public abstract class Grid {
     return STATE_MAP.get(stateSymbol);
   }
 
-  /**
-   * Returns the number of rows in the grid.
-   *
-   * @return the grid's row count
-   */
   public int getRows() {
     return rows;
   }
 
-  /**
-   * Returns the number of columns in the grid.
-   *
-   * @return the grid's column count
-   */
   public int getColumns() {
     return columns;
   }
 
-  /**
-   * Returns the {@link Ruleset} associated with this grid.
-   *
-   * @return the current ruleset
-   */
   protected Ruleset getRuleset() {
     return ruleset;
   }
 
-  /**
-   * Dynamically creates a cell instance based on the given parameters.
-   * <p>
-   * The method uses reflection to instantiate a cell class located in the
-   * "cellsociety.model.cell" package. The cell type is determined by the provided cellType parameter.
-   * </p>
-   *
-   * @param id        a unique identifier for the cell
-   * @param currState the current state of the cell
-   * @param nextState the next state of the cell (may be null)
-   * @param cellType  the name of the cell class to instantiate (e.g., "ConwayCell")
-   * @return a new {@link Cell} instance, or null if instantiation fails
-   */
-  public Cell createCell(int id, CellState currState, CellState nextState, String cellType) {
-    try {
-      // Construct the full class name using the cellType.
-      Class<?> cellClass = Class.forName("cellsociety.model.cell." + cellType);
-      // Instantiate and return the cell.
-      return (Cell) cellClass.getConstructor(int.class, CellState.class, CellState.class)
-          .newInstance(id, currState, nextState);
-    } catch (Exception e) {
-      e.printStackTrace();
-      return null;  // Handle error or return a default cell if necessary.
-    }
-  }
-
-  /**
-   * Determines the cell type name corresponding to a given {@link CellState}.
-   * <p>
-   * This method maps specific state instances to their associated cell type names.
-   * </p>
-   *
-   * @param state the {@link CellState} for which to determine the cell type
-   * @return the name of the cell class corresponding to the state
-   */
-  private String getCellTypeForState(CellState state) {
-    if (state instanceof ConwayState) {
-      return "ConwayCell";
-    } else if (state instanceof FireState) {
-      return "FireCell";
-    } else if (state instanceof PercolationState) {
-      return "PercolationCell";
-    } else if (state instanceof WatorState) {
-      return "WatorCell";
-    } else if (state instanceof SegregationState) {
-      return "SegregationCell";
-    } else if (state instanceof SugarscapeState) {
-      return "SugarscapePatch";
-    }
-    return "Cell";
-  }
-
-  /**
-   * Checks if the given row and column indices represent a valid position in the grid.
-   *
-   * @param row the row index to check
-   * @param col the column index to check
-   * @return true if the position is within grid bounds; false otherwise
-   */
   public boolean isValidPosition(int row, int col) {
     return row >= 0 && row < rows && col >= 0 && col < columns;
   }
@@ -348,8 +274,7 @@ public abstract class Grid {
         } else {
           // Create a new cell with the default state.
           CellState initialState = ruleset.getDefaultCellState();
-          String cellType = getCellTypeForState(initialState);
-          Cell newCell = createCell(i * newCols + j, initialState, null, cellType);
+          Cell newCell = CellFactory.createCell(i * newCols + j, initialState);
           row.add(newCell);
         }
       }

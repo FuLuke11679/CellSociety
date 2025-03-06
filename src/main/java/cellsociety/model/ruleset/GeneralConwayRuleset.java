@@ -28,7 +28,7 @@ public class GeneralConwayRuleset extends ConwayRuleset {
   public GeneralConwayRuleset(Map<String, String> params) {
     birthVals = new HashSet<>();
     survivalVals = new HashSet<>();
-    String rules = params.get(RULE_PARAM_NAME);
+    String rules = params.getOrDefault(RULE_PARAM_NAME, "B3/S23");
     GeneralConwayParser.parseRuleString(rules, birthVals, survivalVals);
   }
 
