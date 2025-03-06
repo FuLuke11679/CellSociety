@@ -187,9 +187,11 @@ public abstract class Grid {
    * @param row the row index of the desired cell
    * @param col the column index of the desired cell
    * @return the {@link Cell} located at (row, col) in the grid
+   */
   public Cell getCell(int row, int col) {
     return myGrid.get(row).get(col);
   }
+
 
   /**
    * Retrieves the neighboring cells for the cell at the specified position.

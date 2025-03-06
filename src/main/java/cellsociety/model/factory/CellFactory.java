@@ -51,7 +51,7 @@ public class CellFactory {
       }
     } catch (Exception classNotFoundException) {
       log.error("Could not instantiate cell type: {}", cellType);
-      throw new RuntimeException("Error creating cell of type " + cellType, e);
+      throw new RuntimeException("Error creating cell of type " + cellType);
     }
   }
 
