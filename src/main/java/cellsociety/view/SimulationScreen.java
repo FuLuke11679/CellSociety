@@ -6,6 +6,7 @@ import cellsociety.model.grid.Grid;
 import cellsociety.model.grid.NeighborhoodFactory;
 import cellsociety.model.ruleset.Ruleset;
 import cellsociety.model.factory.RulesetFactory;
+import cellsociety.model.ruleset.SugarscapeRuleset;
 import cellsociety.parser.XMLParser;
 import cellsociety.view.GridView.ColorScheme;
 import cellsociety.view.shapes.ShapeFactory;
@@ -58,6 +59,10 @@ public class SimulationScreen {
 
       myParser = new XMLParser(file);
       Ruleset ruleset = getRuleset();
+      int[] values = myParser.getValues();
+      if (values != null && myParser.getSimType().equals("Sugarscape")) {
+        ((SugarscapeRuleset) ruleset).setInitialValues(values);
+      }
       myGrid = ruleset.createGrid(myParser.getRows(), myParser.getColumns(), myParser.getInitialStates());
       myGrid.setEdgeHandler(EdgeFactory.createEdgeHandler(myParser.getEdgeType()));
       myGrid.setNeighborhoodStrategy(NeighborhoodFactory.createNeighborhoodStrategy(myParser.getNeighborhoodType()));

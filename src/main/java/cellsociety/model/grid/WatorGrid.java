@@ -20,29 +20,4 @@ public class WatorGrid extends Grid {
     moveNextStateToCurrent();
   }
 
-  /**
-   * A function that determines the four adjacent cells (N,E,S,W)
-   * @param row The row index of the target cell
-   * @param col The col index of a target cell
-   * @return The four neighbors of a cell
-   */
-  @Override
-  public List<Cell> getNeighbors(int row, int col) {
-    List<Cell> neighbors = new ArrayList<>();
-
-    int[] dx = {-1, 1, 0, 0};
-    int[] dy = {0, 0, -1, 1};
-
-    for (int i = 0; i < 4; i++) {
-      int numRows = getRows();
-      int numCols = getColumns();
-      int newRow = (row + dx[i] + numRows) % numRows;  // Wrap row
-      int newCol = (col + dy[i] + numCols) % numCols;  // Wrap column
-
-      neighbors.add(this.getCell(newRow, newCol));
-    }
-    return neighbors;
-  }
-
-
 }

@@ -27,6 +27,7 @@ public class XMLParser extends Parser {
     private Map<String, GridPattern> patterns;
     private boolean hasRandomStates;
     private Map<String, Double> stateProportions;
+    private int[] initialValues;
 
   private String edgeType;
   private String neighborhoodType;
@@ -341,30 +342,72 @@ public class XMLParser extends Parser {
    * @param stateListStr a comma-separated string or contiguous string representing cell states
    * @throws IllegalArgumentException if the number of states does not match the grid size or if an invalid state is encountered
    */
-    private void parseStateList(String stateListStr) {
-        String cleanedList = stateListStr.replaceAll("\\s+", "");
-        if (cleanedList.contains(",")) {
-            initialStates = cleanedList.split(",");
-        } else {
-            // Handle case where commas might be missing
-            initialStates = new String[cleanedList.length()];
-            for (int i = 0; i < cleanedList.length(); i++) {
-                initialStates[i] = String.valueOf(cleanedList.charAt(i));
-            }
-        }
+  /**
+   * Parses the state list from XML, extracting both states and optional per-cell numerical values.
+   * Ensures valid states are used and assigns default values where necessary.
+   *
+   * @param stateListStr The raw state list string from XML.
+   * @throws InvalidXMLConfigurationException if states are missing or improperly formatted.
+   */
+  private void parseStateList(String stateListStr) throws InvalidXMLConfigurationException {
+    String cleanedList = stateListStr.replaceAll("\\s+", "");
+    String[] tokens = cleanedList.split(",");
 
-        if (initialStates.length != rows * columns) {
-            throw new IllegalArgumentException(
-                "Number of cell states (" + initialStates.length +
-                ") does not match grid size (" + (rows * columns) + ").");
-        }
-
-        for (String state : initialStates) {
-            if (!isInSimulation(state, simType)) {
-                throw new IllegalArgumentException("Invalid cell state: " + state);
-            }
-        }
+    int expectedCells = rows * columns;
+    if (tokens.length != expectedCells) {
+      throw new IllegalArgumentException("Number of cell states (" + tokens.length +
+          ") does not match grid size (" + expectedCells + ").");
     }
+
+    // Initialize arrays
+    initialStates = new String[tokens.length];
+    initialValues = new int[tokens.length];
+
+    boolean requiresValues = requiresValues(simType);
+    boolean foundValues = false; // Tracks if at least one value is found
+
+    for (int i = 0; i < tokens.length; i++) {
+      String token = tokens[i].trim();
+
+      if (token.contains(":")) { // If the format is "STATE:VALUE"
+        String[] parts = token.split(":", 2);
+        if (parts.length != 2) {
+          throw new IllegalArgumentException("Invalid token format: " + token);
+        }
+
+        String state = parts[0];
+        int value;
+
+        try {
+          value = Integer.parseInt(parts[1]);
+        } catch (NumberFormatException e) {
+          throw new IllegalArgumentException("Invalid numeric value for state: " + token);
+        }
+
+        // Ensure state is valid
+        if (!isInSimulation(state, simType)) {
+          throw new IllegalArgumentException("Invalid state for simulation: " + state);
+        }
+
+        initialStates[i] = state;
+        initialValues[i] = value;
+        foundValues = true; // At least one value was found
+
+      } else { // If only state is provided
+        if (!isInSimulation(token, simType)) {
+          throw new IllegalArgumentException("Invalid cell state: " + token);
+        }
+
+        initialStates[i] = token;
+        initialValues[i] = requiresValues ? -1 : 0; // If required, flag missing values with -1
+      }
+    }
+
+    // If the simulation REQUIRES per-cell values but none were provided, throw an error
+    if (requiresValues && !foundValues) {
+      throw new IllegalArgumentException("Simulation type " + simType + " requires per-cell values, but none were provided.");
+    }
+  }
 
   /**
    * Parses random state definitions from a dedicated random section in the XML.
@@ -665,6 +708,14 @@ public class XMLParser extends Parser {
     public String[] getInitialStates() {
       return initialStates;
     }
+  public int[] getValues() {
+    if (initialValues == null) {
+      throw new IllegalStateException(
+          "initialValues is NULL in getValues(). Ensure XML file is parsed first.");
+    }
+    return initialValues;
+  }
+
 
     public Map<String, String> getSimVarsMap() {
       return simVarsMap;

@@ -12,7 +12,7 @@ class SugarscapePatchTest {
 
   @BeforeEach
   void setUp() {
-    patch = new SugarscapePatch(0, null, null, 10, 20);
+    patch = new SugarscapePatch(0, null,null, 10, 20);
     agent = new SugarscapeAgent(15);
   }
 

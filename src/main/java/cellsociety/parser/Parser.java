@@ -19,6 +19,7 @@ public abstract class Parser {
       "GeneralConway", Set.of("D", "A"),
       "Sugarscape", Set.of("PATCH", "AGENT")
   );
+  private final static Set<String> requiresValues = Set.of("Sugarscape");
 
   //what info is needed from Parser
   private String simulationType;
@@ -54,6 +55,10 @@ public abstract class Parser {
   }
   public static boolean validateSimulation(String state) {
     return simulationStatesMap.containsKey(state);
+  }
+
+  public static boolean requiresValues(String state) {
+    return requiresValues.contains(state);
   }
 
 

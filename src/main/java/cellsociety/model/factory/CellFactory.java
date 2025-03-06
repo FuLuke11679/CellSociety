@@ -1,6 +1,7 @@
 package cellsociety.model.factory;
 
 import cellsociety.model.cell.Cell;
+import cellsociety.model.cell.SugarscapePatch;
 import cellsociety.model.state.CellState;
 import cellsociety.parser.PropertiesLoader;
 import java.lang.reflect.Constructor;
@@ -42,16 +43,29 @@ public class CellFactory {
 
     try {
       Class<? extends Cell> clazz = (Class<? extends Cell>) Class.forName(cellClass);
-      Constructor<? extends Cell> constructor = clazz.getConstructor(int.class, CellState.class, CellState.class);
-      return constructor.newInstance(id, state, null);
-    } catch (Exception classNotFoundException) {
-      log.error("Could not find cell type: {}", cellType);
+
+      // Handle SugarscapePatch separately
+      if (clazz.equals(SugarscapePatch.class)) {
+        Constructor<? extends Cell> constructor = clazz.getConstructor(int.class, CellState.class, CellState.class, int.class, int.class);
+
+        // Default values for now (modify to pull from simulation parameters if available)
+        int initialSugar = 5;
+        int maxSugar = 25;
+
+        return constructor.newInstance(id, state, null, initialSugar, maxSugar);
+      } else {
+        Constructor<? extends Cell> constructor = clazz.getConstructor(int.class, CellState.class, CellState.class);
+        return constructor.newInstance(id, state, null);
+      }
+
+    } catch (Exception e) {
+      log.error("Could not find or instantiate cell type: {}", cellType, e);
     }
 
     log.error("Could not find cell class: {}. Returned null object.", cellClass);
     return null;
-
   }
+
 
   /**
    * Function to figure out what type of cell to make depending on the unique state
