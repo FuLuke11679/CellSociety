@@ -14,6 +14,7 @@ import javafx.stage.Stage;
 import java.io.File;
 
 /**
+ * @Author Palo Silva
  * Main class to drive simulations. Extends the Application class of javafx,
  */
 public class Main extends Application { ;
