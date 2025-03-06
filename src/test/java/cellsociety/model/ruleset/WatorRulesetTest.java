@@ -4,7 +4,10 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import cellsociety.model.cell.Cell;
 import cellsociety.model.cell.WatorCell.WatorState;
+import cellsociety.model.grid.CellShapeFactory;
+import cellsociety.model.grid.EdgeFactory;
 import cellsociety.model.grid.Grid;
+import cellsociety.model.grid.NeighborhoodFactory;
 import java.util.List;
 import java.util.Map;
 import org.junit.jupiter.api.BeforeEach;
@@ -30,6 +33,12 @@ class WatorRulesetTest {
     myRuleset = new WatorRuleset(params);
   }
 
+  void setGridParams(Grid grid) {
+    myGrid.setEdgeHandler(EdgeFactory.createEdgeHandler(""));
+    myGrid.setNeighborhoodStrategy(NeighborhoodFactory.createNeighborhoodStrategy(""));
+    myGrid.setCellShape(CellShapeFactory.createCellShape(""));
+  }
+
   @Test
   void updateGridState_SharkMoves_SharkMovesRandomlyToAdjacentSpot() {
     String[] initialStates = {"W","W","W","W","W",
@@ -38,6 +47,7 @@ class WatorRulesetTest {
                               "W","W","W","W","W",
                               "W","W","W","W","W"};
     myGrid = myRuleset.createGrid(5, 5, initialStates);
+    setGridParams(myGrid);
 
     myGrid.update();
 
@@ -62,6 +72,7 @@ class WatorRulesetTest {
                               "W","W","W","W","W",
                               "W","W","W","W","W"};
     myGrid = myRuleset.createGrid(5, 5, initialStates);
+    setGridParams(myGrid);
 
     myGrid.update();
 
@@ -86,6 +97,7 @@ class WatorRulesetTest {
         "W","W","F","W","W",
         "W","W","W","W","W"};
     myGrid = myRuleset.createGrid(5, 5, initialStates);
+    setGridParams(myGrid);
 
     myGrid.update();
 
@@ -110,6 +122,7 @@ class WatorRulesetTest {
         "W","W","S","W","W",
         "W","W","W","W","W"};
     myGrid = myRuleset.createGrid(5, 5, initialStates);
+    setGridParams(myGrid);
 
     myGrid.update();
 
@@ -124,6 +137,7 @@ class WatorRulesetTest {
         "W","W","F","W","W",
         "W","W","W","W","W"};
     myGrid = myRuleset.createGrid(5, 5, initialStates);
+    setGridParams(myGrid);
 
     myGrid.update();
 
@@ -145,6 +159,7 @@ class WatorRulesetTest {
                               "W","W","W","W","W",
                               "W","W","W","W","W"};
     myGrid = myRuleset.createGrid(5, 5, initialStates);
+    setGridParams(myGrid);
 
     myGrid.update();
 

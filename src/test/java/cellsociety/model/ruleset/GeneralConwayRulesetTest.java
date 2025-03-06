@@ -5,8 +5,14 @@ import static org.junit.jupiter.api.Assertions.*;
 import cellsociety.model.cell.Cell;
 import cellsociety.model.cell.ConwayCell;
 import cellsociety.model.cell.ConwayCell.ConwayState;
+import cellsociety.model.grid.CellShapeFactory;
 import cellsociety.model.grid.ConwayGrid;
+import cellsociety.model.grid.EdgeFactory;
 import cellsociety.model.grid.Grid;
+import cellsociety.model.grid.NeighborhoodFactory;
+import cellsociety.model.grid.neighborhood.NeighborhoodStrategy;
+import cellsociety.model.grid.shape.RectangularShape;
+import cellsociety.view.shapes.ShapeFactory;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -33,6 +39,9 @@ class GeneralConwayRulesetTest {
         "D","D","D","D","D",
     };
     myGrid = new ConwayGrid(5, 5, myRuleset, initialStates);
+    myGrid.setEdgeHandler(EdgeFactory.createEdgeHandler(""));
+    myGrid.setNeighborhoodStrategy(NeighborhoodFactory.createNeighborhoodStrategy(""));
+    myGrid.setCellShape(CellShapeFactory.createCellShape(""));
   }
 
   @Test
