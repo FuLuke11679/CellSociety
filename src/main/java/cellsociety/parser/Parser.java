@@ -18,7 +18,6 @@ public abstract class Parser {
       "WatorWorld", Set.of("S", "F", "W"),
       "GeneralConway", Set.of("D", "A"),
       "Sugarscape", Set.of("PATCH", "AGENT")
-
   );
 
   //what info is needed from Parser
