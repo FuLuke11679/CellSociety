@@ -18,7 +18,7 @@ public class RhombusShape extends Polygon {
    * @param col  the column index in the grid
    */
   public RhombusShape(int size, int row, int col) {
-    double s = size;
+    double s = size * .8;
     double sqrt3 = Math.sqrt(3);
 
     // Define the rhombus vertices (lozenge) with side length s

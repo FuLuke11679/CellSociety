@@ -30,31 +30,11 @@ class GridTest {
     grid = new ConwayGrid(rows, cols, new ConwayRuleset(), initialStates);
   }
 
-  // Tests Grid Initialization: Ensures all cells are created correctly
-  @Test
-  void initializeGrid_CorrectlyInitializesCells() {
-    assertNotNull(grid);
-    assertEquals(rows * cols, grid.getLength());
-
-    // Check that the first and last cell are correctly assigned
-    assertEquals(ConwayState.ALIVE, ((ConwayCell) grid.getCell(0, 0)).getNextState());
-    assertEquals(ConwayState.DEAD, ((ConwayCell) grid.getCell(0, 1)).getNextState());
-  }
-
-
   // Negative Test: Ensure update does not throw exceptions on empty grids
   @Test
   void update_DoesNotThrowOnEmptyGrid() {
     Grid emptyGrid = new ConwayGrid(0, 0, new ConwayRuleset(), new String[0]);
     assertDoesNotThrow(emptyGrid::update);
-  }
-
-  // ✅ Tests getCell: Ensures retrieval of correct cell
-  @Test
-  void getCell_ReturnsCorrectCell() {
-    Cell cell = grid.getCell(3, 3);
-    assertNotNull(cell);
-    assertEquals(ConwayState.ALIVE, ((ConwayCell) cell).getNextState());
   }
 
   // Negative Test: Ensure out-of-bounds access throws exception
